@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,10 +17,10 @@
 */
 //==============================================================================
 
-#include <ripple/app/tx/impl/OfferStream.h>
-#include <ripple/basics/Log.h>
+#include <jbcoin/app/tx/impl/OfferStream.h>
+#include <jbcoin/basics/Log.h>
 
-namespace ripple {
+namespace jbcoin {
 
 template<class TIn, class TOut>
 TOfferStreamBase<TIn, TOut>::TOfferStreamBase (ApplyView& view, ApplyView& cancelView,
@@ -104,14 +104,14 @@ IOUAmount accountFundsHelper (ReadView const& view,
 }
 
 static
-XRPAmount accountFundsHelper (ReadView const& view,
+JBCAmount accountFundsHelper (ReadView const& view,
     AccountID const& id,
-    XRPAmount const& amtDefault,
+    JBCAmount const& amtDefault,
     Issue const& issue,
     FreezeHandling freezeHandling,
     beast::Journal j)
 {
-    return toAmount<XRPAmount> (
+    return toAmount<JBCAmount> (
         accountHolds (view, id, issue.currency, issue.account, freezeHandling, j));
 }
 
@@ -220,11 +220,11 @@ void FlowOfferStream<TIn, TOut>::permRmOffer (uint256 const& offerIndex)
 
 template class FlowOfferStream<STAmount, STAmount>;
 template class FlowOfferStream<IOUAmount, IOUAmount>;
-template class FlowOfferStream<XRPAmount, IOUAmount>;
-template class FlowOfferStream<IOUAmount, XRPAmount>;
+template class FlowOfferStream<JBCAmount, IOUAmount>;
+template class FlowOfferStream<IOUAmount, JBCAmount>;
 
 template class TOfferStreamBase<STAmount, STAmount>;
 template class TOfferStreamBase<IOUAmount, IOUAmount>;
-template class TOfferStreamBase<XRPAmount, IOUAmount>;
-template class TOfferStreamBase<IOUAmount, XRPAmount>;
+template class TOfferStreamBase<JBCAmount, IOUAmount>;
+template class TOfferStreamBase<IOUAmount, JBCAmount>;
 }

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,26 +17,26 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_BOOK_TAKER_H_INCLUDED
-#define RIPPLE_APP_BOOK_TAKER_H_INCLUDED
+#ifndef JBCOIN_APP_BOOK_TAKER_H_INCLUDED
+#define JBCOIN_APP_BOOK_TAKER_H_INCLUDED
 
-#include <ripple/app/tx/impl/Offer.h>
-#include <ripple/core/Config.h>
-#include <ripple/ledger/View.h>
-#include <ripple/protocol/Quality.h>
-#include <ripple/protocol/Rate.h>
-#include <ripple/protocol/TER.h>
-#include <ripple/protocol/TxFlags.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/app/tx/impl/Offer.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/ledger/View.h>
+#include <jbcoin/protocol/Quality.h>
+#include <jbcoin/protocol/Rate.h>
+#include <jbcoin/protocol/TER.h>
+#include <jbcoin/protocol/TxFlags.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <functional>
 
-namespace ripple {
+namespace jbcoin {
 
 /** The flavor of an offer crossing */
 enum class CrossType
 {
-    XrpToIou,
-    IouToXrp,
+    JrpToIou,
+    IouToJrp,
     IouToIou
 };
 
@@ -82,7 +82,7 @@ protected:
         {
             using beast::zero;
 
-            if (isXRP (order.in) && isXRP (order.out))
+            if (isJBC (order.in) && isJBC (order.out))
                 return false;
 
             return order.in >= zero &&
@@ -97,12 +97,12 @@ private:
     log_flow (char const* description, Flow const& flow);
 
     Flow
-    flow_xrp_to_iou (Amounts const& offer, Quality quality,
+    flow_jbc_to_iou (Amounts const& offer, Quality quality,
         STAmount const& owner_funds, STAmount const& taker_funds,
         Rate const& rate_out);
 
     Flow
-    flow_iou_to_xrp (Amounts const& offer, Quality quality,
+    flow_iou_to_jbc (Amounts const& offer, Quality quality,
         STAmount const& owner_funds, STAmount const& taker_funds,
         Rate const& rate_in);
 
@@ -243,9 +243,9 @@ public:
     get_funds (AccountID const& account, STAmount const& funds) const override;
 
     STAmount const&
-    get_xrp_flow () const
+    get_jbc_flow () const
     {
-        return xrp_flow_;
+        return jbc_flow_;
     }
 
     std::uint32_t
@@ -288,7 +288,7 @@ private:
         BasicTaker::Flow const& flow2, Offer& leg2);
 
     TER
-    transferXRP (AccountID const& from, AccountID const& to, STAmount const& amount);
+    transferJBC (AccountID const& from, AccountID const& to, STAmount const& amount);
 
     TER
     redeemIOU (AccountID const& account, STAmount const& amount, Issue const& issue);
@@ -300,8 +300,8 @@ private:
     // The underlying ledger entry we are dealing with
     ApplyView& view_;
 
-    // The amount of XRP that flowed if we were autobridging
-    STAmount xrp_flow_;
+    // The amount of JBC that flowed if we were autobridging
+    STAmount jbc_flow_;
 
     // The number direct crossings that we performed
     std::uint32_t direct_crossings_;

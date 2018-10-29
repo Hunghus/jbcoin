@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,13 +18,13 @@
 //==============================================================================
 
 
-#include <ripple/crypto/impl/ec_key.cpp>
-#include <ripple/crypto/impl/GenerateDeterministicKey.cpp>
-#include <ripple/crypto/impl/KeyType.cpp>
-#include <ripple/crypto/impl/openssl.cpp>
-#include <ripple/crypto/impl/csprng.cpp>
-#include <ripple/crypto/impl/RFC1751.cpp>
+#include <jbcoin/crypto/impl/ec_key.cpp>
+#include <jbcoin/crypto/impl/GenerateDeterministicKey.cpp>
+#include <jbcoin/crypto/impl/KeyType.cpp>
+#include <jbcoin/crypto/impl/openssl.cpp>
+#include <jbcoin/crypto/impl/csprng.cpp>
+#include <jbcoin/crypto/impl/RFC1751.cpp>
 
 #if DOXYGEN
-#include <ripple/crypto/README.md>
+#include <jbcoin/crypto/README.md>
 #endif

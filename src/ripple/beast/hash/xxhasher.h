@@ -20,8 +20,8 @@
 #ifndef BEAST_HASH_XXHASHER_H_INCLUDED
 #define BEAST_HASH_XXHASHER_H_INCLUDED
 
-#include <ripple/beast/hash/endian.h>
-#include <ripple/beast/hash/impl/xxhash.h>
+#include <jbcoin/beast/hash/endian.h>
+#include <jbcoin/beast/hash/impl/xxhash.h>
 #include <type_traits>
 #include <cstddef>
 

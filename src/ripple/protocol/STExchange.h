@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,24 +17,24 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_STEXCHANGE_H_INCLUDED
-#define RIPPLE_PROTOCOL_STEXCHANGE_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_STEXCHANGE_H_INCLUDED
+#define JBCOIN_PROTOCOL_STEXCHANGE_H_INCLUDED
 
-#include <ripple/basics/Buffer.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Slice.h>
-#include <ripple/protocol/SField.h>
-#include <ripple/protocol/STBlob.h>
-#include <ripple/protocol/STInteger.h>
-#include <ripple/protocol/STObject.h>
-#include <ripple/basics/Blob.h>
+#include <jbcoin/basics/Buffer.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Slice.h>
+#include <jbcoin/protocol/SField.h>
+#include <jbcoin/protocol/STBlob.h>
+#include <jbcoin/protocol/STInteger.h>
+#include <jbcoin/protocol/STObject.h>
+#include <jbcoin/basics/Blob.h>
 #include <boost/optional.hpp>
 #include <memory>
 #include <stdexcept>
 #include <type_traits>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Convert between serialized type U and C++ type T. */
 template <class U, class T>
@@ -204,6 +204,6 @@ erase (STObject& st,
     st.makeFieldAbsent(f);
 }
 
-} // ripple
+} // jbcoin
 
 #endif

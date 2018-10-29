@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_STOBJECT_H_INCLUDED
-#define RIPPLE_PROTOCOL_STOBJECT_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_STOBJECT_H_INCLUDED
+#define JBCOIN_PROTOCOL_STOBJECT_H_INCLUDED
 
-#include <ripple/basics/chrono.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/CountedObject.h>
-#include <ripple/basics/Slice.h>
-#include <ripple/protocol/STAmount.h>
-#include <ripple/protocol/STPathSet.h>
-#include <ripple/protocol/STVector256.h>
-#include <ripple/protocol/SOTemplate.h>
-#include <ripple/protocol/impl/STVar.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/CountedObject.h>
+#include <jbcoin/basics/Slice.h>
+#include <jbcoin/protocol/STAmount.h>
+#include <jbcoin/protocol/STPathSet.h>
+#include <jbcoin/protocol/STVector256.h>
+#include <jbcoin/protocol/SOTemplate.h>
+#include <jbcoin/protocol/impl/STVar.h>
 #include <boost/iterator/transform_iterator.hpp>
 #include <boost/optional.hpp>
 #include <cassert>
@@ -36,7 +36,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 class STArray;
 
@@ -953,6 +953,6 @@ STObject::operator[](OptionaledField<T> const& of) ->
     return OptionalProxy<T>(this, of.f);
 }
 
-} // ripple
+} // jbcoin
 
 #endif

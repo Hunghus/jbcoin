@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,23 +17,23 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_ST_H_INCLUDED
-#define RIPPLE_PROTOCOL_ST_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_ST_H_INCLUDED
+#define JBCOIN_PROTOCOL_ST_H_INCLUDED
 
-#include <ripple/protocol/SField.h>
-#include <ripple/protocol/STAccount.h>
-#include <ripple/protocol/STAmount.h>
-#include <ripple/protocol/STArray.h>
-#include <ripple/protocol/STBase.h>
-#include <ripple/protocol/STBitString.h>
-#include <ripple/protocol/STBlob.h>
-#include <ripple/protocol/STInteger.h>
-#include <ripple/protocol/STLedgerEntry.h>
-#include <ripple/protocol/STObject.h>
-#include <ripple/protocol/STParsedJSON.h>
-#include <ripple/protocol/STPathSet.h>
-#include <ripple/protocol/STTx.h>
-#include <ripple/protocol/STValidation.h>
-#include <ripple/protocol/STVector256.h>
+#include <jbcoin/protocol/SField.h>
+#include <jbcoin/protocol/STAccount.h>
+#include <jbcoin/protocol/STAmount.h>
+#include <jbcoin/protocol/STArray.h>
+#include <jbcoin/protocol/STBase.h>
+#include <jbcoin/protocol/STBitString.h>
+#include <jbcoin/protocol/STBlob.h>
+#include <jbcoin/protocol/STInteger.h>
+#include <jbcoin/protocol/STLedgerEntry.h>
+#include <jbcoin/protocol/STObject.h>
+#include <jbcoin/protocol/STParsedJSON.h>
+#include <jbcoin/protocol/STPathSet.h>
+#include <jbcoin/protocol/STTx.h>
+#include <jbcoin/protocol/STValidation.h>
+#include <jbcoin/protocol/STVector256.h>
 
 #endif

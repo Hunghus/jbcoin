@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_PATHS_NODE_H_INCLUDED
-#define RIPPLE_APP_PATHS_NODE_H_INCLUDED
+#ifndef JBCOIN_APP_PATHS_NODE_H_INCLUDED
+#define JBCOIN_APP_PATHS_NODE_H_INCLUDED
 
-#include <ripple/app/paths/NodeDirectory.h>
-#include <ripple/app/paths/Types.h>
-#include <ripple/protocol/Rate.h>
-#include <ripple/protocol/UintTypes.h>
+#include <jbcoin/app/paths/NodeDirectory.h>
+#include <jbcoin/app/paths/Types.h>
+#include <jbcoin/protocol/Rate.h>
+#include <jbcoin/protocol/UintTypes.h>
 #include <boost/optional.hpp>
 
-namespace ripple {
+namespace jbcoin {
 namespace path {
 
 struct Node
@@ -79,7 +79,7 @@ struct Node
     // The "directories" are ordered in "increasing" "quality" value, which
     // means that the first "directory" has the "best" (i.e. numerically least)
     // "quality".
-    // https://ripple.com/wiki/Ledger_Format#Prioritizing_a_continuous_key_space
+    // https://jbcoin.com/wiki/Ledger_Format#Prioritizing_a_continuous_key_space
 
     NodeDirectory directory;
 
@@ -109,6 +109,6 @@ struct Node
 };
 
 } // path
-} // ripple
+} // jbcoin
 
 #endif

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-  This file is part of rippled: https://github.com/ripple/rippled
-  Copyright (c) 2012-2015 Ripple Labs Inc.
+  This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+  Copyright (c) 2012-2015 JBCoin Labs Inc.
 
   Permission to use, copy, modify, and/or distribute this software for any
   purpose  with  or without fee is hereby granted, provided that the above
@@ -17,28 +17,28 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_TEST_JTX_AMOUNT_H_INCLUDED
-#define RIPPLE_TEST_JTX_AMOUNT_H_INCLUDED
+#ifndef JBCOIN_TEST_JTX_AMOUNT_H_INCLUDED
+#define JBCOIN_TEST_JTX_AMOUNT_H_INCLUDED
 
 #include <test/jtx/Account.h>
 #include <test/jtx/amount.h>
 #include <test/jtx/tags.h>
-#include <ripple/protocol/Issue.h>
-#include <ripple/protocol/STAmount.h>
-#include <ripple/basics/contract.h>
+#include <jbcoin/protocol/Issue.h>
+#include <jbcoin/protocol/STAmount.h>
+#include <jbcoin/basics/contract.h>
 #include <cstdint>
 #include <ostream>
 #include <string>
 #include <type_traits>
 
-namespace ripple {
+namespace jbcoin {
 namespace test {
 namespace jtx {
 
 /*
 
-The decision was made to accept amounts of drops and XRP
-using an int type, since the range of XRP is 100 billion
+The decision was made to accept amounts of drops and JBC
+using an int type, since the range of JBC is 100 billion
 and having both signed and unsigned overloads creates
 tricky code leading to overload resolution ambiguities.
 
@@ -61,14 +61,14 @@ struct None
 //------------------------------------------------------------------------------
 
 template <class T>
-struct dropsPerXRP
+struct dropsPerJBC
 {
     static T const value = 1000000;
 };
 
-/** Represents an XRP or IOU quantity
+/** Represents an JBC or IOU quantity
     This customizes the string conversion and supports
-    XRP conversions from integer and floating point.
+    JBC conversions from integer and floating point.
 */
 struct PrettyAmount
 {
@@ -148,10 +148,10 @@ operator<< (std::ostream& os,
 struct BookSpec
 {
     AccountID account;
-    ripple::Currency currency;
+    jbcoin::Currency currency;
 
     BookSpec(AccountID const& account_,
-        ripple::Currency const& currency_)
+        jbcoin::Currency const& currency_)
         : account(account_)
         , currency(currency_)
     {
@@ -160,21 +160,21 @@ struct BookSpec
 
 //------------------------------------------------------------------------------
 
-struct XRP_t
+struct JBC_t
 {
     /** Implicit conversion to Issue.
 
-        This allows passing XRP where
+        This allows passing JBC where
         an Issue is expected.
     */
     operator Issue() const
     {
-        return xrpIssue();
+        return jbcIssue();
     }
 
-    /** Returns an amount of XRP as STAmount
+    /** Returns an amount of JBC as STAmount
 
-        @param v The number of XRP (not drops)
+        @param v The number of JBC (not drops)
     */
     /** @{ */
     template <class T, class = std::enable_if_t<
@@ -185,14 +185,14 @@ struct XRP_t
         return { std::conditional_t<
             std::is_signed<T>::value,
                 std::int64_t, std::uint64_t>{v} *
-                    dropsPerXRP<T>::value };
+                    dropsPerJBC<T>::value };
     }
 
     PrettyAmount
     operator()(double v) const
     {
         auto const c =
-            dropsPerXRP<int>::value;
+            dropsPerJBC<int>::value;
         if (v >= 0)
         {
             auto const d = std::uint64_t(
@@ -211,31 +211,31 @@ struct XRP_t
     }
     /** @} */
 
-    /** Returns None-of-XRP */
+    /** Returns None-of-JBC */
     None
     operator()(none_t) const
     {
-        return { xrpIssue() };
+        return { jbcIssue() };
     }
 
     friend
     BookSpec
-    operator~ (XRP_t const&)
+    operator~ (JBC_t const&)
     {        
-        return BookSpec( xrpAccount(),
-            xrpCurrency() );
+        return BookSpec( jbcAccount(),
+            jbcCurrency() );
     }
 };
 
-/** Converts to XRP Issue or STAmount.
+/** Converts to JBC Issue or STAmount.
 
     Examples:
-        XRP         Converts to the XRP Issue
-        XRP(10)     Returns STAmount of 10 XRP
+        JBC         Converts to the JBC Issue
+        JBC(10)     Returns STAmount of 10 JBC
 */
-extern XRP_t const XRP;
+extern JBC_t const JBC;
 
-/** Returns an XRP STAmount.
+/** Returns an JBC STAmount.
 
     Example:
         drops(10)   Returns STAmount of 10 drops
@@ -287,10 +287,10 @@ class IOU
 {
 public:
     Account account;
-    ripple::Currency currency;
+    jbcoin::Currency currency;
 
     IOU(Account const& account_,
-            ripple::Currency const& currency_)
+            jbcoin::Currency const& currency_)
         : account(account_)
         , currency(currency_)
     {
@@ -403,6 +403,6 @@ extern any_t const any;
 
 } // jtx
 } // test
-} // ripple
+} // jbcoin
 
 #endif

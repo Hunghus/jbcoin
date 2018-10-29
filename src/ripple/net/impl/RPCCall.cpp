@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,25 +17,25 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/net/RPCCall.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/basics/base64.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/core/Config.h>
-#include <ripple/json/json_reader.h>
-#include <ripple/json/to_string.h>
-#include <ripple/json/Object.h>
-#include <ripple/net/HTTPClient.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/SystemParameters.h>
-#include <ripple/protocol/UintTypes.h>
-#include <ripple/rpc/ServerHandler.h>
-#include <ripple/beast/core/LexicalCast.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/net/RPCCall.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/basics/base64.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/json/json_reader.h>
+#include <jbcoin/json/to_string.h>
+#include <jbcoin/json/Object.h>
+#include <jbcoin/net/HTTPClient.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/SystemParameters.h>
+#include <jbcoin/protocol/UintTypes.h>
+#include <jbcoin/rpc/ServerHandler.h>
+#include <jbcoin/beast/core/LexicalCast.h>
 #include <boost/beast/core/string.hpp>
 #include <boost/asio/streambuf.hpp>
 #include <boost/optional.hpp>
@@ -44,7 +44,7 @@
 #include <iostream>
 #include <type_traits>
 
-namespace ripple {
+namespace jbcoin {
 
 class RPCParser;
 
@@ -126,7 +126,7 @@ private:
 
             if (strIssuer.length ())
             {
-                // Could confirm issuer is a valid Ripple address.
+                // Could confirm issuer is a valid JBCoin address.
                 jvResult[jss::issuer]      = strIssuer;
             }
 
@@ -557,7 +557,7 @@ private:
         if (jv.isObject())
         {
             if (jv.isMember(jss::jsonrpc) && jv[jss::jsonrpc] == "2.0" &&
-                jv.isMember(jss::ripplerpc) && jv[jss::ripplerpc] == "2.0" &&
+                jv.isMember(jss::jbcoinrpc) && jv[jss::jbcoinrpc] == "2.0" &&
                 jv.isMember(jss::id) && jv.isMember(jss::method))
             {
                 if (jv.isMember(jss::params) &&
@@ -587,7 +587,7 @@ private:
                         jv1[i.key().asString()] = *i;
                 }
                 jv1[jss::jsonrpc] = jv[jss::jsonrpc];
-                jv1[jss::ripplerpc] = jv[jss::ripplerpc];
+                jv1[jss::jbcoinrpc] = jv[jss::jbcoinrpc];
                 jv1[jss::id] = jv[jss::id];
                 jv1[jss::method] = jv[jss::method];
                 return jv1;
@@ -603,7 +603,7 @@ private:
                         jv1[j][i.key().asString()] = *i;
                 }
                 jv1[j][jss::jsonrpc] = jv[j][jss::jsonrpc];
-                jv1[j][jss::ripplerpc] = jv[j][jss::ripplerpc];
+                jv1[j][jss::jbcoinrpc] = jv[j][jss::jbcoinrpc];
                 jv1[j][jss::id] = jv[j][jss::id];
                 jv1[j][jss::method] = jv[j][jss::method];
             }
@@ -612,8 +612,8 @@ private:
         auto jv_error = rpcError(rpcINVALID_PARAMS);
         if (jv.isMember(jss::jsonrpc))
             jv_error[jss::jsonrpc] = jv[jss::jsonrpc];
-        if (jv.isMember(jss::ripplerpc))
-            jv_error[jss::ripplerpc] = jv[jss::ripplerpc];
+        if (jv.isMember(jss::jbcoinrpc))
+            jv_error[jss::jbcoinrpc] = jv[jss::jbcoinrpc];
         if (jv.isMember(jss::id))
             jv_error[jss::id] = jv[jss::id];
         return jv_error;
@@ -847,8 +847,8 @@ private:
         return jvRequest;
     }
 
-    // ripple_path_find <json> [<ledger>]
-    Json::Value parseRipplePathFind (Json::Value const& jvParams)
+    // jbcoin_path_find <json> [<ledger>]
+    Json::Value parseJBCoinPathFind (Json::Value const& jvParams)
     {
         Json::Reader    reader;
         Json::Value     jvRequest{Json::objectValue};
@@ -1139,7 +1139,7 @@ public:
             {   "print",                &RPCParser::parseAsIs,                  0,  1   },
     //      {   "profile",              &RPCParser::parseProfile,               1,  9   },
             {   "random",               &RPCParser::parseAsIs,                  0,  0   },
-            {   "ripple_path_find",     &RPCParser::parseRipplePathFind,        1,  2   },
+            {   "jbcoin_path_find",     &RPCParser::parseJBCoinPathFind,        1,  2   },
             {   "sign",                 &RPCParser::parseSignSubmit,            2,  3   },
             {   "sign_for",             &RPCParser::parseSignFor,               3,  4   },
             {   "submit",               &RPCParser::parseSignSubmit,            1,  3   },
@@ -1340,8 +1340,8 @@ cmdLineToJSONRPC (std::vector<std::string> const& args, beast::Journal j)
     }
     if (paramsObj.isMember(jss::jsonrpc))
         jv[jss::jsonrpc] = paramsObj[jss::jsonrpc];
-    if (paramsObj.isMember(jss::ripplerpc))
-        jv[jss::ripplerpc] = paramsObj[jss::ripplerpc];
+    if (paramsObj.isMember(jss::jbcoinrpc))
+        jv[jss::jbcoinrpc] = paramsObj[jss::jbcoinrpc];
     if (paramsObj.isMember(jss::id))
         jv[jss::id] = paramsObj[jss::id];
     return jv;
@@ -1560,4 +1560,4 @@ void fromNetwork (
 
 } // RPCCall
 
-} // ripple
+} // jbcoin

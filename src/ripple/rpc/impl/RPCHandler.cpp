@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,30 +17,30 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/rpc/RPCHandler.h>
-#include <ripple/rpc/impl/Tuning.h>
-#include <ripple/rpc/impl/Handler.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/PerfLog.h>
-#include <ripple/core/Config.h>
-#include <ripple/core/JobQueue.h>
-#include <ripple/json/Object.h>
-#include <ripple/json/to_string.h>
-#include <ripple/net/InfoSub.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/resource/Fees.h>
-#include <ripple/rpc/Role.h>
-#include <ripple/resource/Fees.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/rpc/RPCHandler.h>
+#include <jbcoin/rpc/impl/Tuning.h>
+#include <jbcoin/rpc/impl/Handler.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/PerfLog.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/core/JobQueue.h>
+#include <jbcoin/json/Object.h>
+#include <jbcoin/json/to_string.h>
+#include <jbcoin/net/InfoSub.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/resource/Fees.h>
+#include <jbcoin/rpc/Role.h>
+#include <jbcoin/resource/Fees.h>
 #include <atomic>
 #include <chrono>
 
-namespace ripple {
+namespace jbcoin {
 namespace RPC {
 
 namespace {
@@ -69,7 +69,7 @@ namespace {
            "result" : {
               "error" : "noNetwork",
               "error_code" : 16,
-              "error_message" : "Not synced to Ripple network.",
+              "error_message" : "Not synced to JBCoin network.",
               "request" : {
                  "command" : "ledger",
                  "ledger_index" : 10300865
@@ -99,7 +99,7 @@ namespace {
         {
           "error" : "noNetwork",
           "error_code" : 16,
-          "error_message" : "Not synced to Ripple network.",
+          "error_message" : "Not synced to JBCoin network.",
           "request" : {
              "command" : "ledger",
              "ledger_index" : 10300865
@@ -307,4 +307,4 @@ Role roleRequired (std::string const& method)
 }
 
 } // RPC
-} // ripple
+} // jbcoin

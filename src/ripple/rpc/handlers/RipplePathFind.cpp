@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/paths/PathRequests.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/resource/Fees.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/impl/LegacyPathFind.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/paths/PathRequests.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/resource/Fees.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/impl/LegacyPathFind.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
 
-namespace ripple {
+namespace jbcoin {
 
 // This interface is deprecated.
-Json::Value doRipplePathFind (RPC::Context& context)
+Json::Value doJBCoinPathFind (RPC::Context& context)
 {
     if (context.app.config().PATH_SEARCH_MAX == 0)
         return rpcError (rpcNOT_SUPPORTED);
@@ -58,11 +58,11 @@ Json::Value doRipplePathFind (RPC::Context& context)
         // be aware this code runs in a JobQueue::Coro, which is a coroutine.
         // And we may be flipping around between threads.  Here's an overview:
         //
-        // 1. We're running doRipplePathFind() due to a call to
-        //    ripple_path_find.  doRipplePathFind() is currently running
+        // 1. We're running doJBCoinPathFind() due to a call to
+        //    jbcoin_path_find.  doJBCoinPathFind() is currently running
         //    inside of a JobQueue::Coro using a JobQueue thread.
         //
-        // 2. doRipplePathFind's call to makeLegacyPathRequest() enqueues the
+        // 2. doJBCoinPathFind's call to makeLegacyPathRequest() enqueues the
         //    path-finding request.  That request will (probably) run at some
         //    indeterminate future time on a (probably different) JobQueue
         //    thread.
@@ -111,7 +111,7 @@ Json::Value doRipplePathFind (RPC::Context& context)
         // Both of these failure modes are hard to recreate in a unit test
         // because they are so dependent on inter-thread timing.  However
         // the failure modes can be observed by synchronously (inside the
-        // rippled source code) shutting down the application.  The code to
+        // jbcoind source code) shutting down the application.  The code to
         // do so looks like this:
         //
         //   context.app.signalStop();
@@ -168,4 +168,4 @@ Json::Value doRipplePathFind (RPC::Context& context)
     return result;
 }
 
-} // ripple
+} // jbcoin

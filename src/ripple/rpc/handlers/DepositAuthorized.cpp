@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2018 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2018 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,14 +18,14 @@
 //==============================================================================
 
 
-#include <ripple/ledger/ReadView.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
 
-namespace ripple {
+namespace jbcoin {
 
 // {
 //   source_account : <ident>
@@ -114,4 +114,4 @@ Json::Value doDepositAuthorized (RPC::Context& context)
     return result;
 }
 
-} // ripple
+} // jbcoin

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PATH_IMPL_AMOUNTSPEC_H_INCLUDED
-#define RIPPLE_PATH_IMPL_AMOUNTSPEC_H_INCLUDED
+#ifndef JBCOIN_PATH_IMPL_AMOUNTSPEC_H_INCLUDED
+#define JBCOIN_PATH_IMPL_AMOUNTSPEC_H_INCLUDED
 
-#include <ripple/protocol/IOUAmount.h>
-#include <ripple/protocol/XRPAmount.h>
-#include <ripple/protocol/STAmount.h>
+#include <jbcoin/protocol/IOUAmount.h>
+#include <jbcoin/protocol/JBCAmount.h>
+#include <jbcoin/protocol/STAmount.h>
 
-namespace ripple {
+namespace jbcoin {
 
 struct AmountSpec
 {
@@ -33,7 +33,7 @@ struct AmountSpec
     bool native;
     union
     {
-        XRPAmount xrp;
+        JBCAmount jbc;
         IOUAmount iou;
     };
     boost::optional<AccountID> issuer;
@@ -46,7 +46,7 @@ struct AmountSpec
         AmountSpec const& amt)
     {
         if (amt.native)
-            stream << to_string (amt.xrp);
+            stream << to_string (amt.jbc);
         else
             stream << to_string (amt.iou);
         if (amt.currency)
@@ -66,7 +66,7 @@ struct EitherAmount
     union
     {
         IOUAmount iou;
-        XRPAmount xrp;
+        JBCAmount jbc;
     };
 
     EitherAmount () = default;
@@ -83,8 +83,8 @@ struct EitherAmount
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
     explicit
-    EitherAmount (XRPAmount const& a)
-            :xrp(a)
+    EitherAmount (JBCAmount const& a)
+            :jbc(a)
     {
 #ifndef NDEBUG
         native = true;
@@ -101,7 +101,7 @@ struct EitherAmount
         native = a.native;
 #endif
         if (a.native)
-            xrp = a.xrp;
+            jbc = a.jbc;
         else
             iou = a.iou;
     }
@@ -126,11 +126,11 @@ get<IOUAmount> (EitherAmount& amt)
 
 template <>
 inline
-XRPAmount&
-get<XRPAmount> (EitherAmount& amt)
+JBCAmount&
+get<JBCAmount> (EitherAmount& amt)
 {
     assert (amt.native);
-    return amt.xrp;
+    return amt.jbc;
 }
 
 template <class T>
@@ -152,11 +152,11 @@ get<IOUAmount> (EitherAmount const& amt)
 
 template <>
 inline
-XRPAmount const&
-get<XRPAmount> (EitherAmount const& amt)
+JBCAmount const&
+get<JBCAmount> (EitherAmount const& amt)
 {
     assert (amt.native);
-    return amt.xrp;
+    return amt.jbc;
 }
 
 inline
@@ -169,10 +169,10 @@ toAmountSpec (STAmount const& amt)
         isNeg ? - std::int64_t (amt.mantissa ()) : amt.mantissa ();
     AmountSpec result;
 
-    result.native = isXRP (amt);
+    result.native = isJBC (amt);
     if (result.native)
     {
-        result.xrp = XRPAmount (sMant);
+        result.jbc = JBCAmount (sMant);
     }
     else
     {
@@ -188,8 +188,8 @@ inline
 EitherAmount
 toEitherAmount (STAmount const& amt)
 {
-    if (isXRP (amt))
-        return EitherAmount{amt.xrp()};
+    if (isJBC (amt))
+        return EitherAmount{amt.jbc()};
     return EitherAmount{amt.iou()};
 }
 
@@ -200,12 +200,12 @@ toAmountSpec (
     boost::optional<Currency> const& c)
 {
     AmountSpec r;
-    r.native = (!c || isXRP (*c));
+    r.native = (!c || isJBC (*c));
     r.currency = c;
     assert (ea.native == r.native);
     if (r.native)
     {
-        r.xrp = ea.xrp;
+        r.jbc = ea.jbc;
     }
     else
     {

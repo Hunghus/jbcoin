@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright 2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright 2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -16,20 +16,20 @@
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 //==============================================================================
-#ifndef RIPPLE_TEST_TRUSTED_PUBLISHER_SERVER_H_INCLUDED
-#define RIPPLE_TEST_TRUSTED_PUBLISHER_SERVER_H_INCLUDED
+#ifndef JBCOIN_TEST_TRUSTED_PUBLISHER_SERVER_H_INCLUDED
+#define JBCOIN_TEST_TRUSTED_PUBLISHER_SERVER_H_INCLUDED
 
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/protocol/SecretKey.h>
-#include <ripple/protocol/Sign.h>
-#include <ripple/basics/base64.h>
-#include <ripple/basics/strHex.h>
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/protocol/SecretKey.h>
+#include <jbcoin/protocol/Sign.h>
+#include <jbcoin/basics/base64.h>
+#include <jbcoin/basics/strHex.h>
 #include <test/jtx/envconfig.h>
 #include <boost/asio.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/beast/http.hpp>
 
-namespace ripple {
+namespace jbcoin {
 namespace test {
 
 class TrustedPublisherServer
@@ -67,7 +67,7 @@ public:
         : sock_(ios), acceptor_(ios)
     {
         endpoint_type const& ep {
-            beast::IP::Address::from_string (ripple::test::getEnvLocalhostAddr()),
+            beast::IP::Address::from_string (jbcoin::test::getEnvLocalhostAddr()),
             0}; // 0 means let OS pick the port based on what's available
         std::string data = "{\"sequence\":" + std::to_string(sequence) +
             ",\"expiration\":" +
@@ -238,5 +238,5 @@ private:
 };
 
 }  // namespace test
-}  // namespace ripple
+}  // namespace jbcoin
 #endif

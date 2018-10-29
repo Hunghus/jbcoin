@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -19,9 +19,9 @@
 
 #include <test/jtx/Account.h>
 #include <test/jtx/amount.h>
-#include <ripple/protocol/UintTypes.h>
+#include <jbcoin/protocol/UintTypes.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace test {
 namespace jtx {
 
@@ -72,4 +72,4 @@ Account::operator[](std::string const& s) const
 
 } // jtx
 } // test
-} // ripple
+} // jbcoin

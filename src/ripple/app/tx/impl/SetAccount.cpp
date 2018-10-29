@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,17 +17,17 @@
 */
 //==============================================================================
 
-#include <ripple/app/tx/impl/SetAccount.h>
-#include <ripple/basics/Log.h>
-#include <ripple/core/Config.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/protocol/Quality.h>
-#include <ripple/protocol/st.h>
-#include <ripple/ledger/View.h>
+#include <jbcoin/app/tx/impl/SetAccount.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/protocol/Quality.h>
+#include <jbcoin/protocol/st.h>
+#include <jbcoin/ledger/View.h>
 
-namespace ripple {
+namespace jbcoin {
 
 bool
 SetAccount::affectsSubsequentTransactionAuth(STTx const& tx)
@@ -100,12 +100,12 @@ SetAccount::preflight (PreflightContext const& ctx)
     }
 
     //
-    // DisallowXRP
+    // DisallowJBC
     //
-    bool bSetDisallowXRP   = (uTxFlags & tfDisallowXRP) || (uSetFlag == asfDisallowXRP);
-    bool bClearDisallowXRP = (uTxFlags & tfAllowXRP) || (uClearFlag == asfDisallowXRP);
+    bool bSetDisallowJBC   = (uTxFlags & tfDisallowJBC) || (uSetFlag == asfDisallowJBC);
+    bool bClearDisallowJBC = (uTxFlags & tfAllowJBC) || (uClearFlag == asfDisallowJBC);
 
-    if (bSetDisallowXRP && bClearDisallowXRP)
+    if (bSetDisallowJBC && bClearDisallowJBC)
     {
         JLOG(j.trace()) << "Malformed transaction: Contradictory flags set.";
         return temINVALID_FLAG;
@@ -215,8 +215,8 @@ SetAccount::doApply ()
     bool const bClearRequireDest {(uTxFlags & tfOptionalDestTag) || (uClearFlag == asfRequireDest)};
     bool const bSetRequireAuth   {(uTxFlags & tfRequireAuth) || (uSetFlag == asfRequireAuth)};
     bool const bClearRequireAuth {(uTxFlags & tfOptionalAuth) || (uClearFlag == asfRequireAuth)};
-    bool const bSetDisallowXRP   {(uTxFlags & tfDisallowXRP) || (uSetFlag == asfDisallowXRP)};
-    bool const bClearDisallowXRP {(uTxFlags & tfAllowXRP) || (uClearFlag == asfDisallowXRP)};
+    bool const bSetDisallowJBC   {(uTxFlags & tfDisallowJBC) || (uSetFlag == asfDisallowJBC)};
+    bool const bClearDisallowJBC {(uTxFlags & tfAllowJBC) || (uClearFlag == asfDisallowJBC)};
 
     bool const sigWithMaster {[&tx, &acct = account_] ()
     {
@@ -263,18 +263,18 @@ SetAccount::doApply ()
     }
 
     //
-    // DisallowXRP
+    // DisallowJBC
     //
-    if (bSetDisallowXRP && !(uFlagsIn & lsfDisallowXRP))
+    if (bSetDisallowJBC && !(uFlagsIn & lsfDisallowJBC))
     {
-        JLOG(j_.trace()) << "Set lsfDisallowXRP.";
-        uFlagsOut |= lsfDisallowXRP;
+        JLOG(j_.trace()) << "Set lsfDisallowJBC.";
+        uFlagsOut |= lsfDisallowJBC;
     }
 
-    if (bClearDisallowXRP && (uFlagsIn & lsfDisallowXRP))
+    if (bClearDisallowJBC && (uFlagsIn & lsfDisallowJBC))
     {
-        JLOG(j_.trace()) << "Clear lsfDisallowXRP.";
-        uFlagsOut &= ~lsfDisallowXRP;
+        JLOG(j_.trace()) << "Clear lsfDisallowJBC.";
+        uFlagsOut &= ~lsfDisallowJBC;
     }
 
     //
@@ -311,17 +311,17 @@ SetAccount::doApply ()
     }
 
     //
-    // DefaultRipple
+    // DefaultJBCoin
     //
-    if (uSetFlag == asfDefaultRipple)
+    if (uSetFlag == asfDefaultJBCoin)
     {
-        JLOG(j_.trace()) << "Set lsfDefaultRipple.";
-        uFlagsOut |= lsfDefaultRipple;
+        JLOG(j_.trace()) << "Set lsfDefaultJBCoin.";
+        uFlagsOut |= lsfDefaultJBCoin;
     }
-    else if (uClearFlag == asfDefaultRipple)
+    else if (uClearFlag == asfDefaultJBCoin)
     {
-        JLOG(j_.trace()) << "Clear lsfDefaultRipple.";
-        uFlagsOut &= ~lsfDefaultRipple;
+        JLOG(j_.trace()) << "Clear lsfDefaultJBCoin.";
+        uFlagsOut &= ~lsfDefaultJBCoin;
     }
 
     //

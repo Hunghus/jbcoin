@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_SHAMAP_SHAMAPITEM_H_INCLUDED
-#define RIPPLE_SHAMAP_SHAMAPITEM_H_INCLUDED
+#ifndef JBCOIN_SHAMAP_SHAMAPITEM_H_INCLUDED
+#define JBCOIN_SHAMAP_SHAMAPITEM_H_INCLUDED
 
-#include <ripple/basics/base_uint.h>
-#include <ripple/basics/Blob.h>
-#include <ripple/basics/Slice.h>
-#include <ripple/protocol/Serializer.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/basics/base_uint.h>
+#include <jbcoin/basics/Blob.h>
+#include <jbcoin/basics/Slice.h>
+#include <jbcoin/protocol/Serializer.h>
+#include <jbcoin/beast/utility/Journal.h>
 
 #include <cstddef>
 
-namespace ripple {
+namespace jbcoin {
 
 // an item stored in a SHAMap
 class SHAMapItem
@@ -89,6 +89,6 @@ SHAMapItem::peekData() const
     return data_;
 }
 
-} // ripple
+} // jbcoin
 
 #endif

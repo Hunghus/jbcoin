@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,7 +18,7 @@
 //==============================================================================
 
 
-#include <ripple/app/main/LoadManager.cpp>
-#include <ripple/app/main/Main.cpp>
-#include <ripple/app/main/NodeIdentity.cpp>
-#include <ripple/app/main/NodeStoreScheduler.cpp>
+#include <jbcoin/app/main/LoadManager.cpp>
+#include <jbcoin/app/main/Main.cpp>
+#include <jbcoin/app/main/NodeIdentity.cpp>
+#include <jbcoin/app/main/NodeStoreScheduler.cpp>

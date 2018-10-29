@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,15 +18,15 @@
 //==============================================================================
 
 
-#include <ripple/core/impl/Config.cpp>
-#include <ripple/core/impl/DatabaseCon.cpp>
-#include <ripple/core/impl/LoadEvent.cpp>
-#include <ripple/core/impl/LoadMonitor.cpp>
-#include <ripple/core/impl/Job.cpp>
-#include <ripple/core/impl/JobQueue.cpp>
-#include <ripple/core/impl/SNTPClock.cpp>
-#include <ripple/core/impl/Stoppable.cpp>
-#include <ripple/core/impl/TerminateHandler.cpp>
-#include <ripple/core/impl/TimeKeeper.cpp>
-#include <ripple/core/impl/Workers.cpp>
+#include <jbcoin/core/impl/Config.cpp>
+#include <jbcoin/core/impl/DatabaseCon.cpp>
+#include <jbcoin/core/impl/LoadEvent.cpp>
+#include <jbcoin/core/impl/LoadMonitor.cpp>
+#include <jbcoin/core/impl/Job.cpp>
+#include <jbcoin/core/impl/JobQueue.cpp>
+#include <jbcoin/core/impl/SNTPClock.cpp>
+#include <jbcoin/core/impl/Stoppable.cpp>
+#include <jbcoin/core/impl/TerminateHandler.cpp>
+#include <jbcoin/core/impl/TimeKeeper.cpp>
+#include <jbcoin/core/impl/Workers.cpp>
 

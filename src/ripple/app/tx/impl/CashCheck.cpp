@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/app/tx/impl/CashCheck.h>
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/app/paths/Flow.h>
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/STAccount.h>
-#include <ripple/protocol/TER.h>
-#include <ripple/protocol/TxFlags.h>
+#include <jbcoin/app/tx/impl/CashCheck.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/app/paths/Flow.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/STAccount.h>
+#include <jbcoin/protocol/TER.h>
+#include <jbcoin/protocol/TxFlags.h>
 
 #include <algorithm>
 
-namespace ripple {
+namespace jbcoin {
 
 NotTEC
 CashCheck::preflight (PreflightContext const& ctx)
@@ -173,12 +173,12 @@ CashCheck::preclaim (PreclaimContext const& ctx)
             STAmount availableFunds {accountFunds (ctx.view,
                 (*sleCheck)[sfAccount], value, fhZERO_IF_FROZEN, ctx.j)};
 
-            // Note that src will have one reserve's worth of additional XRP
+            // Note that src will have one reserve's worth of additional JBC
             // once the check is cashed, since the check's reserve will no
-            // longer be required.  So, if we're dealing in XRP, we add one
+            // longer be required.  So, if we're dealing in JBC, we add one
             // reserve's worth to the available funds.
             if (value.native())
-                availableFunds += XRPAmount (ctx.view.fees().increment);
+                availableFunds += JBCAmount (ctx.view.fees().increment);
 
             if (value > availableFunds)
             {
@@ -288,10 +288,10 @@ CashCheck::doApply ()
     {
         STAmount const sendMax {sleCheck->getFieldAmount (sfSendMax)};
 
-        // Flow() doesn't do XRP to XRP transfers.
+        // Flow() doesn't do JBC to JBC transfers.
         if (sendMax.native())
         {
-            // Here we need to calculate the amount of XRP sleSrc can send.
+            // Here we need to calculate the amount of JBC sleSrc can send.
             // The amount they have available is their balance minus their
             // reserve.
             //
@@ -299,29 +299,29 @@ CashCheck::doApply ()
             // from src's directory, we allow them to send that additional
             // incremental reserve amount in the transfer.  Hence the -1
             // argument.
-            STAmount const srcLiquid {xrpLiquid (psb, srcId, -1, viewJ)};
+            STAmount const srcLiquid {jbcLiquid (psb, srcId, -1, viewJ)};
 
             // Now, how much do they need in order to be successful?
-            STAmount const xrpDeliver {optDeliverMin ?
+            STAmount const jbcDeliver {optDeliverMin ?
                 std::max (*optDeliverMin, std::min (sendMax, srcLiquid)) :
                 ctx_.tx.getFieldAmount (sfAmount)};
 
-            if (srcLiquid < xrpDeliver)
+            if (srcLiquid < jbcDeliver)
             {
                 // Vote no. However the transaction might succeed if applied
                 // in a different order.
-                JLOG(j_.trace()) << "Cash Check: Insufficient XRP: "
+                JLOG(j_.trace()) << "Cash Check: Insufficient JBC: "
                     << srcLiquid.getFullText()
-                    << " < " << xrpDeliver.getFullText();
+                    << " < " << jbcDeliver.getFullText();
                 return tecUNFUNDED_PAYMENT;
             }
 
             if (optDeliverMin && doFix1623)
                 // Set the DeliveredAmount metadata.
-                ctx_.deliver (xrpDeliver);
+                ctx_.deliver (jbcDeliver);
 
-            // The source account has enough XRP so make the ledger change.
-            transferXRP (psb, srcId, account_, xrpDeliver, viewJ);
+            // The source account has enough JBC so make the ledger change.
+            transferJBC (psb, srcId, account_, jbcDeliver, viewJ);
         }
         else
         {
@@ -402,4 +402,4 @@ CashCheck::doApply ()
     return tesSUCCESS;
 }
 
-} // namespace ripple
+} // namespace jbcoin

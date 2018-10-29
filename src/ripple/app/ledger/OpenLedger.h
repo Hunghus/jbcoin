@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,21 +17,21 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_LEDGER_OPENLEDGER_H_INCLUDED
-#define RIPPLE_APP_LEDGER_OPENLEDGER_H_INCLUDED
+#ifndef JBCOIN_APP_LEDGER_OPENLEDGER_H_INCLUDED
+#define JBCOIN_APP_LEDGER_OPENLEDGER_H_INCLUDED
 
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/ledger/CachedSLEs.h>
-#include <ripple/ledger/OpenView.h>
-#include <ripple/app/misc/CanonicalTXSet.h>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/UnorderedContainers.h>
-#include <ripple/core/Config.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/ledger/CachedSLEs.h>
+#include <jbcoin/ledger/OpenView.h>
+#include <jbcoin/app/misc/CanonicalTXSet.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/UnorderedContainers.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <cassert>
 #include <mutex>
 
-namespace ripple {
+namespace jbcoin {
 
 // How many total extra passes we make
 // We must ensure we make at least one non-retriable pass
@@ -284,6 +284,6 @@ debugTostr (SHAMap const& set);
 std::string
 debugTostr (std::shared_ptr<ReadView const> const& view);
 
-} // ripple
+} // jbcoin
 
 #endif

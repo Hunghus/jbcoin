@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_BASICS_STRINGUTILITIES_H_INCLUDED
-#define RIPPLE_BASICS_STRINGUTILITIES_H_INCLUDED
+#ifndef JBCOIN_BASICS_STRINGUTILITIES_H_INCLUDED
+#define JBCOIN_BASICS_STRINGUTILITIES_H_INCLUDED
 
-#include <ripple/basics/Blob.h>
-#include <ripple/basics/strHex.h>
+#include <jbcoin/basics/Blob.h>
+#include <jbcoin/basics/strHex.h>
 #include <boost/endian/conversion.hpp>
 #include <boost/format.hpp>
 #include <boost/optional.hpp>
 #include <sstream>
 #include <string>
 
-namespace ripple {
+namespace jbcoin {
 
 // NIKB TODO Remove the need for all these overloads. Move them out of here.
 inline const std::string strHex (std::string const& strSrc)
@@ -109,6 +109,6 @@ std::string trim_whitespace (std::string str);
 
 boost::optional<std::uint64_t> to_uint64(std::string const& s);
 
-} // ripple
+} // jbcoin
 
 #endif

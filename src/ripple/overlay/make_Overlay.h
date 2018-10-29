@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_OVERLAY_MAKE_OVERLAY_H_INCLUDED
-#define RIPPLE_OVERLAY_MAKE_OVERLAY_H_INCLUDED
+#ifndef JBCOIN_OVERLAY_MAKE_OVERLAY_H_INCLUDED
+#define JBCOIN_OVERLAY_MAKE_OVERLAY_H_INCLUDED
 
-#include <ripple/rpc/ServerHandler.h>
-#include <ripple/overlay/Overlay.h>
-#include <ripple/resource/ResourceManager.h>
-#include <ripple/basics/Resolver.h>
-#include <ripple/core/Stoppable.h>
+#include <jbcoin/rpc/ServerHandler.h>
+#include <jbcoin/overlay/Overlay.h>
+#include <jbcoin/resource/ResourceManager.h>
+#include <jbcoin/basics/Resolver.h>
+#include <jbcoin/core/Stoppable.h>
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/ssl/context.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 Overlay::Setup
 setup_Overlay (BasicConfig const& config);
@@ -45,6 +45,6 @@ make_Overlay (
     boost::asio::io_service& io_service,
     BasicConfig const& config);
 
-} // ripple
+} // jbcoin
 
 #endif

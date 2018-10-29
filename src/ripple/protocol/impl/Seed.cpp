@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,22 +17,22 @@
 */
 //==============================================================================
 
-#include <ripple/protocol/Seed.h>
-#include <ripple/basics/Buffer.h>
-#include <ripple/protocol/AccountID.h>
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/protocol/SecretKey.h>
-#include <ripple/protocol/digest.h>
-#include <ripple/basics/contract.h>
-#include <ripple/crypto/RFC1751.h>
-#include <ripple/crypto/csprng.h>
-#include <ripple/beast/crypto/secure_erase.h>
-#include <ripple/beast/utility/rngfill.h>
+#include <jbcoin/protocol/Seed.h>
+#include <jbcoin/basics/Buffer.h>
+#include <jbcoin/protocol/AccountID.h>
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/protocol/SecretKey.h>
+#include <jbcoin/protocol/digest.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/crypto/RFC1751.h>
+#include <jbcoin/crypto/csprng.h>
+#include <jbcoin/beast/crypto/secure_erase.h>
+#include <jbcoin/beast/utility/rngfill.h>
 #include <algorithm>
 #include <cstring>
 #include <iterator>
 
-namespace ripple {
+namespace jbcoin {
 
 Seed::~Seed()
 {

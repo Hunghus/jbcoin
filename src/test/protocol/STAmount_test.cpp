@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#include <ripple/basics/Log.h>
-#include <ripple/basics/random.h>
-#include <ripple/protocol/STAmount.h>
-#include <ripple/beast/unit_test.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/random.h>
+#include <jbcoin/protocol/STAmount.h>
+#include <jbcoin/beast/unit_test.h>
 
-namespace ripple {
+namespace jbcoin {
 
 class STAmount_test : public beast::unit_test::suite
 {
@@ -140,34 +140,34 @@ public:
         {
             testcase ("set value (native)");
 
-            Issue const xrp (xrpIssue ());
+            Issue const jbc (jbcIssue ());
 
-            // fractional XRP (i.e. drops)
-            testSetValue ("1", xrp);
-            testSetValue ("22", xrp);
-            testSetValue ("333", xrp);
-            testSetValue ("4444", xrp);
-            testSetValue ("55555", xrp);
-            testSetValue ("666666", xrp);
+            // fractional JBC (i.e. drops)
+            testSetValue ("1", jbc);
+            testSetValue ("22", jbc);
+            testSetValue ("333", jbc);
+            testSetValue ("4444", jbc);
+            testSetValue ("55555", jbc);
+            testSetValue ("666666", jbc);
 
-            // 1 XRP up to 100 billion, in powers of 10 (in drops)
-            testSetValue ("1000000", xrp);
-            testSetValue ("10000000", xrp);
-            testSetValue ("100000000", xrp);
-            testSetValue ("1000000000", xrp);
-            testSetValue ("10000000000", xrp);
-            testSetValue ("100000000000", xrp);
-            testSetValue ("1000000000000", xrp);
-            testSetValue ("10000000000000", xrp);
-            testSetValue ("100000000000000", xrp);
-            testSetValue ("1000000000000000", xrp);
-            testSetValue ("10000000000000000", xrp);
-            testSetValue ("100000000000000000", xrp);
+            // 1 JBC up to 100 billion, in powers of 10 (in drops)
+            testSetValue ("1000000", jbc);
+            testSetValue ("10000000", jbc);
+            testSetValue ("100000000", jbc);
+            testSetValue ("1000000000", jbc);
+            testSetValue ("10000000000", jbc);
+            testSetValue ("100000000000", jbc);
+            testSetValue ("1000000000000", jbc);
+            testSetValue ("10000000000000", jbc);
+            testSetValue ("100000000000000", jbc);
+            testSetValue ("1000000000000000", jbc);
+            testSetValue ("10000000000000000", jbc);
+            testSetValue ("100000000000000000", jbc);
 
             // Invalid native values:
-            testSetValue ("1.1", xrp, false);
-            testSetValue ("100000000000000001", xrp, false);
-            testSetValue ("1000000000000000000", xrp, false);
+            testSetValue ("1.1", jbc, false);
+            testSetValue ("100000000000000001", jbc, false);
+            testSetValue ("1000000000000000000", jbc, false);
         }
 
         {
@@ -271,7 +271,7 @@ public:
         unexpected (STAmount ().getText () != "0", "STAmount fail");
         unexpected (STAmount (31).getText () != "31", "STAmount fail");
         unexpected (STAmount (310).getText () != "310", "STAmount fail");
-        unexpected (to_string (Currency ()) != "XRP", "cHC(XRP)");
+        unexpected (to_string (Currency ()) != "JBC", "cHC(JBC)");
         Currency c;
         unexpected (!to_currency (c, "USD"), "create USD currency");
         unexpected (to_string (c) != "USD", "check USD currency");
@@ -358,11 +358,11 @@ public:
         unexpected (STAmount (noIssue(), 31, -2).getText () != "0.31", "STAmount fail");
         unexpected (multiply (STAmount (noIssue(), 20), STAmount (3), noIssue()).getText () != "60",
             "STAmount multiply fail 1");
-        unexpected (multiply (STAmount (noIssue(), 20), STAmount (3), xrpIssue ()).getText () != "60",
+        unexpected (multiply (STAmount (noIssue(), 20), STAmount (3), jbcIssue ()).getText () != "60",
             "STAmount multiply fail 2");
         unexpected (multiply (STAmount (20), STAmount (3), noIssue()).getText () != "60",
             "STAmount multiply fail 3");
-        unexpected (multiply (STAmount (20), STAmount (3), xrpIssue ()).getText () != "60",
+        unexpected (multiply (STAmount (20), STAmount (3), jbcIssue ()).getText () != "60",
             "STAmount multiply fail 4");
 
         if (divide (STAmount (noIssue(), 60), STAmount (3), noIssue()).getText () != "20")
@@ -377,13 +377,13 @@ public:
             pass ();
         }
 
-        unexpected (divide (STAmount (noIssue(), 60), STAmount (3), xrpIssue ()).getText () != "20",
+        unexpected (divide (STAmount (noIssue(), 60), STAmount (3), jbcIssue ()).getText () != "20",
             "STAmount divide fail");
 
         unexpected (divide (STAmount (noIssue(), 60), STAmount (noIssue(), 3), noIssue()).getText () != "20",
             "STAmount divide fail");
 
-        unexpected (divide (STAmount (noIssue(), 60), STAmount (noIssue(), 3), xrpIssue ()).getText () != "20",
+        unexpected (divide (STAmount (noIssue(), 60), STAmount (noIssue(), 3), jbcIssue ()).getText () != "20",
             "STAmount divide fail");
 
         STAmount a1 (noIssue(), 60), a2 (noIssue(), 10, -1);
@@ -468,11 +468,11 @@ public:
 
         BEAST_EXPECT(bigDsmall == beast::zero);
 
-        bigDsmall = divide (smallValue, bigValue, xrpIssue ());
+        bigDsmall = divide (smallValue, bigValue, jbcIssue ());
 
         BEAST_EXPECT(bigDsmall == beast::zero);
 
-        bigDsmall = divide (smallValue, bigNative, xrpIssue ());
+        bigDsmall = divide (smallValue, bigNative, jbcIssue ());
 
         BEAST_EXPECT(bigDsmall == beast::zero);
 
@@ -531,9 +531,9 @@ public:
         log << fourThirdsB;
         log << fourThirdsC;
 
-        STAmount dripTest1 = mulRound (twoThird2, two, xrpIssue (), false);
-        STAmount dripTest2 = multiply (twoThird2, two, xrpIssue ());
-        STAmount dripTest3 = mulRound (twoThird2, two, xrpIssue (), true);
+        STAmount dripTest1 = mulRound (twoThird2, two, jbcIssue (), false);
+        STAmount dripTest2 = multiply (twoThird2, two, jbcIssue ());
+        STAmount dripTest3 = mulRound (twoThird2, two, jbcIssue (), true);
         log << dripTest1;
         log << dripTest2;
         log << dripTest3;
@@ -541,26 +541,26 @@ public:
     }
 
     void
-    testConvertXRP ()
+    testConvertJBC ()
     {
-        testcase ("STAmount to XRPAmount conversions");
+        testcase ("STAmount to JBCAmount conversions");
 
         Issue const usd { Currency (0x5553440000000000), AccountID (0x4985601) };
-        Issue const xrp { xrpIssue () };
+        Issue const jbc { jbcIssue () };
 
         for (std::uint64_t drops = 100000000000000000; drops != 1; drops = drops / 10)
         {
-            auto const t = amountFromString (xrp, std::to_string (drops));
-            auto const s = t.xrp ();
+            auto const t = amountFromString (jbc, std::to_string (drops));
+            auto const s = t.jbc ();
             BEAST_EXPECT(s.drops() == drops);
-            BEAST_EXPECT(t == STAmount (XRPAmount (drops)));
-            BEAST_EXPECT(s == XRPAmount (drops));
+            BEAST_EXPECT(t == STAmount (JBCAmount (drops)));
+            BEAST_EXPECT(s == JBCAmount (drops));
         }
 
         try
         {
             auto const t = amountFromString (usd, "136500");
-            fail (to_string (t.xrp ()));
+            fail (to_string (t.jbc ()));
         }
         catch (std::logic_error const&)
         {
@@ -578,7 +578,7 @@ public:
         testcase ("STAmount to IOUAmount conversions");
 
         Issue const usd { Currency (0x5553440000000000), AccountID (0x4985601) };
-        Issue const xrp { xrpIssue () };
+        Issue const jbc { jbcIssue () };
 
         for (std::uint64_t dollars = 10000000000; dollars != 1; dollars = dollars / 10)
         {
@@ -591,7 +591,7 @@ public:
 
         try
         {
-            auto const t = amountFromString (xrp, "136500");
+            auto const t = amountFromString (jbc, "136500");
             fail (to_string (t.iou ()));
         }
         catch (std::logic_error const&)
@@ -614,11 +614,11 @@ public:
         testArithmetic ();
         testUnderflow ();
         testRounding ();
-        testConvertXRP ();
+        testConvertJBC ();
         testConvertIOU ();
     }
 };
 
-BEAST_DEFINE_TESTSUITE(STAmount,ripple_data,ripple);
+BEAST_DEFINE_TESTSUITE(STAmount,jbcoin_data,jbcoin);
 
-} // ripple
+} // jbcoin

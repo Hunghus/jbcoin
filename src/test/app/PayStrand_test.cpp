@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
     copyright notice and this permission notice appear in all copies.
@@ -15,20 +15,20 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/Flow.h>
-#include <ripple/app/paths/RippleCalc.h>
-#include <ripple/app/paths/impl/Steps.h>
-#include <ripple/basics/contract.h>
-#include <ripple/core/Config.h>
-#include <ripple/ledger/ApplyViewImpl.h>
-#include <ripple/ledger/PaymentSandbox.h>
-#include <ripple/ledger/Sandbox.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/JsonFields.h>
+#include <jbcoin/app/paths/Flow.h>
+#include <jbcoin/app/paths/JBCoinCalc.h>
+#include <jbcoin/app/paths/impl/Steps.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/ledger/ApplyViewImpl.h>
+#include <jbcoin/ledger/PaymentSandbox.h>
+#include <jbcoin/ledger/Sandbox.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/JsonFields.h>
 #include <test/jtx.h>
 #include <test/jtx/PathSet.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace test {
 
 struct DirectStepInfo
@@ -38,12 +38,12 @@ struct DirectStepInfo
     Currency currency;
 };
 
-struct XRPEndpointStepInfo
+struct JBCEndpointStepInfo
 {
     AccountID acc;
 };
 
-enum class TrustFlag {freeze, auth, noripple};
+enum class TrustFlag {freeze, auth, nojbcoin};
 
 /*constexpr*/ std::uint32_t trustFlag (TrustFlag f, bool useHigh)
 {
@@ -57,10 +57,10 @@ enum class TrustFlag {freeze, auth, noripple};
             if (useHigh)
                 return lsfHighAuth;
             return lsfLowAuth;
-        case TrustFlag::noripple:
+        case TrustFlag::nojbcoin:
             if (useHigh)
-                return lsfHighNoRipple;
-            return lsfLowNoRipple;
+                return lsfHighNoJBCoin;
+            return lsfLowNoJBCoin;
     }
     return 0; // Silence warning about end of non-void function
 }
@@ -91,15 +91,15 @@ equal(std::unique_ptr<Step> const& s1, DirectStepInfo const& dsi)
 }
 
 bool
-equal(std::unique_ptr<Step> const& s1, XRPEndpointStepInfo const& xrpsi)
+equal(std::unique_ptr<Step> const& s1, JBCEndpointStepInfo const& jbcsi)
 {
     if (!s1)
         return false;
-    return test::xrpEndpointStepEqual(*s1, xrpsi.acc);
+    return test::jbcEndpointStepEqual(*s1, jbcsi.acc);
 }
 
 bool
-equal(std::unique_ptr<Step> const& s1, ripple::Book const& bsi)
+equal(std::unique_ptr<Step> const& s1, jbcoin::Book const& bsi)
 {
     if (!s1)
         return false;
@@ -138,7 +138,7 @@ STPathElement
 ape(AccountID const& a)
 {
     return STPathElement(
-        STPathElement::typeAccount, a, xrpCurrency(), xrpAccount());
+        STPathElement::typeAccount, a, jbcCurrency(), jbcAccount());
 };
 
 // Issue path element
@@ -147,7 +147,7 @@ ipe(Issue const& iss)
 {
     return STPathElement(
         STPathElement::typeCurrency | STPathElement::typeIssuer,
-        xrpAccount(),
+        jbcAccount(),
         iss.currency,
         iss.account);
 };
@@ -157,7 +157,7 @@ STPathElement
 iape(AccountID const& account)
 {
     return STPathElement(
-        STPathElement::typeIssuer, xrpAccount(), xrpCurrency(), account);
+        STPathElement::typeIssuer, jbcAccount(), jbcCurrency(), account);
 };
 
 // Currency path element
@@ -165,7 +165,7 @@ STPathElement
 cpe(Currency const& c)
 {
     return STPathElement(
-        STPathElement::typeCurrency, xrpAccount(), c, xrpAccount());
+        STPathElement::typeCurrency, jbcAccount(), c, jbcAccount());
 };
 
 // All path element
@@ -188,7 +188,7 @@ class ElementComboIter
       cur,
       rootAcc,
       rootIss,
-      xrp,
+      jbc,
       sameAccIss,
       existingAcc,
       existingCur,
@@ -244,9 +244,9 @@ public:
             (!hasAny({SB::prevAcc, SB::prevCur, SB::prevIss}) || prev_) &&
             (!hasAny({SB::rootAcc, SB::sameAccIss, SB::existingAcc, SB::prevAcc}) || has(SB::acc)) &&
             (!hasAny({SB::rootIss, SB::sameAccIss, SB::existingIss, SB::prevIss}) || has(SB::iss)) &&
-            (!hasAny({SB::xrp, SB::existingCur, SB::prevCur}) || has(SB::cur)) &&
+            (!hasAny({SB::jbc, SB::existingCur, SB::prevCur}) || has(SB::cur)) &&
             // These will be duplicates
-            (count({SB::xrp, SB::existingCur, SB::prevCur}) <= 1) &&
+            (count({SB::jbc, SB::existingCur, SB::prevCur}) <= 1) &&
             (count({SB::rootAcc, SB::existingAcc, SB::prevAcc}) <= 1) &&
             (count({SB::rootIss, SB::existingIss, SB::rootIss}) <= 1);
     }
@@ -284,7 +284,7 @@ public:
             if (!has(SB::acc))
                 return boost::none;
             if (has(SB::rootAcc))
-                return xrpAccount();
+                return jbcAccount();
             if (has(SB::existingAcc) && existingAcc)
                 return existingAcc;
             return accF().id();
@@ -293,7 +293,7 @@ public:
             if (!has(SB::iss))
                 return boost::none;
             if (has(SB::rootIss))
-                return xrpAccount();
+                return jbcAccount();
             if (has(SB::sameAccIss))
                 return acc;
             if (has(SB::existingIss) && existingIss)
@@ -303,8 +303,8 @@ public:
         auto const cur = [&]() -> boost::optional<Currency> {
             if (!has(SB::cur))
                 return boost::none;
-            if (has(SB::xrp))
-                return xrpCurrency();
+            if (has(SB::jbc))
+                return jbcCurrency();
             if (has(SB::existingCur) && existingCur)
                 return *existingCur;
             return currencyF();
@@ -323,7 +323,7 @@ public:
 struct ExistingElementPool
 {
     std::vector<jtx::Account> accounts;
-    std::vector<ripple::Currency> currencies;
+    std::vector<jbcoin::Currency> currencies;
     std::vector<std::string> currencyNames;
 
     jtx::Account
@@ -333,7 +333,7 @@ struct ExistingElementPool
         return accounts[id];
     }
 
-    ripple::Currency
+    jbcoin::Currency
     getCurrency(size_t id)
     {
         assert(id < currencies.size());
@@ -417,7 +417,7 @@ struct ExistingElementPool
         }
 
         for (auto const& a : accounts)
-            env.fund(XRP(100000), a);
+            env.fund(JBC(100000), a);
 
         // Every account trusts every other account with every currency
         for (auto ai1 = accounts.begin(), aie = accounts.end(); ai1 != aie;
@@ -469,68 +469,68 @@ struct ExistingElementPool
             env.close();
         }
 
-        // create offers to/from xrp to every other ious
+        // create offers to/from jbc to every other ious
         for (auto const& iou : ious)
         {
             auto const owner =
                 offererIndex ? accounts[*offererIndex] : iou.account;
-            env(offer(owner, iou(1000), XRP(1000)), txflags(tfPassive));
-            env(offer(owner, XRP(1000), iou(1000)), txflags(tfPassive));
+            env(offer(owner, iou(1000), JBC(1000)), txflags(tfPassive));
+            env(offer(owner, JBC(1000), iou(1000)), txflags(tfPassive));
             env.close();
         }
     }
 
     std::int64_t
-    totalXRP(ReadView const& v, bool incRoot)
+    totalJBC(ReadView const& v, bool incRoot)
     {
-        std::uint64_t totalXRP = 0;
+        std::uint64_t totalJBC = 0;
         auto add = [&](auto const& a) {
-            // XRP balance
+            // JBC balance
             auto const sle = v.read(keylet::account(a));
             if (!sle)
                 return;
             auto const b = (*sle)[sfBalance];
-            totalXRP += b.mantissa();
+            totalJBC += b.mantissa();
         };
         for (auto const& a : accounts)
             add(a);
         if (incRoot)
-            add(xrpAccount());
-        return totalXRP;
+            add(jbcAccount());
+        return totalJBC;
     }
 
-    // Check that the balances for all accounts for all currencies & XRP are the
+    // Check that the balances for all accounts for all currencies & JBC are the
     // same
     bool
     checkBalances(ReadView const& v1, ReadView const& v2)
     {
         std::vector<std::tuple<STAmount, STAmount, AccountID, AccountID>> diffs;
 
-        auto xrpBalance = [](ReadView const& v, ripple::Keylet const& k) {
+        auto jbcBalance = [](ReadView const& v, jbcoin::Keylet const& k) {
             auto const sle = v.read(k);
             if (!sle)
                 return STAmount{};
             return (*sle)[sfBalance];
         };
-        auto lineBalance = [](ReadView const& v, ripple::Keylet const& k) {
+        auto lineBalance = [](ReadView const& v, jbcoin::Keylet const& k) {
             auto const sle = v.read(k);
             if (!sle)
                 return STAmount{};
             return (*sle)[sfBalance];
         };
-        std::uint64_t totalXRP[2];
+        std::uint64_t totalJBC[2];
         for (auto ai1 = accounts.begin(), aie = accounts.end(); ai1 != aie;
              ++ai1)
         {
             {
-                // XRP balance
+                // JBC balance
                 auto const ak = keylet::account(*ai1);
-                auto const b1 = xrpBalance(v1, ak);
-                auto const b2 = xrpBalance(v2, ak);
-                totalXRP[0] += b1.mantissa();
-                totalXRP[1] += b2.mantissa();
+                auto const b1 = jbcBalance(v1, ak);
+                auto const b2 = jbcBalance(v2, ak);
+                totalJBC[0] += b1.mantissa();
+                totalJBC[1] += b2.mantissa();
                 if (b1 != b2)
-                    diffs.emplace_back(b1, b2, xrpAccount(), *ai1);
+                    diffs.emplace_back(b1, b2, jbcAccount(), *ai1);
             }
             for (auto ai2 = accounts.begin(); ai2 != aie; ++ai2)
             {
@@ -556,7 +556,7 @@ struct ExistingElementPool
         return getAccount(nextAvailAccount++);
     }
 
-    ripple::Currency
+    jbcoin::Currency
     getAvailCurrency()
     {
         return getCurrency(nextAvailCurrency++);
@@ -628,7 +628,7 @@ struct PayStrandAllPairs_test : public beast::unit_test::suite
     {
         testcase("All pairs");
         using namespace jtx;
-        using RippleCalc = ::ripple::path::RippleCalc;
+        using JBCoinCalc = ::jbcoin::path::JBCoinCalc;
 
         ExistingElementPool eep;
         Env env(*this, features);
@@ -642,7 +642,7 @@ struct PayStrandAllPairs_test : public beast::unit_test::suite
         auto const src = eep.getAvailAccount();
         auto const dst = eep.getAvailAccount();
 
-        RippleCalc::Input inputs;
+        JBCoinCalc::Input inputs;
         inputs.defaultPathsAllowed = false;
 
         auto callback = [&](
@@ -652,7 +652,7 @@ struct PayStrandAllPairs_test : public beast::unit_test::suite
             std::array<PaymentSandbox, 2> sbs{
                 {PaymentSandbox{env.current().get(), tapNONE},
                  PaymentSandbox{env.current().get(), tapNONE}}};
-            std::array<RippleCalc::Output, 2> rcOutputs;
+            std::array<JBCoinCalc::Output, 2> rcOutputs;
             // pay with both env1 and env2
             // check all result and account balances match
             // save results so can see if run out of funds or somesuch
@@ -667,7 +667,7 @@ struct PayStrandAllPairs_test : public beast::unit_test::suite
 
                 try
                 {
-                    rcOutputs[i] = RippleCalc::rippleCalculate(
+                    rcOutputs[i] = JBCoinCalc::jbcoinCalculate(
                         sbs[i],
                         sendMax,
                         deliver,
@@ -683,7 +683,7 @@ struct PayStrandAllPairs_test : public beast::unit_test::suite
                 }
             }
 
-            // check combinations of src and dst currencies (inc xrp)
+            // check combinations of src and dst currencies (inc jbc)
             // Check the results
             auto const terMatch = [&] {
                 if (rcOutputs[0].result() == rcOutputs[1].result())
@@ -711,10 +711,10 @@ struct PayStrandAllPairs_test : public beast::unit_test::suite
                     }
                 }
 
-                // xrp followed by offer that doesn't specify both currency and
-                // issuer (and currency is not xrp, if specifyed)
-                if (isXRP(sendMax) &&
-                    !(p[0].hasCurrency() && isXRP(p[0].getCurrency())) &&
+                // jbc followed by offer that doesn't specify both currency and
+                // issuer (and currency is not jbc, if specifyed)
+                if (isJBC(sendMax) &&
+                    !(p[0].hasCurrency() && isJBC(p[0].getCurrency())) &&
                     !(p[0].hasCurrency() && p[0].hasIssuer()))
                 {
                     return true;
@@ -725,9 +725,9 @@ struct PayStrandAllPairs_test : public beast::unit_test::suite
                     auto const tCur = p[i].getNodeType();
                     auto const tNext = p[i + 1].getNodeType();
                     if ((tCur & STPathElement::typeCurrency) &&
-                        isXRP(p[i].getCurrency()) &&
+                        isJBC(p[i].getCurrency()) &&
                         (tNext & STPathElement::typeAccount) &&
-                        !isXRP(p[i + 1].getAccountID()))
+                        !isJBC(p[i + 1].getAccountID()))
                     {
                         return true;
                     }
@@ -746,9 +746,9 @@ struct PayStrandAllPairs_test : public beast::unit_test::suite
         std::vector<STPathElement> prefix;
         std::vector<STPathElement> suffix;
 
-        for (auto const srcAmtIsXRP : {false, true})
+        for (auto const srcAmtIsJBC : {false, true})
         {
-            for (auto const dstAmtIsXRP : {false, true})
+            for (auto const dstAmtIsJBC : {false, true})
             {
                 for (auto const hasPrefix : {false, true})
                 {
@@ -757,13 +757,13 @@ struct PayStrandAllPairs_test : public beast::unit_test::suite
                     suffix.clear();
 
                     STAmount const sendMax{
-                        srcAmtIsXRP ? xrpIssue() : Issue{eep.getAvailCurrency(),
+                        srcAmtIsJBC ? jbcIssue() : Issue{eep.getAvailCurrency(),
                                                          eep.getAvailAccount()},
                         -1,  // (-1 == no limit)
                         0};
 
                     STAmount const deliver{
-                        dstAmtIsXRP ? xrpIssue() : Issue{eep.getAvailCurrency(),
+                        dstAmtIsJBC ? jbcIssue() : Issue{eep.getAvailCurrency(),
                                                          eep.getAvailAccount()},
                         1,
                         0};
@@ -852,7 +852,7 @@ struct PayStrandAllPairs_test : public beast::unit_test::suite
     }
 };
 
-BEAST_DEFINE_TESTSUITE_MANUAL_PRIO(PayStrandAllPairs, app, ripple, 12);
+BEAST_DEFINE_TESTSUITE_MANUAL_PRIO(PayStrandAllPairs, app, jbcoin, 12);
 
 struct PayStrand_test : public beast::unit_test::suite
 {
@@ -875,8 +875,8 @@ struct PayStrand_test : public beast::unit_test::suite
         auto const usdC = USD.currency;
 
         using D = DirectStepInfo;
-        using B = ripple::Book;
-        using XRPS = XRPEndpointStepInfo;
+        using B = jbcoin::Book;
+        using JBCS = JBCEndpointStepInfo;
 
         auto test = [&, this](
             jtx::Env& env,
@@ -904,7 +904,7 @@ struct PayStrand_test : public beast::unit_test::suite
 
         {
             Env env(*this, features);
-            env.fund(XRP(10000), alice, bob, gw);
+            env.fund(JBC(10000), alice, bob, gw);
             env.trust(USD(1000), alice, bob);
             env.trust(EUR(1000), alice, bob);
             env(pay(gw, alice, EUR(100)));
@@ -916,7 +916,7 @@ struct PayStrand_test : public beast::unit_test::suite
                     *env.current(),
                     alice,
                     alice,
-                    /*deliver*/ xrpIssue(),
+                    /*deliver*/ jbcIssue(),
                     /*limitQuality*/ boost::none,
                     /*sendMaxIssue*/ EUR.issue(),
                     path,
@@ -926,14 +926,14 @@ struct PayStrand_test : public beast::unit_test::suite
                 BEAST_EXPECT(r.first == tesSUCCESS);
             }
             {
-                STPath const path = STPath({ipe(USD), cpe(xrpCurrency())});
+                STPath const path = STPath({ipe(USD), cpe(jbcCurrency())});
                 auto r = toStrand(
                     *env.current(),
                     alice,
                     alice,
-                    /*deliver*/ xrpIssue(),
+                    /*deliver*/ jbcIssue(),
                     /*limitQuality*/ boost::none,
-                    /*sendMaxIssue*/ xrpIssue(),
+                    /*sendMaxIssue*/ jbcIssue(),
                     path,
                     true,
                     false,
@@ -945,7 +945,7 @@ struct PayStrand_test : public beast::unit_test::suite
 
         {
             Env env(*this, features);
-            env.fund(XRP(10000), alice, bob, carol, gw);
+            env.fund(JBC(10000), alice, bob, carol, gw);
 
             test(env, USD, boost::none, STPath(), terNO_LINE);
 
@@ -1000,42 +1000,42 @@ struct PayStrand_test : public beast::unit_test::suite
                 B{USD, carol["USD"]},
                 D{carol, bob, usdC});
 
-            // Path with XRP src currency
+            // Path with JBC src currency
             test(
                 env,
                 USD,
-                xrpIssue(),
+                jbcIssue(),
                 STPath({ipe(USD)}),
                 tesSUCCESS,
-                XRPS{alice},
-                B{XRP, USD},
+                JBCS{alice},
+                B{JBC, USD},
                 D{gw, bob, usdC});
 
-            // Path with XRP dst currency
+            // Path with JBC dst currency
             test(
                 env,
-                xrpIssue(),
+                jbcIssue(),
                 USD.issue(),
-                STPath({ipe(XRP)}),
+                STPath({ipe(JBC)}),
                 tesSUCCESS,
                 D{alice, gw, usdC},
-                B{USD, XRP},
-                XRPS{bob});
+                B{USD, JBC},
+                JBCS{bob});
 
-            // Path with XRP cross currency bridged payment
+            // Path with JBC cross currency bridged payment
             test(
                 env,
                 EUR,
                 USD.issue(),
-                STPath({cpe(xrpCurrency())}),
+                STPath({cpe(jbcCurrency())}),
                 tesSUCCESS,
                 D{alice, gw, usdC},
-                B{USD, XRP},
-                B{XRP, EUR},
+                B{USD, JBC},
+                B{JBC, EUR},
                 D{gw, bob, eurC});
 
-            // XRP -> XRP transaction can't include a path
-            test(env, XRP, boost::none, STPath({ape(carol)}), temBAD_PATH);
+            // JBC -> JBC transaction can't include a path
+            test(env, JBC, boost::none, STPath({ape(carol)}), temBAD_PATH);
 
             {
                 // The root account can't be the src or dst
@@ -1045,8 +1045,8 @@ struct PayStrand_test : public beast::unit_test::suite
                     auto r = toStrand(
                         *env.current(),
                         alice,
-                        xrpAccount(),
-                        XRP,
+                        jbcAccount(),
+                        JBC,
                         boost::none,
                         USD.issue(),
                         STPath(),
@@ -1059,9 +1059,9 @@ struct PayStrand_test : public beast::unit_test::suite
                     // The root account can't be the src
                     auto r = toStrand(
                         *env.current(),
-                        xrpAccount(),
+                        jbcAccount(),
                         alice,
-                        XRP,
+                        JBC,
                         boost::none,
                         boost::none,
                         STPath(),
@@ -1101,7 +1101,7 @@ struct PayStrand_test : public beast::unit_test::suite
                 USD,
                 boost::none,
                 STPath({STPathElement(
-                    0, xrpAccount(), xrpCurrency(), xrpAccount())}),
+                    0, jbcAccount(), jbcCurrency(), jbcAccount())}),
                 temBAD_PATH);
 
             // The same account can't appear more than once on a path
@@ -1129,37 +1129,37 @@ struct PayStrand_test : public beast::unit_test::suite
             using namespace jtx;
             Env env(*this, features);
 
-            env.fund(XRP(10000), alice, bob, carol, gw);
+            env.fund(JBC(10000), alice, bob, carol, gw);
             env.trust(USD(10000), alice, bob, carol);
             env.trust(EUR(10000), alice, bob, carol);
 
             env(pay(gw, bob, USD(100)));
             env(pay(gw, bob, EUR(100)));
 
-            env(offer(bob, XRP(100), USD(100)));
+            env(offer(bob, JBC(100), USD(100)));
             env(offer(bob, USD(100), EUR(100)), txflags(tfPassive));
             env(offer(bob, EUR(100), USD(100)), txflags(tfPassive));
 
-            // payment path: XRP -> XRP/USD -> USD/EUR -> EUR/USD
+            // payment path: JBC -> JBC/USD -> USD/EUR -> EUR/USD
             env(pay(alice, carol, USD(100)),
                 path(~USD, ~EUR, ~USD),
-                sendmax(XRP(200)),
-                txflags(tfNoRippleDirect),
+                sendmax(JBC(200)),
+                txflags(tfNoJBCoinDirect),
                 ter(temBAD_PATH_LOOP));
         }
 
         {
             Env env(*this, features);
-            env.fund(XRP(10000), alice, bob, noripple(gw));
+            env.fund(JBC(10000), alice, bob, nojbcoin(gw));
             env.trust(USD(1000), alice, bob);
             env(pay(gw, alice, USD(100)));
-            test(env, USD, boost::none, STPath(), terNO_RIPPLE);
+            test(env, USD, boost::none, STPath(), terNO_JBCOIN);
         }
 
         {
             // check global freeze
             Env env(*this, features);
-            env.fund(XRP(10000), alice, bob, gw);
+            env.fund(JBC(10000), alice, bob, gw);
             env.trust(USD(1000), alice, bob);
             env(pay(gw, alice, USD(100)));
 
@@ -1184,7 +1184,7 @@ struct PayStrand_test : public beast::unit_test::suite
         {
             // Freeze between gw and alice
             Env env(*this, features);
-            env.fund(XRP(10000), alice, bob, gw);
+            env.fund(JBC(10000), alice, bob, gw);
             env.trust(USD(1000), alice, bob);
             env(pay(gw, alice, USD(100)));
             test(env, USD, boost::none, STPath(), tesSUCCESS);
@@ -1197,7 +1197,7 @@ struct PayStrand_test : public beast::unit_test::suite
             // An account may require authorization to receive IOUs from an
             // issuer
             Env env(*this, features);
-            env.fund(XRP(10000), alice, bob, gw);
+            env.fund(JBC(10000), alice, bob, gw);
             env(fset(gw, asfRequireAuth));
             env.trust(USD(1000), alice, bob);
             // Authorize alice but not bob
@@ -1225,7 +1225,7 @@ struct PayStrand_test : public beast::unit_test::suite
         {
             // Check path with sendMax and node with correct sendMax already set
             Env env(*this, features);
-            env.fund(XRP(10000), alice, bob, gw);
+            env.fund(JBC(10000), alice, bob, gw);
             env.trust(USD(1000), alice, bob);
             env.trust(EUR(1000), alice, bob);
             env(pay(gw, alice, EUR(100)));
@@ -1238,22 +1238,22 @@ struct PayStrand_test : public beast::unit_test::suite
         }
 
         {
-            // last step xrp from offer
+            // last step jbc from offer
             Env env(*this, features);
-            env.fund(XRP(10000), alice, bob, gw);
+            env.fund(JBC(10000), alice, bob, gw);
             env.trust(USD(1000), alice, bob);
             env(pay(gw, alice, USD(100)));
 
-            // alice -> USD/XRP -> bob
+            // alice -> USD/JBC -> bob
             STPath path;
             path.emplace_back(boost::none, USD.currency, USD.account.id());
-            path.emplace_back(boost::none, xrpCurrency(), boost::none);
+            path.emplace_back(boost::none, jbcCurrency(), boost::none);
 
             auto r = toStrand(
                 *env.current(),
                 alice,
                 bob,
-                XRP,
+                JBC,
                 boost::none,
                 USD.issue(),
                 path,
@@ -1261,7 +1261,7 @@ struct PayStrand_test : public beast::unit_test::suite
                 false,
                 env.app().logs().journal("Flow"));
             BEAST_EXPECT(r.first == tesSUCCESS);
-            BEAST_EXPECT(equal(r.second, D{alice, gw, usdC}, B{USD.issue(), xrpIssue()}, XRPS{bob}));
+            BEAST_EXPECT(equal(r.second, D{alice, gw, usdC}, B{USD.issue(), jbcIssue()}, JBCS{bob}));
         }
     }
 
@@ -1281,15 +1281,15 @@ struct PayStrand_test : public beast::unit_test::suite
         if (features[fix1373])
         {
             Env env(*this, features);
-            env.fund(XRP(10000), alice, bob, gw);
+            env.fund(JBC(10000), alice, bob, gw);
 
             env.trust(USD(1000), alice, bob);
             env.trust(EUR(1000), alice, bob);
             env.trust(bob["USD"](1000), alice, gw);
             env.trust(bob["EUR"](1000), alice, gw);
 
-            env(offer(bob, XRP(100), bob["USD"](100)), txflags(tfPassive));
-            env(offer(gw, XRP(100), USD(100)), txflags(tfPassive));
+            env(offer(bob, JBC(100), bob["USD"](100)), txflags(tfPassive));
+            env(offer(gw, JBC(100), USD(100)), txflags(tfPassive));
 
             env(offer(bob, bob["USD"](100), bob["EUR"](100)),
                 txflags(tfPassive));
@@ -1306,46 +1306,46 @@ struct PayStrand_test : public beast::unit_test::suite
 
             env(pay(alice, alice, EUR(1)),
                 json(paths.json()),
-                sendmax(XRP(10)),
-                txflags(tfNoRippleDirect | tfPartialPayment),
+                sendmax(JBC(10)),
+                txflags(tfNoJBCoinDirect | tfPartialPayment),
                 ter(temBAD_PATH));
         }
 
         {
             Env env(*this, features);
 
-            env.fund(XRP(10000), alice, bob, carol, gw);
+            env.fund(JBC(10000), alice, bob, carol, gw);
             env.trust(USD(10000), alice, bob, carol);
 
             env(pay(gw, bob, USD(100)));
 
-            env(offer(bob, XRP(100), USD(100)), txflags(tfPassive));
-            env(offer(bob, USD(100), XRP(100)), txflags(tfPassive));
+            env(offer(bob, JBC(100), USD(100)), txflags(tfPassive));
+            env(offer(bob, USD(100), JBC(100)), txflags(tfPassive));
 
-            // payment path: XRP -> XRP/USD -> USD/XRP
-            env(pay(alice, carol, XRP(100)),
-                path(~USD, ~XRP),
-                txflags(tfNoRippleDirect),
-                ter(temBAD_SEND_XRP_PATHS));
+            // payment path: JBC -> JBC/USD -> USD/JBC
+            env(pay(alice, carol, JBC(100)),
+                path(~USD, ~JBC),
+                txflags(tfNoJBCoinDirect),
+                ter(temBAD_SEND_JBC_PATHS));
         }
 
         {
             Env env(*this, features);
 
-            env.fund(XRP(10000), alice, bob, carol, gw);
+            env.fund(JBC(10000), alice, bob, carol, gw);
             env.trust(USD(10000), alice, bob, carol);
 
             env(pay(gw, bob, USD(100)));
 
-            env(offer(bob, XRP(100), USD(100)), txflags(tfPassive));
-            env(offer(bob, USD(100), XRP(100)), txflags(tfPassive));
+            env(offer(bob, JBC(100), USD(100)), txflags(tfPassive));
+            env(offer(bob, USD(100), JBC(100)), txflags(tfPassive));
 
-            // payment path: XRP -> XRP/USD -> USD/XRP
-            env(pay(alice, carol, XRP(100)),
-                path(~USD, ~XRP),
-                sendmax(XRP(200)),
-                txflags(tfNoRippleDirect),
-                ter(temBAD_SEND_XRP_MAX));
+            // payment path: JBC -> JBC/USD -> USD/JBC
+            env(pay(alice, carol, JBC(100)),
+                path(~USD, ~JBC),
+                sendmax(JBC(200)),
+                txflags(tfNoJBCoinDirect),
+                ter(temBAD_SEND_JBC_MAX));
         }
     }
 
@@ -1366,31 +1366,31 @@ struct PayStrand_test : public beast::unit_test::suite
         {
             Env env(*this, features);
 
-            env.fund(XRP(10000), alice, bob, carol, gw);
+            env.fund(JBC(10000), alice, bob, carol, gw);
             env.trust(USD(10000), alice, bob, carol);
 
             env(pay(gw, bob, USD(100)));
             env(pay(gw, alice, USD(100)));
 
-            env(offer(bob, XRP(100), USD(100)), txflags(tfPassive));
-            env(offer(bob, USD(100), XRP(100)), txflags(tfPassive));
+            env(offer(bob, JBC(100), USD(100)), txflags(tfPassive));
+            env(offer(bob, USD(100), JBC(100)), txflags(tfPassive));
 
             auto const expectedResult = [&] () -> TER {
                 if (features[featureFlow] && !features[fix1373])
                     return tesSUCCESS;
                 return temBAD_PATH_LOOP;
             }();
-            // payment path: USD -> USD/XRP -> XRP/USD
+            // payment path: USD -> USD/JBC -> JBC/USD
             env(pay(alice, carol, USD(100)),
                 sendmax(USD(100)),
-                path(~XRP, ~USD),
-                txflags(tfNoRippleDirect),
+                path(~JBC, ~USD),
+                txflags(tfNoJBCoinDirect),
                 ter(expectedResult));
         }
         {
             Env env(*this, features);
 
-            env.fund(XRP(10000), alice, bob, carol, gw);
+            env.fund(JBC(10000), alice, bob, carol, gw);
             env.trust(USD(10000), alice, bob, carol);
             env.trust(EUR(10000), alice, bob, carol);
             env.trust(CNY(10000), alice, bob, carol);
@@ -1399,15 +1399,15 @@ struct PayStrand_test : public beast::unit_test::suite
             env(pay(gw, bob, EUR(100)));
             env(pay(gw, bob, CNY(100)));
 
-            env(offer(bob, XRP(100), USD(100)), txflags(tfPassive));
+            env(offer(bob, JBC(100), USD(100)), txflags(tfPassive));
             env(offer(bob, USD(100), EUR(100)), txflags(tfPassive));
             env(offer(bob, EUR(100), CNY(100)), txflags(tfPassive));
 
-            // payment path: XRP->XRP/USD->USD/EUR->USD/CNY
+            // payment path: JBC->JBC/USD->USD/EUR->USD/CNY
             env(pay(alice, carol, CNY(100)),
-                sendmax(XRP(100)),
+                sendmax(JBC(100)),
                 path(~USD, ~EUR, ~USD, ~CNY),
-                txflags(tfNoRippleDirect),
+                txflags(tfNoJBCoinDirect),
                 ter(temBAD_PATH_LOOP));
         }
     }
@@ -1424,7 +1424,7 @@ struct PayStrand_test : public beast::unit_test::suite
         auto const USD = gw["USD"];
 
         Env env(*this, features);
-        env.fund(XRP(10000), alice, bob, gw);
+        env.fund(JBC(10000), alice, bob, gw);
 
         STAmount sendMax{USD.issue(), 100, 1};
         STAmount noAccountAmount{Issue{USD.currency, noAccount()}, 100, 1};
@@ -1432,31 +1432,31 @@ struct PayStrand_test : public beast::unit_test::suite
         AccountID const srcAcc = alice.id();
         AccountID dstAcc = bob.id();
         STPathSet pathSet;
-        ::ripple::path::RippleCalc::Input inputs;
+        ::jbcoin::path::JBCoinCalc::Input inputs;
         inputs.defaultPathsAllowed = true;
         try
         {
             PaymentSandbox sb{env.current().get(), tapNONE};
             {
-                auto const r = ::ripple::path::RippleCalc::rippleCalculate(
+                auto const r = ::jbcoin::path::JBCoinCalc::jbcoinCalculate(
                     sb, sendMax, deliver, dstAcc, noAccount(), pathSet,
                     env.app().logs(), &inputs);
                 BEAST_EXPECT(r.result() == temBAD_PATH);
             }
             {
-                auto const r = ::ripple::path::RippleCalc::rippleCalculate(
+                auto const r = ::jbcoin::path::JBCoinCalc::jbcoinCalculate(
                     sb, sendMax, deliver, noAccount(), srcAcc, pathSet,
                     env.app().logs(), &inputs);
                 BEAST_EXPECT(r.result() == temBAD_PATH);
             }
             {
-                auto const r = ::ripple::path::RippleCalc::rippleCalculate(
+                auto const r = ::jbcoin::path::JBCoinCalc::jbcoinCalculate(
                     sb, noAccountAmount, deliver, dstAcc, srcAcc, pathSet,
                     env.app().logs(), &inputs);
                 BEAST_EXPECT(r.result() == temBAD_PATH);
             }
             {
-                auto const r = ::ripple::path::RippleCalc::rippleCalculate(
+                auto const r = ::jbcoin::path::JBCoinCalc::jbcoinCalculate(
                     sb, sendMax, noAccountAmount, dstAcc, srcAcc, pathSet,
                     env.app().logs(), &inputs);
                 BEAST_EXPECT(r.result() == temBAD_PATH);
@@ -1490,7 +1490,7 @@ struct PayStrand_test : public beast::unit_test::suite
     }
 };
 
-BEAST_DEFINE_TESTSUITE(PayStrand, app, ripple);
+BEAST_DEFINE_TESTSUITE(PayStrand, app, jbcoin);
 
 }  // test
-}  // ripple
+}  // jbcoin

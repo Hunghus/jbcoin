@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_SERVER_SERVER_H_INCLUDED
-#define RIPPLE_SERVER_SERVER_H_INCLUDED
+#ifndef JBCOIN_SERVER_SERVER_H_INCLUDED
+#define JBCOIN_SERVER_SERVER_H_INCLUDED
 
-#include <ripple/server/Port.h>
-#include <ripple/server/impl/ServerImpl.h>
-#include <ripple/beast/utility/Journal.h>
-#include <ripple/beast/utility/PropertyStream.h>
+#include <jbcoin/server/Port.h>
+#include <jbcoin/server/impl/ServerImpl.h>
+#include <jbcoin/beast/utility/Journal.h>
+#include <jbcoin/beast/utility/PropertyStream.h>
 #include <boost/asio/io_service.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Create the HTTP server using the specified handler. */
 template<class Handler>
@@ -38,6 +38,6 @@ make_Server(Handler& handler,
         handler, io_service, journal);
 }
 
-} // ripple
+} // jbcoin
 
 #endif

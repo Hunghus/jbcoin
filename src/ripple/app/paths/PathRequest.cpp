@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,25 +17,25 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/AccountCurrencies.h>
-#include <ripple/app/paths/RippleCalc.h>
-#include <ripple/app/paths/PathRequest.h>
-#include <ripple/app/paths/PathRequests.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/basics/Log.h>
-#include <ripple/core/Config.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/UintTypes.h>
-#include <ripple/rpc/impl/Tuning.h>
-#include <ripple/beast/core/LexicalCast.h>
+#include <jbcoin/app/paths/AccountCurrencies.h>
+#include <jbcoin/app/paths/JBCoinCalc.h>
+#include <jbcoin/app/paths/PathRequest.h>
+#include <jbcoin/app/paths/PathRequests.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/UintTypes.h>
+#include <jbcoin/rpc/impl/Tuning.h>
+#include <jbcoin/beast/core/LexicalCast.h>
 #include <boost/algorithm/clamp.hpp>
 #include <boost/optional.hpp>
 #include <tuple>
 
-namespace ripple {
+namespace jbcoin {
 
 PathRequest::PathRequest (
     Application& app,
@@ -163,7 +163,7 @@ void PathRequest::updateComplete ()
     }
 }
 
-bool PathRequest::isValid (std::shared_ptr<RippleLineCache> const& crCache)
+bool PathRequest::isValid (std::shared_ptr<JBCoinLineCache> const& crCache)
 {
     if (! raSrcAccount || ! raDstAccount)
         return false;
@@ -195,7 +195,7 @@ bool PathRequest::isValid (std::shared_ptr<RippleLineCache> const& crCache)
         jvDestCur.append (Json::Value (systemCurrencyCode()));
         if (! saDstAmount.native ())
         {
-            // Only XRP can be send to a non-existent account.
+            // Only JBC can be send to a non-existent account.
             jvStatus = rpcError (rpcACT_NOT_FOUND);
             return false;
         }
@@ -210,11 +210,11 @@ bool PathRequest::isValid (std::shared_ptr<RippleLineCache> const& crCache)
     }
     else
     {
-        bool const disallowXRP (
-            sleDest->getFlags() & lsfDisallowXRP);
+        bool const disallowJBC (
+            sleDest->getFlags() & lsfDisallowJBC);
 
         auto usDestCurrID = accountDestCurrencies (
-                *raDstAccount, crCache, ! disallowXRP);
+                *raDstAccount, crCache, ! disallowJBC);
 
         for (auto const& currency : usDestCurrID)
             jvDestCur.append (to_string (currency));
@@ -238,7 +238,7 @@ bool PathRequest::isValid (std::shared_ptr<RippleLineCache> const& crCache)
 */
 std::pair<bool, Json::Value>
 PathRequest::doCreate (
-    std::shared_ptr<RippleLineCache> const& cache,
+    std::shared_ptr<JBCoinLineCache> const& cache,
     Json::Value const& value)
 {
     bool valid = false;
@@ -456,7 +456,7 @@ Json::Value PathRequest::doStatus (Json::Value const&)
 }
 
 std::unique_ptr<Pathfinder> const&
-PathRequest::getPathFinder(std::shared_ptr<RippleLineCache> const& cache,
+PathRequest::getPathFinder(std::shared_ptr<JBCoinLineCache> const& cache,
     hash_map<Currency, std::unique_ptr<Pathfinder>>& currency_map,
         Currency const& currency, STAmount const& dst_amount,
             int const level)
@@ -475,7 +475,7 @@ PathRequest::getPathFinder(std::shared_ptr<RippleLineCache> const& cache,
 }
 
 bool
-PathRequest::findPaths (std::shared_ptr<RippleLineCache> const& cache,
+PathRequest::findPaths (std::shared_ptr<JBCoinLineCache> const& cache,
     int const level, Json::Value& jvArray)
 {
     auto sourceCurrencies = sciSourceCurrencies;
@@ -490,7 +490,7 @@ PathRequest::findPaths (std::shared_ptr<RippleLineCache> const& cache,
                 if (sourceCurrencies.size() >= RPC::Tuning::max_auto_src_cur)
                     return false;
                 sourceCurrencies.insert(
-                    {c, c.isZero() ? xrpAccount() : *raSrcAccount});
+                    {c, c.isZero() ? jbcAccount() : *raSrcAccount});
             }
         }
     }
@@ -520,23 +520,23 @@ PathRequest::findPaths (std::shared_ptr<RippleLineCache> const& cache,
             fullLiquidityPath, mContext[issue], issue.account);
         mContext[issue] = ps;
 
-        auto& sourceAccount = ! isXRP(issue.account)
+        auto& sourceAccount = ! isJBC(issue.account)
             ? issue.account
-            : isXRP(issue.currency)
-            ? xrpAccount()
+            : isJBC(issue.currency)
+            ? jbcAccount()
             : *raSrcAccount;
         STAmount saMaxAmount = saSendMax.value_or(
             STAmount({issue.currency, sourceAccount}, 1u, 0, true));
 
         JLOG(m_journal.debug()) << iIdentifier
-            << " Paths found, calling rippleCalc";
+            << " Paths found, calling jbcoinCalc";
 
-        path::RippleCalc::Input rcInput;
+        path::JBCoinCalc::Input rcInput;
         if (convert_all_)
             rcInput.partialPaymentAllowed = true;
         auto sandbox = std::make_unique<PaymentSandbox>
             (&*cache->getLedger(), tapNONE);
-        auto rc = path::RippleCalc::rippleCalculate(
+        auto rc = path::JBCoinCalc::jbcoinCalculate(
             *sandbox,
             saMaxAmount,    // --> Amount to send is unlimited
                             //     to get an estimate.
@@ -557,7 +557,7 @@ PathRequest::findPaths (std::shared_ptr<RippleLineCache> const& cache,
             ps.push_back(fullLiquidityPath);
             sandbox = std::make_unique<PaymentSandbox>
                 (&*cache->getLedger(), tapNONE);
-            rc = path::RippleCalc::rippleCalculate(
+            rc = path::JBCoinCalc::jbcoinCalculate(
                 *sandbox,
                 saMaxAmount,    // --> Amount to send is unlimited
                                 //     to get an estimate.
@@ -593,7 +593,7 @@ PathRequest::findPaths (std::shared_ptr<RippleLineCache> const& cache,
 
             if (hasCompletion ())
             {
-                // Old ripple_path_find API requires this
+                // Old jbcoin_path_find API requires this
                 jvEntry[jss::paths_canonical] = Json::arrayValue;
             }
 
@@ -601,7 +601,7 @@ PathRequest::findPaths (std::shared_ptr<RippleLineCache> const& cache,
         }
         else
         {
-            JLOG(m_journal.debug()) << iIdentifier << " rippleCalc returns "
+            JLOG(m_journal.debug()) << iIdentifier << " jbcoinCalc returns "
                 << transHuman(rc.result());
         }
     }
@@ -617,7 +617,7 @@ PathRequest::findPaths (std::shared_ptr<RippleLineCache> const& cache,
 }
 
 Json::Value PathRequest::doUpdate(
-    std::shared_ptr<RippleLineCache> const& cache, bool fast)
+    std::shared_ptr<JBCoinLineCache> const& cache, bool fast)
 {
     using namespace std::chrono;
     JLOG(m_journal.debug()) << iIdentifier
@@ -634,7 +634,7 @@ Json::Value PathRequest::doUpdate(
 
     if (hasCompletion ())
     {
-        // Old ripple_path_find API gives destination_currencies
+        // Old jbcoin_path_find API gives destination_currencies
         auto& destCurrencies = (newStatus[jss::destination_currencies] = Json::arrayValue);
         auto usCurrencies = accountDestCurrencies (*raDstAccount, cache, true);
         for (auto const& c : usCurrencies)
@@ -721,4 +721,4 @@ InfoSub::pointer PathRequest::getSubscriber ()
     return wpSubscriber.lock ();
 }
 
-} // ripple
+} // jbcoin

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#include <ripple/nodestore/impl/DatabaseRotatingImp.h>
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/protocol/HashPrefix.h>
+#include <jbcoin/nodestore/impl/DatabaseRotatingImp.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/protocol/HashPrefix.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace NodeStore {
 
 DatabaseRotatingImp::DatabaseRotatingImp(
@@ -62,7 +62,7 @@ void
 DatabaseRotatingImp::store(NodeObjectType type, Blob&& data,
     uint256 const& hash, std::uint32_t seq)
 {
-#if RIPPLE_VERIFY_NODEOBJECT_KEYS
+#if JBCOIN_VERIFY_NODEOBJECT_KEYS
     assert(hash == sha512Hash(makeSlice(data)));
 #endif
     auto nObj = NodeObject::createObject(type, std::move(data), hash);
@@ -119,4 +119,4 @@ DatabaseRotatingImp::fetchFrom(uint256 const& hash, std::uint32_t seq)
 }
 
 } // NodeStore
-} // ripple
+} // jbcoin

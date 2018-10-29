@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,17 +17,17 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_OVERLAY_OVERLAY_H_INCLUDED
-#define RIPPLE_OVERLAY_OVERLAY_H_INCLUDED
+#ifndef JBCOIN_OVERLAY_OVERLAY_H_INCLUDED
+#define JBCOIN_OVERLAY_OVERLAY_H_INCLUDED
 
-#include <ripple/json/json_value.h>
-#include <ripple/overlay/Peer.h>
-#include <ripple/overlay/PeerSet.h>
-#include <ripple/server/Handoff.h>
-#include <ripple/beast/asio/ssl_bundle.h>
+#include <jbcoin/json/json_value.h>
+#include <jbcoin/overlay/Peer.h>
+#include <jbcoin/overlay/PeerSet.h>
+#include <jbcoin/server/Handoff.h>
+#include <jbcoin/beast/asio/ssl_bundle.h>
 #include <boost/beast/http/message.hpp>
-#include <ripple/core/Stoppable.h>
-#include <ripple/beast/utility/PropertyStream.h>
+#include <jbcoin/core/Stoppable.h>
+#include <jbcoin/beast/utility/PropertyStream.h>
 #include <memory>
 #include <type_traits>
 #include <boost/asio/buffer.hpp>
@@ -36,7 +36,7 @@
 
 namespace boost { namespace asio { namespace ssl { class context; } } }
 
-namespace ripple {
+namespace jbcoin {
 
 /** Manages the set of connected peers. */
 class Overlay

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,26 +17,26 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_OVERLAY_PEERIMP_H_INCLUDED
-#define RIPPLE_OVERLAY_PEERIMP_H_INCLUDED
+#ifndef JBCOIN_OVERLAY_PEERIMP_H_INCLUDED
+#define JBCOIN_OVERLAY_PEERIMP_H_INCLUDED
 
-#include <ripple/app/consensus/RCLCxPeerPos.h>
-#include <ripple/basics/Log.h>
-#include <ripple/beast/utility/WrappedSink.h>
-#include <ripple/basics/RangeSet.h>
-#include <ripple/overlay/impl/ProtocolMessage.h>
-#include <ripple/overlay/impl/OverlayImpl.h>
-#include <ripple/protocol/Protocol.h>
-#include <ripple/protocol/STTx.h>
-#include <ripple/protocol/STValidation.h>
-#include <ripple/resource/Fees.h>
+#include <jbcoin/app/consensus/RCLCxPeerPos.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/beast/utility/WrappedSink.h>
+#include <jbcoin/basics/RangeSet.h>
+#include <jbcoin/overlay/impl/ProtocolMessage.h>
+#include <jbcoin/overlay/impl/OverlayImpl.h>
+#include <jbcoin/protocol/Protocol.h>
+#include <jbcoin/protocol/STTx.h>
+#include <jbcoin/protocol/STValidation.h>
+#include <jbcoin/resource/Fees.h>
 
 #include <boost/endian/conversion.hpp>
 #include <cstdint>
 #include <deque>
 #include <queue>
 
-namespace ripple {
+namespace jbcoin {
 
 class PeerImp
     : public Peer
@@ -66,7 +66,7 @@ public:
         /** Handshake has been received from this peer */
         ,handshaked
 
-        /** Running the Ripple protocol actively */
+        /** Running the JBCoin protocol actively */
         ,active
     };
 
@@ -268,7 +268,7 @@ public:
         return publicKey_;
     }
 
-    /** Return the version of rippled that the peer is running, if reported. */
+    /** Return the version of jbcoind that the peer is running, if reported. */
     std::string
     getVersion() const;
 

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,20 +18,20 @@
 //==============================================================================
 
 
-#include <ripple/nodestore/backend/MemoryFactory.cpp>
-#include <ripple/nodestore/backend/NuDBFactory.cpp>
-#include <ripple/nodestore/backend/NullFactory.cpp>
-#include <ripple/nodestore/backend/RocksDBFactory.cpp>
-#include <ripple/nodestore/backend/RocksDBQuickFactory.cpp>
+#include <jbcoin/nodestore/backend/MemoryFactory.cpp>
+#include <jbcoin/nodestore/backend/NuDBFactory.cpp>
+#include <jbcoin/nodestore/backend/NullFactory.cpp>
+#include <jbcoin/nodestore/backend/RocksDBFactory.cpp>
+#include <jbcoin/nodestore/backend/RocksDBQuickFactory.cpp>
 
-#include <ripple/nodestore/impl/BatchWriter.cpp>
-#include <ripple/nodestore/impl/Database.cpp>
-#include <ripple/nodestore/impl/DatabaseNodeImp.cpp>
-#include <ripple/nodestore/impl/DatabaseRotatingImp.cpp>
-#include <ripple/nodestore/impl/DatabaseShardImp.cpp>
-#include <ripple/nodestore/impl/DummyScheduler.cpp>
-#include <ripple/nodestore/impl/DecodedBlob.cpp>
-#include <ripple/nodestore/impl/EncodedBlob.cpp>
-#include <ripple/nodestore/impl/ManagerImp.cpp>
-#include <ripple/nodestore/impl/NodeObject.cpp>
-#include <ripple/nodestore/impl/Shard.cpp>
+#include <jbcoin/nodestore/impl/BatchWriter.cpp>
+#include <jbcoin/nodestore/impl/Database.cpp>
+#include <jbcoin/nodestore/impl/DatabaseNodeImp.cpp>
+#include <jbcoin/nodestore/impl/DatabaseRotatingImp.cpp>
+#include <jbcoin/nodestore/impl/DatabaseShardImp.cpp>
+#include <jbcoin/nodestore/impl/DummyScheduler.cpp>
+#include <jbcoin/nodestore/impl/DecodedBlob.cpp>
+#include <jbcoin/nodestore/impl/EncodedBlob.cpp>
+#include <jbcoin/nodestore/impl/ManagerImp.cpp>
+#include <jbcoin/nodestore/impl/NodeObject.cpp>
+#include <jbcoin/nodestore/impl/Shard.cpp>

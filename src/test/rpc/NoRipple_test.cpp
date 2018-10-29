@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2016 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2016 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,21 +17,21 @@
 */
 //==============================================================================
 
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/JsonFields.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/JsonFields.h>
 #include <test/jtx.h>
 
-namespace ripple {
+namespace jbcoin {
 
 namespace test {
 
-class NoRipple_test : public beast::unit_test::suite
+class NoJBCoin_test : public beast::unit_test::suite
 {
 public:
     void
     testSetAndClear()
     {
-        testcase("Set and clear noripple");
+        testcase("Set and clear nojbcoin");
 
         using namespace jtx;
         Env env(*this);
@@ -39,7 +39,7 @@ public:
         auto const gw = Account("gateway");
         auto const alice = Account("alice");
 
-        env.fund(XRP(10000), gw, alice);
+        env.fund(JBC(10000), gw, alice);
 
         auto const USD = gw["USD"];
 
@@ -50,26 +50,26 @@ public:
 
         for (auto SetOrClear : {true,false})
         {
-            // Create a trust line with no-ripple flag setting
-            env( trust(gw, USD(100), alice, SetOrClear ? tfSetNoRipple
-                                                       : tfClearNoRipple));
+            // Create a trust line with no-jbcoin flag setting
+            env( trust(gw, USD(100), alice, SetOrClear ? tfSetNoJBCoin
+                                                       : tfClearNoJBCoin));
             env.close();
 
-            // Check no-ripple flag on sender 'gateway'
+            // Check no-jbcoin flag on sender 'gateway'
             auto lines = env.rpc("json", "account_lines", to_string(account_gw));
             auto const& gline0 = lines[jss::result][jss::lines][0u];
-            BEAST_EXPECT(gline0[jss::no_ripple].asBool() == SetOrClear);
+            BEAST_EXPECT(gline0[jss::no_jbcoin].asBool() == SetOrClear);
 
-            // Check no-ripple peer flag on destination 'alice'
+            // Check no-jbcoin peer flag on destination 'alice'
             lines = env.rpc("json", "account_lines", to_string(account_alice));
             auto const& aline0 = lines[jss::result][jss::lines][0u];
-            BEAST_EXPECT(aline0[jss::no_ripple_peer].asBool() == SetOrClear);
+            BEAST_EXPECT(aline0[jss::no_jbcoin_peer].asBool() == SetOrClear);
         }
     }
 
     void testNegativeBalance(FeatureBitset features)
     {
-        testcase("Set noripple on a line with negative balance");
+        testcase("Set nojbcoin on a line with negative balance");
 
         using namespace jtx;
         Env env(*this, features);
@@ -79,7 +79,7 @@ public:
         auto const bob = Account("bob");
         auto const carol = Account("carol");
 
-        env.fund(XRP(10000), gw, alice, bob, carol);
+        env.fund(JBC(10000), gw, alice, bob, carol);
 
         env.trust(alice["USD"](100), bob);
         env.trust(bob["USD"](100), carol);
@@ -87,8 +87,8 @@ public:
 
         env(pay(alice, carol, carol["USD"](50)), path(bob));
 
-        env(trust(alice, bob["USD"](100), bob, tfSetNoRipple));
-        env(trust(bob, carol["USD"](100), carol, tfSetNoRipple));
+        env(trust(alice, bob["USD"](100), bob, tfSetNoJBCoin));
+        env(trust(bob, carol["USD"](100), carol, tfSetNoJBCoin));
         env.close();
 
         Json::Value params;
@@ -102,7 +102,7 @@ public:
             return dest_amt;
         }();
 
-        auto const resp = env.rpc("json", "ripple_path_find", to_string(params));
+        auto const resp = env.rpc("json", "jbcoin_path_find", to_string(params));
         BEAST_EXPECT(resp[jss::result][jss::alternatives].size()==1);
 
         Json::Value account_alice;
@@ -110,12 +110,12 @@ public:
         auto const res = env.rpc("json", "account_lines", to_string(account_alice));
         auto const& lines = res[jss::result][jss::lines];
         BEAST_EXPECT(lines.size() == 1);
-        BEAST_EXPECT(!lines[0u].isMember(jss::no_ripple));
+        BEAST_EXPECT(!lines[0u].isMember(jss::no_jbcoin));
     }
 
     void testPairwise(FeatureBitset features)
     {
-        testcase("pairwise NoRipple");
+        testcase("pairwise NoJBCoin");
 
         using namespace jtx;
         Env env(*this, features);
@@ -124,13 +124,13 @@ public:
         auto const bob = Account("bob");
         auto const carol = Account("carol");
 
-        env.fund(XRP(10000), alice, bob, carol);
+        env.fund(JBC(10000), alice, bob, carol);
 
         env(trust(bob, alice["USD"](100)));
         env(trust(carol, bob["USD"](100)));
 
-        env(trust(bob, alice["USD"](100), alice, tfSetNoRipple));
-        env(trust(bob, carol["USD"](100), carol, tfSetNoRipple));
+        env(trust(bob, alice["USD"](100), alice, tfSetNoJBCoin));
+        env(trust(bob, carol["USD"](100), carol, tfSetNoJBCoin));
         env.close();
 
         Json::Value params;
@@ -144,15 +144,15 @@ public:
             return dest_amt;
         }();
 
-        auto const resp = env.rpc("json", "ripple_path_find", to_string(params));
+        auto const resp = env.rpc("json", "jbcoin_path_find", to_string(params));
         BEAST_EXPECT(resp[jss::result][jss::alternatives].size() == 0);
 
         env(pay(alice, carol, bob["USD"](50)), ter(tecPATH_DRY));
     }
 
-    void testDefaultRipple(FeatureBitset features)
+    void testDefaultJBCoin(FeatureBitset features)
     {
-        testcase("Set default ripple on an account and check new trustlines");
+        testcase("Set default jbcoin on an account and check new trustlines");
 
         using namespace jtx;
         Env env(*this, features);
@@ -161,9 +161,9 @@ public:
         auto const alice = Account("alice");
         auto const bob =   Account("bob");
 
-        env.fund(XRP(10000), gw, noripple(alice, bob));
+        env.fund(JBC(10000), gw, nojbcoin(alice, bob));
 
-        env(fset(bob, asfDefaultRipple));
+        env(fset(bob, asfDefaultJBCoin));
 
         auto const USD = gw["USD"];
 
@@ -177,7 +177,7 @@ public:
 
             auto lines = env.rpc("json", "account_lines", to_string(params));
             auto const& line0 = lines[jss::result][jss::lines][0u];
-            BEAST_EXPECT(line0[jss::no_ripple_peer].asBool() == true);
+            BEAST_EXPECT(line0[jss::no_jbcoin_peer].asBool() == true);
         }
         {
             Json::Value params;
@@ -186,7 +186,7 @@ public:
 
             auto lines = env.rpc("json", "account_lines", to_string(params));
             auto const& line0 = lines[jss::result][jss::lines][0u];
-            BEAST_EXPECT(line0[jss::no_ripple].asBool() == true);
+            BEAST_EXPECT(line0[jss::no_jbcoin].asBool() == true);
         }
         {
             Json::Value params;
@@ -195,7 +195,7 @@ public:
 
             auto lines = env.rpc("json", "account_lines", to_string(params));
             auto const& line0 = lines[jss::result][jss::lines][0u];
-            BEAST_EXPECT(line0[jss::no_ripple].asBool() == false);
+            BEAST_EXPECT(line0[jss::no_jbcoin].asBool() == false);
         }
         {
             Json::Value params;
@@ -204,7 +204,7 @@ public:
 
             auto lines = env.rpc("json", "account_lines", to_string(params));
             auto const& line0 = lines[jss::result][jss::lines][0u];
-            BEAST_EXPECT(line0[jss::no_ripple_peer].asBool() == false);
+            BEAST_EXPECT(line0[jss::no_jbcoin_peer].asBool() == false);
         }
     }
 
@@ -215,7 +215,7 @@ public:
         auto withFeatsTests = [this](FeatureBitset features) {
             testNegativeBalance(features);
             testPairwise(features);
-            testDefaultRipple(features);
+            testDefaultJBCoin(features);
         };
         using namespace jtx;
         auto const sa = supported_amendments();
@@ -226,8 +226,8 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE(NoRipple,app,ripple);
+BEAST_DEFINE_TESTSUITE(NoJBCoin,app,jbcoin);
 
 } // RPC
-} // ripple
+} // jbcoin
 

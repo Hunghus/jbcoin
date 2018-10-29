@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,16 +18,16 @@
 //==============================================================================
 
 
-#include <ripple/nodestore/impl/DatabaseShardImp.h>
-#include <ripple/app/ledger/InboundLedgers.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/basics/chrono.h>
-#include <ripple/basics/random.h>
-#include <ripple/nodestore/DummyScheduler.h>
-#include <ripple/nodestore/Manager.h>
-#include <ripple/protocol/HashPrefix.h>
+#include <jbcoin/nodestore/impl/DatabaseShardImp.h>
+#include <jbcoin/app/ledger/InboundLedgers.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/basics/random.h>
+#include <jbcoin/nodestore/DummyScheduler.h>
+#include <jbcoin/nodestore/Manager.h>
+#include <jbcoin/protocol/HashPrefix.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace NodeStore {
 
 constexpr std::uint32_t DatabaseShard::ledgersPerShardDefault;
@@ -787,7 +787,7 @@ void
 DatabaseShardImp::store(NodeObjectType type,
     Blob&& data, uint256 const& hash, std::uint32_t seq)
 {
-#if RIPPLE_VERIFY_NODEOBJECT_KEYS
+#if JBCOIN_VERIFY_NODEOBJECT_KEYS
     assert(hash == sha512Hash(makeSlice(data)));
 #endif
     std::shared_ptr<NodeObject> nObj;
@@ -1141,4 +1141,4 @@ DatabaseShardImp::available() const
 }
 
 } // NodeStore
-} // ripple
+} // jbcoin

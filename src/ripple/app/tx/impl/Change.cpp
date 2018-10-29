@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#include <ripple/app/tx/impl/Change.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/AmendmentTable.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/TxFlags.h>
+#include <jbcoin/app/tx/impl/Change.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/AmendmentTable.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/TxFlags.h>
 
-namespace ripple {
+namespace jbcoin {
 
 NotTEC
 Change::preflight (PreflightContext const& ctx)

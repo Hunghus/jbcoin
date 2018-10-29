@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,20 +17,20 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_TX_INVARIANTCHECK_H_INCLUDED
-#define RIPPLE_APP_TX_INVARIANTCHECK_H_INCLUDED
+#ifndef JBCOIN_APP_TX_INVARIANTCHECK_H_INCLUDED
+#define JBCOIN_APP_TX_INVARIANTCHECK_H_INCLUDED
 
-#include <ripple/basics/base_uint.h>
-#include <ripple/protocol/STLedgerEntry.h>
-#include <ripple/protocol/STTx.h>
-#include <ripple/protocol/TER.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/basics/base_uint.h>
+#include <jbcoin/protocol/STLedgerEntry.h>
+#include <jbcoin/protocol/STTx.h>
+#include <jbcoin/protocol/TER.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <map>
 #include <tuple>
 #include <utility>
 #include <cstdint>
 
-namespace ripple {
+namespace jbcoin {
 
 #if GENERATING_DOCS
 /**
@@ -76,7 +76,7 @@ public:
     finalize(
         STTx const& tx,
         TER const tec,
-        XRPAmount const fee,
+        JBCAmount const fee,
         beast::Journal const& j);
 };
 #endif
@@ -98,18 +98,18 @@ public:
         std::shared_ptr<SLE const> const&);
 
     bool
-    finalize(STTx const&, TER const, XRPAmount const, beast::Journal const&);
+    finalize(STTx const&, TER const, JBCAmount const, beast::Journal const&);
 };
 
 /**
- * @brief Invariant: A transaction must not create XRP and should only destroy
- * the XRP fee.
+ * @brief Invariant: A transaction must not create JBC and should only destroy
+ * the JBC fee.
  *
  * We iterate through all account roots, payment channels and escrow entries
- * that were modified and calculate the net change in XRP caused by the
+ * that were modified and calculate the net change in JBC caused by the
  * transactions.
  */
-class XRPNotCreated
+class JBCNotCreated
 {
     std::int64_t drops_ = 0;
 
@@ -122,7 +122,7 @@ public:
         std::shared_ptr<SLE const> const&);
 
     bool
-    finalize(STTx const&, TER const, XRPAmount const, beast::Journal const&);
+    finalize(STTx const&, TER const, JBCAmount const, beast::Journal const&);
 };
 
 /**
@@ -145,17 +145,17 @@ public:
         std::shared_ptr<SLE const> const&);
 
     bool
-    finalize(STTx const&, TER const, XRPAmount const, beast::Journal const&);
+    finalize(STTx const&, TER const, JBCAmount const, beast::Journal const&);
 };
 
 /**
- * @brief Invariant: An account XRP balance must be in XRP and take a value
+ * @brief Invariant: An account JBC balance must be in JBC and take a value
  *                   between 0 and SYSTEM_CURRENCY_START drops, inclusive.
  *
  * We iterate all account roots modified by the transaction and ensure that
- * their XRP balances are reasonable.
+ * their JBC balances are reasonable.
  */
-class XRPBalanceChecks
+class JBCBalanceChecks
 {
     bool bad_ = false;
 
@@ -168,7 +168,7 @@ public:
         std::shared_ptr<SLE const> const&);
 
     bool
-    finalize(STTx const&, TER const, XRPAmount const, beast::Journal const&);
+    finalize(STTx const&, TER const, JBCAmount const, beast::Journal const&);
 };
 
 /**
@@ -189,18 +189,18 @@ public:
         std::shared_ptr<SLE const> const&);
 
     bool
-    finalize(STTx const&, TER const, XRPAmount const, beast::Journal const&);
+    finalize(STTx const&, TER const, JBCAmount const, beast::Journal const&);
 };
 
 /**
- * @brief Invariant: Trust lines using XRP are not allowed.
+ * @brief Invariant: Trust lines using JBC are not allowed.
  *
  * We iterate all the trust lines created by this transaction and ensure
  * that they are against a valid issuer.
  */
-class NoXRPTrustLines
+class NoJBCTrustLines
 {
-    bool xrpTrustLine_ = false;
+    bool jbcTrustLine_ = false;
 
 public:
     void
@@ -211,15 +211,15 @@ public:
         std::shared_ptr<SLE const> const&);
 
     bool
-    finalize(STTx const&, TER const, XRPAmount const, beast::Journal const&);
+    finalize(STTx const&, TER const, JBCAmount const, beast::Journal const&);
 };
 
 /**
  * @brief Invariant: offers should be for non-negative amounts and must not
- *                   be XRP to XRP.
+ *                   be JBC to JBC.
  *
  * Examine all offers modified by the transaction and ensure that there are
- * no offers which contain negative amounts or which exchange XRP for XRP.
+ * no offers which contain negative amounts or which exchange JBC for JBC.
  */
 class NoBadOffers
 {
@@ -234,7 +234,7 @@ public:
         std::shared_ptr<SLE const> const&);
 
     bool
-    finalize(STTx const&, TER const, XRPAmount const, beast::Journal const&);
+    finalize(STTx const&, TER const, JBCAmount const, beast::Journal const&);
 
 };
 
@@ -255,7 +255,7 @@ public:
         std::shared_ptr<SLE const> const&);
 
     bool
-    finalize(STTx const&, TER const, XRPAmount const, beast::Journal const&);
+    finalize(STTx const&, TER const, JBCAmount const, beast::Journal const&);
 
 };
 
@@ -265,9 +265,9 @@ using InvariantChecks = std::tuple<
     TransactionFeeCheck,
     AccountRootsNotDeleted,
     LedgerEntryTypesMatch,
-    XRPBalanceChecks,
-    XRPNotCreated,
-    NoXRPTrustLines,
+    JBCBalanceChecks,
+    JBCNotCreated,
+    NoJBCTrustLines,
     NoBadOffers,
     NoZeroEscrow
 >;
@@ -278,7 +278,7 @@ using InvariantChecks = std::tuple<
  * @return std::tuple of instances that implement the required invariant check
  * methods
  *
- * @see ripple::InvariantChecker_PROTOTYPE
+ * @see jbcoin::InvariantChecker_PROTOTYPE
  */
 inline
 InvariantChecks
@@ -287,6 +287,6 @@ getInvariantChecks()
     return InvariantChecks{};
 }
 
-} //ripple
+} //jbcoin
 
 #endif

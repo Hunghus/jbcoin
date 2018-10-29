@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_RPC_JSON_BODY_H
-#define RIPPLE_RPC_JSON_BODY_H
+#ifndef JBCOIN_RPC_JSON_BODY_H
+#define JBCOIN_RPC_JSON_BODY_H
 
-#include <ripple/json/json_value.h>
-#include <ripple/json/to_string.h>
+#include <jbcoin/json/json_value.h>
+#include <jbcoin/json/to_string.h>
 
 #include <boost/beast/core/multi_buffer.hpp>
 #include <boost/beast/http/message.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 /// Body that holds JSON
 struct json_body
@@ -109,6 +109,6 @@ struct json_body
     };
 };
 
-} // ripple
+} // jbcoin
 
 #endif

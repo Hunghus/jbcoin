@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_WEBSOCKET_AUTOSOCKET_AUTOSOCKET_H_INCLUDED
-#define RIPPLE_WEBSOCKET_AUTOSOCKET_AUTOSOCKET_H_INCLUDED
+#ifndef JBCOIN_WEBSOCKET_AUTOSOCKET_AUTOSOCKET_H_INCLUDED
+#define JBCOIN_WEBSOCKET_AUTOSOCKET_AUTOSOCKET_H_INCLUDED
 
-#include <ripple/basics/Log.h>
-#include <ripple/beast/net/IPAddressConversion.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/beast/net/IPAddressConversion.h>
 #include <boost/beast/core/bind_handler.hpp>
 #include <boost/asio.hpp>
 #include <boost/asio/ip/tcp.hpp>
@@ -124,7 +124,7 @@ public:
     static bool rfc2818_verify (std::string const& domain, bool preverified,
                                 boost::asio::ssl::verify_context& ctx, beast::Journal j)
     {
-        using namespace ripple;
+        using namespace jbcoin;
 
         if (boost::asio::ssl::rfc2818_verification (domain) (preverified, ctx))
             return true;
@@ -317,7 +317,7 @@ protected:
     void handle_autodetect (
         callback cbFunc, const error_code& ec, size_t bytesTransferred)
     {
-        using namespace ripple;
+        using namespace jbcoin;
 
         if (ec)
         {

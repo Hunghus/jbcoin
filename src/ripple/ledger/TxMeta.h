@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_TX_TRANSACTIONMETA_H_INCLUDED
-#define RIPPLE_APP_TX_TRANSACTIONMETA_H_INCLUDED
+#ifndef JBCOIN_APP_TX_TRANSACTIONMETA_H_INCLUDED
+#define JBCOIN_APP_TX_TRANSACTIONMETA_H_INCLUDED
 
-#include <ripple/protocol/STLedgerEntry.h>
-#include <ripple/protocol/STArray.h>
-#include <ripple/protocol/TER.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/protocol/STLedgerEntry.h>
+#include <jbcoin/protocol/STArray.h>
+#include <jbcoin/protocol/TER.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <boost/container/flat_set.hpp>
 #include <boost/optional.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
-// VFALCO Move to ripple/app/ledger/detail, rename to TxMeta
+// VFALCO Move to jbcoin/app/ledger/detail, rename to TxMeta
 class TxMeta
 {
 public:
@@ -148,6 +148,6 @@ private:
     beast::Journal j_;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

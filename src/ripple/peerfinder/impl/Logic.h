@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,25 +17,25 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PEERFINDER_LOGIC_H_INCLUDED
-#define RIPPLE_PEERFINDER_LOGIC_H_INCLUDED
+#ifndef JBCOIN_PEERFINDER_LOGIC_H_INCLUDED
+#define JBCOIN_PEERFINDER_LOGIC_H_INCLUDED
 
-#include <ripple/basics/Log.h>
-#include <ripple/basics/random.h>
-#include <ripple/basics/contract.h>
-#include <ripple/beast/container/aged_container_utility.h>
-#include <ripple/beast/net/IPAddressConversion.h>
-#include <ripple/peerfinder/PeerfinderManager.h>
-#include <ripple/peerfinder/impl/Bootcache.h>
-#include <ripple/peerfinder/impl/Counts.h>
-#include <ripple/peerfinder/impl/Fixed.h>
-#include <ripple/peerfinder/impl/Handouts.h>
-#include <ripple/peerfinder/impl/Livecache.h>
-#include <ripple/peerfinder/impl/Reporting.h>
-#include <ripple/peerfinder/impl/SlotImp.h>
-#include <ripple/peerfinder/impl/Source.h>
-#include <ripple/peerfinder/impl/Store.h>
-#include <ripple/peerfinder/impl/iosformat.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/random.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/beast/container/aged_container_utility.h>
+#include <jbcoin/beast/net/IPAddressConversion.h>
+#include <jbcoin/peerfinder/PeerfinderManager.h>
+#include <jbcoin/peerfinder/impl/Bootcache.h>
+#include <jbcoin/peerfinder/impl/Counts.h>
+#include <jbcoin/peerfinder/impl/Fixed.h>
+#include <jbcoin/peerfinder/impl/Handouts.h>
+#include <jbcoin/peerfinder/impl/Livecache.h>
+#include <jbcoin/peerfinder/impl/Reporting.h>
+#include <jbcoin/peerfinder/impl/SlotImp.h>
+#include <jbcoin/peerfinder/impl/Source.h>
+#include <jbcoin/peerfinder/impl/Store.h>
+#include <jbcoin/peerfinder/impl/iosformat.h>
 
 #include <algorithm>
 #include <functional>
@@ -43,7 +43,7 @@
 #include <memory>
 #include <set>
 
-namespace ripple {
+namespace jbcoin {
 namespace PeerFinder {
 
 /** The Logic for maintaining the list of Slot addresses.

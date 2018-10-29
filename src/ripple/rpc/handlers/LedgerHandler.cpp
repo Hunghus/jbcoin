@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#include <ripple/rpc/handlers/LedgerHandler.h>
-#include <ripple/app/ledger/LedgerToJson.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/json/Object.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/resource/Fees.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
-#include <ripple/rpc/Role.h>
+#include <jbcoin/rpc/handlers/LedgerHandler.h>
+#include <jbcoin/app/ledger/LedgerToJson.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/json/Object.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/resource/Fees.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
+#include <jbcoin/rpc/Role.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace RPC {
 
 LedgerHandler::LedgerHandler (Context& context) : context_ (context)
@@ -61,7 +61,7 @@ Status LedgerHandler::check()
 
     options_ = (full ? LedgerFill::full : 0)
             | (expand ? LedgerFill::expand : 0)
-            | (transactions ? LedgerFill::dumpTxrp : 0)
+            | (transactions ? LedgerFill::dumpTjbc : 0)
             | (accounts ? LedgerFill::dumpState : 0)
             | (binary ? LedgerFill::binary : 0)
             | (owner_funds ? LedgerFill::ownerFunds : 0)
@@ -98,4 +98,4 @@ Status LedgerHandler::check()
 }
 
 } // RPC
-} // ripple
+} // jbcoin

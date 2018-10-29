@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_LEDGERFORMATS_H_INCLUDED
-#define RIPPLE_PROTOCOL_LEDGERFORMATS_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_LEDGERFORMATS_H_INCLUDED
+#define JBCOIN_PROTOCOL_LEDGERFORMATS_H_INCLUDED
 
-#include <ripple/protocol/KnownFormats.h>
+#include <jbcoin/protocol/KnownFormats.h>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Ledger entry types.
 
@@ -64,7 +64,7 @@ enum LedgerEntryType
     */
     ltDIR_NODE          = 'd',
 
-    ltRIPPLE_STATE      = 'r',
+    ltJBCOIN_STATE      = 'r',
 
     ltTICKET            = 'T',
 
@@ -80,7 +80,7 @@ enum LedgerEntryType
 
     ltESCROW            = 'u',
 
-    // Simple unidirection xrp channel
+    // Simple unidirection jbc channel
     ltPAYCHAN           = 'x',
 
     ltCHECK             = 'C',
@@ -103,7 +103,7 @@ enum LedgerNameSpace
     spaceAccount        = 'a',
     spaceDirNode        = 'd',
     spaceGenerator      = 'g',
-    spaceRipple         = 'r',
+    spaceJBCoin         = 'r',
     spaceOffer          = 'o',  // Entry for an offer.
     spaceOwnerDir       = 'O',  // Directory of things owned by an account.
     spaceBookDir        = 'B',  // Directory of order books.
@@ -114,7 +114,7 @@ enum LedgerNameSpace
     spaceFee            = 'e',
     spaceTicket         = 'T',
     spaceSignerList     = 'S',
-    spaceXRPUChannel    = 'x',
+    spaceJBCUChannel    = 'x',
     spaceCheck          = 'C',
     spaceDepositPreauth = 'p',
 
@@ -132,24 +132,24 @@ enum LedgerSpecificFlags
     lsfPasswordSpent    = 0x00010000,   // True, if password set fee is spent.
     lsfRequireDestTag   = 0x00020000,   // True, to require a DestinationTag for payments.
     lsfRequireAuth      = 0x00040000,   // True, to require a authorization to hold IOUs.
-    lsfDisallowXRP      = 0x00080000,   // True, to disallow sending XRP.
+    lsfDisallowJBC      = 0x00080000,   // True, to disallow sending JBC.
     lsfDisableMaster    = 0x00100000,   // True, force regular key
-    lsfNoFreeze         = 0x00200000,   // True, cannot freeze ripple states
+    lsfNoFreeze         = 0x00200000,   // True, cannot freeze jbcoin states
     lsfGlobalFreeze     = 0x00400000,   // True, all assets frozen
-    lsfDefaultRipple    = 0x00800000,   // True, trust lines allow rippling by default
+    lsfDefaultJBCoin    = 0x00800000,   // True, trust lines allow rippling by default
     lsfDepositAuth      = 0x01000000,   // True, all deposits require authorization
 
     // ltOFFER
     lsfPassive          = 0x00010000,
     lsfSell             = 0x00020000,   // True, offer was placed as a sell.
 
-    // ltRIPPLE_STATE
+    // ltJBCOIN_STATE
     lsfLowReserve       = 0x00010000,   // True, if entry counts toward reserve.
     lsfHighReserve      = 0x00020000,
     lsfLowAuth          = 0x00040000,
     lsfHighAuth         = 0x00080000,
-    lsfLowNoRipple      = 0x00100000,
-    lsfHighNoRipple     = 0x00200000,
+    lsfLowNoJBCoin      = 0x00100000,
+    lsfHighNoJBCoin     = 0x00200000,
     lsfLowFreeze        = 0x00400000,   // True, low side has set freeze flag
     lsfHighFreeze       = 0x00800000,   // True, high side has set freeze flag
 };
@@ -170,6 +170,6 @@ private:
     void addCommonFields (Item& item) override;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

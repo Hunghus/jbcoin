@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,27 +17,27 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/AccountCurrencies.h>
+#include <jbcoin/app/paths/AccountCurrencies.h>
 
-namespace ripple {
+namespace jbcoin {
 
 hash_set<Currency> accountSourceCurrencies (
     AccountID const& account,
-    std::shared_ptr<RippleLineCache> const& lrCache,
-    bool includeXRP)
+    std::shared_ptr<JBCoinLineCache> const& lrCache,
+    bool includeJBC)
 {
     hash_set<Currency> currencies;
 
     // YYY Only bother if they are above reserve
-    if (includeXRP)
-        currencies.insert (xrpCurrency());
+    if (includeJBC)
+        currencies.insert (jbcCurrency());
 
-    // List of ripple lines.
-    auto& rippleLines = lrCache->getRippleLines (account);
+    // List of jbcoin lines.
+    auto& jbcoinLines = lrCache->getJBCoinLines (account);
 
-    for (auto const& item : rippleLines)
+    for (auto const& item : jbcoinLines)
     {
-        auto rspEntry = (RippleState*) item.get ();
+        auto rspEntry = (JBCoinState*) item.get ();
         assert (rspEntry);
         if (!rspEntry)
             continue;
@@ -61,21 +61,21 @@ hash_set<Currency> accountSourceCurrencies (
 
 hash_set<Currency> accountDestCurrencies (
     AccountID const& account,
-    std::shared_ptr<RippleLineCache> const& lrCache,
-    bool includeXRP)
+    std::shared_ptr<JBCoinLineCache> const& lrCache,
+    bool includeJBC)
 {
     hash_set<Currency> currencies;
 
-    if (includeXRP)
-        currencies.insert (xrpCurrency());
+    if (includeJBC)
+        currencies.insert (jbcCurrency());
     // Even if account doesn't exist
 
-    // List of ripple lines.
-    auto& rippleLines = lrCache->getRippleLines (account);
+    // List of jbcoin lines.
+    auto& jbcoinLines = lrCache->getJBCoinLines (account);
 
-    for (auto const& item : rippleLines)
+    for (auto const& item : jbcoinLines)
     {
-        auto rspEntry = (RippleState*) item.get ();
+        auto rspEntry = (JBCoinState*) item.get ();
         assert (rspEntry);
         if (!rspEntry)
             continue;
@@ -90,4 +90,4 @@ hash_set<Currency> accountDestCurrencies (
     return currencies;
 }
 
-} // ripple
+} // jbcoin

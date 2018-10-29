@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,13 +17,13 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_SYSTEMPARAMETERS_H_INCLUDED
-#define RIPPLE_PROTOCOL_SYSTEMPARAMETERS_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_SYSTEMPARAMETERS_H_INCLUDED
+#define JBCOIN_PROTOCOL_SYSTEMPARAMETERS_H_INCLUDED
 
 #include <cstdint>
 #include <string>
 
-namespace ripple {
+namespace jbcoin {
 
 // Various protocol and system specific constant globals.
 
@@ -32,7 +32,7 @@ static inline
 std::string const&
 systemName ()
 {
-    static std::string const name = "ripple";
+    static std::string const name = "jbcoin";
     return name;
 }
 
@@ -45,7 +45,7 @@ static
 std::uint64_t const
 SYSTEM_CURRENCY_USERS = 100000000;
 
-/** Number of drops per 1 XRP */
+/** Number of drops per 1 JBC */
 static
 std::uint64_t const
 SYSTEM_CURRENCY_PARTS = 1000000;
@@ -60,15 +60,15 @@ static inline
 std::string const&
 systemCurrencyCode ()
 {
-    static std::string const code = "XRP";
+    static std::string const code = "JBC";
     return code;
 }
 
-/** The XRP ledger network's earliest allowed sequence */
+/** The JBC ledger network's earliest allowed sequence */
 static
 std::uint32_t constexpr
-XRP_LEDGER_EARLIEST_SEQ {32570};
+JBC_LEDGER_EARLIEST_SEQ {32570};
 
-} // ripple
+} // jbcoin
 
 #endif

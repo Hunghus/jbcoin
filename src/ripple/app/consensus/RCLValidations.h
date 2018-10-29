@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_CONSENSUSS_VALIDATIONS_H_INCLUDED
-#define RIPPLE_APP_CONSENSUSS_VALIDATIONS_H_INCLUDED
+#ifndef JBCOIN_APP_CONSENSUSS_VALIDATIONS_H_INCLUDED
+#define JBCOIN_APP_CONSENSUSS_VALIDATIONS_H_INCLUDED
 
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/basics/ScopedLock.h>
-#include <ripple/consensus/Validations.h>
-#include <ripple/protocol/Protocol.h>
-#include <ripple/protocol/RippleLedgerHash.h>
-#include <ripple/protocol/STValidation.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/basics/ScopedLock.h>
+#include <jbcoin/consensus/Validations.h>
+#include <jbcoin/protocol/Protocol.h>
+#include <jbcoin/protocol/JBCoinLedgerHash.h>
+#include <jbcoin/protocol/STValidation.h>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 
 class Application;
 
@@ -41,8 +41,8 @@ class RCLValidation
 {
     STValidation::pointer val_;
 public:
-    using NodeKey = ripple::PublicKey;
-    using NodeID = ripple::NodeID;
+    using NodeKey = jbcoin::PublicKey;
+    using NodeID = jbcoin::NodeID;
 
     /** Constructor
 
@@ -279,6 +279,6 @@ handleNewValidation(
     STValidation::ref val,
     std::string const& source);
 
-}  // namespace ripple
+}  // namespace jbcoin
 
 #endif

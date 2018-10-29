@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,31 +17,31 @@
 */
 //==============================================================================
 
-#include <ripple/app/tx/impl/Payment.h>
-#include <ripple/app/paths/RippleCalc.h>
-#include <ripple/basics/Log.h>
-#include <ripple/core/Config.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/st.h>
-#include <ripple/protocol/TxFlags.h>
-#include <ripple/protocol/JsonFields.h>
+#include <jbcoin/app/tx/impl/Payment.h>
+#include <jbcoin/app/paths/JBCoinCalc.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/st.h>
+#include <jbcoin/protocol/TxFlags.h>
+#include <jbcoin/protocol/JsonFields.h>
 
-namespace ripple {
+namespace jbcoin {
 
-// See https://ripple.com/wiki/Transaction_Format#Payment_.280.29
+// See https://jbcoin.com/wiki/Transaction_Format#Payment_.280.29
 
-XRPAmount
+JBCAmount
 Payment::calculateMaxSpend(STTx const& tx)
 {
     if (tx.isFieldPresent(sfSendMax))
     {
         auto const& sendMax = tx[sfSendMax];
-        return sendMax.native() ? sendMax.xrp() : beast::zero;
+        return sendMax.native() ? sendMax.jbc() : beast::zero;
     }
-    /* If there's no sfSendMax in XRP, and the sfAmount isn't
-    in XRP, then the transaction can not send XRP. */
+    /* If there's no sfSendMax in JBC, and the sfAmount isn't
+    in JBC, then the transaction can not send JBC. */
     auto const& saDstAmount = tx.getFieldAmount(sfAmount);
-    return saDstAmount.native() ? saDstAmount.xrp() : beast::zero;
+    return saDstAmount.native() ? saDstAmount.jbc() : beast::zero;
 }
 
 NotTEC
@@ -65,7 +65,7 @@ Payment::preflight (PreflightContext const& ctx)
 
     bool const partialPaymentAllowed = uTxFlags & tfPartialPayment;
     bool const limitQuality = uTxFlags & tfLimitQuality;
-    bool const defaultPathsAllowed = !(uTxFlags & tfNoRippleDirect);
+    bool const defaultPathsAllowed = !(uTxFlags & tfNoJBCoinDirect);
     bool const bPaths = tx.isFieldPresent (sfPaths);
     bool const bMax = tx.isFieldPresent (sfSendMax);
 
@@ -87,8 +87,8 @@ Payment::preflight (PreflightContext const& ctx)
     auto const& uSrcCurrency = maxSourceAmount.getCurrency ();
     auto const& uDstCurrency = saDstAmount.getCurrency ();
 
-    // isZero() is XRP.  FIX!
-    bool const bXRPDirect = uSrcCurrency.isZero () && uDstCurrency.isZero ();
+    // isZero() is JBC.  FIX!
+    bool const bJBCDirect = uSrcCurrency.isZero () && uDstCurrency.isZero ();
 
     if (!isLegalNet (saDstAmount) || !isLegalNet (maxSourceAmount))
         return temBAD_AMOUNT;
@@ -128,40 +128,40 @@ Payment::preflight (PreflightContext const& ctx)
             " to self without path for " << to_string (uDstCurrency);
         return temREDUNDANT;
     }
-    if (bXRPDirect && bMax)
+    if (bJBCDirect && bMax)
     {
         // Consistent but redundant transaction.
         JLOG(j.trace()) << "Malformed transaction: " <<
-            "SendMax specified for XRP to XRP.";
-        return temBAD_SEND_XRP_MAX;
+            "SendMax specified for JBC to JBC.";
+        return temBAD_SEND_JBC_MAX;
     }
-    if (bXRPDirect && bPaths)
+    if (bJBCDirect && bPaths)
     {
-        // XRP is sent without paths.
+        // JBC is sent without paths.
         JLOG(j.trace()) << "Malformed transaction: " <<
-            "Paths specified for XRP to XRP.";
-        return temBAD_SEND_XRP_PATHS;
+            "Paths specified for JBC to JBC.";
+        return temBAD_SEND_JBC_PATHS;
     }
-    if (bXRPDirect && partialPaymentAllowed)
-    {
-        // Consistent but redundant transaction.
-        JLOG(j.trace()) << "Malformed transaction: " <<
-            "Partial payment specified for XRP to XRP.";
-        return temBAD_SEND_XRP_PARTIAL;
-    }
-    if (bXRPDirect && limitQuality)
+    if (bJBCDirect && partialPaymentAllowed)
     {
         // Consistent but redundant transaction.
         JLOG(j.trace()) << "Malformed transaction: " <<
-            "Limit quality specified for XRP to XRP.";
-        return temBAD_SEND_XRP_LIMIT;
+            "Partial payment specified for JBC to JBC.";
+        return temBAD_SEND_JBC_PARTIAL;
     }
-    if (bXRPDirect && !defaultPathsAllowed)
+    if (bJBCDirect && limitQuality)
     {
         // Consistent but redundant transaction.
         JLOG(j.trace()) << "Malformed transaction: " <<
-            "No ripple direct specified for XRP to XRP.";
-        return temBAD_SEND_XRP_NO_DIRECT;
+            "Limit quality specified for JBC to JBC.";
+        return temBAD_SEND_JBC_LIMIT;
+    }
+    if (bJBCDirect && !defaultPathsAllowed)
+    {
+        // Consistent but redundant transaction.
+        JLOG(j.trace()) << "Malformed transaction: " <<
+            "No jbcoin direct specified for JBC to JBC.";
+        return temBAD_SEND_JBC_NO_DIRECT;
     }
 
     auto const deliverMin = tx[~sfDeliverMin];
@@ -204,7 +204,7 @@ Payment::preflight (PreflightContext const& ctx)
 TER
 Payment::preclaim(PreclaimContext const& ctx)
 {
-    // Ripple if source or destination is non-native or if there are paths.
+    // JBCoin if source or destination is non-native or if there are paths.
     std::uint32_t const uTxFlags = ctx.tx.getFlags();
     bool const partialPaymentAllowed = uTxFlags & tfPartialPayment;
     auto const paths = ctx.tx.isFieldPresent(sfPaths);
@@ -252,7 +252,7 @@ Payment::preclaim(PreclaimContext const& ctx)
             // TODO: dedupe
             // Another transaction could create the account and then this
             // transaction would succeed.
-            return tecNO_DST_INSUF_XRP;
+            return tecNO_DST_INSUF_JBC;
         }
     }
     else if ((sleDst->getFlags() & lsfRequireDestTag) &&
@@ -270,7 +270,7 @@ Payment::preclaim(PreclaimContext const& ctx)
 
     if (paths || sendMax || !saDstAmount.native())
     {
-        // Ripple payment with at least one intermediate step and uses
+        // JBCoin payment with at least one intermediate step and uses
         // transitive balances.
 
         // Copy paths into an editable class.
@@ -301,11 +301,11 @@ Payment::doApply ()
 {
     auto const deliverMin = ctx_.tx[~sfDeliverMin];
 
-    // Ripple if source or destination is non-native or if there are paths.
+    // JBCoin if source or destination is non-native or if there are paths.
     std::uint32_t const uTxFlags = ctx_.tx.getFlags ();
     bool const partialPaymentAllowed = uTxFlags & tfPartialPayment;
     bool const limitQuality = uTxFlags & tfLimitQuality;
-    bool const defaultPathsAllowed = !(uTxFlags & tfNoRippleDirect);
+    bool const defaultPathsAllowed = !(uTxFlags & tfNoJBCoinDirect);
     auto const paths = ctx_.tx.isFieldPresent(sfPaths);
     auto const sendMax = ctx_.tx[~sfSendMax];
 
@@ -352,16 +352,16 @@ Payment::doApply ()
 
     bool const depositPreauth = view().rules().enabled(featureDepositPreauth);
 
-    bool const bRipple = paths || sendMax || !saDstAmount.native ();
+    bool const bJBCoin = paths || sendMax || !saDstAmount.native ();
 
-    // If the destination has lsfDepositAuth set, then only direct XRP
+    // If the destination has lsfDepositAuth set, then only direct JBC
     // payments (no intermediate steps) are allowed to the destination.
-    if (!depositPreauth && bRipple && reqDepositAuth)
+    if (!depositPreauth && bJBCoin && reqDepositAuth)
         return tecNO_PERMISSION;
 
-    if (bRipple)
+    if (bJBCoin)
     {
-        // Ripple payment with at least one intermediate step and uses
+        // JBCoin payment with at least one intermediate step and uses
         // transitive balances.
 
         if (depositPreauth && reqDepositAuth)
@@ -381,19 +381,19 @@ Payment::doApply ()
         // Copy paths into an editable class.
         STPathSet spsPaths = ctx_.tx.getFieldPathSet (sfPaths);
 
-        path::RippleCalc::Input rcInput;
+        path::JBCoinCalc::Input rcInput;
         rcInput.partialPaymentAllowed = partialPaymentAllowed;
         rcInput.defaultPathsAllowed = defaultPathsAllowed;
         rcInput.limitQuality = limitQuality;
         rcInput.isLedgerOpen = view().open();
 
-        path::RippleCalc::Output rc;
+        path::JBCoinCalc::Output rc;
         {
             PaymentSandbox pv(&view());
             JLOG(j_.debug())
-                << "Entering RippleCalc in payment: "
+                << "Entering JBCoinCalc in payment: "
                 << ctx_.tx.getTransactionID();
-            rc = path::RippleCalc::rippleCalculate (
+            rc = path::JBCoinCalc::jbcoinCalculate (
                 pv,
                 maxSourceAmount,
                 saDstAmount,
@@ -422,7 +422,7 @@ Payment::doApply ()
 
         auto terResult = rc.result ();
 
-        // Because of its overhead, if RippleCalc
+        // Because of its overhead, if JBCoinCalc
         // fails with a retry code, claim a fee
         // instead. Maybe the user will be more
         // careful with their path spec next time.
@@ -433,7 +433,7 @@ Payment::doApply ()
 
     assert (saDstAmount.native ());
 
-    // Direct XRP payment.
+    // Direct JBC payment.
 
     // uOwnerCount is the number of entries in this ledger for this
     // account that require a reserve.
@@ -447,15 +447,15 @@ Payment::doApply ()
     // fees were charged. We want to make sure we have enough reserve
     // to send. Allow final spend to use reserve for fee.
     auto const mmm = std::max(reserve,
-        ctx_.tx.getFieldAmount (sfFee).xrp ());
+        ctx_.tx.getFieldAmount (sfFee).jbc ());
 
-    if (mPriorBalance < saDstAmount.xrp () + mmm)
+    if (mPriorBalance < saDstAmount.jbc () + mmm)
     {
         // Vote no. However the transaction might succeed, if applied in
         // a different order.
         JLOG(j_.trace()) << "Delay transaction: Insufficient funds: " <<
             " " << to_string (mPriorBalance) <<
-            " / " << to_string (saDstAmount.xrp () + mmm) <<
+            " / " << to_string (saDstAmount.jbc () + mmm) <<
             " (" << to_string (reserve) << ")";
 
         return tecUNFUNDED_PAYMENT;
@@ -466,19 +466,19 @@ Payment::doApply ()
     if (reqDepositAuth)
     {
         // If depositPreauth is enabled, then an account that requires
-        // authorization has three ways to get an XRP Payment in:
+        // authorization has three ways to get an JBC Payment in:
         //  1. If Account == Destination, or
         //  2. If Account is deposit preauthorized by destination, or
-        //  3. If the destination's XRP balance is
+        //  3. If the destination's JBC balance is
         //    a. less than or equal to the base reserve and
         //    b. the deposit amount is less than or equal to the base reserve,
         // then we allow the deposit.
         //
         // Rule 3 is designed to keep an account from getting wedged
         // in an unusable state if it sets the lsfDepositAuth flag and
-        // then consumes all of its XRP.  Without the rule if an
-        // account with lsfDepositAuth set spent all of its XRP, it
-        // would be unable to acquire more XRP required to pay fees.
+        // then consumes all of its JBC.  Without the rule if an
+        // account with lsfDepositAuth set spent all of its JBC, it
+        // would be unable to acquire more JBC required to pay fees.
         //
         // We choose the base reserve as our bound because it is
         // a small number that seldom changes but is always sufficient
@@ -489,7 +489,7 @@ Payment::doApply ()
                 keylet::depositPreauth (uDstAccountID, account_)))
             {
                 // Get the base reserve.
-                XRPAmount const dstReserve {view().fees().accountReserve (0)};
+                JBCAmount const dstReserve {view().fees().accountReserve (0)};
 
                 if (saDstAmount > dstReserve ||
                     sleDst->getFieldAmount (sfBalance) > dstReserve)
@@ -512,4 +512,4 @@ Payment::doApply ()
     return tesSUCCESS;
 }
 
-}  // ripple
+}  // jbcoin

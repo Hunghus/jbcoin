@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_TX_CREATEOFFER_H_INCLUDED
-#define RIPPLE_TX_CREATEOFFER_H_INCLUDED
+#ifndef JBCOIN_TX_CREATEOFFER_H_INCLUDED
+#define JBCOIN_TX_CREATEOFFER_H_INCLUDED
 
-#include <ripple/app/tx/impl/OfferStream.h>
-#include <ripple/app/tx/impl/Taker.h>
-#include <ripple/app/tx/impl/Transactor.h>
+#include <jbcoin/app/tx/impl/OfferStream.h>
+#include <jbcoin/app/tx/impl/Taker.h>
+#include <jbcoin/app/tx/impl/Transactor.h>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 class PaymentSandbox;
 class Sandbox;
@@ -44,7 +44,7 @@ public:
 
     /** Override default behavior provided by Transactor base class. */
     static
-    XRPAmount
+    JBCAmount
     calculateMaxSpend(STTx const& tx);
 
     /** Enforce constraints beyond those of the Transactor base class. */

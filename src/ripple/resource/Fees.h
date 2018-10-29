@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_RESOURCE_FEES_H_INCLUDED
-#define RIPPLE_RESOURCE_FEES_H_INCLUDED
+#ifndef JBCOIN_RESOURCE_FEES_H_INCLUDED
+#define JBCOIN_RESOURCE_FEES_H_INCLUDED
 
-#include <ripple/resource/Charge.h>
+#include <jbcoin/resource/Charge.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace Resource {
 
 /** Schedule of fees charged for imposing load on the server. */

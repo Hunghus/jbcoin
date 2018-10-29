@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/InboundTransactions.h>
-#include <ripple/app/ledger/InboundLedgers.h>
-#include <ripple/app/ledger/impl/TransactionAcquire.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/basics/Log.h>
-#include <ripple/core/JobQueue.h>
-#include <ripple/protocol/RippleLedgerHash.h>
-#include <ripple/resource/Fees.h>
+#include <jbcoin/app/ledger/InboundTransactions.h>
+#include <jbcoin/app/ledger/InboundLedgers.h>
+#include <jbcoin/app/ledger/impl/TransactionAcquire.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/core/JobQueue.h>
+#include <jbcoin/protocol/JBCoinLedgerHash.h>
+#include <jbcoin/resource/Fees.h>
 #include <memory>
 #include <mutex>
 
-namespace ripple {
+namespace jbcoin {
 
 enum
 {
@@ -304,4 +304,4 @@ make_InboundTransactions (
         (app, clock, parent, collector, std::move (gotSet));
 }
 
-} // ripple
+} // jbcoin

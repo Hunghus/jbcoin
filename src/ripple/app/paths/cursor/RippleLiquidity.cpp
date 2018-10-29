@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#include <ripple/protocol/Quality.h>
-#include <ripple/app/paths/cursor/RippleLiquidity.h>
-#include <ripple/basics/Log.h>
+#include <jbcoin/protocol/Quality.h>
+#include <jbcoin/app/paths/cursor/JBCoinLiquidity.h>
+#include <jbcoin/basics/Log.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace path {
 
 // Compute how much might flow for the node for the pass. Does not actually
@@ -46,8 +46,8 @@ namespace path {
 // it will work and set a rate.  If called again, the new work must not worsen
 // the previous rate.
 
-void rippleLiquidity (
-    RippleCalc& rippleCalc,
+void jbcoinLiquidity (
+    JBCoinCalc& jbcoinCalc,
     Rate const& qualityIn,
     Rate const& qualityOut,
     STAmount const& saPrvReq,   // --> in limit including fees, <0 = unlimited
@@ -56,8 +56,8 @@ void rippleLiquidity (
     STAmount& saCurAct,  // <-> out limit including achieved so far: <-- <= -->
     std::uint64_t& uRateMax)
 {
-    JLOG (rippleCalc.j_.trace())
-        << "rippleLiquidity>"
+    JLOG (jbcoinCalc.j_.trace())
+        << "jbcoinLiquidity>"
         << " qualityIn=" << qualityIn
         << " qualityOut=" << qualityOut
         << " saPrvReq=" << saPrvReq
@@ -83,8 +83,8 @@ void rippleLiquidity (
     // How much could possibly flow through the current node?
     const STAmount  saCur = saCurReq - saCurAct;
 
-    JLOG (rippleCalc.j_.trace())
-        << "rippleLiquidity: "
+    JLOG (jbcoinCalc.j_.trace())
+        << "jbcoinLiquidity: "
         << " bPrvUnlimited=" << bPrvUnlimited
         << " saPrv=" << saPrv
         << " saCur=" << saCur;
@@ -96,7 +96,7 @@ void rippleLiquidity (
     if (qualityIn >= qualityOut)
     {
         // You're getting better quality than you asked for, so no fee.
-        JLOG (rippleCalc.j_.trace()) << "rippleLiquidity: No fees";
+        JLOG (jbcoinCalc.j_.trace()) << "jbcoinLiquidity: No fees";
 
         // Only process if the current rate, 1:1, is not worse than the previous
         // rate, uRateMax - otherwise there is no flow.
@@ -126,7 +126,7 @@ void rippleLiquidity (
     else
     {
         // If the quality is worse than the previous
-        JLOG (rippleCalc.j_.trace()) << "rippleLiquidity: Fee";
+        JLOG (jbcoinCalc.j_.trace()) << "jbcoinLiquidity: Fee";
 
         std::uint64_t const uRate = getRate (
             STAmount (qualityOut.value),
@@ -141,8 +141,8 @@ void rippleLiquidity (
 
             STAmount saCurIn = divideRound (numerator, qualityIn, true);
 
-            JLOG (rippleCalc.j_.trace())
-                << "rippleLiquidity:"
+            JLOG (jbcoinCalc.j_.trace())
+                << "jbcoinLiquidity:"
                 << " bPrvUnlimited=" << bPrvUnlimited
                 << " saPrv=" << saPrv
                 << " saCurIn=" << saCurIn;
@@ -152,8 +152,8 @@ void rippleLiquidity (
                 // All of current. Some amount of previous.
                 saCurAct += saCur;
                 saPrvAct += saCurIn;
-                JLOG (rippleCalc.j_.trace())
-                    << "rippleLiquidity:3c:"
+                JLOG (jbcoinCalc.j_.trace())
+                    << "jbcoinLiquidity:3c:"
                     << " saCurReq=" << saCurReq
                     << " saPrvAct=" << saPrvAct;
             }
@@ -172,8 +172,8 @@ void rippleLiquidity (
                 STAmount saCurOut = divideRound (numerator,
                     qualityOut, saCur.issue(), true);
 
-                JLOG (rippleCalc.j_.trace())
-                    << "rippleLiquidity:4: saCurReq=" << saCurReq;
+                JLOG (jbcoinCalc.j_.trace())
+                    << "jbcoinLiquidity:4: saCurReq=" << saCurReq;
 
                 saCurAct += saCurOut;
                 saPrvAct = saPrvReq;
@@ -183,8 +183,8 @@ void rippleLiquidity (
         }
     }
 
-    JLOG (rippleCalc.j_.trace())
-        << "rippleLiquidity<"
+    JLOG (jbcoinCalc.j_.trace())
+        << "jbcoinLiquidity<"
         << " qualityIn=" << qualityIn
         << " qualityOut=" << qualityOut
         << " saPrvReq=" << saPrvReq
@@ -195,7 +195,7 @@ void rippleLiquidity (
 
 static
 Rate
-rippleQuality (
+jbcoinQuality (
     ReadView const& view,
     AccountID const& destination,
     AccountID const& source,
@@ -231,7 +231,7 @@ quality_in (
     AccountID const& uFromAccountID,
     Currency const& currency)
 {
-    return rippleQuality (view, uToAccountID, uFromAccountID, currency,
+    return jbcoinQuality (view, uToAccountID, uFromAccountID, currency,
         sfLowQualityIn, sfHighQualityIn);
 }
 
@@ -242,9 +242,9 @@ quality_out (
     AccountID const& uFromAccountID,
     Currency const& currency)
 {
-    return rippleQuality (view, uToAccountID, uFromAccountID, currency,
+    return jbcoinQuality (view, uToAccountID, uFromAccountID, currency,
         sfLowQualityOut, sfHighQualityOut);
 }
 
 } // path
-} // ripple
+} // jbcoin

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2018 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2018 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/BuildLedger.h>
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/app/ledger/LedgerReplay.h>
-#include <ripple/app/ledger/OpenLedger.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/CanonicalTXSet.h>
-#include <ripple/app/tx/apply.h>
-#include <ripple/protocol/Feature.h>
+#include <jbcoin/app/ledger/BuildLedger.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/app/ledger/LedgerReplay.h>
+#include <jbcoin/app/ledger/OpenLedger.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/CanonicalTXSet.h>
+#include <jbcoin/app/tx/apply.h>
+#include <jbcoin/protocol/Feature.h>
 
-namespace ripple {
+namespace jbcoin {
 
 /* Generic buildLedgerImpl that dispatches to ApplyTxs invocable with signature
     void(OpenView&, std::shared_ptr<Ledger> const&)
@@ -232,4 +232,4 @@ buildLedger(
         });
 }
 
-}  // namespace ripple
+}  // namespace jbcoin

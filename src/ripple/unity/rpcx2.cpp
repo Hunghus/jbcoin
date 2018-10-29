@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -21,44 +21,44 @@
 // This has to be included early to prevent an obscure MSVC compile error
 #include <boost/asio/deadline_timer.hpp>
 
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/rpc/RPCHandler.h>
-#include <ripple/rpc/handlers/Handlers.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/rpc/RPCHandler.h>
+#include <jbcoin/rpc/handlers/Handlers.h>
 
-#include <ripple/rpc/handlers/PathFind.cpp>
-#include <ripple/rpc/handlers/PayChanClaim.cpp>
-#include <ripple/rpc/handlers/Peers.cpp>
-#include <ripple/rpc/handlers/Ping.cpp>
-#include <ripple/rpc/handlers/Print.cpp>
-#include <ripple/rpc/handlers/Random.cpp>
-#include <ripple/rpc/handlers/RipplePathFind.cpp>
-#include <ripple/rpc/handlers/ServerInfo.cpp>
-#include <ripple/rpc/handlers/ServerState.cpp>
-#include <ripple/rpc/handlers/SignFor.cpp>
-#include <ripple/rpc/handlers/SignHandler.cpp>
-#include <ripple/rpc/handlers/Stop.cpp>
-#include <ripple/rpc/handlers/Submit.cpp>
-#include <ripple/rpc/handlers/SubmitMultiSigned.cpp>
-#include <ripple/rpc/handlers/Subscribe.cpp>
-#include <ripple/rpc/handlers/TransactionEntry.cpp>
-#include <ripple/rpc/handlers/Tx.cpp>
-#include <ripple/rpc/handlers/TxHistory.cpp>
-#include <ripple/rpc/handlers/UnlList.cpp>
-#include <ripple/rpc/handlers/Unsubscribe.cpp>
-#include <ripple/rpc/handlers/ValidationCreate.cpp>
-#include <ripple/rpc/handlers/ValidationSeed.cpp>
-#include <ripple/rpc/handlers/Validators.cpp>
-#include <ripple/rpc/handlers/ValidatorListSites.cpp>
-#include <ripple/rpc/handlers/WalletPropose.cpp>
+#include <jbcoin/rpc/handlers/PathFind.cpp>
+#include <jbcoin/rpc/handlers/PayChanClaim.cpp>
+#include <jbcoin/rpc/handlers/Peers.cpp>
+#include <jbcoin/rpc/handlers/Ping.cpp>
+#include <jbcoin/rpc/handlers/Print.cpp>
+#include <jbcoin/rpc/handlers/Random.cpp>
+#include <jbcoin/rpc/handlers/JBCoinPathFind.cpp>
+#include <jbcoin/rpc/handlers/ServerInfo.cpp>
+#include <jbcoin/rpc/handlers/ServerState.cpp>
+#include <jbcoin/rpc/handlers/SignFor.cpp>
+#include <jbcoin/rpc/handlers/SignHandler.cpp>
+#include <jbcoin/rpc/handlers/Stop.cpp>
+#include <jbcoin/rpc/handlers/Submit.cpp>
+#include <jbcoin/rpc/handlers/SubmitMultiSigned.cpp>
+#include <jbcoin/rpc/handlers/Subscribe.cpp>
+#include <jbcoin/rpc/handlers/TransactionEntry.cpp>
+#include <jbcoin/rpc/handlers/Tx.cpp>
+#include <jbcoin/rpc/handlers/TxHistory.cpp>
+#include <jbcoin/rpc/handlers/UnlList.cpp>
+#include <jbcoin/rpc/handlers/Unsubscribe.cpp>
+#include <jbcoin/rpc/handlers/ValidationCreate.cpp>
+#include <jbcoin/rpc/handlers/ValidationSeed.cpp>
+#include <jbcoin/rpc/handlers/Validators.cpp>
+#include <jbcoin/rpc/handlers/ValidatorListSites.cpp>
+#include <jbcoin/rpc/handlers/WalletPropose.cpp>
 
-#include <ripple/rpc/impl/Handler.cpp>
-#include <ripple/rpc/impl/LegacyPathFind.cpp>
-#include <ripple/rpc/impl/Role.cpp>
-#include <ripple/rpc/impl/RPCHandler.cpp>
-#include <ripple/rpc/impl/RPCHelpers.cpp>
-#include <ripple/rpc/impl/ServerHandlerImp.cpp>
-#include <ripple/rpc/impl/ShardArchiveHandler.cpp>
-#include <ripple/rpc/impl/Status.cpp>
-#include <ripple/rpc/impl/TransactionSign.cpp>
+#include <jbcoin/rpc/impl/Handler.cpp>
+#include <jbcoin/rpc/impl/LegacyPathFind.cpp>
+#include <jbcoin/rpc/impl/Role.cpp>
+#include <jbcoin/rpc/impl/RPCHandler.cpp>
+#include <jbcoin/rpc/impl/RPCHelpers.cpp>
+#include <jbcoin/rpc/impl/ServerHandlerImp.cpp>
+#include <jbcoin/rpc/impl/ShardArchiveHandler.cpp>
+#include <jbcoin/rpc/impl/Status.cpp>
+#include <jbcoin/rpc/impl/TransactionSign.cpp>
 
 

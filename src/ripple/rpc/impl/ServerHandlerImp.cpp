@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,29 +17,29 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/basics/base64.h>
-#include <ripple/beast/rfc2616.h>
-#include <ripple/beast/net/IPAddressConversion.h>
-#include <ripple/json/json_reader.h>
-#include <ripple/rpc/json_body.h>
-#include <ripple/rpc/ServerHandler.h>
-#include <ripple/server/Server.h>
-#include <ripple/server/impl/JSONRPCUtil.h>
-#include <ripple/rpc/impl/ServerHandlerImp.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/make_SSLContext.h>
-#include <ripple/core/JobQueue.h>
-#include <ripple/json/to_string.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/overlay/Overlay.h>
-#include <ripple/resource/ResourceManager.h>
-#include <ripple/resource/Fees.h>
-#include <ripple/rpc/impl/Tuning.h>
-#include <ripple/rpc/RPCHandler.h>
-#include <ripple/server/SimpleWriter.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/basics/base64.h>
+#include <jbcoin/beast/rfc2616.h>
+#include <jbcoin/beast/net/IPAddressConversion.h>
+#include <jbcoin/json/json_reader.h>
+#include <jbcoin/rpc/json_body.h>
+#include <jbcoin/rpc/ServerHandler.h>
+#include <jbcoin/server/Server.h>
+#include <jbcoin/server/impl/JSONRPCUtil.h>
+#include <jbcoin/rpc/impl/ServerHandlerImp.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/make_SSLContext.h>
+#include <jbcoin/core/JobQueue.h>
+#include <jbcoin/json/to_string.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/overlay/Overlay.h>
+#include <jbcoin/resource/ResourceManager.h>
+#include <jbcoin/resource/Fees.h>
+#include <jbcoin/rpc/impl/Tuning.h>
+#include <jbcoin/rpc/RPCHandler.h>
+#include <jbcoin/server/SimpleWriter.h>
 #include <boost/beast/http/fields.hpp>
 #include <boost/beast/http/string_body.hpp>
 #include <boost/algorithm/string.hpp>
@@ -49,7 +49,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-namespace ripple {
+namespace jbcoin {
 
 static
 bool
@@ -409,8 +409,8 @@ ServerHandlerImp::processSession(
                 jr[jss::id]  = jv[jss::id];
             if (jv.isMember(jss::jsonrpc))
                 jr[jss::jsonrpc] = jv[jss::jsonrpc];
-            if (jv.isMember(jss::ripplerpc))
-                jr[jss::ripplerpc] = jv[jss::ripplerpc];
+            if (jv.isMember(jss::jbcoinrpc))
+                jr[jss::jbcoinrpc] = jv[jss::jbcoinrpc];
 
             is->getConsumer().charge(Resource::feeInvalidRPC);
             return jr;
@@ -501,8 +501,8 @@ ServerHandlerImp::processSession(
         jr[jss::id] = jv[jss::id];
     if (jv.isMember(jss::jsonrpc))
         jr[jss::jsonrpc] = jv[jss::jsonrpc];
-    if (jv.isMember(jss::ripplerpc))
-        jr[jss::ripplerpc] = jv[jss::ripplerpc];
+    if (jv.isMember(jss::jbcoinrpc))
+        jr[jss::jbcoinrpc] = jv[jss::jbcoinrpc];
     jr[jss::type] = jss::response;
     return jr;
 }
@@ -739,9 +739,9 @@ ServerHandlerImp::processRequest (Port const& port,
             params = jsonRPC;
         }
 
-        std::string ripplerpc = "1.0";
-        if (params.isMember(jss::ripplerpc) && params[jss::ripplerpc] != "1.0")
-            ripplerpc = params[jss::ripplerpc].asString();
+        std::string jbcoinrpc = "1.0";
+        if (params.isMember(jss::jbcoinrpc) && params[jss::jbcoinrpc] != "1.0")
+            jbcoinrpc = params[jss::jbcoinrpc].asString();
         /**
          * Clear header-assigned values if not positively identified from a
          * secure_gateway.
@@ -771,7 +771,7 @@ ServerHandlerImp::processRequest (Port const& port,
             result[jss::warning] = jss::load;
 
         Json::Value r(Json::objectValue);
-        if (ripplerpc >= "2.0")
+        if (jbcoinrpc >= "2.0")
         {
             if (result.isMember(jss::error))
             {
@@ -825,8 +825,8 @@ ServerHandlerImp::processRequest (Port const& port,
 
         if (params.isMember(jss::jsonrpc))
             r[jss::jsonrpc] = params[jss::jsonrpc];
-        if (params.isMember(jss::ripplerpc))
-           r[jss::ripplerpc] = params[jss::ripplerpc];
+        if (params.isMember(jss::jbcoinrpc))
+           r[jss::jbcoinrpc] = params[jss::jbcoinrpc];
         if (params.isMember(jss::id))
             r[jss::id] = params[jss::id];
         if (batch)
@@ -875,8 +875,8 @@ ServerHandlerImp::statusResponse(
     {
         msg.result(boost::beast::http::status::ok);
         msg.body() = "<!DOCTYPE html><html><head><title>" + systemName() +
-            " Test page for rippled</title></head><body><h1>" +
-                systemName() + " Test</h1><p>This page shows rippled http(s) "
+            " Test page for jbcoind</title></head><body><h1>" +
+                systemName() + " Test</h1><p>This page shows jbcoind http(s) "
                     "connectivity is working.</p></body></html>";
     }
     else
@@ -1115,4 +1115,4 @@ make_ServerHandler (Application& app, Stoppable& parent,
         io_service, jobQueue, networkOPs, resourceManager, cm);
 }
 
-} // ripple
+} // jbcoin

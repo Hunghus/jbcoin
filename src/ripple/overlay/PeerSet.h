@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_PEERS_PEERSET_H_INCLUDED
-#define RIPPLE_APP_PEERS_PEERSET_H_INCLUDED
+#ifndef JBCOIN_APP_PEERS_PEERSET_H_INCLUDED
+#define JBCOIN_APP_PEERS_PEERSET_H_INCLUDED
 
-#include <ripple/app/main/Application.h>
-#include <ripple/beast/clock/abstract_clock.h>
-#include <ripple/beast/utility/Journal.h>
-#include <ripple/overlay/Peer.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/beast/clock/abstract_clock.h>
+#include <jbcoin/beast/utility/Journal.h>
+#include <jbcoin/overlay/Peer.h>
 #include <boost/asio/basic_waitable_timer.hpp>
 #include <mutex>
 #include <set>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Supports data retrieval by managing a set of peers.
 
@@ -171,6 +171,6 @@ protected:
     std::set <Peer::id_t> mPeers;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

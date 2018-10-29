@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_LEDGER_APPLYSTATETABLE_H_INCLUDED
-#define RIPPLE_LEDGER_APPLYSTATETABLE_H_INCLUDED
+#ifndef JBCOIN_LEDGER_APPLYSTATETABLE_H_INCLUDED
+#define JBCOIN_LEDGER_APPLYSTATETABLE_H_INCLUDED
 
-#include <ripple/ledger/OpenView.h>
-#include <ripple/ledger/RawView.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/ledger/TxMeta.h>
-#include <ripple/protocol/TER.h>
-#include <ripple/protocol/XRPAmount.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/ledger/OpenView.h>
+#include <jbcoin/ledger/RawView.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/ledger/TxMeta.h>
+#include <jbcoin/protocol/TER.h>
+#include <jbcoin/protocol/JBCAmount.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <memory>
 
-namespace ripple {
+namespace jbcoin {
 namespace detail {
 
 // Helper class that buffers modifications
@@ -51,7 +51,7 @@ private:
         std::pair<Action, std::shared_ptr<SLE>>>;
 
     items_t items_;
-    XRPAmount dropsDestroyed_ = 0;
+    JBCAmount dropsDestroyed_ = 0;
 
 public:
     ApplyStateTable() = default;
@@ -119,10 +119,10 @@ public:
         std::shared_ptr<SLE> const& sle);
 
     void
-    destroyXRP (XRPAmount const& fee);
+    destroyJBC (JBCAmount const& fee);
 
     // For debugging
-    XRPAmount const& dropsDestroyed () const
+    JBCAmount const& dropsDestroyed () const
     {
         return dropsDestroyed_;
     }
@@ -154,6 +154,6 @@ private:
 };
 
 } // detail
-} // ripple
+} // jbcoin
 
 #endif

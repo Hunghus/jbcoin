@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_LEDGER_RAWVIEW_H_INCLUDED
-#define RIPPLE_LEDGER_RAWVIEW_H_INCLUDED
+#ifndef JBCOIN_LEDGER_RAWVIEW_H_INCLUDED
+#define JBCOIN_LEDGER_RAWVIEW_H_INCLUDED
 
-#include <ripple/ledger/ReadView.h>
-#include <ripple/protocol/Serializer.h>
-#include <ripple/protocol/STLedgerEntry.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/protocol/Serializer.h>
+#include <jbcoin/protocol/STLedgerEntry.h>
 #include <boost/optional.hpp>
 #include <cstdint>
 #include <memory>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Interface for ledger entry changes.
 
@@ -82,13 +82,13 @@ public:
     void
     rawReplace (std::shared_ptr<SLE> const& sle) = 0;
 
-    /** Destroy XRP.
+    /** Destroy JBC.
 
         This is used to pay for transaction fees.
     */
     virtual
     void
-    rawDestroyXRP (XRPAmount const& fee) = 0;
+    rawDestroyJBC (JBCAmount const& fee) = 0;
 };
 
 //------------------------------------------------------------------------------
@@ -114,6 +114,6 @@ public:
                 Serializer const> const& metaData) = 0;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

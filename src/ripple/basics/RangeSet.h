@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,8 +17,8 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_BASICS_RANGESET_H_INCLUDED
-#define RIPPLE_BASICS_RANGESET_H_INCLUDED
+#ifndef JBCOIN_BASICS_RANGESET_H_INCLUDED
+#define JBCOIN_BASICS_RANGESET_H_INCLUDED
 
 #include <string>
 #include <boost/optional.hpp>
@@ -26,7 +26,7 @@
 #include <boost/icl/interval_set.hpp>
 #include <boost/serialization/split_free.hpp>
 
-namespace ripple
+namespace jbcoin
 {
 
 /** A closed interval over the domain T.
@@ -95,7 +95,7 @@ std::string to_string(ClosedInterval<T> const & ci)
 template <class T>
 std::string to_string(RangeSet<T> const & rs)
 {
-    using ripple::to_string;
+    using jbcoin::to_string;
 
     if (rs.empty())
         return "empty";
@@ -129,7 +129,7 @@ prevMissing(RangeSet<T> const & rs, T t, T minVal = 0)
         return boost::none;
     return boost::icl::last(tgt);
 }
-}  // namespace ripple
+}  // namespace jbcoin
 
 
 // The boost serialization documents recommended putting free-function helpers
@@ -140,7 +140,7 @@ namespace serialization {
 template <class Archive, class T>
 void
 save(Archive& ar,
-    ripple::ClosedInterval<T> const& ci,
+    jbcoin::ClosedInterval<T> const& ci,
     const unsigned int version)
 {
     auto l = ci.lower();
@@ -150,17 +150,17 @@ save(Archive& ar,
 
 template <class Archive, class T>
 void
-load(Archive& ar, ripple::ClosedInterval<T>& ci, const unsigned int version)
+load(Archive& ar, jbcoin::ClosedInterval<T>& ci, const unsigned int version)
 {
     T low, up;
     ar >> low >> up;
-    ci = ripple::ClosedInterval<T>{low, up};
+    ci = jbcoin::ClosedInterval<T>{low, up};
 }
 
 template <class Archive, class T>
 void
 serialize(Archive& ar,
-    ripple::ClosedInterval<T>& ci,
+    jbcoin::ClosedInterval<T>& ci,
     const unsigned int version)
 {
     split_free(ar, ci, version);
@@ -168,7 +168,7 @@ serialize(Archive& ar,
 
 template <class Archive, class T>
 void
-save(Archive& ar, ripple::RangeSet<T> const& rs, const unsigned int version)
+save(Archive& ar, jbcoin::RangeSet<T> const& rs, const unsigned int version)
 {
     auto s = rs.iterative_size();
     ar << s;
@@ -178,14 +178,14 @@ save(Archive& ar, ripple::RangeSet<T> const& rs, const unsigned int version)
 
 template <class Archive, class T>
 void
-load(Archive& ar, ripple::RangeSet<T>& rs, const unsigned int version)
+load(Archive& ar, jbcoin::RangeSet<T>& rs, const unsigned int version)
 {
     rs.clear();
     std::size_t intervals;
     ar >> intervals;
     for (std::size_t i = 0; i < intervals; ++i)
     {
-        ripple::ClosedInterval<T> ci;
+        jbcoin::ClosedInterval<T> ci;
         ar >> ci;
         rs.insert(ci);
     }
@@ -193,7 +193,7 @@ load(Archive& ar, ripple::RangeSet<T>& rs, const unsigned int version)
 
 template <class Archive, class T>
 void
-serialize(Archive& ar, ripple::RangeSet<T>& rs, const unsigned int version)
+serialize(Archive& ar, jbcoin::RangeSet<T>& rs, const unsigned int version)
 {
     split_free(ar, rs, version);
 }

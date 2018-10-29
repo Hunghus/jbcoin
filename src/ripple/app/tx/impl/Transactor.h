@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_TX_TRANSACTOR_H_INCLUDED
-#define RIPPLE_APP_TX_TRANSACTOR_H_INCLUDED
+#ifndef JBCOIN_APP_TX_TRANSACTOR_H_INCLUDED
+#define JBCOIN_APP_TX_TRANSACTOR_H_INCLUDED
 
-#include <ripple/app/tx/applySteps.h>
-#include <ripple/app/tx/impl/ApplyContext.h>
-#include <ripple/protocol/XRPAmount.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/app/tx/applySteps.h>
+#include <jbcoin/app/tx/impl/ApplyContext.h>
+#include <jbcoin/protocol/JBCAmount.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <boost/optional.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 /** State information when preflighting a tx. */
 struct PreflightContext
@@ -81,8 +81,8 @@ protected:
     beast::Journal j_;
 
     AccountID     account_;
-    XRPAmount     mPriorBalance;  // Balance before fees.
-    XRPAmount     mSourceBalance; // Balance after fees.
+    JBCAmount     mPriorBalance;  // Balance before fees.
+    JBCAmount     mSourceBalance; // Balance after fees.
 
     virtual ~Transactor() = default;
     Transactor (Transactor const&) = delete;
@@ -142,11 +142,11 @@ public:
     }
 
     static
-    XRPAmount
+    JBCAmount
     calculateFeePaid(STTx const& tx);
 
     static
-    XRPAmount
+    JBCAmount
     calculateMaxSpend(STTx const& tx);
 
     static
@@ -175,17 +175,17 @@ protected:
 
         @param app The application hosting the server
         @param baseFee The base fee of a candidate transaction
-            @see ripple::calculateBaseFee
+            @see jbcoin::calculateBaseFee
         @param fees Fee settings from the current ledger
         @param flags Transaction processing fees
      */
     static
-    XRPAmount
+    JBCAmount
     minimumFee (Application& app, std::uint64_t baseFee,
         Fees const& fees, ApplyFlags flags);
 
 private:
-    XRPAmount reset(XRPAmount fee);
+    JBCAmount reset(JBCAmount fee);
 
     void setSeq ();
     TER payFee ();

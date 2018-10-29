@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/AmendmentTable.h>
-#include <ripple/protocol/STValidation.h>
-#include <ripple/core/DatabaseCon.h>
-#include <ripple/core/ConfigSections.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/TxFlags.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/AmendmentTable.h>
+#include <jbcoin/protocol/STValidation.h>
+#include <jbcoin/core/DatabaseCon.h>
+#include <jbcoin/core/ConfigSections.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/TxFlags.h>
 #include <boost/format.hpp>
 #include <boost/regex.hpp>
 #include <algorithm>
 #include <mutex>
 
-namespace ripple {
+namespace jbcoin {
 
 static
 std::vector<std::pair<uint256, std::string>>
@@ -621,4 +621,4 @@ std::unique_ptr<AmendmentTable> make_AmendmentTable (
         journal);
 }
 
-}  // ripple
+}  // jbcoin

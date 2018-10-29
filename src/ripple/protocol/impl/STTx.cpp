@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,27 +17,27 @@
 */
 //==============================================================================
 
-#include <ripple/protocol/STTx.h>
-#include <ripple/protocol/HashPrefix.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/protocol/Protocol.h>
-#include <ripple/protocol/Sign.h>
-#include <ripple/protocol/STAccount.h>
-#include <ripple/protocol/STArray.h>
-#include <ripple/protocol/TxFlags.h>
-#include <ripple/protocol/UintTypes.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/json/to_string.h>
+#include <jbcoin/protocol/STTx.h>
+#include <jbcoin/protocol/HashPrefix.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/protocol/Protocol.h>
+#include <jbcoin/protocol/Sign.h>
+#include <jbcoin/protocol/STAccount.h>
+#include <jbcoin/protocol/STArray.h>
+#include <jbcoin/protocol/TxFlags.h>
+#include <jbcoin/protocol/UintTypes.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/json/to_string.h>
 #include <boost/format.hpp>
 #include <array>
 #include <memory>
 #include <type_traits>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 static
 auto getTxFormat (TxType type)
@@ -130,7 +130,7 @@ STTx::getMentionedAccounts () const
         else if (auto sa = dynamic_cast<STAmount const*> (&it))
         {
             auto const& issuer = sa->getIssuer ();
-            if (! isXRP (issuer))
+            if (! isJBC (issuer))
                 list.insert(issuer);
         }
     }
@@ -170,7 +170,7 @@ void STTx::sign (
 {
     auto const data = getSigningData (*this);
 
-    auto const sig = ripple::sign (
+    auto const sig = jbcoin::sign (
         publicKey,
         secretKey,
         makeSlice(data));
@@ -530,4 +530,4 @@ isPseudoTx(STObject const& tx)
     return tt == ttAMENDMENT || tt == ttFEE;
 }
 
-} // ripple
+} // jbcoin

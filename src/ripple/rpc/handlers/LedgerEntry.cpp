@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/basics/strHex.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/basics/strHex.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
 
-namespace ripple {
+namespace jbcoin {
 
 // {
 //   ledger_hash : <ledger>
@@ -220,21 +220,21 @@ Json::Value doLedgerEntry (RPC::Context& context)
         expectedType = ltPAYCHAN;
         uNodeIndex.SetHex (context.params[jss::payment_channel].asString ());
     }
-    else if (context.params.isMember (jss::ripple_state))
+    else if (context.params.isMember (jss::jbcoin_state))
     {
-        expectedType = ltRIPPLE_STATE;
+        expectedType = ltJBCOIN_STATE;
         Currency         uCurrency;
-        Json::Value     jvRippleState   = context.params[jss::ripple_state];
+        Json::Value     jvJBCoinState   = context.params[jss::jbcoin_state];
 
-        if (!jvRippleState.isObject()
-            || !jvRippleState.isMember (jss::currency)
-            || !jvRippleState.isMember (jss::accounts)
-            || !jvRippleState[jss::accounts].isArray()
-            || 2 != jvRippleState[jss::accounts].size ()
-            || !jvRippleState[jss::accounts][0u].isString ()
-            || !jvRippleState[jss::accounts][1u].isString ()
-            || (jvRippleState[jss::accounts][0u].asString ()
-                == jvRippleState[jss::accounts][1u].asString ())
+        if (!jvJBCoinState.isObject()
+            || !jvJBCoinState.isMember (jss::currency)
+            || !jvJBCoinState.isMember (jss::accounts)
+            || !jvJBCoinState[jss::accounts].isArray()
+            || 2 != jvJBCoinState[jss::accounts].size ()
+            || !jvJBCoinState[jss::accounts][0u].isString ()
+            || !jvJBCoinState[jss::accounts][1u].isString ()
+            || (jvJBCoinState[jss::accounts][0u].asString ()
+                == jvJBCoinState[jss::accounts][1u].asString ())
            )
         {
             jvResult[jss::error] = "malformedRequest";
@@ -242,21 +242,21 @@ Json::Value doLedgerEntry (RPC::Context& context)
         else
         {
             auto const id1 = parseBase58<AccountID>(
-                jvRippleState[jss::accounts][0u].asString());
+                jvJBCoinState[jss::accounts][0u].asString());
             auto const id2 = parseBase58<AccountID>(
-                jvRippleState[jss::accounts][1u].asString());
+                jvJBCoinState[jss::accounts][1u].asString());
             if (! id1 || ! id2)
             {
                 jvResult[jss::error] = "malformedAddress";
             }
             else if (!to_currency (uCurrency,
-                jvRippleState[jss::currency].asString()))
+                jvJBCoinState[jss::currency].asString()))
             {
                 jvResult[jss::error] = "malformedCurrency";
             }
             else
             {
-                uNodeIndex = getRippleStateIndex(
+                uNodeIndex = getJBCoinStateIndex(
                     *id1, *id2, uCurrency);
             }
         }
@@ -301,4 +301,4 @@ Json::Value doLedgerEntry (RPC::Context& context)
     return jvResult;
 }
 
-} // ripple
+} // jbcoin

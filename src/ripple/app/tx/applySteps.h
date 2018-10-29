@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,13 +17,13 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_TX_APPLYSTEPS_H_INCLUDED
-#define RIPPLE_TX_APPLYSTEPS_H_INCLUDED
+#ifndef JBCOIN_TX_APPLYSTEPS_H_INCLUDED
+#define JBCOIN_TX_APPLYSTEPS_H_INCLUDED
 
-#include <ripple/ledger/ApplyViewImpl.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/ledger/ApplyViewImpl.h>
+#include <jbcoin/beast/utility/Journal.h>
 
-namespace ripple {
+namespace jbcoin {
 
 class Application;
 class STTx;
@@ -120,7 +120,7 @@ public:
 
 /** Structure describing the consequences to the account
     of applying a transaction if the transaction consumes
-    the maximum XRP allowed.
+    the maximum JBC allowed.
 
     @see calculateConsequences
 */
@@ -141,13 +141,13 @@ struct TxConsequences
     /// transactions
     ConsequenceCategory const category;
     /// Transaction fee
-    XRPAmount const fee;
+    JBCAmount const fee;
     /// Does NOT include the fee.
-    XRPAmount const potentialSpend;
+    JBCAmount const potentialSpend;
 
     /// Constructor
     TxConsequences(ConsequenceCategory const category_,
-        XRPAmount const fee_, XRPAmount const spend_)
+        JBCAmount const fee_, JBCAmount const spend_)
         : category(category_)
         , fee(fee_)
         , potentialSpend(spend_)
@@ -238,8 +238,8 @@ std::uint64_t
 calculateBaseFee(ReadView const& view,
     STTx const& tx);
 
-/** Determine the XRP balance consequences if a transaction
-    consumes the maximum XRP allowed.
+/** Determine the JBC balance consequences if a transaction
+    consumes the maximum JBC allowed.
 
     @pre The transaction has been checked
     and validated using `preflight`

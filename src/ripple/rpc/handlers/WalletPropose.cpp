@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,23 +17,23 @@
 */
 //==============================================================================
 
-#include <ripple/basics/strHex.h>
-#include <ripple/crypto/KeyType.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/protocol/SecretKey.h>
-#include <ripple/protocol/Seed.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
-#include <ripple/rpc/handlers/WalletPropose.h>
+#include <jbcoin/basics/strHex.h>
+#include <jbcoin/crypto/KeyType.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/protocol/SecretKey.h>
+#include <jbcoin/protocol/Seed.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
+#include <jbcoin/rpc/handlers/WalletPropose.h>
 #include <ed25519-donna/ed25519.h>
 #include <boost/optional.hpp>
 #include <cmath>
 #include <map>
 
-namespace ripple {
+namespace jbcoin {
 
 double
 estimate_entropy (std::string const& input)
@@ -148,4 +148,4 @@ Json::Value walletPropose (Json::Value const& params)
     return obj;
 }
 
-} // ripple
+} // jbcoin

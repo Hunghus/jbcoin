@@ -12,12 +12,12 @@ The ResourceManager module has these responsibilities:
 To prevent monopolization of server resources or attacks on servers,
 resource consumption is monitored at each endpoint. When consumption
 exceeds certain thresholds, costs are imposed. Costs could include charging
-additional XRP for transactions, requiring a proof of work to be
+additional JBC for transactions, requiring a proof of work to be
 performed, or simply disconnecting the endpoint.
 
 Currently, consumption endpoints include websocket connections used to
 service clients, and peer connections used to create the peer to peer
-overlay network implementing the Ripple protocol.
+overlay network implementing the JBCoin protocol.
 
 The current "balance" of a Consumer represents resource consumption
 debt or credit. Debt is accrued when bad loads are imposed. Credit is
@@ -72,6 +72,6 @@ drop connections to those IP addresses that occur commonly in the gossip.
 
 ## Access ##
 
-In rippled, the Application holds a unique instance of Resource::Manager,
+In jbcoind, the Application holds a unique instance of Resource::Manager,
 which may be retrieved by calling the method
 `Application::getResourceManager()`.

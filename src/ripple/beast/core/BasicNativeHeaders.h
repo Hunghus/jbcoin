@@ -24,7 +24,7 @@
 #ifndef BEAST_MODULE_CORE_NATIVE_BASICNATIVEHEADERS_H_INCLUDED
 #define BEAST_MODULE_CORE_NATIVE_BASICNATIVEHEADERS_H_INCLUDED
 
-#include <ripple/beast/core/Config.h>
+#include <jbcoin/beast/core/Config.h>
 
 #undef T
 
@@ -234,8 +234,8 @@
 // Order matters, since headers don't have their own #include lines.
 // Add new includes to the bottom.
 
-#include <ripple/beast/core/LexicalCast.h>
-#include <ripple/beast/core/SemanticVersion.h>
+#include <jbcoin/beast/core/LexicalCast.h>
+#include <jbcoin/beast/core/SemanticVersion.h>
 
 #include <locale>
 #include <cctype>

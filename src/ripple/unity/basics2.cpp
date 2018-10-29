@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,13 +17,13 @@
 */
 //==============================================================================
 
-#include <ripple/basics/impl/BasicConfig.cpp>
-#include <ripple/basics/impl/make_SSLContext.cpp>
-#include <ripple/basics/impl/mulDiv.cpp>
-#include <ripple/basics/impl/PerfLogImp.cpp>
-#include <ripple/basics/impl/ResolverAsio.cpp>
-#include <ripple/basics/impl/Sustain.cpp>
-#include <ripple/basics/impl/UptimeClock.cpp>
-#include <ripple/basics/impl/Archive.cpp>
+#include <jbcoin/basics/impl/BasicConfig.cpp>
+#include <jbcoin/basics/impl/make_SSLContext.cpp>
+#include <jbcoin/basics/impl/mulDiv.cpp>
+#include <jbcoin/basics/impl/PerfLogImp.cpp>
+#include <jbcoin/basics/impl/ResolverAsio.cpp>
+#include <jbcoin/basics/impl/Sustain.cpp>
+#include <jbcoin/basics/impl/UptimeClock.cpp>
+#include <jbcoin/basics/impl/Archive.cpp>
 
 

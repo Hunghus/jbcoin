@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_TX_SETTRUST_H_INCLUDED
-#define RIPPLE_TX_SETTRUST_H_INCLUDED
+#ifndef JBCOIN_TX_SETTRUST_H_INCLUDED
+#define JBCOIN_TX_SETTRUST_H_INCLUDED
 
-#include <ripple/protocol/Quality.h>
-#include <ripple/app/tx/impl/Transactor.h>
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/TxFlags.h>
+#include <jbcoin/protocol/Quality.h>
+#include <jbcoin/app/tx/impl/Transactor.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/TxFlags.h>
 
-namespace ripple {
+namespace jbcoin {
 
 class SetTrust
     : public Transactor
@@ -48,7 +48,7 @@ public:
     TER doApply () override;
 };
 
-} // ripple
+} // jbcoin
 
 #endif
 

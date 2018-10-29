@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,13 +17,13 @@
 */
 //==============================================================================
 
-#include <ripple/protocol/Feature.h>
-#include <ripple/basics/contract.h>
-#include <ripple/protocol/digest.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/protocol/digest.h>
 
 #include <cstring>
 
-namespace ripple {
+namespace jbcoin {
 
 //------------------------------------------------------------------------------
 
@@ -169,4 +169,4 @@ uint256 const fix1623 = *getRegisteredFeature("fix1623");
 uint256 const featureDepositPreauth = *getRegisteredFeature("DepositPreauth");
 uint256 const fix1515 = *getRegisteredFeature("fix1515");
 
-} // ripple
+} // jbcoin

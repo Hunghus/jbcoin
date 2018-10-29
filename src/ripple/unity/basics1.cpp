@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,13 +18,13 @@
 //==============================================================================
 
 
-#include <ripple/basics/impl/base64.cpp>
-#include <ripple/basics/impl/contract.cpp>
-#include <ripple/basics/impl/CountedObject.cpp>
-#include <ripple/basics/impl/Log.cpp>
-#include <ripple/basics/impl/strHex.cpp>
-#include <ripple/basics/impl/StringUtilities.cpp>
+#include <jbcoin/basics/impl/base64.cpp>
+#include <jbcoin/basics/impl/contract.cpp>
+#include <jbcoin/basics/impl/CountedObject.cpp>
+#include <jbcoin/basics/impl/Log.cpp>
+#include <jbcoin/basics/impl/strHex.cpp>
+#include <jbcoin/basics/impl/StringUtilities.cpp>
 
 #if DOXYGEN
-#include <ripple/basics/README.md>
+#include <jbcoin/basics/README.md>
 #endif

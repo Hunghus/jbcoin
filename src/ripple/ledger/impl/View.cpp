@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,21 +17,21 @@
 */
 //==============================================================================
 
-#include <ripple/basics/chrono.h>
-#include <ripple/ledger/BookDirs.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/ledger/View.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/st.h>
-#include <ripple/protocol/Protocol.h>
-#include <ripple/protocol/Quality.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/ledger/BookDirs.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/ledger/View.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/st.h>
+#include <jbcoin/protocol/Protocol.h>
+#include <jbcoin/protocol/Quality.h>
 #include <boost/algorithm/string.hpp>
 #include <cassert>
 
-namespace ripple {
+namespace jbcoin {
 
 NetClock::time_point const& fix1141Time ()
 {
@@ -126,7 +126,7 @@ isGlobalFrozen (ReadView const& view,
     AccountID const& issuer)
 {
     // VFALCO Perhaps this should assert
-    if (isXRP (issuer))
+    if (isJBC (issuer))
         return false;
     auto const sle =
         view.read(keylet::account(issuer));
@@ -141,7 +141,7 @@ bool
 isFrozen (ReadView const& view, AccountID const& account,
     Currency const& currency, AccountID const& issuer)
 {
-    if (isXRP (currency))
+    if (isJBC (currency))
         return false;
     auto sle =
         view.read(keylet::account(issuer));
@@ -167,9 +167,9 @@ accountHolds (ReadView const& view,
               beast::Journal j)
 {
     STAmount amount;
-    if (isXRP(currency))
+    if (isJBC(currency))
     {
-        return {xrpLiquid (view, account, 0, j)};
+        return {jbcLiquid (view, account, 0, j)};
     }
 
     // IOU: Return balance on trust line modulo freeze
@@ -276,8 +276,8 @@ confineOwnerCount (std::uint32_t current, std::int32_t adjustment,
     return adjusted;
 }
 
-XRPAmount
-xrpLiquid (ReadView const& view, AccountID const& id,
+JBCAmount
+jbcLiquid (ReadView const& view, AccountID const& id,
     std::int32_t ownerCountAdj, beast::Journal j)
 {
     auto const sle = view.read(keylet::account(id));
@@ -297,7 +297,7 @@ xrpLiquid (ReadView const& view, AccountID const& id,
         auto const fullBalance =
             sle->getFieldAmount(sfBalance);
 
-        auto const balance = view.balanceHook(id, xrpAccount(), fullBalance);
+        auto const balance = view.balanceHook(id, jbcAccount(), fullBalance);
 
         STAmount amount = balance - reserve;
         if (balance < reserve)
@@ -312,12 +312,12 @@ xrpLiquid (ReadView const& view, AccountID const& id,
             " ownerCount=" << to_string (ownerCount) <<
             " ownerCountAdj=" << to_string (ownerCountAdj);
 
-        return amount.xrp();
+        return amount.jbc();
     }
     else
     {
         // pre-switchover
-        // XRP: return balance minus reserve
+        // JBC: return balance minus reserve
         std::uint32_t const ownerCount =
             confineOwnerCount (sle->getFieldU32 (sfOwnerCount), ownerCountAdj);
         auto const reserve =
@@ -336,7 +336,7 @@ xrpLiquid (ReadView const& view, AccountID const& id,
             " ownerCount=" << to_string (ownerCount) <<
             " ownerCountAdj=" << to_string (ownerCountAdj);
 
-        return view.balanceHook(id, xrpAccount(), amount).xrp();
+        return view.balanceHook(id, jbcAccount(), amount).jbc();
     }
 }
 
@@ -916,10 +916,10 @@ trustCreate (ApplyView& view,
     const bool      bSrcHigh,
     AccountID const&  uSrcAccountID,
     AccountID const&  uDstAccountID,
-    uint256 const&  uIndex,             // --> ripple state entry
+    uint256 const&  uIndex,             // --> jbcoin state entry
     SLE::ref        sleAccount,         // --> the account being set.
     const bool      bAuth,              // --> authorize account.
-    const bool      bNoRipple,          // --> others cannot ripple through
+    const bool      bNoJBCoin,          // --> others cannot jbcoin through
     const bool      bFreeze,            // --> funds cannot leave
     STAmount const& saBalance,          // --> balance of account being set.
                                         // Issuer should be noAccount()
@@ -936,18 +936,18 @@ trustCreate (ApplyView& view,
     auto const& uLowAccountID   = !bSrcHigh ? uSrcAccountID : uDstAccountID;
     auto const& uHighAccountID  =  bSrcHigh ? uSrcAccountID : uDstAccountID;
 
-    auto const sleRippleState = std::make_shared<SLE>(
-        ltRIPPLE_STATE, uIndex);
-    view.insert (sleRippleState);
+    auto const sleJBCoinState = std::make_shared<SLE>(
+        ltJBCOIN_STATE, uIndex);
+    view.insert (sleJBCoinState);
 
     auto lowNode = dirAdd (view, keylet::ownerDir (uLowAccountID),
-        sleRippleState->key(), false, describeOwnerDir (uLowAccountID), j);
+        sleJBCoinState->key(), false, describeOwnerDir (uLowAccountID), j);
 
     if (!lowNode)
         return tecDIR_FULL;
 
     auto highNode = dirAdd (view, keylet::ownerDir (uHighAccountID),
-        sleRippleState->key(), false, describeOwnerDir (uHighAccountID), j);
+        sleJBCoinState->key(), false, describeOwnerDir (uHighAccountID), j);
 
     if (!highNode)
         return tecDIR_FULL;
@@ -962,22 +962,22 @@ trustCreate (ApplyView& view,
     assert (slePeer);
 
     // Remember deletion hints.
-    sleRippleState->setFieldU64 (sfLowNode, *lowNode);
-    sleRippleState->setFieldU64 (sfHighNode, *highNode);
+    sleJBCoinState->setFieldU64 (sfLowNode, *lowNode);
+    sleJBCoinState->setFieldU64 (sfHighNode, *highNode);
 
-    sleRippleState->setFieldAmount (
+    sleJBCoinState->setFieldAmount (
         bSetHigh ? sfHighLimit : sfLowLimit, saLimit);
-    sleRippleState->setFieldAmount (
+    sleJBCoinState->setFieldAmount (
         bSetHigh ? sfLowLimit : sfHighLimit,
         STAmount ({saBalance.getCurrency (),
                    bSetDst ? uSrcAccountID : uDstAccountID}));
 
     if (uQualityIn)
-        sleRippleState->setFieldU32 (
+        sleJBCoinState->setFieldU32 (
             bSetHigh ? sfHighQualityIn : sfLowQualityIn, uQualityIn);
 
     if (uQualityOut)
-        sleRippleState->setFieldU32 (
+        sleJBCoinState->setFieldU32 (
             bSetHigh ? sfHighQualityOut : sfLowQualityOut, uQualityOut);
 
     std::uint32_t uFlags = bSetHigh ? lsfHighReserve : lsfLowReserve;
@@ -986,26 +986,26 @@ trustCreate (ApplyView& view,
     {
         uFlags |= (bSetHigh ? lsfHighAuth : lsfLowAuth);
     }
-    if (bNoRipple)
+    if (bNoJBCoin)
     {
-        uFlags |= (bSetHigh ? lsfHighNoRipple : lsfLowNoRipple);
+        uFlags |= (bSetHigh ? lsfHighNoJBCoin : lsfLowNoJBCoin);
     }
     if (bFreeze)
     {
         uFlags |= (!bSetHigh ? lsfLowFreeze : lsfHighFreeze);
     }
 
-    if ((slePeer->getFlags() & lsfDefaultRipple) == 0)
+    if ((slePeer->getFlags() & lsfDefaultJBCoin) == 0)
     {
         // The other side's default is no rippling
-        uFlags |= (bSetHigh ? lsfLowNoRipple : lsfHighNoRipple);
+        uFlags |= (bSetHigh ? lsfLowNoJBCoin : lsfHighNoJBCoin);
     }
 
-    sleRippleState->setFieldU32 (sfFlags, uFlags);
+    sleJBCoinState->setFieldU32 (sfFlags, uFlags);
     adjustOwnerCount(view, sleAccount, 1, j);
 
-    // ONLY: Create ripple balance.
-    sleRippleState->setFieldAmount (sfBalance, bSetHigh ? -saBalance : saBalance);
+    // ONLY: Create jbcoin balance.
+    sleJBCoinState->setFieldAmount (sfBalance, bSetHigh ? -saBalance : saBalance);
 
     view.creditHook (uSrcAccountID,
         uDstAccountID, saBalance, saBalance.zeroed());
@@ -1015,41 +1015,41 @@ trustCreate (ApplyView& view,
 
 TER
 trustDelete (ApplyView& view,
-    std::shared_ptr<SLE> const& sleRippleState,
+    std::shared_ptr<SLE> const& sleJBCoinState,
         AccountID const& uLowAccountID,
             AccountID const& uHighAccountID,
                  beast::Journal j)
 {
     // Detect legacy dirs.
-    std::uint64_t uLowNode    = sleRippleState->getFieldU64 (sfLowNode);
-    std::uint64_t uHighNode   = sleRippleState->getFieldU64 (sfHighNode);
+    std::uint64_t uLowNode    = sleJBCoinState->getFieldU64 (sfLowNode);
+    std::uint64_t uHighNode   = sleJBCoinState->getFieldU64 (sfHighNode);
 
     JLOG (j.trace())
-        << "trustDelete: Deleting ripple line: low";
+        << "trustDelete: Deleting jbcoin line: low";
 
     if (! view.dirRemove(
             keylet::ownerDir(uLowAccountID),
             uLowNode,
-            sleRippleState->key(),
+            sleJBCoinState->key(),
             false))
     {
         return tefBAD_LEDGER;
     }
 
     JLOG (j.trace())
-            << "trustDelete: Deleting ripple line: high";
+            << "trustDelete: Deleting jbcoin line: high";
 
     if (! view.dirRemove(
             keylet::ownerDir(uHighAccountID),
             uHighNode,
-            sleRippleState->key(),
+            sleJBCoinState->key(),
             false))
     {
         return tefBAD_LEDGER;
     }
 
-    JLOG (j.trace()) << "trustDelete: Deleting ripple line: state";
-    view.erase(sleRippleState);
+    JLOG (j.trace()) << "trustDelete: Deleting jbcoin line: state";
+    view.erase(sleJBCoinState);
 
     return tesSUCCESS;
 }
@@ -1098,7 +1098,7 @@ offerDelete (ApplyView& view,
 // - Create trust line if needed.
 // --> bCheckIssuer : normally require issuer to be involved.
 TER
-rippleCredit (ApplyView& view,
+jbcoinCredit (ApplyView& view,
     AccountID const& uSenderID, AccountID const& uReceiverID,
     STAmount const& saAmount, bool bCheckIssuer,
     beast::Journal j)
@@ -1115,23 +1115,23 @@ rippleCredit (ApplyView& view,
     assert (uSenderID != uReceiverID);
 
     bool bSenderHigh = uSenderID > uReceiverID;
-    uint256 uIndex = getRippleStateIndex (
+    uint256 uIndex = getJBCoinStateIndex (
         uSenderID, uReceiverID, saAmount.getCurrency ());
-    auto sleRippleState  = view.peek (keylet::line(uIndex));
+    auto sleJBCoinState  = view.peek (keylet::line(uIndex));
 
     TER terResult;
 
-    assert (!isXRP (uSenderID) && uSenderID != noAccount());
-    assert (!isXRP (uReceiverID) && uReceiverID != noAccount());
+    assert (!isJBC (uSenderID) && uSenderID != noAccount());
+    assert (!isJBC (uReceiverID) && uReceiverID != noAccount());
 
-    if (!sleRippleState)
+    if (!sleJBCoinState)
     {
         STAmount saReceiverLimit({currency, uReceiverID});
         STAmount saBalance = saAmount;
 
         saBalance.setIssuer (noAccount());
 
-        JLOG (j.debug()) << "rippleCredit: "
+        JLOG (j.debug()) << "jbcoinCredit: "
             "create line: " << to_string (uSenderID) <<
             " -> " << to_string (uReceiverID) <<
             " : " << saAmount.getFullText ();
@@ -1139,7 +1139,7 @@ rippleCredit (ApplyView& view,
         auto const sleAccount =
             view.peek(keylet::account(uReceiverID));
 
-        bool noRipple = (sleAccount->getFlags() & lsfDefaultRipple) == 0;
+        bool noJBCoin = (sleAccount->getFlags() & lsfDefaultJBCoin) == 0;
 
         terResult = trustCreate (view,
             bSenderHigh,
@@ -1148,7 +1148,7 @@ rippleCredit (ApplyView& view,
             uIndex,
             sleAccount,
             false,
-            noRipple,
+            noJBCoin,
             false,
             saBalance,
             saReceiverLimit,
@@ -1158,7 +1158,7 @@ rippleCredit (ApplyView& view,
     }
     else
     {
-        STAmount saBalance   = sleRippleState->getFieldAmount (sfBalance);
+        STAmount saBalance   = sleJBCoinState->getFieldAmount (sfBalance);
 
         if (bSenderHigh)
             saBalance.negate ();    // Put balance in sender terms.
@@ -1170,14 +1170,14 @@ rippleCredit (ApplyView& view,
 
         saBalance   -= saAmount;
 
-        JLOG (j.trace()) << "rippleCredit: " <<
+        JLOG (j.trace()) << "jbcoinCredit: " <<
             to_string (uSenderID) <<
             " -> " << to_string (uReceiverID) <<
             " : before=" << saBefore.getFullText () <<
             " amount=" << saAmount.getFullText () <<
             " after=" << saBalance.getFullText ();
 
-        std::uint32_t const uFlags (sleRippleState->getFieldU32 (sfFlags));
+        std::uint32_t const uFlags (sleJBCoinState->getFieldU32 (sfFlags));
         bool bDelete = false;
 
         // YYY Could skip this if rippling in reverse.
@@ -1187,16 +1187,16 @@ rippleCredit (ApplyView& view,
             // Sender is zero or negative.
             && (uFlags & (!bSenderHigh ? lsfLowReserve : lsfHighReserve))
             // Sender reserve is set.
-            && static_cast <bool> (uFlags & (!bSenderHigh ? lsfLowNoRipple : lsfHighNoRipple)) !=
-               static_cast <bool> (view.read (keylet::account(uSenderID))->getFlags() & lsfDefaultRipple)
+            && static_cast <bool> (uFlags & (!bSenderHigh ? lsfLowNoJBCoin : lsfHighNoJBCoin)) !=
+               static_cast <bool> (view.read (keylet::account(uSenderID))->getFlags() & lsfDefaultJBCoin)
             && !(uFlags & (!bSenderHigh ? lsfLowFreeze : lsfHighFreeze))
-            && !sleRippleState->getFieldAmount (
+            && !sleJBCoinState->getFieldAmount (
                 !bSenderHigh ? sfLowLimit : sfHighLimit)
             // Sender trust limit is 0.
-            && !sleRippleState->getFieldU32 (
+            && !sleJBCoinState->getFieldU32 (
                 !bSenderHigh ? sfLowQualityIn : sfHighQualityIn)
             // Sender quality in is 0.
-            && !sleRippleState->getFieldU32 (
+            && !sleJBCoinState->getFieldU32 (
                 !bSenderHigh ? sfLowQualityOut : sfHighQualityOut))
             // Sender quality out is 0.
         {
@@ -1205,7 +1205,7 @@ rippleCredit (ApplyView& view,
                 view.peek(keylet::account(uSenderID)), -1, j);
 
             // Clear reserve flag.
-            sleRippleState->setFieldU32 (
+            sleJBCoinState->setFieldU32 (
                 sfFlags,
                 uFlags & (!bSenderHigh ? ~lsfLowReserve : ~lsfHighReserve));
 
@@ -1219,19 +1219,19 @@ rippleCredit (ApplyView& view,
             saBalance.negate ();
 
         // Want to reflect balance to zero even if we are deleting line.
-        sleRippleState->setFieldAmount (sfBalance, saBalance);
-        // ONLY: Adjust ripple balance.
+        sleJBCoinState->setFieldAmount (sfBalance, saBalance);
+        // ONLY: Adjust jbcoin balance.
 
         if (bDelete)
         {
             terResult   = trustDelete (view,
-                sleRippleState,
+                sleJBCoinState,
                 bSenderHigh ? uReceiverID : uSenderID,
                 !bSenderHigh ? uReceiverID : uSenderID, j);
         }
         else
         {
-            view.update (sleRippleState);
+            view.update (sleJBCoinState);
             terResult   = tesSUCCESS;
         }
     }
@@ -1242,7 +1242,7 @@ rippleCredit (ApplyView& view,
 // Calculate the fee needed to transfer IOU assets between two parties.
 static
 STAmount
-rippleTransferFee (ReadView const& view,
+jbcoinTransferFee (ReadView const& view,
     AccountID const& from,
     AccountID const& to,
     AccountID const& issuer,
@@ -1257,7 +1257,7 @@ rippleTransferFee (ReadView const& view,
         {
             auto const fee = multiply (amount, rate) - amount;
 
-            JLOG (j.debug()) << "rippleTransferFee:" <<
+            JLOG (j.debug()) << "jbcoinTransferFee:" <<
                 " amount=" << amount.getFullText () <<
                 " fee=" << fee.getFullText ();
 
@@ -1273,19 +1273,19 @@ rippleTransferFee (ReadView const& view,
 // <-- saActual: Amount actually cost.  Sender pays fees.
 static
 TER
-rippleSend (ApplyView& view,
+jbcoinSend (ApplyView& view,
     AccountID const& uSenderID, AccountID const& uReceiverID,
     STAmount const& saAmount, STAmount& saActual, beast::Journal j)
 {
     auto const issuer   = saAmount.getIssuer ();
 
-    assert (!isXRP (uSenderID) && !isXRP (uReceiverID));
+    assert (!isJBC (uSenderID) && !isJBC (uReceiverID));
     assert (uSenderID != uReceiverID);
 
     if (uSenderID == issuer || uReceiverID == issuer || issuer == noAccount())
     {
         // Direct send: redeeming IOUs and/or sending own IOUs.
-        rippleCredit (view, uSenderID, uReceiverID, saAmount, false, j);
+        jbcoinCredit (view, uSenderID, uReceiverID, saAmount, false, j);
         saActual = saAmount;
         return tesSUCCESS;
     }
@@ -1296,7 +1296,7 @@ rippleSend (ApplyView& view,
     // for any transfer fees:
     if (!fix1141 (view.info ().parentCloseTime))
     {
-        STAmount const saTransitFee = rippleTransferFee (
+        STAmount const saTransitFee = jbcoinTransferFee (
             view, uSenderID, uReceiverID, issuer, saAmount, j);
 
         saActual = !saTransitFee ? saAmount : saAmount + saTransitFee;
@@ -1308,16 +1308,16 @@ rippleSend (ApplyView& view,
             transferRate (view, issuer));
     }
 
-    JLOG (j.debug()) << "rippleSend> " <<
+    JLOG (j.debug()) << "jbcoinSend> " <<
         to_string (uSenderID) <<
         " - > " << to_string (uReceiverID) <<
         " : deliver=" << saAmount.getFullText () <<
         " cost=" << saActual.getFullText ();
 
-    TER terResult   = rippleCredit (view, issuer, uReceiverID, saAmount, true, j);
+    TER terResult   = jbcoinCredit (view, issuer, uReceiverID, saAmount, true, j);
 
     if (tesSUCCESS == terResult)
-        terResult = rippleCredit (view, uSenderID, issuer, saActual, true, j);
+        terResult = jbcoinCredit (view, uSenderID, issuer, saActual, true, j);
 
     return terResult;
 }
@@ -1343,7 +1343,7 @@ accountSend (ApplyView& view,
             to_string (uSenderID) << " -> " << to_string (uReceiverID) <<
             " : " << saAmount.getFullText ();
 
-        return rippleSend (view, uSenderID, uReceiverID, saAmount, saActual, j);
+        return jbcoinSend (view, uSenderID, uReceiverID, saAmount, saActual, j);
     }
 
     auto const fv2Switch = fix1141 (view.info ().parentCloseTime);
@@ -1353,7 +1353,7 @@ accountSend (ApplyView& view,
         view.creditHook (uSenderID, uReceiverID, saAmount, dummyBalance);
     }
 
-    /* XRP send which does not check reserve and can do pure adjustment.
+    /* JBC send which does not check reserve and can do pure adjustment.
      * Note that sender or receiver may be null and this not a mistake; this
      * setup is used during pathfinding and it is carefully controlled to
      * ensure that transfers are balanced.
@@ -1399,9 +1399,9 @@ accountSend (ApplyView& view,
         {
             auto const sndBal = sender->getFieldAmount (sfBalance);
             if (fv2Switch)
-                view.creditHook (uSenderID, xrpAccount (), saAmount, sndBal);
+                view.creditHook (uSenderID, jbcAccount (), saAmount, sndBal);
 
-            // Decrement XRP balance.
+            // Decrement JBC balance.
             sender->setFieldAmount (sfBalance, sndBal - saAmount);
             view.update (sender);
         }
@@ -1409,12 +1409,12 @@ accountSend (ApplyView& view,
 
     if (tesSUCCESS == terResult && receiver)
     {
-        // Increment XRP balance.
+        // Increment JBC balance.
         auto const rcvBal = receiver->getFieldAmount (sfBalance);
         receiver->setFieldAmount (sfBalance, rcvBal + saAmount);
 
         if (fv2Switch)
-            view.creditHook (xrpAccount (), uReceiverID, saAmount, -rcvBal);
+            view.creditHook (jbcAccount (), uReceiverID, saAmount, -rcvBal);
 
         view.update (receiver);
     }
@@ -1462,8 +1462,8 @@ updateTrustLine (
         // Sender is zero or negative.
         && (flags & (!bSenderHigh ? lsfLowReserve : lsfHighReserve))
         // Sender reserve is set.
-        && static_cast <bool> (flags & (!bSenderHigh ? lsfLowNoRipple : lsfHighNoRipple)) !=
-           static_cast <bool> (sle->getFlags() & lsfDefaultRipple)
+        && static_cast <bool> (flags & (!bSenderHigh ? lsfLowNoJBCoin : lsfHighNoJBCoin)) !=
+           static_cast <bool> (sle->getFlags() & lsfDefaultJBCoin)
         && !(flags & (!bSenderHigh ? lsfLowFreeze : lsfHighFreeze))
         && !state->getFieldAmount (
             !bSenderHigh ? sfLowLimit : sfHighLimit)
@@ -1497,7 +1497,7 @@ issueIOU (ApplyView& view,
     AccountID const& account,
         STAmount const& amount, Issue const& issue, beast::Journal j)
 {
-    assert (!isXRP (account) && !isXRP (issue.account));
+    assert (!isJBC (account) && !isJBC (issue.account));
 
     // Consistency check
     assert (issue == amount.issue ());
@@ -1510,7 +1510,7 @@ issueIOU (ApplyView& view,
         amount.getFullText ();
 
     bool bSenderHigh = issue.account > account;
-    uint256 const index = getRippleStateIndex (
+    uint256 const index = getJBCoinStateIndex (
         issue.account, account, issue.currency);
     auto state = view.peek (keylet::line(index));
 
@@ -1526,10 +1526,10 @@ issueIOU (ApplyView& view,
 
         auto receiverAccount = view.peek (keylet::account(account));
 
-        bool noRipple = (receiverAccount->getFlags() & lsfDefaultRipple) == 0;
+        bool noJBCoin = (receiverAccount->getFlags() & lsfDefaultJBCoin) == 0;
 
         return trustCreate (view, bSenderHigh, issue.account, account, index,
-            receiverAccount, false, noRipple, false, final_balance, limit, 0, 0, j);
+            receiverAccount, false, noJBCoin, false, final_balance, limit, 0, 0, j);
     }
 
     STAmount final_balance = state->getFieldAmount (sfBalance);
@@ -1570,7 +1570,7 @@ redeemIOU (ApplyView& view,
     Issue const& issue,
     beast::Journal j)
 {
-    assert (!isXRP (account) && !isXRP (issue.account));
+    assert (!isJBC (account) && !isJBC (issue.account));
 
     // Consistency check
     assert (issue == amount.issue ());
@@ -1583,7 +1583,7 @@ redeemIOU (ApplyView& view,
         amount.getFullText ();
 
     bool bSenderHigh = account > issue.account;
-    uint256 const index = getRippleStateIndex (
+    uint256 const index = getJBCoinStateIndex (
         account, issue.account, issue.currency);
     auto state  = view.peek (keylet::line(index));
 
@@ -1634,7 +1634,7 @@ redeemIOU (ApplyView& view,
 }
 
 TER
-transferXRP (ApplyView& view,
+transferJBC (ApplyView& view,
     AccountID const& from,
     AccountID const& to,
     STAmount const& amount,
@@ -1648,7 +1648,7 @@ transferXRP (ApplyView& view,
     SLE::pointer sender = view.peek (keylet::account(from));
     SLE::pointer receiver = view.peek (keylet::account(to));
 
-    JLOG (j.trace()) << "transferXRP: " <<
+    JLOG (j.trace()) << "transferJBC: " <<
         to_string (from) <<  " -> " << to_string (to) <<
         ") : " << amount.getFullText ();
 
@@ -1662,7 +1662,7 @@ transferXRP (ApplyView& view,
             : TER {tecFAILED_PROCESSING};
     }
 
-    // Decrement XRP balance.
+    // Decrement JBC balance.
     sender->setFieldAmount (sfBalance,
         sender->getFieldAmount (sfBalance) - amount);
     view.update (sender);
@@ -1674,4 +1674,4 @@ transferXRP (ApplyView& view,
     return tesSUCCESS;
 }
 
-} // ripple
+} // jbcoin

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,31 +17,31 @@
 */
 //==============================================================================
 
-#include <ripple/app/consensus/RCLConsensus.h>
-#include <ripple/app/consensus/RCLValidations.h>
-#include <ripple/app/ledger/BuildLedger.h>
-#include <ripple/app/ledger/InboundLedgers.h>
-#include <ripple/app/ledger/InboundTransactions.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/ledger/LocalTxs.h>
-#include <ripple/app/ledger/OpenLedger.h>
-#include <ripple/app/misc/AmendmentTable.h>
-#include <ripple/app/misc/HashRouter.h>
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/app/misc/TxQ.h>
-#include <ripple/app/misc/ValidatorKeys.h>
-#include <ripple/app/misc/ValidatorList.h>
-#include <ripple/basics/make_lock.h>
-#include <ripple/beast/core/LexicalCast.h>
-#include <ripple/consensus/LedgerTiming.h>
-#include <ripple/nodestore/DatabaseShard.h>
-#include <ripple/overlay/Overlay.h>
-#include <ripple/overlay/predicates.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/digest.h>
+#include <jbcoin/app/consensus/RCLConsensus.h>
+#include <jbcoin/app/consensus/RCLValidations.h>
+#include <jbcoin/app/ledger/BuildLedger.h>
+#include <jbcoin/app/ledger/InboundLedgers.h>
+#include <jbcoin/app/ledger/InboundTransactions.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/ledger/LocalTxs.h>
+#include <jbcoin/app/ledger/OpenLedger.h>
+#include <jbcoin/app/misc/AmendmentTable.h>
+#include <jbcoin/app/misc/HashRouter.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/app/misc/TxQ.h>
+#include <jbcoin/app/misc/ValidatorKeys.h>
+#include <jbcoin/app/misc/ValidatorList.h>
+#include <jbcoin/basics/make_lock.h>
+#include <jbcoin/beast/core/LexicalCast.h>
+#include <jbcoin/consensus/LedgerTiming.h>
+#include <jbcoin/nodestore/DatabaseShard.h>
+#include <jbcoin/overlay/Overlay.h>
+#include <jbcoin/overlay/predicates.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/digest.h>
 
-namespace ripple {
+namespace jbcoin {
 
 RCLConsensus::RCLConsensus(
     Application& app,
@@ -176,7 +176,7 @@ RCLConsensus::Adaptor::propose(RCLCxPeerPos::Proposal const& proposal)
     JLOG(j_.trace()) << "We propose: "
                      << (proposal.isBowOut()
                              ? std::string("bowOut")
-                             : ripple::to_string(proposal.position()));
+                             : jbcoin::to_string(proposal.position()));
 
     protocol::TMProposeSet prop;
 

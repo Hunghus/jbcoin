@@ -17,7 +17,7 @@
 */
 //==============================================================================
 
-#include <ripple/beast/utility/Debug.h>
+#include <jbcoin/beast/utility/Debug.h>
 
 namespace beast {
 

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_STINTEGER_H_INCLUDED
-#define RIPPLE_PROTOCOL_STINTEGER_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_STINTEGER_H_INCLUDED
+#define JBCOIN_PROTOCOL_STINTEGER_H_INCLUDED
 
-#include <ripple/protocol/STBase.h>
+#include <jbcoin/protocol/STBase.h>
 
-namespace ripple {
+namespace jbcoin {
 
 template <typename Integer>
 class STInteger
@@ -116,6 +116,6 @@ using STUInt16 = STInteger<std::uint16_t>;
 using STUInt32 = STInteger<std::uint32_t>;
 using STUInt64 = STInteger<std::uint64_t>;
 
-} // ripple
+} // jbcoin
 
 #endif

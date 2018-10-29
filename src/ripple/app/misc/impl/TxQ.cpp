@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,21 +17,21 @@
 */
 //==============================================================================
 
-#include <ripple/app/misc/TxQ.h>
-#include <ripple/app/ledger/OpenLedger.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/app/tx/apply.h>
-#include <ripple/protocol/st.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/basics/mulDiv.h>
+#include <jbcoin/app/misc/TxQ.h>
+#include <jbcoin/app/ledger/OpenLedger.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/app/tx/apply.h>
+#include <jbcoin/protocol/st.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/basics/mulDiv.h>
 #include <boost/algorithm/clamp.hpp>
 #include <limits>
 #include <numeric>
 #include <algorithm>
 
-namespace ripple {
+namespace jbcoin {
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -51,7 +51,7 @@ getFeeLevelPaid(
     // If the math overflows, return the clipped
     // result blindly. This is very unlikely to ever
     // happen.
-    return mulDiv(tx[sfFee].xrp().drops(),
+    return mulDiv(tx[sfFee].jbc().drops(),
         baseRefLevel,
             refTxnCostDrops).second;
 }
@@ -549,7 +549,7 @@ TxQ::tryClearAccountQueue(Application& app, OpenView& view,
     How the decision to apply, queue, or reject is made:
     0. Is `featureFeeEscalation` enabled?
         Yes: Continue to next step.
-        No: Fallback to `ripple::apply`. Stop.
+        No: Fallback to `jbcoin::apply`. Stop.
     1. Does `preflight` indicate that the tx is valid?
         No: Return the `TER` from `preflight`. Stop.
         Yes: Continue to next step.
@@ -618,7 +618,7 @@ TxQ::apply(Application& app, OpenView& view,
         (view.rules().enabled(featureFeeEscalation));
     if (!allowEscalation)
     {
-        return ripple::apply(app, view, *tx, flags, j);
+        return jbcoin::apply(app, view, *tx, flags, j);
     }
 
     auto const account = (*tx)[sfAccount];
@@ -646,8 +646,8 @@ TxQ::apply(Application& app, OpenView& view,
 
         TxQAccount::TxMap::iterator nextTxIter;
 
-        XRPAmount fee = beast::zero;
-        XRPAmount potentialSpend = beast::zero;
+        JBCAmount fee = beast::zero;
+        JBCAmount potentialSpend = beast::zero;
         bool includeCurrentFee = false;
     };
 
@@ -889,34 +889,34 @@ TxQ::apply(Application& app, OpenView& view,
                         this account. Currently, it will not count,
                         for the same reason that it is not checked on
                         the first transaction.
-                    Assume: Minimum account reserve is 20 XRP.
-                    Example 1: If I have 1,000,000 XRP, I can queue
-                        a transaction with a 1,000,000 XRP fee. In
+                    Assume: Minimum account reserve is 20 JBC.
+                    Example 1: If I have 1,000,000 JBC, I can queue
+                        a transaction with a 1,000,000 JBC fee. In
                         the meantime, some other transaction may
                         lower my balance (eg. taking an offer). When
                         the transaction executes, I will either
-                        spend the 1,000,000 XRP, or the transaction
+                        spend the 1,000,000 JBC, or the transaction
                         will get stuck in the queue with a
                         `terINSUF_FEE_B`.
-                    Example 2: If I have 1,000,000 XRP, and I queue
-                        10 transactions with 0.1 XRP fee, I have 1 XRP
+                    Example 2: If I have 1,000,000 JBC, and I queue
+                        10 transactions with 0.1 JBC fee, I have 1 JBC
                         in flight. I can now queue another tx with a
-                        999,999 XRP fee. When the first 10 execute,
+                        999,999 JBC fee. When the first 10 execute,
                         they're guaranteed to pay their fee, because
                         nothing can eat into my reserve. The last
                         transaction, again, will either spend the
-                        999,999 XRP, or get stuck in the queue.
-                    Example 3: If I have 1,000,000 XRP, and I queue
-                        7 transactions with 3 XRP fee, I have 21 XRP
+                        999,999 JBC, or get stuck in the queue.
+                    Example 3: If I have 1,000,000 JBC, and I queue
+                        7 transactions with 3 JBC fee, I have 21 JBC
                         in flight. I can not queue any more transactions,
                         no matter how small or large the fee.
                     Transactions stuck in the queue are mitigated by
                     LastLedgerSeq and MaybeTx::retriesRemaining.
                 */
-                auto const balance = (*sle)[sfBalance].xrp();
+                auto const balance = (*sle)[sfBalance].jbc();
                 auto totalFee = multiTxn->fee;
                 if (multiTxn->includeCurrentFee)
-                    totalFee += (*tx)[sfFee].xrp();
+                    totalFee += (*tx)[sfFee].jbc();
                 if (totalFee >= balance ||
                     totalFee >= view.fees().accountReserve(0))
                 {
@@ -1008,7 +1008,7 @@ TxQ::apply(Application& app, OpenView& view,
         JLOG(j_.trace()) << "Applying transaction " <<
             transactionID <<
             " to open ledger.";
-        ripple::TER txnResult;
+        jbcoin::TER txnResult;
         bool didApply;
 
         std::tie(txnResult, didApply) = doApply(pcresult, app, view);
@@ -1562,4 +1562,4 @@ make_TxQ(TxQ::Setup const& setup, beast::Journal j)
     return std::make_unique<TxQ>(setup, std::move(j));
 }
 
-} // ripple
+} // jbcoin

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2016 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2016 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_CONDITIONS_CONDITION_H
-#define RIPPLE_CONDITIONS_CONDITION_H
+#ifndef JBCOIN_CONDITIONS_CONDITION_H
+#define JBCOIN_CONDITIONS_CONDITION_H
 
-#include <ripple/basics/Buffer.h>
-#include <ripple/basics/Slice.h>
-#include <ripple/conditions/impl/utils.h>
+#include <jbcoin/basics/Buffer.h>
+#include <jbcoin/basics/Slice.h>
+#include <jbcoin/conditions/impl/utils.h>
 #include <array>
 #include <cstdint>
 #include <set>
@@ -30,7 +30,7 @@
 #include <system_error>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 namespace cryptoconditions {
 
 enum class Type

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2016 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2016 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_CONDITIONS_UTILS_H
-#define RIPPLE_CONDITIONS_UTILS_H
+#ifndef JBCOIN_CONDITIONS_UTILS_H
+#define JBCOIN_CONDITIONS_UTILS_H
 
-#include <ripple/basics/strHex.h>
-#include <ripple/conditions/impl/error.h>
+#include <jbcoin/basics/strHex.h>
+#include <jbcoin/conditions/impl/error.h>
 #include <boost/dynamic_bitset.hpp>
 #include <limits>
 #include <stdexcept>
@@ -31,7 +31,7 @@
 #include <sstream>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 namespace cryptoconditions {
 
 // A collection of functions to decode binary blobs
@@ -237,6 +237,6 @@ parseInteger(Slice& s, std::size_t count, std::error_code& ec)
 
 } // der
 } // cryptoconditions
-} // ripple
+} // jbcoin
 
 #endif

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright(c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright(c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_SERVER_BASEHTTPPEER_H_INCLUDED
-#define RIPPLE_SERVER_BASEHTTPPEER_H_INCLUDED
+#ifndef JBCOIN_SERVER_BASEHTTPPEER_H_INCLUDED
+#define JBCOIN_SERVER_BASEHTTPPEER_H_INCLUDED
 
-#include <ripple/basics/Log.h>
-#include <ripple/server/Session.h>
-#include <ripple/server/impl/io_list.h>
-#include <ripple/beast/net/IPAddressConversion.h>
-#include <ripple/beast/asio/ssl_error.h> // for is_short_read?
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/server/Session.h>
+#include <jbcoin/server/impl/io_list.h>
+#include <jbcoin/beast/net/IPAddressConversion.h>
+#include <jbcoin/beast/asio/ssl_error.h> // for is_short_read?
 #include <boost/beast/http/read.hpp>
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/parser.hpp>
@@ -42,7 +42,7 @@
 #include <type_traits>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Represents an active connection. */
 template<class Handler, class Impl>
@@ -515,6 +515,6 @@ close(bool graceful)
     impl().stream_.lowest_layer().close(ec);
 }
 
-} // ripple
+} // jbcoin
 
 #endif

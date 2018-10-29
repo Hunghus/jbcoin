@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/cursor/RippleLiquidity.h>
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/Quality.h>
+#include <jbcoin/app/paths/cursor/JBCoinLiquidity.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/Quality.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace path {
 
 // The reverse pass has been narrowing by credit available and inflating by fees
@@ -35,15 +35,15 @@ namespace path {
 // Then, compute current node's output for next node.
 // - Current node: specify what to push through to next.
 // - Output to next node is computed as input minus quality or transfer fee.
-// - If next node is an offer and output is non-XRP then we are the issuer and
+// - If next node is an offer and output is non-JBC then we are the issuer and
 //   do not need to push funds.
-// - If next node is an offer and output is XRP then we need to deliver funds to
+// - If next node is an offer and output is JBC then we need to deliver funds to
 //   limbo.
 TER PathCursor::forwardLiquidityForAccount () const
 {
     TER resultCode   = tesSUCCESS;
     auto const lastNodeIndex       = pathState_.nodes().size () - 1;
-    auto viewJ = rippleCalc_.logs_.journal ("View");
+    auto viewJ = jbcoinCalc_.logs_.journal ("View");
 
     std::uint64_t uRateMax = 0;
 
@@ -90,7 +90,7 @@ TER PathCursor::forwardLiquidityForAccount () const
         << " node.saRevIssue:" << node().saRevIssue
         << " node.saRevDeliver:" << node().saRevDeliver;
 
-    // Ripple through account.
+    // JBCoin through account.
 
     if (previousNode().isAccount() && nextNode().isAccount())
     {
@@ -100,7 +100,7 @@ TER PathCursor::forwardLiquidityForAccount () const
         {
             // ^ --> ACCOUNT --> account
 
-            // For the first node, calculate amount to ripple based on what is
+            // For the first node, calculate amount to jbcoin based on what is
             // available.
             node().saFwdRedeem = node().saRevRedeem;
 
@@ -166,7 +166,7 @@ TER PathCursor::forwardLiquidityForAccount () const
             if (saCurReceive)
             {
                 // Actually receive.
-                resultCode = rippleCredit(view(),
+                resultCode = jbcoinCredit(view(),
                     previousAccountID,
                     node().account_,
                     previousNode().saFwdRedeem + previousNode().saFwdIssue,
@@ -193,8 +193,8 @@ TER PathCursor::forwardLiquidityForAccount () const
                 // Previous wants to redeem.
             {
                 // Rate : 1.0 : quality out
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     parityRate,
                     qualityOut,
                     previousNode().saFwdRedeem,
@@ -211,8 +211,8 @@ TER PathCursor::forwardLiquidityForAccount () const
                 // Current has more to redeem to next.
             {
                 // Rate: quality in : quality out
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     qualityIn,
                     qualityOut,
                     previousNode().saFwdIssue,
@@ -231,8 +231,8 @@ TER PathCursor::forwardLiquidityForAccount () const
                 // Current wants to issue.
             {
                 // Rate : 1.0 : transfer_rate
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     parityRate,
                     transferRate (view(), node().account_),
                     previousNode().saFwdRedeem,
@@ -251,8 +251,8 @@ TER PathCursor::forwardLiquidityForAccount () const
                 // Current wants to issue.
             {
                 // Rate: quality in : 1.0
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     qualityIn,
                     parityRate,
                     previousNode().saFwdIssue,
@@ -266,7 +266,7 @@ TER PathCursor::forwardLiquidityForAccount () const
 
             // Adjust prv --> cur balance : take all inbound
             resultCode = saProvide
-                ? rippleCredit(view(),
+                ? jbcoinCredit(view(),
                     previousAccountID,
                     node().account_,
                     previousNode().saFwdRedeem + previousNode().saFwdIssue,
@@ -284,7 +284,7 @@ TER PathCursor::forwardLiquidityForAccount () const
 
         if (nodeIndex_)
         {
-            // Non-XRP, current node is the issuer.
+            // Non-JBC, current node is the issuer.
             JLOG (j_.trace())
                 << "forwardLiquidityForAccount: account --> "
                 << "ACCOUNT --> offer";
@@ -300,8 +300,8 @@ TER PathCursor::forwardLiquidityForAccount () const
             {
                 // Rate : 1.0 : transfer_rate
                 // XXX Is having the transfer rate here correct?
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     parityRate,
                     transferRate (view(), node().account_),
                     previousNode().saFwdRedeem,
@@ -318,8 +318,8 @@ TER PathCursor::forwardLiquidityForAccount () const
                 // Previous wants to issue. To next must be ok.
             {
                 // Rate: quality in : 1.0
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     qualityIn,
                     parityRate,
                     previousNode().saFwdIssue,
@@ -331,7 +331,7 @@ TER PathCursor::forwardLiquidityForAccount () const
 
             // Adjust prv --> cur balance : take all inbound
             resultCode   = node().saFwdDeliver
-                ? rippleCredit(view(),
+                ? jbcoinCredit(view(),
                     previousAccountID, node().account_,
                     previousNode().saFwdRedeem + previousNode().saFwdIssue,
                     false, viewJ)
@@ -349,15 +349,15 @@ TER PathCursor::forwardLiquidityForAccount () const
                 node().saFwdDeliver = std::min (
                     node().saFwdDeliver, pathState_.inReq() - pathState_.inAct());
 
-                // Limit XRP by available. No limit for non-XRP as issuer.
-                if (isXRP (node().issue_))
+                // Limit JBC by available. No limit for non-JBC as issuer.
+                if (isJBC (node().issue_))
                     node().saFwdDeliver = std::min (
                         node().saFwdDeliver,
                         accountHolds(view(),
                             node().account_,
-                            xrpCurrency(),
-                            xrpAccount(),
-                            fhIGNORE_FREEZE, viewJ)); // XRP can't be frozen
+                            jbcCurrency(),
+                            jbcAccount(),
+                            fhIGNORE_FREEZE, viewJ)); // JBC can't be frozen
 
             }
 
@@ -368,15 +368,15 @@ TER PathCursor::forwardLiquidityForAccount () const
             {
                 resultCode   = tecPATH_DRY;
             }
-            else if (!isXRP (node().issue_))
+            else if (!isJBC (node().issue_))
             {
-                // Non-XRP, current node is the issuer.
+                // Non-JBC, current node is the issuer.
                 // We could be delivering to multiple accounts, so we don't know
-                // which ripple balance will be adjusted.  Assume just issuing.
+                // which jbcoin balance will be adjusted.  Assume just issuing.
 
                 JLOG (j_.trace())
                     << "forwardLiquidityForAccount: ^ --> "
-                    << "ACCOUNT -- !XRP --> offer";
+                    << "ACCOUNT -- !JBC --> offer";
 
                 // As the issuer, would only issue.
                 // Don't need to actually deliver. As from delivering leave in
@@ -386,11 +386,11 @@ TER PathCursor::forwardLiquidityForAccount () const
             {
                 JLOG (j_.trace())
                     << "forwardLiquidityForAccount: ^ --> "
-                    << "ACCOUNT -- XRP --> offer";
+                    << "ACCOUNT -- JBC --> offer";
 
-                // Deliver XRP to limbo.
+                // Deliver JBC to limbo.
                 resultCode = accountSend(view(),
-                    node().account_, xrpAccount(), node().saFwdDeliver, viewJ);
+                    node().account_, jbcAccount(), node().saFwdDeliver, viewJ);
             }
         }
     }
@@ -425,8 +425,8 @@ TER PathCursor::forwardLiquidityForAccount () const
                 // Previous wants to deliver and can current redeem.
             {
                 // Rate : 1.0 : quality out
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     parityRate,
                     qualityOut,
                     previousNode().saFwdDeliver,
@@ -446,8 +446,8 @@ TER PathCursor::forwardLiquidityForAccount () const
                 // Current wants issue.
             {
                 // Rate : 1.0 : transfer_rate
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     parityRate,
                     transferRate (view(), node().account_),
                     previousNode().saFwdDeliver,
@@ -477,8 +477,8 @@ TER PathCursor::forwardLiquidityForAccount () const
         if (previousNode().saFwdDeliver && node().saRevDeliver)
         {
             // Rate : 1.0 : transfer_rate
-            rippleLiquidity (
-                rippleCalc_,
+            jbcoinLiquidity (
+                jbcoinCalc_,
                 parityRate,
                 transferRate (view(), node().account_),
                 previousNode().saFwdDeliver,
@@ -498,4 +498,4 @@ TER PathCursor::forwardLiquidityForAccount () const
 }
 
 } // path
-} // ripple
+} // jbcoin

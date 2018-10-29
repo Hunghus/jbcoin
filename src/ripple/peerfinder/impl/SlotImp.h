@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PEERFINDER_SLOTIMP_H_INCLUDED
-#define RIPPLE_PEERFINDER_SLOTIMP_H_INCLUDED
+#ifndef JBCOIN_PEERFINDER_SLOTIMP_H_INCLUDED
+#define JBCOIN_PEERFINDER_SLOTIMP_H_INCLUDED
 
-#include <ripple/peerfinder/Slot.h>
-#include <ripple/peerfinder/PeerfinderManager.h>
-#include <ripple/beast/core/CompilerConfig.h>
-#include <ripple/beast/container/aged_unordered_map.h>
-#include <ripple/beast/container/aged_container_utility.h>
+#include <jbcoin/peerfinder/Slot.h>
+#include <jbcoin/peerfinder/PeerfinderManager.h>
+#include <jbcoin/beast/core/CompilerConfig.h>
+#include <jbcoin/beast/container/aged_unordered_map.h>
+#include <jbcoin/beast/container/aged_container_utility.h>
 #include <boost/optional.hpp>
 #include <atomic>
 
-namespace ripple {
+namespace jbcoin {
 namespace PeerFinder {
 
 class SlotImp : public Slot

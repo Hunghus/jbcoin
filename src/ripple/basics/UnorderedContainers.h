@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,13 +17,13 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_BASICS_UNORDEREDCONTAINERS_H_INCLUDED
-#define RIPPLE_BASICS_UNORDEREDCONTAINERS_H_INCLUDED
+#ifndef JBCOIN_BASICS_UNORDEREDCONTAINERS_H_INCLUDED
+#define JBCOIN_BASICS_UNORDEREDCONTAINERS_H_INCLUDED
 
-#include <ripple/basics/hardened_hash.h>
-#include <ripple/beast/hash/hash_append.h>
-#include <ripple/beast/hash/uhash.h>
-#include <ripple/beast/hash/xxhasher.h>
+#include <jbcoin/basics/hardened_hash.h>
+#include <jbcoin/beast/hash/hash_append.h>
+#include <jbcoin/beast/hash/uhash.h>
+#include <jbcoin/beast/hash/xxhasher.h>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -38,7 +38,7 @@
 * what container it is.
 */
 
-namespace ripple
+namespace jbcoin
 {
 
 // hash containers
@@ -87,6 +87,6 @@ template <class Value, class Hash = hardened_hash<strong_hash>,
           class Allocator = std::allocator<Value>>
 using hardened_hash_multiset = std::unordered_multiset <Value, Hash, Pred, Allocator>;
 
-} // ripple
+} // jbcoin
 
 #endif

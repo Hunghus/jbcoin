@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,21 +17,21 @@
 */
 //==============================================================================
 
-#include <ripple/basics/chrono.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/make_SSLContext.h>
-#include <ripple/beast/container/aged_unordered_set.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/make_SSLContext.h>
+#include <jbcoin/beast/container/aged_unordered_set.h>
 #include <cstdint>
 #include <sstream>
 #include <stdexcept>
 
-namespace ripple {
+namespace jbcoin {
 namespace openssl {
 namespace detail {
 
 // We limit the ciphers we request and allow to ensure that weak
 // ciphers aren't used. While this isn't strictly necessary for
-// the rippled server-server use case, where we only need MITM
+// the jbcoind server-server use case, where we only need MITM
 // detection/prevention, we also have websocket and rpc scenarios
 // and want to ensure weak ciphers can't be used.
 std::string const defaultCipherList =
@@ -196,7 +196,7 @@ disallowRenegotiation (SSL const* ssl, bool isNew)
         beast::aged_unordered_set <SSL const*> set;
 
         StaticData()
-            : set (ripple::stopwatch())
+            : set (jbcoin::stopwatch())
         {
         }
     };
@@ -392,8 +392,8 @@ get_context (std::string const& cipherList)
             LogicError ("SSL_CTX_set_cipher_list failed");
     }
 
-    // These are the raw DH parameters that Ripple Labs has
-    // chosen for Ripple, in the binary format needed by
+    // These are the raw DH parameters that JBCoin Labs has
+    // chosen for JBCoin, in the binary format needed by
     // d2i_DHparams.
     //
     unsigned char const params[] =
@@ -466,4 +466,4 @@ make_SSLContextAuthed (
     return context;
 }
 
-} // ripple
+} // jbcoin

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,10 +17,10 @@
 */
 //==============================================================================
 
-#include <ripple/shamap/impl/SHAMap.cpp>
-#include <ripple/shamap/impl/SHAMapDelta.cpp>
-#include <ripple/shamap/impl/SHAMapItem.cpp>
-#include <ripple/shamap/impl/SHAMapMissingNode.cpp>
-#include <ripple/shamap/impl/SHAMapNodeID.cpp>
-#include <ripple/shamap/impl/SHAMapSync.cpp>
-#include <ripple/shamap/impl/SHAMapTreeNode.cpp>
+#include <jbcoin/shamap/impl/SHAMap.cpp>
+#include <jbcoin/shamap/impl/SHAMapDelta.cpp>
+#include <jbcoin/shamap/impl/SHAMapItem.cpp>
+#include <jbcoin/shamap/impl/SHAMapMissingNode.cpp>
+#include <jbcoin/shamap/impl/SHAMapNodeID.cpp>
+#include <jbcoin/shamap/impl/SHAMapSync.cpp>
+#include <jbcoin/shamap/impl/SHAMapTreeNode.cpp>

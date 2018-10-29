@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,26 +17,26 @@
 */
 //==============================================================================
 
-#include <ripple/app/tx/applySteps.h>
-#include <ripple/app/tx/impl/ApplyContext.h>
-#include <ripple/app/tx/impl/CancelCheck.h>
-#include <ripple/app/tx/impl/CancelOffer.h>
-#include <ripple/app/tx/impl/CancelTicket.h>
-#include <ripple/app/tx/impl/CashCheck.h>
-#include <ripple/app/tx/impl/Change.h>
-#include <ripple/app/tx/impl/CreateCheck.h>
-#include <ripple/app/tx/impl/CreateOffer.h>
-#include <ripple/app/tx/impl/CreateTicket.h>
-#include <ripple/app/tx/impl/DepositPreauth.h>
-#include <ripple/app/tx/impl/Escrow.h>
-#include <ripple/app/tx/impl/Payment.h>
-#include <ripple/app/tx/impl/SetAccount.h>
-#include <ripple/app/tx/impl/SetRegularKey.h>
-#include <ripple/app/tx/impl/SetSignerList.h>
-#include <ripple/app/tx/impl/SetTrust.h>
-#include <ripple/app/tx/impl/PayChan.h>
+#include <jbcoin/app/tx/applySteps.h>
+#include <jbcoin/app/tx/impl/ApplyContext.h>
+#include <jbcoin/app/tx/impl/CancelCheck.h>
+#include <jbcoin/app/tx/impl/CancelOffer.h>
+#include <jbcoin/app/tx/impl/CancelTicket.h>
+#include <jbcoin/app/tx/impl/CashCheck.h>
+#include <jbcoin/app/tx/impl/Change.h>
+#include <jbcoin/app/tx/impl/CreateCheck.h>
+#include <jbcoin/app/tx/impl/CreateOffer.h>
+#include <jbcoin/app/tx/impl/CreateTicket.h>
+#include <jbcoin/app/tx/impl/DepositPreauth.h>
+#include <jbcoin/app/tx/impl/Escrow.h>
+#include <jbcoin/app/tx/impl/Payment.h>
+#include <jbcoin/app/tx/impl/SetAccount.h>
+#include <jbcoin/app/tx/impl/SetRegularKey.h>
+#include <jbcoin/app/tx/impl/SetSignerList.h>
+#include <jbcoin/app/tx/impl/SetTrust.h>
+#include <jbcoin/app/tx/impl/PayChan.h>
 
-namespace ripple {
+namespace jbcoin {
 
 static
 NotTEC
@@ -354,4 +354,4 @@ doApply(PreclaimResult const& preclaimResult,
     }
 }
 
-} // ripple
+} // jbcoin

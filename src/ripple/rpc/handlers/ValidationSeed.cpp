@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/core/Config.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/basics/make_lock.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/basics/make_lock.h>
 #include <iostream>
 
-namespace ripple {
+namespace jbcoin {
 
 // {
 //   secret: <string>
@@ -63,8 +63,8 @@ Json::Value doValidationSeed (RPC::Context& context)
     //     auto& seed = context.app.config().VALIDATION_SEED;
     //     auto& pub = context.app.config().VALIDATION_PUB;
 
-    //     pub = RippleAddress::createNodePublic (seed);
-    //     context.app.config().VALIDATION_PRIV = RippleAddress::createNodePrivate (seed);
+    //     pub = JBCoinAddress::createNodePublic (seed);
+    //     context.app.config().VALIDATION_PRIV = JBCoinAddress::createNodePrivate (seed);
 
     //     obj[jss::validation_public_key] = pub.humanNodePublic ();
     //     obj[jss::validation_seed] = seed.humanSeed ();
@@ -74,4 +74,4 @@ Json::Value doValidationSeed (RPC::Context& context)
     // return obj;
 }
 
-} // ripple
+} // jbcoin

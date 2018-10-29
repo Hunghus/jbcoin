@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#include <ripple/rpc/impl/Handler.h>
-#include <ripple/rpc/handlers/Handlers.h>
-#include <ripple/rpc/handlers/Version.h>
+#include <jbcoin/rpc/impl/Handler.h>
+#include <jbcoin/rpc/handlers/Handlers.h>
+#include <jbcoin/rpc/handlers/Version.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace RPC {
 namespace {
 
@@ -89,7 +89,7 @@ Handler const handlerArray[] {
     {   "ledger_request",       byRef (&doLedgerRequest),       Role::ADMIN,   NO_CONDITION     },
     {   "log_level",            byRef (&doLogLevel),            Role::ADMIN,   NO_CONDITION     },
     {   "logrotate",            byRef (&doLogRotate),           Role::ADMIN,   NO_CONDITION     },
-    {   "noripple_check",       byRef (&doNoRippleCheck),       Role::USER,  NO_CONDITION  },
+    {   "nojbcoin_check",       byRef (&doNoJBCoinCheck),       Role::USER,  NO_CONDITION  },
     {   "owner_info",           byRef (&doOwnerInfo),           Role::USER,  NEEDS_CURRENT_LEDGER  },
     {   "peers",                byRef (&doPeers),               Role::ADMIN,   NO_CONDITION     },
     {   "path_find",            byRef (&doPathFind),            Role::USER,  NEEDS_CURRENT_LEDGER  },
@@ -97,7 +97,7 @@ Handler const handlerArray[] {
     {   "print",                byRef (&doPrint),               Role::ADMIN,   NO_CONDITION     },
 //      {   "profile",              byRef (&doProfile),             Role::USER,  NEEDS_CURRENT_LEDGER  },
     {   "random",               byRef (&doRandom),              Role::USER,  NO_CONDITION     },
-    {   "ripple_path_find",     byRef (&doRipplePathFind),      Role::USER,  NO_CONDITION  },
+    {   "jbcoin_path_find",     byRef (&doJBCoinPathFind),      Role::USER,  NO_CONDITION  },
     {   "sign",                 byRef (&doSign),                Role::USER,  NO_CONDITION     },
     {   "sign_for",             byRef (&doSignFor),             Role::USER,  NO_CONDITION     },
     {   "submit",               byRef (&doSubmit),              Role::USER,  NEEDS_CURRENT_LEDGER  },
@@ -193,4 +193,4 @@ getHandlerNames()
 };
 
 } // RPC
-} // ripple
+} // jbcoin

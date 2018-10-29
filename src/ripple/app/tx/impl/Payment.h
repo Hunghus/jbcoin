@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,17 +17,17 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_TX_PAYMENT_H_INCLUDED
-#define RIPPLE_TX_PAYMENT_H_INCLUDED
+#ifndef JBCOIN_TX_PAYMENT_H_INCLUDED
+#define JBCOIN_TX_PAYMENT_H_INCLUDED
 
-#include <ripple/app/paths/RippleCalc.h>
-#include <ripple/app/tx/impl/Transactor.h>
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/TxFlags.h>
+#include <jbcoin/app/paths/JBCoinCalc.h>
+#include <jbcoin/app/tx/impl/Transactor.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/TxFlags.h>
 
-namespace ripple {
+namespace jbcoin {
 
-// See https://ripple.com/wiki/Transaction_Format#Payment_.280.29
+// See https://jbcoin.com/wiki/Transaction_Format#Payment_.280.29
 
 class Payment
     : public Transactor
@@ -45,7 +45,7 @@ public:
     }
 
     static
-    XRPAmount
+    JBCAmount
     calculateMaxSpend(STTx const& tx);
 
     static
@@ -59,6 +59,6 @@ public:
     TER doApply () override;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

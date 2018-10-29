@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,25 +17,25 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/InboundLedger.h>
-#include <ripple/shamap/SHAMapNodeID.h>
-#include <ripple/app/ledger/AccountStateSF.h>
-#include <ripple/app/ledger/InboundLedgers.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/ledger/TransactionStateSF.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/basics/Log.h>
-#include <ripple/core/JobQueue.h>
-#include <ripple/overlay/Overlay.h>
-#include <ripple/resource/Fees.h>
-#include <ripple/protocol/HashPrefix.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/nodestore/DatabaseShard.h>
+#include <jbcoin/app/ledger/InboundLedger.h>
+#include <jbcoin/shamap/SHAMapNodeID.h>
+#include <jbcoin/app/ledger/AccountStateSF.h>
+#include <jbcoin/app/ledger/InboundLedgers.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/ledger/TransactionStateSF.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/core/JobQueue.h>
+#include <jbcoin/overlay/Overlay.h>
+#include <jbcoin/resource/Fees.h>
+#include <jbcoin/protocol/HashPrefix.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/nodestore/DatabaseShard.h>
 
 #include <algorithm>
 
-namespace ripple {
+namespace jbcoin {
 
 using namespace std::chrono_literals;
 
@@ -1348,4 +1348,4 @@ Json::Value InboundLedger::getJson (int)
     return ret;
 }
 
-} // ripple
+} // jbcoin

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,20 +18,20 @@
 //==============================================================================
 
 
-#include <ripple/peerfinder/impl/Bootcache.cpp>
-#include <ripple/peerfinder/impl/PeerfinderConfig.cpp>
-#include <ripple/peerfinder/impl/Endpoint.cpp>
-#include <ripple/peerfinder/impl/PeerfinderManager.cpp>
-#include <ripple/peerfinder/impl/SlotImp.cpp>
-#include <ripple/peerfinder/impl/SourceStrings.cpp>
+#include <jbcoin/peerfinder/impl/Bootcache.cpp>
+#include <jbcoin/peerfinder/impl/PeerfinderConfig.cpp>
+#include <jbcoin/peerfinder/impl/Endpoint.cpp>
+#include <jbcoin/peerfinder/impl/PeerfinderManager.cpp>
+#include <jbcoin/peerfinder/impl/SlotImp.cpp>
+#include <jbcoin/peerfinder/impl/SourceStrings.cpp>
 
-#include <ripple/peerfinder/sim/GraphAlgorithms.h>
-#include <ripple/peerfinder/sim/Predicates.h>
-#include <ripple/peerfinder/sim/FunctionQueue.h>
-#include <ripple/peerfinder/sim/Message.h>
-#include <ripple/peerfinder/sim/NodeSnapshot.h>
-#include <ripple/peerfinder/sim/Params.h>
+#include <jbcoin/peerfinder/sim/GraphAlgorithms.h>
+#include <jbcoin/peerfinder/sim/Predicates.h>
+#include <jbcoin/peerfinder/sim/FunctionQueue.h>
+#include <jbcoin/peerfinder/sim/Message.h>
+#include <jbcoin/peerfinder/sim/NodeSnapshot.h>
+#include <jbcoin/peerfinder/sim/Params.h>
 
 #if DOXYGEN
-#include <ripple/peerfinder/README.md>
+#include <jbcoin/peerfinder/README.md>
 #endif

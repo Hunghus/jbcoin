@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,21 +17,21 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_ACCOUNTID_H_INCLUDED
-#define RIPPLE_PROTOCOL_ACCOUNTID_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_ACCOUNTID_H_INCLUDED
+#define JBCOIN_PROTOCOL_ACCOUNTID_H_INCLUDED
 
-#include <ripple/protocol/tokens.h>
+#include <jbcoin/protocol/tokens.h>
 // VFALCO Uncomment when the header issues are resolved
-//#include <ripple/protocol/PublicKey.h>
-#include <ripple/basics/base_uint.h>
-#include <ripple/basics/UnorderedContainers.h>
-#include <ripple/json/json_value.h>
+//#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/basics/base_uint.h>
+#include <jbcoin/basics/UnorderedContainers.h>
+#include <jbcoin/json/json_value.h>
 #include <boost/optional.hpp>
 #include <cstddef>
 #include <mutex>
 #include <string>
 
-namespace ripple {
+namespace jbcoin {
 
 namespace detail {
 
@@ -99,9 +99,9 @@ parseHexOrBase58 (std::string const& s);
 //AccountID
 //calcAccountID (PublicKey const& pk);
 
-/** A special account that's used as the "issuer" for XRP. */
+/** A special account that's used as the "issuer" for JBC. */
 AccountID const&
-xrpAccount();
+jbcAccount();
 
 /** A placeholder for empty accounts. */
 AccountID const&
@@ -118,7 +118,7 @@ to_issuer (AccountID&, std::string const&);
 // DEPRECATED Should be checking the currency or native flag
 inline
 bool
-isXRP(AccountID const& c)
+isJBC(AccountID const& c)
 {
     return c == beast::zero;
 }
@@ -143,7 +143,7 @@ inline std::ostream& operator<< (std::ostream& os, AccountID const& x)
 /** Caches the base58 representations of AccountIDs
 
     This operation occurs with sufficient frequency to
-    justify having a cache. In the future, rippled should
+    justify having a cache. In the future, jbcoind should
     require clients to receive "binary" results, where
     AccountIDs are hex-encoded.
 */
@@ -164,7 +164,7 @@ public:
     explicit
     AccountIDCache (std::size_t capacity);
 
-    /** Return ripple::toBase58 for the AccountID
+    /** Return jbcoin::toBase58 for the AccountID
 
         Thread Safety:
             Safe to call from any thread concurrently
@@ -176,7 +176,7 @@ public:
     toBase58 (AccountID const&) const;
 };
 
-} // ripple
+} // jbcoin
 
 //------------------------------------------------------------------------------
 
@@ -185,7 +185,7 @@ namespace std {
 // DEPRECATED
 // VFALCO Use beast::uhash or a hardened container
 template <>
-struct hash <ripple::AccountID> : ripple::AccountID::hasher
+struct hash <jbcoin::AccountID> : jbcoin::AccountID::hasher
 {
     explicit hash() = default;
 };

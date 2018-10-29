@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/ledger/AcceptedLedgerTx.h>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/UintTypes.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/ledger/AcceptedLedgerTx.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/UintTypes.h>
 
-namespace ripple {
+namespace jbcoin {
 
 AcceptedLedgerTx::AcceptedLedgerTx (
     std::shared_ptr<ReadView const> const& ledger,
@@ -109,4 +109,4 @@ void AcceptedLedgerTx::buildJson ()
     }
 }
 
-} // ripple
+} // jbcoin

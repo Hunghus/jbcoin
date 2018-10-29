@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#include <ripple/beast/unit_test.h>
-#include <ripple/nodestore/impl/varint.h>
+#include <jbcoin/beast/unit_test.h>
+#include <jbcoin/nodestore/impl/varint.h>
 #include <array>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 namespace NodeStore {
 namespace tests {
 
@@ -62,8 +62,8 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE(varint,NodeStore,ripple);
+BEAST_DEFINE_TESTSUITE(varint,NodeStore,jbcoin);
 
 } // test
 } // NodeStore
-} // ripple
+} // jbcoin

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_LEDGER_ORDERBOOKDB_H_INCLUDED
-#define RIPPLE_APP_LEDGER_ORDERBOOKDB_H_INCLUDED
+#ifndef JBCOIN_APP_LEDGER_ORDERBOOKDB_H_INCLUDED
+#define JBCOIN_APP_LEDGER_ORDERBOOKDB_H_INCLUDED
 
-#include <ripple/app/ledger/AcceptedLedgerTx.h>
-#include <ripple/app/ledger/BookListeners.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/OrderBook.h>
+#include <jbcoin/app/ledger/AcceptedLedgerTx.h>
+#include <jbcoin/app/ledger/BookListeners.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/OrderBook.h>
 #include <mutex>
 
-namespace ripple {
+namespace jbcoin {
 
 class OrderBookDB
     : public Stoppable
@@ -48,7 +48,7 @@ public:
         currencyID. */
     int getBookSize(Issue const&);
 
-    bool isBookToXRP (Issue const&);
+    bool isBookToJBC (Issue const&);
 
     BookListeners::pointer getBookListeners (Book const&);
     BookListeners::pointer makeBookListeners (Book const&);
@@ -71,8 +71,8 @@ private:
     // by co/io
     IssueToOrderBook mDestMap;
 
-    // does an order book to XRP exist
-    hash_set <Issue> mXRPBooks;
+    // does an order book to JBC exist
+    hash_set <Issue> mJBCBooks;
 
     std::recursive_mutex mLock;
 
@@ -85,6 +85,6 @@ private:
     beast::Journal j_;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

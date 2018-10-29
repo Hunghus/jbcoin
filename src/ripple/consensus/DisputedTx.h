@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,20 +17,20 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_CONSENSUS_IMPL_DISPUTEDTX_H_INCLUDED
-#define RIPPLE_APP_CONSENSUS_IMPL_DISPUTEDTX_H_INCLUDED
+#ifndef JBCOIN_APP_CONSENSUS_IMPL_DISPUTEDTX_H_INCLUDED
+#define JBCOIN_APP_CONSENSUS_IMPL_DISPUTEDTX_H_INCLUDED
 
 #include <boost/container/flat_map.hpp>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/base_uint.h>
-#include <ripple/beast/utility/Journal.h>
-#include <ripple/consensus/ConsensusParms.h>
-#include <ripple/json/json_writer.h>
-#include <ripple/protocol/Serializer.h>
-#include <ripple/protocol/UintTypes.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/base_uint.h>
+#include <jbcoin/beast/utility/Journal.h>
+#include <jbcoin/consensus/ConsensusParms.h>
+#include <jbcoin/json/json_writer.h>
+#include <jbcoin/protocol/Serializer.h>
+#include <jbcoin/protocol/UintTypes.h>
 #include <memory>
 
-namespace ripple {
+namespace jbcoin {
 
 /** A transaction discovered to be in dispute during conensus.
 
@@ -270,6 +270,6 @@ DisputedTx<Tx_t, NodeID_t>::getJson() const
     return ret;
 }
 
-}  // ripple
+}  // jbcoin
 
 #endif

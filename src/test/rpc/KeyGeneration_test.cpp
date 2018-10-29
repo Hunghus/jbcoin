@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2015 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2015 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#include <ripple/basics/StringUtilities.h>
+#include <jbcoin/basics/StringUtilities.h>
 #include <test/jtx/TestSuite.h>
-#include <ripple/json/json_value.h>
-#include <ripple/json/json_writer.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/rpc/handlers/WalletPropose.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
+#include <jbcoin/json/json_value.h>
+#include <jbcoin/json/json_writer.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/rpc/handlers/WalletPropose.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
 
-namespace ripple {
+namespace jbcoin {
 
 namespace RPC {
 
@@ -95,7 +95,7 @@ static key_strings const strong_brain_strings =
         "attacks.",
 };
 
-class WalletPropose_test : public ripple::TestSuite
+class WalletPropose_test : public jbcoin::TestSuite
 {
 public:
     void testRandomWallet(boost::optional<std::string> const& keyType)
@@ -725,7 +725,7 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE(WalletPropose,ripple_basics,ripple);
+BEAST_DEFINE_TESTSUITE(WalletPropose,jbcoin_basics,jbcoin);
 
 } // RPC
-} // ripple
+} // jbcoin

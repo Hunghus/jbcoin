@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_PATHS_CURSOR_PATHCURSOR_H_INCLUDED
-#define RIPPLE_APP_PATHS_CURSOR_PATHCURSOR_H_INCLUDED
+#ifndef JBCOIN_APP_PATHS_CURSOR_PATHCURSOR_H_INCLUDED
+#define JBCOIN_APP_PATHS_CURSOR_PATHCURSOR_H_INCLUDED
 
-#include <ripple/app/paths/RippleCalc.h>
+#include <jbcoin/app/paths/JBCoinCalc.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace path {
 
 // The next section contains methods that compute the liquidity along a path,
@@ -39,12 +39,12 @@ class PathCursor
 {
 public:
     PathCursor(
-        RippleCalc& rippleCalc,
+        JBCoinCalc& jbcoinCalc,
         PathState& pathState,
         bool multiQuality,
         beast::Journal j,
         NodeIndex nodeIndex = 0)
-            : rippleCalc_(rippleCalc),
+            : jbcoinCalc_(jbcoinCalc),
               pathState_(pathState),
               multiQuality_(multiQuality),
               nodeIndex_(restrict(nodeIndex)),
@@ -59,7 +59,7 @@ private:
 
     PathCursor increment(int delta = 1) const
     {
-        return {rippleCalc_, pathState_, multiQuality_, j_, nodeIndex_ + delta};
+        return {jbcoinCalc_, pathState_, multiQuality_, j_, nodeIndex_ + delta};
     }
 
     TER liquidity() const;
@@ -138,7 +138,7 @@ private:
         return node (restrict (nodeIndex_ + 1));
     }
 
-    RippleCalc& rippleCalc_;
+    JBCoinCalc& jbcoinCalc_;
     PathState& pathState_;
     bool multiQuality_;
     NodeIndex nodeIndex_;
@@ -146,6 +146,6 @@ private:
 };
 
 } // path
-} // ripple
+} // jbcoin
 
 #endif

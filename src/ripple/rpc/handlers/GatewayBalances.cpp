@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/paths/RippleState.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/protocol/AccountID.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/resource/Fees.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/paths/JBCoinState.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/protocol/AccountID.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/resource/Fees.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
 
-namespace ripple {
+namespace jbcoin {
 
 // Query:
 // 1) Specify ledger to query.
@@ -148,7 +148,7 @@ Json::Value doGatewayBalances (RPC::Context& context)
         forEachItem(*ledger, accountID,
             [&](std::shared_ptr<SLE const> const& sle)
             {
-                auto rs = RippleState::makeItem (accountID, sle);
+                auto rs = JBCoinState::makeItem (accountID, sle);
 
                 if (!rs)
                     return;
@@ -233,4 +233,4 @@ Json::Value doGatewayBalances (RPC::Context& context)
     return result;
 }
 
-} // ripple
+} // jbcoin

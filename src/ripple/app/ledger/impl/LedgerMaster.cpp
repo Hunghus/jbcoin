@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,39 +17,39 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/ledger/OpenLedger.h>
-#include <ripple/app/ledger/OrderBookDB.h>
-#include <ripple/app/ledger/PendingSaves.h>
-#include <ripple/app/tx/apply.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/AmendmentTable.h>
-#include <ripple/app/misc/HashRouter.h>
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/app/misc/SHAMapStore.h>
-#include <ripple/app/misc/Transaction.h>
-#include <ripple/app/misc/TxQ.h>
-#include <ripple/app/consensus/RCLValidations.h>
-#include <ripple/app/misc/ValidatorList.h>
-#include <ripple/app/paths/PathRequests.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/TaggedCache.h>
-#include <ripple/basics/UptimeClock.h>
-#include <ripple/core/TimeKeeper.h>
-#include <ripple/nodestore/DatabaseShard.h>
-#include <ripple/overlay/Overlay.h>
-#include <ripple/overlay/Peer.h>
-#include <ripple/protocol/digest.h>
-#include <ripple/protocol/HashPrefix.h>
-#include <ripple/resource/Fees.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/ledger/OpenLedger.h>
+#include <jbcoin/app/ledger/OrderBookDB.h>
+#include <jbcoin/app/ledger/PendingSaves.h>
+#include <jbcoin/app/tx/apply.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/AmendmentTable.h>
+#include <jbcoin/app/misc/HashRouter.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/app/misc/SHAMapStore.h>
+#include <jbcoin/app/misc/Transaction.h>
+#include <jbcoin/app/misc/TxQ.h>
+#include <jbcoin/app/consensus/RCLValidations.h>
+#include <jbcoin/app/misc/ValidatorList.h>
+#include <jbcoin/app/paths/PathRequests.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/TaggedCache.h>
+#include <jbcoin/basics/UptimeClock.h>
+#include <jbcoin/core/TimeKeeper.h>
+#include <jbcoin/nodestore/DatabaseShard.h>
+#include <jbcoin/overlay/Overlay.h>
+#include <jbcoin/overlay/Peer.h>
+#include <jbcoin/protocol/digest.h>
+#include <jbcoin/protocol/HashPrefix.h>
+#include <jbcoin/resource/Fees.h>
 #include <algorithm>
 #include <cassert>
 #include <memory>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 
 using namespace std::chrono_literals;
 
@@ -1935,4 +1935,4 @@ LedgerMaster::getFetchPackCacheSize () const
     return fetch_packs_.getCacheSize ();
 }
 
-} // ripple
+} // jbcoin

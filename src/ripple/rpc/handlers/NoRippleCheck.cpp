@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/app/paths/RippleState.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/TxFlags.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
-#include <ripple/rpc/impl/Tuning.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/app/paths/JBCoinState.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/TxFlags.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
+#include <jbcoin/rpc/impl/Tuning.h>
 
-namespace ripple {
+namespace jbcoin {
 
 static void fillTransaction (
     RPC::Context& context,
@@ -55,7 +55,7 @@ static void fillTransaction (
 //   role: gateway|user             // account role to assume
 //   transactions: true             // optional, reccommend transactions
 // }
-Json::Value doNoRippleCheck (RPC::Context& context)
+Json::Value doNoJBCoinCheck (RPC::Context& context)
 {
     auto const& params (context.params);
     if (! params.isMember (jss::account))
@@ -73,7 +73,7 @@ Json::Value doNoRippleCheck (RPC::Context& context)
     }
 
     unsigned int limit;
-    if (auto err = readLimitField(limit, RPC::Tuning::noRippleCheck, context))
+    if (auto err = readLimitField(limit, RPC::Tuning::noJBCoinCheck, context))
         return *err;
 
     bool transactions = false;
@@ -108,16 +108,16 @@ Json::Value doNoRippleCheck (RPC::Context& context)
 
     Json::Value& problems = (result["problems"] = Json::arrayValue);
 
-    bool bDefaultRipple = sle->getFieldU32 (sfFlags) & lsfDefaultRipple;
+    bool bDefaultJBCoin = sle->getFieldU32 (sfFlags) & lsfDefaultJBCoin;
 
-    if (bDefaultRipple & ! roleGateway)
+    if (bDefaultJBCoin & ! roleGateway)
     {
-        problems.append ("You appear to have set your default ripple flag even though you "
+        problems.append ("You appear to have set your default jbcoin flag even though you "
             "are not a gateway. This is not recommended unless you are experimenting");
     }
-    else if (roleGateway & ! bDefaultRipple)
+    else if (roleGateway & ! bDefaultJBCoin)
     {
-        problems.append ("You should immediately set your default ripple flag");
+        problems.append ("You should immediately set your default jbcoin flag");
         if (transactions)
         {
             Json::Value& tx = jvTransactions.append (Json::objectValue);
@@ -131,23 +131,23 @@ Json::Value doNoRippleCheck (RPC::Context& context)
             uint256(), 0, limit,
         [&](std::shared_ptr<SLE const> const& ownedItem)
         {
-            if (ownedItem->getType() == ltRIPPLE_STATE)
+            if (ownedItem->getType() == ltJBCOIN_STATE)
             {
                 bool const bLow = accountID == ownedItem->getFieldAmount(sfLowLimit).getIssuer();
 
-                bool const bNoRipple = ownedItem->getFieldU32(sfFlags) &
-                    (bLow ? lsfLowNoRipple : lsfHighNoRipple);
+                bool const bNoJBCoin = ownedItem->getFieldU32(sfFlags) &
+                    (bLow ? lsfLowNoJBCoin : lsfHighNoJBCoin);
 
                 std::string problem;
                 bool needFix = false;
-                if (bNoRipple & roleGateway)
+                if (bNoJBCoin & roleGateway)
                 {
-                    problem = "You should clear the no ripple flag on your ";
+                    problem = "You should clear the no jbcoin flag on your ";
                     needFix = true;
                 }
-                else if (! roleGateway & ! bNoRipple)
+                else if (! roleGateway & ! bNoJBCoin)
                 {
-                    problem = "You should probably set the no ripple flag on your ";
+                    problem = "You should probably set the no jbcoin flag on your ";
                     needFix = true;
                 }
                 if (needFix)
@@ -166,7 +166,7 @@ Json::Value doNoRippleCheck (RPC::Context& context)
                     Json::Value& tx = jvTransactions.append (Json::objectValue);
                     tx["TransactionType"] = "TrustSet";
                     tx["LimitAmount"] = limitAmount.getJson (0);
-                    tx["Flags"] = bNoRipple ? tfClearNoRipple : tfSetNoRipple;
+                    tx["Flags"] = bNoJBCoin ? tfClearNoJBCoin : tfSetNoJBCoin;
                     fillTransaction(context, tx, accountID, seq, *ledger);
 
                     return true;
@@ -178,4 +178,4 @@ Json::Value doNoRippleCheck (RPC::Context& context)
     return result;
 }
 
-} // ripple
+} // jbcoin

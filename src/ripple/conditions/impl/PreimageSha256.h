@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2016 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2016 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_CONDITIONS_PREIMAGE_SHA256_H
-#define RIPPLE_CONDITIONS_PREIMAGE_SHA256_H
+#ifndef JBCOIN_CONDITIONS_PREIMAGE_SHA256_H
+#define JBCOIN_CONDITIONS_PREIMAGE_SHA256_H
 
-#include <ripple/basics/Buffer.h>
-#include <ripple/basics/Slice.h>
-#include <ripple/conditions/Condition.h>
-#include <ripple/conditions/Fulfillment.h>
-#include <ripple/conditions/impl/error.h>
-#include <ripple/protocol/digest.h>
+#include <jbcoin/basics/Buffer.h>
+#include <jbcoin/basics/Slice.h>
+#include <jbcoin/conditions/Condition.h>
+#include <jbcoin/conditions/Fulfillment.h>
+#include <jbcoin/conditions/impl/error.h>
+#include <jbcoin/protocol/digest.h>
 #include <memory>
 
-namespace ripple {
+namespace jbcoin {
 namespace cryptoconditions {
 
 class PreimageSha256 final

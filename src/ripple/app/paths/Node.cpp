@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/Node.h>
-#include <ripple/app/paths/PathState.h>
-#include <ripple/protocol/JsonFields.h>
+#include <jbcoin/app/paths/Node.h>
+#include <jbcoin/app/paths/PathState.h>
+#include <jbcoin/protocol/JsonFields.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace path {
 
 // Compare the non-calculated fields.
@@ -41,9 +41,9 @@ Json::Value Node::getJson () const
 
     jvNode[jss::type]  = uFlags;
 
-    bool const hasCurrency = !isXRP (issue_.currency);
-    bool const hasAccount = !isXRP (account_);
-    bool const hasIssuer = !isXRP (issue_.account);
+    bool const hasCurrency = !isJBC (issue_.currency);
+    bool const hasAccount = !isJBC (account_);
+    bool const hasIssuer = !isJBC (issue_.account);
 
     if (isAccount() || hasAccount)
         jvFlags.append (!isAccount() == hasAccount ? "account" : "-account");
@@ -64,13 +64,13 @@ Json::Value Node::getJson () const
 
     jvNode["flags"] = jvFlags;
 
-    if (!isXRP (account_))
+    if (!isJBC (account_))
         jvNode[jss::account] = to_string (account_);
 
-    if (!isXRP (issue_.currency))
+    if (!isJBC (issue_.currency))
         jvNode[jss::currency] = to_string (issue_.currency);
 
-    if (!isXRP (issue_.account))
+    if (!isJBC (issue_.account))
         jvNode[jss::issuer] = to_string (issue_.account);
 
     if (saRevRedeem)
@@ -95,4 +95,4 @@ Json::Value Node::getJson () const
 }
 
 } // path
-} // ripple
+} // jbcoin

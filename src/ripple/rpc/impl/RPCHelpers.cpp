@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/ledger/OpenLedger.h>
-#include <ripple/app/misc/Transaction.h>
-#include <ripple/ledger/View.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/protocol/AccountID.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/ledger/OpenLedger.h>
+#include <jbcoin/app/misc/Transaction.h>
+#include <jbcoin/ledger/View.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/protocol/AccountID.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
 #include <boost/algorithm/string/case_conv.hpp>
 
-namespace ripple {
+namespace jbcoin {
 namespace RPC {
 
 boost::optional<AccountID>
@@ -704,7 +704,7 @@ chooseLedgerEntryType(Json::Value const& params)
             { jss::offer,           ltOFFER },
             { jss::payment_channel, ltPAYCHAN },
             { jss::signer_list,     ltSIGNER_LIST },
-            { jss::state,           ltRIPPLE_STATE },
+            { jss::state,           ltJBCOIN_STATE },
             { jss::ticket,          ltTICKET }
             } };
 
@@ -740,4 +740,4 @@ beast::SemanticVersion const goodVersion("1.0.0");
 beast::SemanticVersion const lastVersion("1.0.0");
 
 } // RPC
-} // ripple
+} // jbcoin

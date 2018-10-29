@@ -21,7 +21,7 @@
 */
 //==============================================================================
 
-#include <ripple/beast/core/WaitableEvent.h>
+#include <jbcoin/beast/core/WaitableEvent.h>
 #include <cerrno>
 
 #if BEAST_WINDOWS

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,13 +17,13 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PATH_IMPL_FLOWDEBUGINFO_H_INCLUDED
-#define RIPPLE_PATH_IMPL_FLOWDEBUGINFO_H_INCLUDED
+#ifndef JBCOIN_PATH_IMPL_FLOWDEBUGINFO_H_INCLUDED
+#define JBCOIN_PATH_IMPL_FLOWDEBUGINFO_H_INCLUDED
 
-#include <ripple/app/paths/impl/AmountSpec.h>
-#include <ripple/ledger/PaymentSandbox.h>
-#include <ripple/protocol/IOUAmount.h>
-#include <ripple/protocol/XRPAmount.h>
+#include <jbcoin/app/paths/impl/AmountSpec.h>
+#include <jbcoin/ledger/PaymentSandbox.h>
+#include <jbcoin/protocol/IOUAmount.h>
+#include <jbcoin/protocol/JBCAmount.h>
 
 #include <boost/container/flat_map.hpp>
 #include <boost/optional.hpp>
@@ -31,7 +31,7 @@
 #include <chrono>
 #include <sstream>
 
-namespace ripple
+namespace jbcoin
 {
 namespace path
 {
@@ -230,17 +230,17 @@ struct FlowDebugInfo
                 }
                 ostr << ']';
             };
-            auto writeXrpAmtList = [&write_list](
+            auto writeJrpAmtList = [&write_list](
                 std::vector<EitherAmount> const& amts, char delim=';') {
                 auto get_val = [](EitherAmount const& a) -> std::string {
-                    return ripple::to_string (a.xrp);
+                    return jbcoin::to_string (a.jbc);
                 };
                 write_list (amts, get_val, delim);
             };
             auto writeIouAmtList = [&write_list](
                 std::vector<EitherAmount> const& amts, char delim=';') {
                 auto get_val = [](EitherAmount const& a) -> std::string {
-                    return ripple::to_string (a.iou);
+                    return jbcoin::to_string (a.iou);
                 };
                 write_list (amts, get_val, delim);
             };
@@ -264,16 +264,16 @@ struct FlowDebugInfo
                 }
                 ostr << ']';
             };
-            auto writeNestedXrpAmtList = [&ostr, &writeXrpAmtList](
+            auto writeNestedJrpAmtList = [&ostr, &writeJrpAmtList](
                 std::vector<std::vector<EitherAmount>> const& amts) {
                 ostr << '[';
                 if (!amts.empty ())
                 {
-                    writeXrpAmtList(amts[0], '|');
+                    writeJrpAmtList(amts[0], '|');
                     for (size_t i = 1, e = amts.size (); i < e; ++i)
                     {
                         ostr << ';';
-                        writeXrpAmtList(amts[i], '|');
+                        writeJrpAmtList(amts[i], '|');
                     }
                 }
                 ostr << ']';
@@ -281,12 +281,12 @@ struct FlowDebugInfo
 
             ostr << ", in_pass: ";
             if (passInfo.nativeIn)
-                writeXrpAmtList (passInfo.in);
+                writeJrpAmtList (passInfo.in);
             else
                 writeIouAmtList (passInfo.in);
             ostr << ", out_pass: ";
             if (passInfo.nativeOut)
-                writeXrpAmtList (passInfo.out);
+                writeJrpAmtList (passInfo.out);
             else
                 writeIouAmtList (passInfo.out);
             ostr << ", num_active: ";
@@ -296,12 +296,12 @@ struct FlowDebugInfo
             {
                 ostr << ", l_src_in: ";
                 if (passInfo.nativeIn)
-                    writeNestedXrpAmtList (passInfo.liquiditySrcIn);
+                    writeNestedJrpAmtList (passInfo.liquiditySrcIn);
                 else
                     writeNestedIouAmtList (passInfo.liquiditySrcIn);
                 ostr << ", l_src_out: ";
                 if (passInfo.nativeOut)
-                    writeNestedXrpAmtList (passInfo.liquiditySrcOut);
+                    writeNestedJrpAmtList (passInfo.liquiditySrcOut);
                 else
                     writeNestedIouAmtList (passInfo.liquiditySrcOut);
             }
@@ -343,13 +343,13 @@ writeDiffs (std::ostringstream& ostr, Iter begin, Iter end)
 
 using BalanceDiffs = std::pair<
     std::map<std::tuple<AccountID, AccountID, Currency>, STAmount>,
-    XRPAmount>;
+    JBCAmount>;
 
 inline
 BalanceDiffs
 balanceDiffs(PaymentSandbox const& sb, ReadView const& rv)
 {
-    return {sb.balanceChanges (rv), sb.xrpDestroyed ()};
+    return {sb.balanceChanges (rv), sb.jbcDestroyed ()};
 }
 
 inline
@@ -359,9 +359,9 @@ balanceDiffsToString (boost::optional<BalanceDiffs> const& bd)
     if (!bd)
         return std::string{};
     auto const& diffs = bd->first;
-    auto const& xrpDestroyed = bd->second;
+    auto const& jbcDestroyed = bd->second;
     std::ostringstream ostr;
-    ostr << ", xrpDestroyed: " << to_string (xrpDestroyed);
+    ostr << ", jbcDestroyed: " << to_string (jbcDestroyed);
     ostr << ", balanceDiffs: ";
     writeDiffs (ostr, diffs.begin (), diffs.end ());
     return ostr.str ();
@@ -369,5 +369,5 @@ balanceDiffsToString (boost::optional<BalanceDiffs> const& bd)
 
 }  // detail
 }  // path
-}  // ripple
+}  // jbcoin
 #endif

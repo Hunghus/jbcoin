@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/basics/strHex.h>
-#include <ripple/protocol/SecretKey.h>
-#include <ripple/protocol/digest.h>
-#include <ripple/protocol/impl/secp256k1.h>
-#include <ripple/basics/contract.h>
-#include <ripple/crypto/GenerateDeterministicKey.h>
-#include <ripple/crypto/csprng.h>
-#include <ripple/beast/crypto/secure_erase.h>
-#include <ripple/beast/utility/rngfill.h>
+#include <jbcoin/basics/strHex.h>
+#include <jbcoin/protocol/SecretKey.h>
+#include <jbcoin/protocol/digest.h>
+#include <jbcoin/protocol/impl/secp256k1.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/crypto/GenerateDeterministicKey.h>
+#include <jbcoin/crypto/csprng.h>
+#include <jbcoin/beast/crypto/secure_erase.h>
+#include <jbcoin/beast/utility/rngfill.h>
 #include <ed25519-donna/ed25519.h>
 #include <cstring>
 
-namespace ripple {
+namespace jbcoin {
 
 SecretKey::~SecretKey()
 {
@@ -301,5 +301,5 @@ parseBase58 (TokenType type, std::string const& s)
     return SecretKey(makeSlice(result));
 }
 
-} // ripple
+} // jbcoin
 

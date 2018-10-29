@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,21 +17,21 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/basics/Log.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/net/RPCSub.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/resource/Fees.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/Role.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/net/RPCSub.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/resource/Fees.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/Role.h>
 
-namespace ripple {
+namespace jbcoin {
 
 Json::Value doSubscribe (RPC::Context& context)
 {
@@ -328,4 +328,4 @@ Json::Value doSubscribe (RPC::Context& context)
     return jvResult;
 }
 
-} // ripple
+} // jbcoin

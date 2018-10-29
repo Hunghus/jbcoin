@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,12 +18,12 @@
 //==============================================================================
 
 
-#include <ripple/unity/rocksdb.h>
+#include <jbcoin/unity/rocksdb.h>
 
-#if RIPPLE_ROCKSDB_AVAILABLE
+#if JBCOIN_ROCKSDB_AVAILABLE
 
 // Compile RocksDB without debugging unless specifically requested
-#if !defined (NDEBUG) && !defined (RIPPLE_DEBUG_ROCKSDB)
+#if !defined (NDEBUG) && !defined (JBCOIN_DEBUG_ROCKSDB)
 #define NDEBUG
 #endif
 
@@ -195,7 +195,7 @@ const char* rocksdb_build_git_sha = "<none>";
 const char* rocksdb_build_git_datetime = "<none>";
 // Don't use __DATE__ and __TIME__, otherwise
 // builds will be nondeterministic.
-const char* rocksdb_build_compile_date = "Ripple Labs";
+const char* rocksdb_build_compile_date = "JBCoin Labs";
 const char* rocksdb_build_compile_time = "C++ Team";
 //const char* rocksdb_build_compile_date = __DATE__;
 //const char* rocksdb_build_compile_time = __TIME__;

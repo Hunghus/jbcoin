@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#include <ripple/beast/unit_test.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
+#include <jbcoin/beast/unit_test.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
 #include <test/jtx.h>
 
-namespace ripple {
+namespace jbcoin {
 
 namespace test {
 
@@ -35,7 +35,7 @@ class AccountTX_test : public beast::unit_test::suite
 
         Env env(*this);
         Account A1{"A1"};
-        env.fund(XRP(10000), A1);
+        env.fund(JBC(10000), A1);
         env.close();
 
         // Ledger 3 has the two txs associated with funding the account
@@ -171,8 +171,8 @@ public:
         testParameters();
     }
 };
-BEAST_DEFINE_TESTSUITE(AccountTX, app, ripple);
+BEAST_DEFINE_TESTSUITE(AccountTX, app, jbcoin);
 
 }  // namespace test
 
-}  // namespace ripple
+}  // namespace jbcoin

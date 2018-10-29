@@ -1,10 +1,10 @@
 #!/usr/bin/node
 
 var async       = require('async');
-var Remote      = require('ripple-lib').Remote;
-var Transaction = require('ripple-lib').Transaction;
-var UInt160     = require('ripple-lib').UInt160;
-var Amount      = require('ripple-lib').Amount;
+var Remote      = require('jbcoin-lib').Remote;
+var Transaction = require('jbcoin-lib').Transaction;
+var UInt160     = require('jbcoin-lib').UInt160;
+var Amount      = require('jbcoin-lib').Amount;
 
 var book_key = function (book) {
   return book.taker_pays.currency
@@ -71,7 +71,7 @@ var ledger_verify = function (ledger) {
       }
     });
 
-  var ripple_selfs  = {};
+  var jbcoin_selfs  = {};
 
   var accounts  = {};
   var counts    = {};
@@ -81,7 +81,7 @@ var ledger_verify = function (ledger) {
       {
         counts[entry.Account] = (counts[entry.Account] || 0) + 1;
       }
-      else if (entry.LedgerEntryType === 'RippleState')
+      else if (entry.LedgerEntryType === 'JBCoinState')
       {
         if (entry.Flags & (0x10000 | 0x40000))
         {
@@ -94,7 +94,7 @@ var ledger_verify = function (ledger) {
         }
 
         if (entry.HighLimit.issuer === entry.LowLimit.issuer)
-          ripple_selfs[entry.Account] = entry;
+          jbcoin_selfs[entry.Account] = entry;
       }
       else if (entry.LedgerEntryType == 'AccountRoot')
       {
@@ -157,8 +157,8 @@ var ledger_verify = function (ledger) {
   if (missing_accounts)
     console.log("missing_accounts = %s", missing_accounts);
 
-  if (Object.keys(ripple_selfs).length)
-    console.log("RippleState selfs = %s", Object.keys(ripple_selfs).length);
+  if (Object.keys(jbcoin_selfs).length)
+    console.log("JBCoinState selfs = %s", Object.keys(jbcoin_selfs).length);
 
 };
 

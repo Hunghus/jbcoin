@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2016 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2016 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,13 +17,13 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_NET_REGISTER_SSL_CERTS_H_INCLUDED
-#define RIPPLE_NET_REGISTER_SSL_CERTS_H_INCLUDED
+#ifndef JBCOIN_NET_REGISTER_SSL_CERTS_H_INCLUDED
+#define JBCOIN_NET_REGISTER_SSL_CERTS_H_INCLUDED
 
 #include <boost/asio/ssl/context.hpp>
-#include <ripple/basics/Log.h>
+#include <jbcoin/basics/Log.h>
 
-namespace ripple {
+namespace jbcoin {
 /** Register default SSL certificates.
 
     Register the system default SSL root certificates. On linux/mac,
@@ -37,6 +37,6 @@ registerSSLCerts(
     boost::system::error_code&,
     beast::Journal j);
 
-}  // namespace ripple
+}  // namespace jbcoin
 
 #endif

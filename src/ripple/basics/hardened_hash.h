@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_BASICS_HARDENED_HASH_H_INCLUDED
-#define RIPPLE_BASICS_HARDENED_HASH_H_INCLUDED
+#ifndef JBCOIN_BASICS_HARDENED_HASH_H_INCLUDED
+#define JBCOIN_BASICS_HARDENED_HASH_H_INCLUDED
 
-#include <ripple/beast/hash/hash_append.h>
-#include <ripple/beast/hash/xxhasher.h>
+#include <jbcoin/beast/hash/hash_append.h>
+#include <jbcoin/beast/hash/xxhasher.h>
 
 #include <cstdint>
 #include <functional>
@@ -35,15 +35,15 @@
 // When set to 1, makes the seed per-process instead
 // of per default-constructed instance of hardened_hash
 //
-#ifndef RIPPLE_NO_HARDENED_HASH_INSTANCE_SEED
+#ifndef JBCOIN_NO_HARDENED_HASH_INSTANCE_SEED
 # ifdef __GLIBCXX__
-#  define RIPPLE_NO_HARDENED_HASH_INSTANCE_SEED 1
+#  define JBCOIN_NO_HARDENED_HASH_INSTANCE_SEED 1
 # else
-#  define RIPPLE_NO_HARDENED_HASH_INSTANCE_SEED 0
+#  define JBCOIN_NO_HARDENED_HASH_INSTANCE_SEED 0
 # endif
 #endif
 
-namespace ripple {
+namespace jbcoin {
 
 namespace detail {
 
@@ -161,7 +161,7 @@ public:
     template parameter (the hashing algorithm).  For details
     see https://131002.net/siphash/#at
 */
-#if RIPPLE_NO_HARDENED_HASH_INSTANCE_SEED
+#if JBCOIN_NO_HARDENED_HASH_INSTANCE_SEED
 template <class HashAlgorithm = beast::xxhasher>
     using hardened_hash = basic_hardened_hash<HashAlgorithm, true>;
 #else
@@ -169,6 +169,6 @@ template <class HashAlgorithm = beast::xxhasher>
     using hardened_hash = basic_hardened_hash<HashAlgorithm, false>;
 #endif
 
-} // ripple
+} // jbcoin
 
 #endif

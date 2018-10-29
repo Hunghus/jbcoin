@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2016 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2016 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/Feature.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/Feature.h>
 #include <test/jtx.h>
 
-namespace ripple {
+namespace jbcoin {
 
 class SetRegularKey_test : public beast::unit_test::suite
 {
@@ -33,7 +33,7 @@ public:
         Env env(*this);
         Account const alice("alice");
         Account const bob("bob");
-        env.fund(XRP(10000), alice, bob);
+        env.fund(JBC(10000), alice, bob);
 
         // Master and Regular key
         env(regkey(alice, bob));
@@ -60,7 +60,7 @@ public:
         Env env(*this);
         Account const alice("alice");
         Account const bob("bob");
-        env.fund(XRP(10000), alice, bob);
+        env.fund(JBC(10000), alice, bob);
 
         auto ar = env.le(alice);
         BEAST_EXPECT(ar->isFieldPresent(sfFlags) && ((ar->getFieldU32(sfFlags) & lsfPasswordSpent) == 0));
@@ -85,7 +85,7 @@ public:
         Env env(*this);
         Account const alice("alice");
         Account const bob("bob");
-        env.fund(XRP(10000), alice, bob);
+        env.fund(JBC(10000), alice, bob);
 
         auto jv = regkey(alice, bob);
         jv[sfFlags.fieldName] = tfUniversalMask;
@@ -101,7 +101,7 @@ public:
 
 };
 
-BEAST_DEFINE_TESTSUITE(SetRegularKey,app,ripple);
+BEAST_DEFINE_TESTSUITE(SetRegularKey,app,jbcoin);
 
 }
 

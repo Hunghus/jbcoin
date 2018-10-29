@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,20 +17,20 @@
 */
 //==============================================================================
 
-#include <ripple/app/tx/impl/SetSignerList.h>
+#include <jbcoin/app/tx/impl/SetSignerList.h>
 
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/basics/Log.h>
-#include <ripple/ledger/ApplyView.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/STArray.h>
-#include <ripple/protocol/STObject.h>
-#include <ripple/protocol/STTx.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/ledger/ApplyView.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/STArray.h>
+#include <jbcoin/protocol/STObject.h>
+#include <jbcoin/protocol/STTx.h>
 #include <algorithm>
 #include <cstdint>
 
-namespace ripple {
+namespace jbcoin {
 
 // We're prepared for there to be multiple signer lists in the future,
 // but we don't need them yet.  So for the time being we're manually
@@ -352,4 +352,4 @@ SetSignerList::ownerCountDelta (std::size_t entryCount)
     return 2 + static_cast<int>(entryCount);
 }
 
-} // namespace ripple
+} // namespace jbcoin

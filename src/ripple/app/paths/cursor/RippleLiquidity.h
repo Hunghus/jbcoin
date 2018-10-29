@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,20 +17,20 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_PATHS_CURSOR_RIPPLELIQUIDITY_H_INCLUDED
-#define RIPPLE_APP_PATHS_CURSOR_RIPPLELIQUIDITY_H_INCLUDED
+#ifndef JBCOIN_APP_PATHS_CURSOR_JBCOINLIQUIDITY_H_INCLUDED
+#define JBCOIN_APP_PATHS_CURSOR_JBCOINLIQUIDITY_H_INCLUDED
 
-#include <ripple/app/paths/cursor/PathCursor.h>
-#include <ripple/app/paths/RippleCalc.h>
-#include <ripple/app/paths/Tuning.h>
-#include <ripple/ledger/View.h>
-#include <ripple/protocol/Rate.h>
+#include <jbcoin/app/paths/cursor/PathCursor.h>
+#include <jbcoin/app/paths/JBCoinCalc.h>
+#include <jbcoin/app/paths/Tuning.h>
+#include <jbcoin/ledger/View.h>
+#include <jbcoin/protocol/Rate.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace path {
 
-void rippleLiquidity (
-    RippleCalc&,
+void jbcoinLiquidity (
+    JBCoinCalc&,
     Rate const& qualityIn,
     Rate const& qualityOut,
     STAmount const& saPrvReq,
@@ -54,6 +54,6 @@ quality_out (
     Currency const& currency);
 
 } // path
-} // ripple
+} // jbcoin
 
 #endif

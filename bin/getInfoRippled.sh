@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-rippled_exe=/opt/ripple/bin/rippled
-conf_file=/etc/opt/ripple/rippled.cfg
+jbcoind_exe=/opt/jbcoin/bin/jbcoind
+conf_file=/etc/opt/jbcoin/jbcoind.cfg
 
 while getopts ":e:c:" opt; do
     case $opt in
         e)
-            rippled_exe=${OPTARG}
+            jbcoind_exe=${OPTARG}
             ;;
         c)
             conf_file=${OPTARG}
@@ -16,13 +16,13 @@ while getopts ":e:c:" opt; do
     esac
 done
 
-tmp_loc=$(mktemp -d --tmpdir ripple_info.XXXX)
+tmp_loc=$(mktemp -d --tmpdir jbcoin_info.XXXX)
 cd /tmp
-chmod 751 ripple_info.*
+chmod 751 jbcoin_info.*
 cd ~
 echo ${tmp_loc}
 
-cleaned_conf=${tmp_loc}/cleaned_rippled_cfg.txt
+cleaned_conf=${tmp_loc}/cleaned_jbcoind_cfg.txt
 
 if [[ -f ${conf_file} ]]
 then
@@ -55,10 +55,10 @@ exec 3>&1 1>>${log_file} 2>&1
 
 ## Send all stdout files to /tmp
 
-if [[ -x ${rippled_exe} ]]
+if [[ -x ${jbcoind_exe} ]]
 then
-    pgrep rippled && \
-    ${rippled_exe} --conf ${conf_file} \
+    pgrep jbcoind && \
+    ${jbcoind_exe} --conf ${conf_file} \
     -- server_info                  > ${tmp_loc}/server_info.txt
 fi
 
@@ -82,5 +82,5 @@ pushd ${tmp_loc}
 tar -czvf info-package.tar.gz *.txt *.log
 popd
 
-echo "Use the following command on your local machine to download from your rippled instance: scp <remote_rippled_username>@<remote_host>:${tmp_loc}/info-package.tar.gz <path/to/local_machine/directory>"| tee /dev/fd/3
+echo "Use the following command on your local machine to download from your jbcoind instance: scp <remote_jbcoind_username>@<remote_host>:${tmp_loc}/info-package.tar.gz <path/to/local_machine/directory>"| tee /dev/fd/3
 

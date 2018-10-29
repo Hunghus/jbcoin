@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-This file is part of rippled: https://github.com/ripple/rippled
-Copyright (c) 2012, 2013 Ripple Labs Inc.
+This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose  with  or without fee is hereby granted, provided that the above
@@ -17,17 +17,17 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 //==============================================================================
 
-#include <ripple/core/impl/Workers.h>
-#include <ripple/beast/unit_test.h>
-#include <ripple/basics/PerfLog.h>
-#include <ripple/core/JobTypes.h>
-#include <ripple/json/json_value.h>
+#include <jbcoin/core/impl/Workers.h>
+#include <jbcoin/beast/unit_test.h>
+#include <jbcoin/basics/PerfLog.h>
+#include <jbcoin/core/JobTypes.h>
+#include <jbcoin/json/json_value.h>
 #include <chrono>
 #include <cstdint>
 #include <memory>
 #include <string>
 
-namespace ripple {
+namespace jbcoin {
 
 /**
  * Dummy class for unit tests.
@@ -156,6 +156,6 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE(Workers, core, ripple);
+BEAST_DEFINE_TESTSUITE(Workers, core, jbcoin);
 
 }

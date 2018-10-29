@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,28 +18,28 @@
 //==============================================================================
 
 
-#include <ripple/app/tx/impl/apply.cpp>
-#include <ripple/app/tx/impl/applySteps.cpp>
-#include <ripple/app/tx/impl/BookTip.cpp>
-#include <ripple/app/tx/impl/CancelCheck.cpp>
-#include <ripple/app/tx/impl/CancelOffer.cpp>
-#include <ripple/app/tx/impl/CancelTicket.cpp>
-#include <ripple/app/tx/impl/CashCheck.cpp>
-#include <ripple/app/tx/impl/Change.cpp>
-#include <ripple/app/tx/impl/CreateCheck.cpp>
-#include <ripple/app/tx/impl/CreateOffer.cpp>
-#include <ripple/app/tx/impl/CreateTicket.cpp>
-#include <ripple/app/tx/impl/DepositPreauth.cpp>
-#include <ripple/app/tx/impl/Escrow.cpp>
-#include <ripple/app/tx/impl/InvariantCheck.cpp>
-#include <ripple/app/tx/impl/OfferStream.cpp>
-#include <ripple/app/tx/impl/Payment.cpp>
-#include <ripple/app/tx/impl/PayChan.cpp>
-#include <ripple/app/tx/impl/SetAccount.cpp>
-#include <ripple/app/tx/impl/SetRegularKey.cpp>
-#include <ripple/app/tx/impl/SetSignerList.cpp>
-#include <ripple/app/tx/impl/SetTrust.cpp>
-#include <ripple/app/tx/impl/SignerEntries.cpp>
-#include <ripple/app/tx/impl/Taker.cpp>
-#include <ripple/app/tx/impl/ApplyContext.cpp>
-#include <ripple/app/tx/impl/Transactor.cpp>
+#include <jbcoin/app/tx/impl/apply.cpp>
+#include <jbcoin/app/tx/impl/applySteps.cpp>
+#include <jbcoin/app/tx/impl/BookTip.cpp>
+#include <jbcoin/app/tx/impl/CancelCheck.cpp>
+#include <jbcoin/app/tx/impl/CancelOffer.cpp>
+#include <jbcoin/app/tx/impl/CancelTicket.cpp>
+#include <jbcoin/app/tx/impl/CashCheck.cpp>
+#include <jbcoin/app/tx/impl/Change.cpp>
+#include <jbcoin/app/tx/impl/CreateCheck.cpp>
+#include <jbcoin/app/tx/impl/CreateOffer.cpp>
+#include <jbcoin/app/tx/impl/CreateTicket.cpp>
+#include <jbcoin/app/tx/impl/DepositPreauth.cpp>
+#include <jbcoin/app/tx/impl/Escrow.cpp>
+#include <jbcoin/app/tx/impl/InvariantCheck.cpp>
+#include <jbcoin/app/tx/impl/OfferStream.cpp>
+#include <jbcoin/app/tx/impl/Payment.cpp>
+#include <jbcoin/app/tx/impl/PayChan.cpp>
+#include <jbcoin/app/tx/impl/SetAccount.cpp>
+#include <jbcoin/app/tx/impl/SetRegularKey.cpp>
+#include <jbcoin/app/tx/impl/SetSignerList.cpp>
+#include <jbcoin/app/tx/impl/SetTrust.cpp>
+#include <jbcoin/app/tx/impl/SignerEntries.cpp>
+#include <jbcoin/app/tx/impl/Taker.cpp>
+#include <jbcoin/app/tx/impl/ApplyContext.cpp>
+#include <jbcoin/app/tx/impl/Transactor.cpp>

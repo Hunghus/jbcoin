@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,20 +17,20 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_SHAMAP_SHAMAPTREENODE_H_INCLUDED
-#define RIPPLE_SHAMAP_SHAMAPTREENODE_H_INCLUDED
+#ifndef JBCOIN_SHAMAP_SHAMAPTREENODE_H_INCLUDED
+#define JBCOIN_SHAMAP_SHAMAPTREENODE_H_INCLUDED
 
-#include <ripple/shamap/SHAMapItem.h>
-#include <ripple/shamap/SHAMapNodeID.h>
-#include <ripple/basics/TaggedCache.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/shamap/SHAMapItem.h>
+#include <jbcoin/shamap/SHAMapNodeID.h>
+#include <jbcoin/basics/TaggedCache.h>
+#include <jbcoin/beast/utility/Journal.h>
 
 #include <cstdint>
 #include <memory>
 #include <mutex>
 #include <string>
 
-namespace ripple {
+namespace jbcoin {
 
 enum SHANodeFormat
 {
@@ -423,6 +423,6 @@ SHAMapTreeNode::peekItem () const
     return mItem;
 }
 
-} // ripple
+} // jbcoin
 
 #endif

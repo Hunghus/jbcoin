@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_CORE_JOBTYPEDATA_H_INCLUDED
-#define RIPPLE_CORE_JOBTYPEDATA_H_INCLUDED
+#ifndef JBCOIN_CORE_JOBTYPEDATA_H_INCLUDED
+#define JBCOIN_CORE_JOBTYPEDATA_H_INCLUDED
 
-#include <ripple/basics/Log.h>
-#include <ripple/core/JobTypeInfo.h>
-#include <ripple/beast/insight/Collector.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/core/JobTypeInfo.h>
+#include <jbcoin/beast/insight/Collector.h>
 
-namespace ripple
+namespace jbcoin
 {
 
 struct JobTypeData

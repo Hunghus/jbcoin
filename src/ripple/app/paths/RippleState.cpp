@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,27 +17,27 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/paths/RippleState.h>
-#include <ripple/protocol/STAmount.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/paths/JBCoinState.h>
+#include <jbcoin/protocol/STAmount.h>
 #include <cstdint>
 #include <memory>
 
-namespace ripple {
+namespace jbcoin {
 
-RippleState::pointer
-RippleState::makeItem (
+JBCoinState::pointer
+JBCoinState::makeItem (
     AccountID const& accountID,
         std::shared_ptr<SLE const> sle)
 {
     // VFALCO Does this ever happen in practice?
-    if (! sle || sle->getType () != ltRIPPLE_STATE)
+    if (! sle || sle->getType () != ltJBCOIN_STATE)
         return {};
-    return std::make_shared<RippleState>(
+    return std::make_shared<JBCoinState>(
         std::move(sle), accountID);
 }
 
-RippleState::RippleState (
+JBCoinState::JBCoinState (
     std::shared_ptr<SLE const>&& sle,
         AccountID const& viewAccount)
     : sle_ (std::move(sle))
@@ -58,7 +58,7 @@ RippleState::RippleState (
         mBalance.negate ();
 }
 
-Json::Value RippleState::getJson (int)
+Json::Value JBCoinState::getJson (int)
 {
     Json::Value ret (Json::objectValue);
     ret["low_id"] = to_string (mLowID);
@@ -66,16 +66,16 @@ Json::Value RippleState::getJson (int)
     return ret;
 }
 
-std::vector <RippleState::pointer>
-getRippleStateItems (AccountID const& accountID,
+std::vector <JBCoinState::pointer>
+getJBCoinStateItems (AccountID const& accountID,
     ReadView const& view)
 {
-    std::vector <RippleState::pointer> items;
+    std::vector <JBCoinState::pointer> items;
     forEachItem(view, accountID,
         [&items,&accountID](
         std::shared_ptr<SLE const> const&sleCur)
         {
-             auto ret = RippleState::makeItem (accountID, sleCur);
+             auto ret = JBCoinState::makeItem (accountID, sleCur);
              if (ret)
                 items.push_back (ret);
         });
@@ -83,4 +83,4 @@ getRippleStateItems (AccountID const& accountID,
     return items;
 }
 
-} // ripple
+} // jbcoin

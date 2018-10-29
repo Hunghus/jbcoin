@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/OpenLedger.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/HashRouter.h>
-#include <ripple/app/misc/TxQ.h>
-#include <ripple/app/tx/apply.h>
-#include <ripple/ledger/CachedView.h>
-#include <ripple/overlay/Message.h>
-#include <ripple/overlay/Overlay.h>
-#include <ripple/overlay/predicates.h>
-#include <ripple/protocol/Feature.h>
+#include <jbcoin/app/ledger/OpenLedger.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/HashRouter.h>
+#include <jbcoin/app/misc/TxQ.h>
+#include <jbcoin/app/tx/apply.h>
+#include <jbcoin/ledger/CachedView.h>
+#include <jbcoin/overlay/Message.h>
+#include <jbcoin/overlay/Overlay.h>
+#include <jbcoin/overlay/predicates.h>
+#include <jbcoin/protocol/Feature.h>
 #include <boost/range/adaptor/transformed.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 OpenLedger::OpenLedger(std::shared_ptr<
     Ledger const> const& ledger,
@@ -197,7 +197,7 @@ OpenLedger::apply_one (Application& app, OpenView& view,
         // reasons, and it can still be recovered, try to put it
         // directly into the open ledger, else drop it.
         if (queueResult.first == telCAN_NOT_QUEUE && shouldRecover)
-            return ripple::apply(app, view, *tx, flags, j);
+            return jbcoin::apply(app, view, *tx, flags, j);
         return queueResult;
     }();
     if (result.second ||
@@ -259,4 +259,4 @@ debugTostr (std::shared_ptr<ReadView const> const& view)
     return ss.str();
 }
 
-} // ripple
+} // jbcoin

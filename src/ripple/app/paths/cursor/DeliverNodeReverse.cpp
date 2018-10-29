@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/cursor/EffectiveRate.h>
-#include <ripple/app/paths/cursor/RippleLiquidity.h>
-#include <ripple/basics/Log.h>
+#include <jbcoin/app/paths/cursor/EffectiveRate.h>
+#include <jbcoin/app/paths/cursor/JBCoinLiquidity.h>
+#include <jbcoin/basics/Log.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace path {
 
 // At the right most node of a list of consecutive offer nodes, given the amount
@@ -60,7 +60,7 @@ TER PathCursor::deliverNodeReverseImpl (
     assert (saOutReq != beast::zero);
 
     int loopCount = 0;
-    auto viewJ = rippleCalc_.logs_.journal ("View");
+    auto viewJ = jbcoinCalc_.logs_.journal ("View");
 
     // While we did not deliver as much as requested:
     while (saOutAct < saOutReq)
@@ -214,7 +214,7 @@ TER PathCursor::deliverNodeReverseImpl (
             continue;
         }
         // Find out input amount actually available at current rate.
-        else if (!isXRP(previousNode().account_))
+        else if (!isJBC(previousNode().account_))
         {
             // account --> OFFER --> ?
             // Due to node expansion, previous is guaranteed to be the issuer.
@@ -379,4 +379,4 @@ TER PathCursor::deliverNodeReverse (
 }
 
 }  // path
-}  // ripple
+}  // jbcoin

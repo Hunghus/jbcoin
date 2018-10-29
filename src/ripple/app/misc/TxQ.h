@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-14 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-14 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_TXQ_H_INCLUDED
-#define RIPPLE_TXQ_H_INCLUDED
+#ifndef JBCOIN_TXQ_H_INCLUDED
+#define JBCOIN_TXQ_H_INCLUDED
 
-#include <ripple/app/tx/applySteps.h>
-#include <ripple/ledger/OpenView.h>
-#include <ripple/ledger/ApplyView.h>
-#include <ripple/protocol/TER.h>
-#include <ripple/protocol/STTx.h>
+#include <jbcoin/app/tx/applySteps.h>
+#include <jbcoin/ledger/OpenView.h>
+#include <jbcoin/ledger/ApplyView.h>
+#include <jbcoin/protocol/TER.h>
+#include <jbcoin/protocol/STTx.h>
 #include <boost/intrusive/set.hpp>
 #include <boost/circular_buffer.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 class Application;
 class Config;
@@ -237,7 +237,7 @@ private:
             for use in fee escalation calculations.
 
             @param view View of the LCL that was just closed or received.
-            @param timeLeap Indicates that rippled is under load so fees
+            @param timeLeap Indicates that jbcoind is under load so fees
             should grow faster.
         */
         std::size_t
@@ -460,6 +460,6 @@ setup_TxQ(Config const&);
 std::unique_ptr<TxQ>
 make_TxQ(TxQ::Setup const&, beast::Journal);
 
-} // ripple
+} // jbcoin
 
 #endif

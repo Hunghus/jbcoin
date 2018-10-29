@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2015 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2015 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_LEDGER_INBOUNDTRANSACTIONS_H_INCLUDED
-#define RIPPLE_APP_LEDGER_INBOUNDTRANSACTIONS_H_INCLUDED
+#ifndef JBCOIN_APP_LEDGER_INBOUNDTRANSACTIONS_H_INCLUDED
+#define JBCOIN_APP_LEDGER_INBOUNDTRANSACTIONS_H_INCLUDED
 
-#include <ripple/overlay/Peer.h>
-#include <ripple/shamap/SHAMap.h>
-#include <ripple/beast/clock/abstract_clock.h>
-#include <ripple/core/Stoppable.h>
+#include <jbcoin/overlay/Peer.h>
+#include <jbcoin/shamap/SHAMap.h>
+#include <jbcoin/beast/clock/abstract_clock.h>
+#include <jbcoin/core/Stoppable.h>
 #include <memory>
 
-namespace ripple {
+namespace jbcoin {
 
 class Application;
 
@@ -82,6 +82,6 @@ make_InboundTransactions (
             bool)> gotSet);
 
 
-} // ripple
+} // jbcoin
 
 #endif

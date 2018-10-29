@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_NODESTORE_DATABASEROTATING_H_INCLUDED
-#define RIPPLE_NODESTORE_DATABASEROTATING_H_INCLUDED
+#ifndef JBCOIN_NODESTORE_DATABASEROTATING_H_INCLUDED
+#define JBCOIN_NODESTORE_DATABASEROTATING_H_INCLUDED
 
-#include <ripple/nodestore/Database.h>
+#include <jbcoin/nodestore/Database.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace NodeStore {
 
 /* This class has two key-value store Backend objects for persisting SHAMap

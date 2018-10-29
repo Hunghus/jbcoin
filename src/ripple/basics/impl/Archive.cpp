@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2018 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2018 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,13 +17,13 @@
 */
 //==============================================================================
 
-#include <ripple/basics/Archive.h>
-#include <ripple/basics/contract.h>
+#include <jbcoin/basics/Archive.h>
+#include <jbcoin/basics/contract.h>
 
 #include <archive.h>
 #include <archive_entry.h>
 
-namespace ripple {
+namespace jbcoin {
 
 void
 extractTarLz4(
@@ -116,4 +116,4 @@ extractTarLz4(
     }
 }
 
-} // ripple
+} // jbcoin

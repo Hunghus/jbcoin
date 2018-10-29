@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#include <ripple/app/misc/Transaction.h>
-#include <ripple/app/tx/apply.h>
-#include <ripple/basics/Log.h>
-#include <ripple/core/DatabaseCon.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/HashRouter.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/JsonFields.h>
+#include <jbcoin/app/misc/Transaction.h>
+#include <jbcoin/app/tx/apply.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/core/DatabaseCon.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/HashRouter.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/JsonFields.h>
 #include <boost/optional.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 Transaction::Transaction (std::shared_ptr<STTx const> const& stx,
     std::string& reason, Application& app)
@@ -165,4 +165,4 @@ Json::Value Transaction::getJson (int options, bool binary) const
     return ret;
 }
 
-} // ripple
+} // jbcoin

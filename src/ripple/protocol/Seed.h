@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_SEED_H_INCLUDED
-#define RIPPLE_PROTOCOL_SEED_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_SEED_H_INCLUDED
+#define JBCOIN_PROTOCOL_SEED_H_INCLUDED
 
-#include <ripple/basics/base_uint.h>
-#include <ripple/basics/Slice.h>
-#include <ripple/protocol/tokens.h>
+#include <jbcoin/basics/base_uint.h>
+#include <jbcoin/basics/Slice.h>
+#include <jbcoin/protocol/tokens.h>
 #include <boost/optional.hpp>
 #include <array>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Seeds are used to generate deterministic secret keys. */
 class Seed
@@ -72,7 +72,7 @@ randomSeed();
 
 /** Generate a seed deterministically.
 
-    The algorithm is specific to Ripple:
+    The algorithm is specific to JBCoin:
 
         The seed is calculated as the first 128 bits
         of the SHA512-Half of the string text excluding

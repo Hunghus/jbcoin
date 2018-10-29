@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_LEDGER_APPLYVIEW_H_INCLUDED
-#define RIPPLE_LEDGER_APPLYVIEW_H_INCLUDED
+#ifndef JBCOIN_LEDGER_APPLYVIEW_H_INCLUDED
+#define JBCOIN_LEDGER_APPLYVIEW_H_INCLUDED
 
-#include <ripple/ledger/RawView.h>
-#include <ripple/ledger/ReadView.h>
+#include <jbcoin/ledger/RawView.h>
+#include <jbcoin/ledger/ReadView.h>
 #include <boost/optional.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 enum ApplyFlags
 {
@@ -371,6 +371,6 @@ public:
     /** @} */
 };
 
-} // ripple
+} // jbcoin
 
 #endif

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,20 +17,20 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_SERVER_SESSION_H_INCLUDED
-#define RIPPLE_SERVER_SESSION_H_INCLUDED
+#ifndef JBCOIN_SERVER_SESSION_H_INCLUDED
+#define JBCOIN_SERVER_SESSION_H_INCLUDED
 
-#include <ripple/server/Writer.h>
-#include <ripple/server/WSSession.h>
+#include <jbcoin/server/Writer.h>
+#include <jbcoin/server/WSSession.h>
 #include <boost/beast/http/message.hpp>
-#include <ripple/beast/net/IPEndpoint.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/beast/net/IPEndpoint.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <functional>
 #include <memory>
 #include <ostream>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Persistent state information for a connection session.
     These values are preserved between calls for efficiency.
@@ -139,6 +139,6 @@ public:
     websocketUpgrade() = 0;
 };
 
-}  // ripple
+}  // jbcoin
 
 #endif

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#include <ripple/core/Config.h>
-#include <ripple/core/ConfigSections.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/json/json_reader.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/SystemParameters.h>
-#include <ripple/net/HTTPClient.h>
-#include <ripple/beast/core/LexicalCast.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/core/ConfigSections.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/json/json_reader.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/SystemParameters.h>
+#include <jbcoin/net/HTTPClient.h>
+#include <jbcoin/beast/core/LexicalCast.h>
 #include <boost/beast/core/string.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
@@ -34,7 +34,7 @@
 #include <iostream>
 #include <iterator>
 
-namespace ripple {
+namespace jbcoin {
 
 //
 // TODO: Check permissions on config file before using it.
@@ -131,7 +131,7 @@ bool getSingleSection (IniFileSections& secSource,
 //
 //------------------------------------------------------------------------------
 
-char const* const Config::configFileName = "rippled.cfg";
+char const* const Config::configFileName = "jbcoind.cfg";
 char const* const Config::databaseDirName = "db";
 char const* const Config::validatorsFileName = "validators.txt";
 
@@ -617,4 +617,4 @@ boost::filesystem::path Config::getDebugLogFile () const
     return log_file;
 }
 
-} // ripple
+} // jbcoin

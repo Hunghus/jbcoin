@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2015 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2015 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,23 +17,23 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_MISC_VALIDATORLIST_H_INCLUDED
-#define RIPPLE_APP_MISC_VALIDATORLIST_H_INCLUDED
+#ifndef JBCOIN_APP_MISC_VALIDATORLIST_H_INCLUDED
+#define JBCOIN_APP_MISC_VALIDATORLIST_H_INCLUDED
 
-#include <ripple/app/misc/Manifest.h>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/UnorderedContainers.h>
-#include <ripple/core/TimeKeeper.h>
-#include <ripple/crypto/csprng.h>
-#include <ripple/json/json_value.h>
-#include <ripple/protocol/PublicKey.h>
+#include <jbcoin/app/misc/Manifest.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/UnorderedContainers.h>
+#include <jbcoin/core/TimeKeeper.h>
+#include <jbcoin/crypto/csprng.h>
+#include <jbcoin/json/json_value.h>
+#include <jbcoin/protocol/PublicKey.h>
 #include <boost/iterator/counting_iterator.hpp>
 #include <boost/range/adaptors.hpp>
 #include <mutex>
 #include <shared_mutex>
 #include <numeric>
 
-namespace ripple {
+namespace jbcoin {
 
 enum class ListDisposition
 {
@@ -73,11 +73,11 @@ struct TrustChanges
     Trusted Validators List
     -----------------------
 
-    Rippled accepts ledger proposals and validations from trusted validator
+    JBCoind accepts ledger proposals and validations from trusted validator
     nodes. A ledger is considered fully-validated once the number of received
     trusted validations for a ledger meets or exceeds a quorum value.
 
-    This class manages the set of validation public keys the local rippled node
+    This class manages the set of validation public keys the local jbcoind node
     trusts. The list of trusted keys is populated using the keys listed in the
     configuration file as well as lists signed by trusted publishers. The
     trusted publisher public keys are specified in the config.
@@ -86,7 +86,7 @@ struct TrustChanges
 
     @li @c "blob": Base64-encoded JSON string containing a @c "sequence", @c
         "expiration", and @c "validators" field. @c "expiration" contains the
-        Ripple timestamp (seconds since January 1st, 2000 (00:00 UTC)) for when
+        JBCoin timestamp (seconds since January 1st, 2000 (00:00 UTC)) for when
         the list expires. @c "validators" contains an array of objects with a
         @c "validation_public_key" and optional @c "manifest" field.
         @c "validation_public_key" should be the hex-encoded master public key.
@@ -395,6 +395,6 @@ private:
     calculateQuorum (
         std::size_t trusted, std::size_t seen);
 };
-} // ripple
+} // jbcoin
 
 #endif

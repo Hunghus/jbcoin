@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_RESOURCE_MANAGER_H_INCLUDED
-#define RIPPLE_RESOURCE_MANAGER_H_INCLUDED
+#ifndef JBCOIN_RESOURCE_MANAGER_H_INCLUDED
+#define JBCOIN_RESOURCE_MANAGER_H_INCLUDED
 
-#include <ripple/json/json_value.h>
-#include <ripple/resource/Consumer.h>
-#include <ripple/resource/Gossip.h>
-#include <ripple/beast/insight/Collector.h>
-#include <ripple/beast/net/IPEndpoint.h>
-#include <ripple/beast/utility/Journal.h>
-#include <ripple/beast/utility/PropertyStream.h>
+#include <jbcoin/json/json_value.h>
+#include <jbcoin/resource/Consumer.h>
+#include <jbcoin/resource/Gossip.h>
+#include <jbcoin/beast/insight/Collector.h>
+#include <jbcoin/beast/net/IPEndpoint.h>
+#include <jbcoin/beast/utility/Journal.h>
+#include <jbcoin/beast/utility/PropertyStream.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace Resource {
 
 /** Tracks load and resource consumption. */

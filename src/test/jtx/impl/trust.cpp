@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,11 +18,11 @@
 //==============================================================================
 
 #include <test/jtx/trust.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/basics/contract.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/basics/contract.h>
 #include <stdexcept>
 
-namespace ripple {
+namespace jbcoin {
 namespace test {
 namespace jtx {
 
@@ -31,7 +31,7 @@ trust (Account const& account,
     STAmount const& amount,
         std::uint32_t flags)
 {
-    if (isXRP(amount))
+    if (isJBC(amount))
         Throw<std::runtime_error> (
             "trust() requires IOU");
     Json::Value jv;
@@ -48,7 +48,7 @@ trust (Account const& account,
     Account const& peer,
     std::uint32_t flags)
 {
-    if (isXRP(amount))
+    if (isJBC(amount))
         Throw<std::runtime_error> (
             "trust() requires IOU");
     Json::Value jv;
@@ -65,4 +65,4 @@ trust (Account const& account,
 
 } // jtx
 } // test
-} // ripple
+} // jbcoin

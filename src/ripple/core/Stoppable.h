@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2015 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2015 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,20 +17,20 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_CORE_STOPPABLE_H_INCLUDED
-#define RIPPLE_CORE_STOPPABLE_H_INCLUDED
+#ifndef JBCOIN_CORE_STOPPABLE_H_INCLUDED
+#define JBCOIN_CORE_STOPPABLE_H_INCLUDED
 
-#include <ripple/beast/core/LockFreeStack.h>
-#include <ripple/beast/utility/Journal.h>
-#include <ripple/beast/core/WaitableEvent.h>
-#include <ripple/core/Job.h>
-#include <ripple/core/ClosureCounter.h>
+#include <jbcoin/beast/core/LockFreeStack.h>
+#include <jbcoin/beast/utility/Journal.h>
+#include <jbcoin/beast/core/WaitableEvent.h>
+#include <jbcoin/core/Job.h>
+#include <jbcoin/core/ClosureCounter.h>
 #include <atomic>
 #include <chrono>
 #include <condition_variable>
 #include <mutex>
 
-namespace ripple {
+namespace jbcoin {
 
 // Give a reasonable name for the JobCounter
 using JobCounter = ClosureCounter<void, Job&>;
@@ -173,7 +173,7 @@ class RootStoppable;
 
     @note A Stoppable may not be restarted.
 
-    The form of the Stoppable tree in the rippled application evolves as
+    The form of the Stoppable tree in the jbcoind application evolves as
     the source code changes and reacts to new demands.  As of March in 2017
     the Stoppable tree had this form:
 
@@ -424,6 +424,6 @@ Stoppable::alertable_sleep_until(
     return m_root.alertable_sleep_until(t);
 }
 
-} // ripple
+} // jbcoin
 
 #endif

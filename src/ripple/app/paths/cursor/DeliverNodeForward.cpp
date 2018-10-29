@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/cursor/EffectiveRate.h>
-#include <ripple/app/paths/cursor/RippleLiquidity.h>
-#include <ripple/basics/Log.h>
+#include <jbcoin/app/paths/cursor/EffectiveRate.h>
+#include <jbcoin/app/paths/cursor/JBCoinLiquidity.h>
+#include <jbcoin/basics/Log.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace path {
 
 // For current offer, get input from deliver/limbo and output to next account or
@@ -48,7 +48,7 @@ TER PathCursor::deliverNodeForward (
     saInFees.clear (saInReq);
 
     int loopCount = 0;
-    auto viewJ = rippleCalc_.logs_.journal ("View");
+    auto viewJ = jbcoinCalc_.logs_.journal ("View");
 
     // XXX Perhaps make sure do not exceed node().saRevDeliver as another way to
     // stop?
@@ -176,11 +176,11 @@ TER PathCursor::deliverNodeForward (
                 continue;
             }
 
-            if (!isXRP(nextNode().account_))
+            if (!isJBC(nextNode().account_))
             {
                 // ? --> OFFER --> account
                 // Input fees: vary based upon the consumed offer's owner.
-                // Output fees: none as XRP or the destination account is the
+                // Output fees: none as JBC or the destination account is the
                 // issuer.
 
                 saOutPassAct = saOutPassMax;
@@ -195,7 +195,7 @@ TER PathCursor::deliverNodeForward (
                     << " saOutPassAct=" << saOutPassAct
                     << " saOutFunded=" << saOutFunded;
 
-                // Output: Debit offer owner, send XRP or non-XPR to next
+                // Output: Debit offer owner, send JBC or non-XPR to next
                 // account.
                 resultCode = accountSend(view(),
                     node().offerOwnerAccount_,
@@ -252,8 +252,8 @@ TER PathCursor::deliverNodeForward (
                 // Do outbound debiting.
                 // Send to issuer/limbo total amount including fees (issuer gets
                 // fees).
-                auto const& id = isXRP(node().issue_) ?
-                        xrpAccount() : node().issue_.account;
+                auto const& id = isJBC(node().issue_) ?
+                        jbcAccount() : node().issue_.account;
                 auto outPassTotal = saOutPassAct + saOutPassFees;
                 accountSend(view(),
                     node().offerOwnerAccount_,
@@ -285,11 +285,11 @@ TER PathCursor::deliverNodeForward (
             // Credit offer owner from in issuer/limbo (input transfer fees left
             // with owner).  Don't attempt to have someone credit themselves, it
             // is redundant.
-            if (isXRP (previousNode().issue_.currency)
+            if (isJBC (previousNode().issue_.currency)
                 || uInAccountID != node().offerOwnerAccount_)
             {
-                auto id = !isXRP(previousNode().issue_.currency) ?
-                        uInAccountID : xrpAccount();
+                auto id = !isJBC(previousNode().issue_.currency) ?
+                        uInAccountID : jbcAccount();
                 resultCode = accountSend(view(),
                     id,
                     node().offerOwnerAccount_,
@@ -367,4 +367,4 @@ TER PathCursor::deliverNodeForward (
 }
 
 } // path
-} // ripple
+} // jbcoin

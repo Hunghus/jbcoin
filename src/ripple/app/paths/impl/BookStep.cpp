@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,26 +17,26 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/impl/Steps.h>
-#include <ripple/app/paths/Credit.h>
-#include <ripple/app/paths/NodeDirectory.h>
-#include <ripple/app/tx/impl/OfferStream.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/ledger/Directory.h>
-#include <ripple/ledger/PaymentSandbox.h>
-#include <ripple/protocol/Book.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/IOUAmount.h>
-#include <ripple/protocol/Quality.h>
-#include <ripple/protocol/XRPAmount.h>
+#include <jbcoin/app/paths/impl/Steps.h>
+#include <jbcoin/app/paths/Credit.h>
+#include <jbcoin/app/paths/NodeDirectory.h>
+#include <jbcoin/app/tx/impl/OfferStream.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/ledger/Directory.h>
+#include <jbcoin/ledger/PaymentSandbox.h>
+#include <jbcoin/protocol/Book.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/IOUAmount.h>
+#include <jbcoin/protocol/Quality.h>
+#include <jbcoin/protocol/JBCAmount.h>
 
 #include <boost/container/flat_set.hpp>
 
 #include <numeric>
 #include <sstream>
 
-namespace ripple {
+namespace jbcoin {
 
 template<class TIn, class TOut, class TDerived>
 class BookStep : public StepImp<TIn, TOut, BookStep<TIn, TOut, TDerived>>
@@ -255,7 +255,7 @@ public:
         // Calculate amount that goes to the taker and the amount charged the
         // offer owner
         auto rate = [&](AccountID const& id) {
-            if (isXRP(id) || id == this->strandDst_)
+            if (isJBC(id) || id == this->strandDst_)
                 return parityRate;
             return transferRate(v, id);
         };
@@ -501,7 +501,7 @@ BookStep<TIn, TOut, TDerived>::forEachOffer (
     // Calculate amount that goes to the taker and the amount charged the offer owner
     auto rate = [this, &sb](AccountID const& id)->std::uint32_t
     {
-        if (isXRP (id) || id == this->strandDst_)
+        if (isJBC (id) || id == this->strandDst_)
             return QUALITY_ONE;
         return transferRate (sb, id).value;
     };
@@ -539,9 +539,9 @@ BookStep<TIn, TOut, TDerived>::forEachOffer (
                 continue;
 
         // Make sure offer owner has authorization to own IOUs from issuer.
-        // An account can always own XRP or their own IOUs.
+        // An account can always own JBC or their own IOUs.
         if (flowCross &&
-            (!isXRP (offer.issueIn().currency)) &&
+            (!isJBC (offer.issueIn().currency)) &&
             (offer.owner() != offer.issueIn().account))
         {
             auto const& issuerID = offer.issueIn().account;
@@ -1017,8 +1017,8 @@ BookStep<TIn, TOut, TDerived>::check(StrandContext const& ctx) const
                 if (!sle)
                     return terNO_LINE;
                 if ((*sle)[sfFlags] &
-                    ((cur > *prev) ? lsfHighNoRipple : lsfLowNoRipple))
-                    return terNO_RIPPLE;
+                    ((cur > *prev) ? lsfHighNoJBCoin : lsfLowNoJBCoin))
+                    return terNO_JBCOIN;
             }
         }
     }
@@ -1034,27 +1034,27 @@ namespace test
 
 template <class TIn, class TOut, class TDerived>
 static
-bool equalHelper (Step const& step, ripple::Book const& book)
+bool equalHelper (Step const& step, jbcoin::Book const& book)
 {
     if (auto bs = dynamic_cast<BookStep<TIn, TOut, TDerived> const*> (&step))
         return book == bs->book ();
     return false;
 }
 
-bool bookStepEqual (Step const& step, ripple::Book const& book)
+bool bookStepEqual (Step const& step, jbcoin::Book const& book)
 {
-    bool const inXRP = isXRP (book.in.currency);
-    bool const outXRP = isXRP (book.out.currency);
-    if (inXRP && outXRP)
-        return equalHelper<XRPAmount, XRPAmount,
-            BookPaymentStep<XRPAmount, XRPAmount>> (step, book);
-    if (inXRP && !outXRP)
-        return equalHelper<XRPAmount, IOUAmount,
-            BookPaymentStep<XRPAmount, IOUAmount>> (step, book);
-    if (!inXRP && outXRP)
-        return equalHelper<IOUAmount, XRPAmount,
-            BookPaymentStep<IOUAmount, XRPAmount>> (step, book);
-    if (!inXRP && !outXRP)
+    bool const inJBC = isJBC (book.in.currency);
+    bool const outJBC = isJBC (book.out.currency);
+    if (inJBC && outJBC)
+        return equalHelper<JBCAmount, JBCAmount,
+            BookPaymentStep<JBCAmount, JBCAmount>> (step, book);
+    if (inJBC && !outJBC)
+        return equalHelper<JBCAmount, IOUAmount,
+            BookPaymentStep<JBCAmount, IOUAmount>> (step, book);
+    if (!inJBC && outJBC)
+        return equalHelper<IOUAmount, JBCAmount,
+            BookPaymentStep<IOUAmount, JBCAmount>> (step, book);
+    if (!inJBC && !outJBC)
         return equalHelper<IOUAmount, IOUAmount,
             BookPaymentStep<IOUAmount, IOUAmount>> (step, book);
     return false;
@@ -1107,7 +1107,7 @@ make_BookStepIX (
     StrandContext const& ctx,
     Issue const& in)
 {
-    return make_BookStepHelper<IOUAmount, XRPAmount> (ctx, in, xrpIssue());
+    return make_BookStepHelper<IOUAmount, JBCAmount> (ctx, in, jbcIssue());
 }
 
 std::pair<TER, std::unique_ptr<Step>>
@@ -1115,7 +1115,7 @@ make_BookStepXI (
     StrandContext const& ctx,
     Issue const& out)
 {
-    return make_BookStepHelper<XRPAmount, IOUAmount> (ctx, xrpIssue(), out);
+    return make_BookStepHelper<JBCAmount, IOUAmount> (ctx, jbcIssue(), out);
 }
 
-} // ripple
+} // jbcoin

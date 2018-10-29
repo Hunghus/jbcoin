@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,20 +17,20 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/Credit.h>
-#include <ripple/app/paths/impl/StepChecks.h>
-#include <ripple/app/paths/impl/Steps.h>
-#include <ripple/basics/Log.h>
-#include <ripple/ledger/PaymentSandbox.h>
-#include <ripple/protocol/IOUAmount.h>
-#include <ripple/protocol/Quality.h>
+#include <jbcoin/app/paths/Credit.h>
+#include <jbcoin/app/paths/impl/StepChecks.h>
+#include <jbcoin/app/paths/impl/Steps.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/ledger/PaymentSandbox.h>
+#include <jbcoin/protocol/IOUAmount.h>
+#include <jbcoin/protocol/Quality.h>
 
 #include <boost/container/flat_set.hpp>
 
 #include <numeric>
 #include <sstream>
 
-namespace ripple {
+namespace jbcoin {
 
 template <class TDerived>
 class DirectStepI : public StepImp<IOUAmount, IOUAmount, DirectStepI<TDerived>>
@@ -426,11 +426,11 @@ DirectIPaymentStep::check (
         {
             if (ctx.prevStep->bookStepBook())
             {
-                auto const noRippleSrcToDst =
+                auto const noJBCoinSrcToDst =
                     ((*sleLine)[sfFlags] &
-                     ((src_ > dst_) ? lsfHighNoRipple : lsfLowNoRipple));
-                if (noRippleSrcToDst)
-                    return terNO_RIPPLE;
+                     ((src_ > dst_) ? lsfHighNoJBCoin : lsfLowNoJBCoin));
+                if (noJBCoinSrcToDst)
+                    return terNO_JBCOIN;
             }
         }
     }
@@ -538,7 +538,7 @@ DirectStepI<TDerived>::revImp (
         IOUAmount const in = mulRatio (
             srcToDst, srcQOut, QUALITY_ONE, /*roundUp*/ true);
         cache_.emplace (in, srcToDst, out, srcRedeems);
-        rippleCredit (sb,
+        jbcoinCredit (sb,
                       src_, dst_, toSTAmount (srcToDst, srcToDstIss),
                       /*checkIssuer*/ true, j_);
         JLOG (j_.trace()) <<
@@ -556,7 +556,7 @@ DirectStepI<TDerived>::revImp (
     IOUAmount const actualOut = mulRatio (
         maxSrcToDst, dstQIn, QUALITY_ONE, /*roundUp*/ false);
     cache_.emplace (in, maxSrcToDst, actualOut, srcRedeems);
-    rippleCredit (sb,
+    jbcoinCredit (sb,
                   src_, dst_, toSTAmount (maxSrcToDst, srcToDstIss),
                   /*checkIssuer*/ true, j_);
     JLOG (j_.trace()) <<
@@ -660,7 +660,7 @@ DirectStepI<TDerived>::fwdImp (
         IOUAmount const out = mulRatio (
             srcToDst, dstQIn, QUALITY_ONE, /*roundUp*/ false);
         setCacheLimiting (in, srcToDst, out, srcRedeems);
-        rippleCredit (sb,
+        jbcoinCredit (sb,
             src_, dst_, toSTAmount (cache_->srcToDst, srcToDstIss),
             /*checkIssuer*/ true, j_);
         JLOG (j_.trace()) <<
@@ -678,7 +678,7 @@ DirectStepI<TDerived>::fwdImp (
         IOUAmount const out = mulRatio (
             maxSrcToDst, dstQIn, QUALITY_ONE, /*roundUp*/ false);
         setCacheLimiting (actualIn, maxSrcToDst, out, srcRedeems);
-        rippleCredit (sb,
+        jbcoinCredit (sb,
             src_, dst_, toSTAmount (cache_->srcToDst, srcToDstIss),
             /*checkIssuer*/ true, j_);
         JLOG (j_.trace()) <<
@@ -847,12 +847,12 @@ TER DirectStepI<TDerived>::check (StrandContext const& ctx) const
     }
 
     // If previous step was a direct step then we need to check
-    // no ripple flags.
+    // no jbcoin flags.
     if (ctx.prevStep)
     {
         if (auto prevSrc = ctx.prevStep->directStepSrcAcct())
         {
-            auto const ter = checkNoRipple(
+            auto const ter = checkNoJBCoin(
                 ctx.view, *prevSrc, src_, dst_, currency_, j_);
             if (ter != tesSUCCESS)
                 return ter;
@@ -942,4 +942,4 @@ make_DirectStepI (
     return {tesSUCCESS, std::move (r)};
 }
 
-} // ripple
+} // jbcoin

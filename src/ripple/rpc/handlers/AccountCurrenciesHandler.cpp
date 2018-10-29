@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/paths/RippleState.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/paths/JBCoinState.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
 
-namespace ripple {
+namespace jbcoin {
 
 Json::Value doAccountCurrencies (RPC::Context& context)
 {
@@ -57,7 +57,7 @@ Json::Value doAccountCurrencies (RPC::Context& context)
         return rpcError (rpcACT_NOT_FOUND);
 
     std::set<Currency> send, receive;
-    for (auto const& item : getRippleStateItems (accountID, *ledger))
+    for (auto const& item : getJBCoinStateItems (accountID, *ledger))
     {
         auto const rspEntry = item.get();
 
@@ -85,4 +85,4 @@ Json::Value doAccountCurrencies (RPC::Context& context)
     return result;
 }
 
-} // ripple
+} // jbcoin

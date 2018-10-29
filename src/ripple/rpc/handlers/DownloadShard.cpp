@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/basics/BasicConfig.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/nodestore/DatabaseShard.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/impl/Handler.h>
-#include <ripple/rpc/ShardArchiveHandler.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/basics/BasicConfig.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/nodestore/DatabaseShard.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/impl/Handler.h>
+#include <jbcoin/rpc/ShardArchiveHandler.h>
 
 #include <boost/algorithm/string.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 /** RPC command that downloads and import shard archives.
     {
@@ -148,4 +148,4 @@ doDownloadShard(RPC::Context& context)
     return RPC::makeObjectValue("downloading shards " + handler->toString());
 }
 
-} // ripple
+} // jbcoin

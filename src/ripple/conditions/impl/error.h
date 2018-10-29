@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2016 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2016 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,13 +17,13 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_CONDITIONS_ERROR_H
-#define RIPPLE_CONDITIONS_ERROR_H
+#ifndef JBCOIN_CONDITIONS_ERROR_H
+#define JBCOIN_CONDITIONS_ERROR_H
 
 #include <system_error>
 #include <string>
 
-namespace ripple {
+namespace jbcoin {
 namespace cryptoconditions {
 
 enum class error
@@ -51,13 +51,13 @@ std::error_code
 make_error_code(error ev);
 
 } // cryptoconditions
-} // ripple
+} // jbcoin
 
 namespace std
 {
 
 template<>
-struct is_error_code_enum<ripple::cryptoconditions::error>
+struct is_error_code_enum<jbcoin::cryptoconditions::error>
 {
     explicit is_error_code_enum() = default;
 

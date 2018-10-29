@@ -21,9 +21,9 @@
 */
 //==============================================================================
 
-#include <ripple/beast/core/BasicNativeHeaders.h>
-#include <ripple/beast/core/Config.h>
-#include <ripple/beast/core/StandardIncludes.h>
+#include <jbcoin/beast/core/BasicNativeHeaders.h>
+#include <jbcoin/beast/core/Config.h>
+#include <jbcoin/beast/core/StandardIncludes.h>
 
 //------------------------------------------------------------------------------
 
@@ -58,9 +58,9 @@
 #undef _aligned_msize
 #endif
 
-#include <ripple/beast/core/CurrentThreadName.cpp>
-#include <ripple/beast/core/SemanticVersion.cpp>
-#include <ripple/beast/core/WaitableEvent.cpp>
+#include <jbcoin/beast/core/CurrentThreadName.cpp>
+#include <jbcoin/beast/core/SemanticVersion.cpp>
+#include <jbcoin/beast/core/WaitableEvent.cpp>
 
 #ifdef _CRTDBG_MAP_ALLOC
 #pragma pop_macro("calloc")

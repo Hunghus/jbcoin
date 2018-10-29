@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#include <ripple/beast/net/IPEndpoint.h>
-#include <ripple/basics/random.h>
+#include <jbcoin/beast/net/IPEndpoint.h>
+#include <jbcoin/basics/random.h>
 
 namespace beast {
 namespace IP {
 
 inline Endpoint randomEP (bool v4 = true)
 {
-    using namespace ripple;
+    using namespace jbcoin;
     auto dv4 = []() -> AddressV4::bytes_type {
         return {{
             static_cast<std::uint8_t>(rand_int<int>(1, UINT8_MAX)),

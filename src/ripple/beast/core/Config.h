@@ -24,9 +24,9 @@
 #ifndef BEAST_CONFIG_H_INCLUDED
 #define BEAST_CONFIG_H_INCLUDED
 
-#include <ripple/beast/core/PlatformConfig.h>
-#include <ripple/beast/core/CompilerConfig.h>
-#include <ripple/beast/core/StandardConfig.h>
-#include <ripple/beast/core/ConfigCheck.h>
+#include <jbcoin/beast/core/PlatformConfig.h>
+#include <jbcoin/beast/core/CompilerConfig.h>
+#include <jbcoin/beast/core/StandardConfig.h>
+#include <jbcoin/beast/core/ConfigCheck.h>
 
 #endif

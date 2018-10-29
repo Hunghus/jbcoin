@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,8 +17,8 @@
 */
 //==============================================================================
 
-#include <ripple/protocol/tokens.h>
-#include <ripple/protocol/digest.h>
+#include <jbcoin/protocol/tokens.h>
+#include <jbcoin/protocol/digest.h>
 #include <boost/container/small_vector.hpp>
 #include <cassert>
 #include <cstring>
@@ -27,9 +27,9 @@
 #include <utility>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 
-static char rippleAlphabet[] =
+static char jbcoinAlphabet[] =
     "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz";
 
 static char bitcoinAlphabet[] =
@@ -181,7 +181,7 @@ std::string
 base58EncodeToken (TokenType type,
     void const* token, std::size_t size)
 {
-    return encodeToken(type, token, size, rippleAlphabet);
+    return encodeToken(type, token, size, jbcoinAlphabet);
 }
 
 std::string
@@ -248,7 +248,7 @@ decodeBase58 (std::string const& s,
     return result;
 }
 
-/*  Base58 decode a Ripple token
+/*  Base58 decode a JBCoin token
 
     The type and checksum are are checked
     and removed from the returned result.
@@ -306,7 +306,7 @@ public:
     }
 };
 
-static InverseAlphabet rippleInverse(rippleAlphabet);
+static InverseAlphabet jbcoinInverse(jbcoinAlphabet);
 
 static InverseAlphabet bitcoinInverse(bitcoinAlphabet);
 
@@ -314,7 +314,7 @@ std::string
 decodeBase58Token(
     std::string const& s, TokenType type)
 {
-    return decodeBase58Token(s, type, rippleInverse);
+    return decodeBase58Token(s, type, jbcoinInverse);
 }
 
 std::string
@@ -324,4 +324,4 @@ decodeBase58TokenBitcoin(
     return decodeBase58Token(s, type, bitcoinInverse);
 }
 
-} // ripple
+} // jbcoin

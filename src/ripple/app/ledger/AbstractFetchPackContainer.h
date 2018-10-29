@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_LEDGER_ABSTRACTFETCHPACKCONTAINER_H_INCLUDED
-#define RIPPLE_APP_LEDGER_ABSTRACTFETCHPACKCONTAINER_H_INCLUDED
+#ifndef JBCOIN_APP_LEDGER_ABSTRACTFETCHPACKCONTAINER_H_INCLUDED
+#define JBCOIN_APP_LEDGER_ABSTRACTFETCHPACKCONTAINER_H_INCLUDED
 
-#include <ripple/basics/base_uint.h>
-#include <ripple/basics/Blob.h>
+#include <jbcoin/basics/base_uint.h>
+#include <jbcoin/basics/Blob.h>
 #include <boost/optional.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 /** An interface facilitating retrieval of fetch packs without
     an application or ledgermaster object.
@@ -43,6 +43,6 @@ public:
     virtual boost::optional<Blob> getFetchPack(uint256 const& nodeHash) = 0;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

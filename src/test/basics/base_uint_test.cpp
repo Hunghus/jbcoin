@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2016 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2016 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#include <ripple/basics/base_uint.h>
-#include <ripple/basics/hardened_hash.h>
-#include <ripple/beast/unit_test.h>
+#include <jbcoin/basics/base_uint.h>
+#include <jbcoin/basics/hardened_hash.h>
+#include <jbcoin/beast/unit_test.h>
 #include <boost/algorithm/string.hpp>
 
 #include <type_traits>
 
-namespace ripple {
+namespace jbcoin {
 namespace test {
 
 // a non-hashing Hasher that just copies the bytes.
@@ -198,7 +198,7 @@ struct base_uint_test : beast::unit_test::suite
     }
 };
 
-BEAST_DEFINE_TESTSUITE(base_uint, ripple_basics, ripple);
+BEAST_DEFINE_TESTSUITE(base_uint, jbcoin_basics, jbcoin);
 
 }  // namespace test
-}  // namespace ripple
+}  // namespace jbcoin

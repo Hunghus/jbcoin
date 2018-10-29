@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,10 +17,10 @@
 */
 //==============================================================================
 
-#include <ripple/ledger/OpenView.h>
-#include <ripple/basics/contract.h>
+#include <jbcoin/ledger/OpenView.h>
+#include <jbcoin/basics/contract.h>
 
-namespace ripple {
+namespace jbcoin {
 
 open_ledger_t const open_ledger {};
 
@@ -253,10 +253,10 @@ OpenView::rawReplace(
 }
 
 void
-OpenView::rawDestroyXRP(
-    XRPAmount const& fee)
+OpenView::rawDestroyJBC(
+    JBCAmount const& fee)
 {
-    items_.destroyXRP(fee);
+    items_.destroyJBC(fee);
     // VFALCO Deduct from info_.totalDrops ?
     //        What about child views?
 }
@@ -277,4 +277,4 @@ OpenView::rawTxInsert (key_type const& key,
             to_string(key));
 }
 
-} // ripple
+} // jbcoin

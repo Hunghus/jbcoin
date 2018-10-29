@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_BOOK_OFFER_H_INCLUDED
-#define RIPPLE_APP_BOOK_OFFER_H_INCLUDED
+#ifndef JBCOIN_APP_BOOK_OFFER_H_INCLUDED
+#define JBCOIN_APP_BOOK_OFFER_H_INCLUDED
 
-#include <ripple/basics/contract.h>
-#include <ripple/ledger/View.h>
-#include <ripple/protocol/Quality.h>
-#include <ripple/protocol/STLedgerEntry.h>
-#include <ripple/protocol/SField.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/ledger/View.h>
+#include <jbcoin/protocol/Quality.h>
+#include <jbcoin/protocol/STLedgerEntry.h>
+#include <jbcoin/protocol/SField.h>
 #include <ostream>
 #include <stdexcept>
 
-namespace ripple {
+namespace jbcoin {
 
 template <class TIn, class TOut>
 class TOfferBase
@@ -191,7 +191,7 @@ void TOffer<IOUAmount, IOUAmount>::setFieldAmounts ()
 
 template<>
 inline
-void TOffer<IOUAmount, XRPAmount>::setFieldAmounts ()
+void TOffer<IOUAmount, JBCAmount>::setFieldAmounts ()
 {
     m_entry->setFieldAmount (sfTakerPays, toSTAmount(m_amounts.in, issIn_));
     m_entry->setFieldAmount (sfTakerGets, toSTAmount(m_amounts.out));
@@ -199,7 +199,7 @@ void TOffer<IOUAmount, XRPAmount>::setFieldAmounts ()
 
 template<>
 inline
-void TOffer<XRPAmount, IOUAmount>::setFieldAmounts ()
+void TOffer<JBCAmount, IOUAmount>::setFieldAmounts ()
 {
     m_entry->setFieldAmount (sfTakerPays, toSTAmount(m_amounts.in));
     m_entry->setFieldAmount (sfTakerGets, toSTAmount(m_amounts.out, issOut_));

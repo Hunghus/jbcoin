@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/LedgerCleaner.h>
-#include <ripple/app/ledger/InboundLedgers.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/beast/core/CurrentThreadName.h>
+#include <jbcoin/app/ledger/LedgerCleaner.h>
+#include <jbcoin/app/ledger/InboundLedgers.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/beast/core/CurrentThreadName.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace detail {
 
 /*
@@ -502,4 +502,4 @@ make_LedgerCleaner (Application& app,
 }
 
 } // detail
-} // ripple
+} // jbcoin

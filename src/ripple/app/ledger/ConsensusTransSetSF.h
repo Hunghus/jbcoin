@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_LEDGER_CONSENSUSTRANSSETSF_H_INCLUDED
-#define RIPPLE_APP_LEDGER_CONSENSUSTRANSSETSF_H_INCLUDED
+#ifndef JBCOIN_APP_LEDGER_CONSENSUSTRANSSETSF_H_INCLUDED
+#define JBCOIN_APP_LEDGER_CONSENSUSTRANSSETSF_H_INCLUDED
 
-#include <ripple/app/main/Application.h>
-#include <ripple/shamap/SHAMapSyncFilter.h>
-#include <ripple/basics/TaggedCache.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/shamap/SHAMapSyncFilter.h>
+#include <jbcoin/basics/TaggedCache.h>
 
-namespace ripple {
+namespace jbcoin {
 
 // Sync filters allow low-level SHAMapSync code to interact correctly with
 // higher-level structures such as caches and transaction stores
@@ -53,6 +53,6 @@ private:
     beast::Journal j_;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

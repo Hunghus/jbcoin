@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,10 +18,10 @@
 //==============================================================================
 
 #include <test/jtx.h>
-#include <ripple/beast/unit_test.h>
-#include <ripple/protocol/JsonFields.h>
+#include <jbcoin/beast/unit_test.h>
+#include <jbcoin/protocol/JsonFields.h>
 
-namespace ripple {
+namespace jbcoin {
 
 class AccountCurrencies_test : public beast::unit_test::suite
 {
@@ -34,7 +34,7 @@ class AccountCurrencies_test : public beast::unit_test::suite
         Env env {*this};
 
         auto const alice = Account {"alice"};
-        env.fund (XRP(10000), alice);
+        env.fund (JBC(10000), alice);
         env.close ();
 
         { // invalid ledger (hash)
@@ -99,7 +99,7 @@ class AccountCurrencies_test : public beast::unit_test::suite
 
         auto const alice = Account {"alice"};
         auto const gw = Account {"gateway"};
-        env.fund (XRP(10000), alice, gw);
+        env.fund (JBC(10000), alice, gw);
         char currencySuffix {'A'};
         std::vector<boost::optional<IOU>> gwCurrencies (26); // A - Z
         std::generate (gwCurrencies.begin(), gwCurrencies.end(),
@@ -191,7 +191,7 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE(AccountCurrencies,app,ripple);
+BEAST_DEFINE_TESTSUITE(AccountCurrencies,app,jbcoin);
 
-} // ripple
+} // jbcoin
 

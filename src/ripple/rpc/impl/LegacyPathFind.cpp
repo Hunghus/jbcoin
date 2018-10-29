@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/core/Job.h>
-#include <ripple/core/JobQueue.h>
-#include <ripple/rpc/impl/LegacyPathFind.h>
-#include <ripple/rpc/impl/Tuning.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/core/Job.h>
+#include <jbcoin/core/JobQueue.h>
+#include <jbcoin/rpc/impl/LegacyPathFind.h>
+#include <jbcoin/rpc/impl/Tuning.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace RPC {
 
 LegacyPathFind::LegacyPathFind (bool isAdmin, Application& app) : m_isOk (false)
@@ -67,4 +67,4 @@ LegacyPathFind::~LegacyPathFind ()
 std::atomic <int> LegacyPathFind::inProgress (0);
 
 } // RPC
-} // ripple
+} // jbcoin

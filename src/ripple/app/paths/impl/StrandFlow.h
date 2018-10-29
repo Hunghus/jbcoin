@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,17 +17,17 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_PATHS_IMPL_STRANDFLOW_H_INCLUDED
-#define RIPPLE_APP_PATHS_IMPL_STRANDFLOW_H_INCLUDED
+#ifndef JBCOIN_APP_PATHS_IMPL_STRANDFLOW_H_INCLUDED
+#define JBCOIN_APP_PATHS_IMPL_STRANDFLOW_H_INCLUDED
 
-#include <ripple/app/paths/Credit.h>
-#include <ripple/app/paths/Flow.h>
-#include <ripple/app/paths/impl/AmountSpec.h>
-#include <ripple/app/paths/impl/FlowDebugInfo.h>
-#include <ripple/app/paths/impl/Steps.h>
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/IOUAmount.h>
-#include <ripple/protocol/XRPAmount.h>
+#include <jbcoin/app/paths/Credit.h>
+#include <jbcoin/app/paths/Flow.h>
+#include <jbcoin/app/paths/impl/AmountSpec.h>
+#include <jbcoin/app/paths/impl/FlowDebugInfo.h>
+#include <jbcoin/app/paths/impl/Steps.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/IOUAmount.h>
+#include <jbcoin/protocol/JBCAmount.h>
 
 #include <boost/container/flat_set.hpp>
 
@@ -36,7 +36,7 @@
 #include <numeric>
 #include <sstream>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Result of flow() execution of a single Strand. */
 template<class TInAmt, class TOutAmt>
@@ -77,7 +77,7 @@ struct StrandResult
    Request `out` amount from a strand
 
    @param baseView Trust lines and balances
-   @param strand Steps of Accounts to ripple through and offer books to use
+   @param strand Steps of Accounts to jbcoin through and offer books to use
    @param maxIn Max amount of input allowed
    @param out Amount of output requested from the strand
    @param j Journal to write log messages to
@@ -102,9 +102,9 @@ flow (
 
     boost::container::flat_set<uint256> ofrsToRm;
 
-    if (isDirectXrpToXrp<TInAmt, TOutAmt> (strand))
+    if (isDirectJrpToJrp<TInAmt, TOutAmt> (strand))
     {
-        // The current implementation returns NO_LINE for XRP->XRP transfers.
+        // The current implementation returns NO_LINE for JBC->JBC transfers.
         // Keep this behavior
         return {tecNO_LINE, std::move (ofrsToRm)};
     }
@@ -388,7 +388,7 @@ qualityUpperBound(ReadView const& v, Strand const& strand)
    from least expensive to most expensive
 
    @param baseView Trust lines and balances
-   @param strands Each strand contains the steps of accounts to ripple through
+   @param strands Each strand contains the steps of accounts to jbcoin through
                   and offer books to use
    @param outReq Amount of output requested from the strand
    @param partialPayment If true allow less than the full payment
@@ -643,6 +643,6 @@ flow (PaymentSandbox const& baseView,
     return {actualIn, actualOut, std::move (sb), std::move(ofrsToRmOnFail)};
 }
 
-} // ripple
+} // jbcoin
 
 #endif

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,17 +17,17 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_BASICS_BUFFER_H_INCLUDED
-#define RIPPLE_BASICS_BUFFER_H_INCLUDED
+#ifndef JBCOIN_BASICS_BUFFER_H_INCLUDED
+#define JBCOIN_BASICS_BUFFER_H_INCLUDED
 
-#include <ripple/basics/Slice.h>
+#include <jbcoin/basics/Slice.h>
 #include <cassert>
 #include <cstdint>
 #include <cstring>
 #include <memory>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Like std::vector<char> but better.
     Meets the requirements of BufferFactory.
@@ -205,6 +205,6 @@ inline bool operator!=(Buffer const& lhs, Buffer const& rhs) noexcept
     return !(lhs == rhs);
 }
 
-} // ripple
+} // jbcoin
 
 #endif

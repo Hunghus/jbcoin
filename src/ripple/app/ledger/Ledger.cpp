@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,41 +17,41 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/app/ledger/AcceptedLedger.h>
-#include <ripple/app/ledger/InboundLedgers.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/consensus/LedgerTiming.h>
-#include <ripple/app/ledger/LedgerToJson.h>
-#include <ripple/app/ledger/OrderBookDB.h>
-#include <ripple/app/ledger/PendingSaves.h>
-#include <ripple/app/ledger/TransactionMaster.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/HashRouter.h>
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/core/Config.h>
-#include <ripple/core/DatabaseCon.h>
-#include <ripple/core/JobQueue.h>
-#include <ripple/core/SociDB.h>
-#include <ripple/json/to_string.h>
-#include <ripple/nodestore/Database.h>
-#include <ripple/protocol/digest.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/protocol/SecretKey.h>
-#include <ripple/protocol/HashPrefix.h>
-#include <ripple/protocol/UintTypes.h>
-#include <ripple/beast/core/LexicalCast.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/app/ledger/AcceptedLedger.h>
+#include <jbcoin/app/ledger/InboundLedgers.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/consensus/LedgerTiming.h>
+#include <jbcoin/app/ledger/LedgerToJson.h>
+#include <jbcoin/app/ledger/OrderBookDB.h>
+#include <jbcoin/app/ledger/PendingSaves.h>
+#include <jbcoin/app/ledger/TransactionMaster.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/HashRouter.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/core/DatabaseCon.h>
+#include <jbcoin/core/JobQueue.h>
+#include <jbcoin/core/SociDB.h>
+#include <jbcoin/json/to_string.h>
+#include <jbcoin/nodestore/Database.h>
+#include <jbcoin/protocol/digest.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/protocol/SecretKey.h>
+#include <jbcoin/protocol/HashPrefix.h>
+#include <jbcoin/protocol/UintTypes.h>
+#include <jbcoin/beast/core/LexicalCast.h>
 #include <boost/optional.hpp>
 #include <cassert>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 create_genesis_t const create_genesis {};
 
@@ -1332,4 +1332,4 @@ getHashesByIndex (std::uint32_t minSeq, std::uint32_t maxSeq,
     return ret;
 }
 
-} // ripple
+} // jbcoin

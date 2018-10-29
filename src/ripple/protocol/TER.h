@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012 - 2018 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012 - 2018 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_TER_H_INCLUDED
-#define RIPPLE_PROTOCOL_TER_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_TER_H_INCLUDED
+#define JBCOIN_PROTOCOL_TER_H_INCLUDED
 
-#include <ripple/json/json_value.h>
+#include <jbcoin/json/json_value.h>
 
 #include <boost/optional.hpp>
 #include <ostream>
 #include <string>
 
-namespace ripple {
+namespace jbcoin {
 
-// See https://ripple.com/wiki/Transaction_errors
+// See https://jbcoin.com/wiki/Transaction_errors
 //
 // "Transaction Engine Result"
 // or Transaction ERror.
@@ -86,11 +86,11 @@ enum TEMcodes : TERUnderlyingType
     temBAD_OFFER,
     temBAD_PATH,
     temBAD_PATH_LOOP,
-    temBAD_SEND_XRP_LIMIT,
-    temBAD_SEND_XRP_MAX,
-    temBAD_SEND_XRP_NO_DIRECT,
-    temBAD_SEND_XRP_PARTIAL,
-    temBAD_SEND_XRP_PATHS,
+    temBAD_SEND_JBC_LIMIT,
+    temBAD_SEND_JBC_MAX,
+    temBAD_SEND_JBC_NO_DIRECT,
+    temBAD_SEND_JBC_PARTIAL,
+    temBAD_SEND_JBC_PATHS,
     temBAD_SEQUENCE,
     temBAD_SIGNATURE,
     temBAD_SRC_ACCOUNT,
@@ -100,7 +100,7 @@ enum TEMcodes : TERUnderlyingType
     temINVALID,
     temINVALID_FLAG,
     temREDUNDANT,
-    temRIPPLE_EMPTY,
+    temJBCOIN_EMPTY,
     temDISABLED,
     temBAD_SIGNER,
     temBAD_QUORUM,
@@ -184,7 +184,7 @@ enum TERcodes : TERUnderlyingType
     terPRE_SEQ,          // Can't pay fee, no point in forwarding, so don't
                          // burden network.
     terLAST,             // Process after all other transactions
-    terNO_RIPPLE,        // Rippling not allowed
+    terNO_JBCOIN,        // Rippling not allowed
     terQUEUED            // Transaction is being held in TxQ until fee drops
 };
 
@@ -212,7 +212,7 @@ enum TECcodes : TERUnderlyingType
     // value in metadata for historic transactions.
 
     // 100 .. 159 C
-    //   Claim fee only (ripple transaction with no good paths, pay to
+    //   Claim fee only (jbcoin transaction with no good paths, pay to
     //   non-existent account, no path)
     //
     // Causes:
@@ -238,7 +238,7 @@ enum TECcodes : TERUnderlyingType
     tecINSUF_RESERVE_LINE       = 122,
     tecINSUF_RESERVE_OFFER      = 123,
     tecNO_DST                   = 124,
-    tecNO_DST_INSUF_XRP         = 125,
+    tecNO_DST_INSUF_JBC         = 125,
     tecNO_LINE_INSUF_RESERVE    = 126,
     tecNO_LINE_REDUNDANT        = 127,
     tecPATH_DRY                 = 128,
@@ -502,6 +502,6 @@ transHuman (TER code);
 boost::optional<TER>
 transCode(std::string const& token);
 
-} // ripple
+} // jbcoin
 
 #endif

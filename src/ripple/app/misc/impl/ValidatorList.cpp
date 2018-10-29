@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2015 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2015 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/app/misc/ValidatorList.h>
-#include <ripple/basics/base64.h>
-#include <ripple/basics/date.h>
-#include <ripple/basics/Slice.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/json/json_reader.h>
-#include <ripple/protocol/JsonFields.h>
+#include <jbcoin/app/misc/ValidatorList.h>
+#include <jbcoin/basics/base64.h>
+#include <jbcoin/basics/date.h>
+#include <jbcoin/basics/Slice.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/json/json_reader.h>
+#include <jbcoin/protocol/JsonFields.h>
 #include <boost/regex.hpp>
 
 #include <mutex>
 #include <shared_mutex>
 
-namespace ripple {
+namespace jbcoin {
 
 std::string
 to_string(ListDisposition disposition)
@@ -344,7 +344,7 @@ ValidatorList::verify (
     auto const sig = strUnHex(signature);
     auto const data = base64_decode (blob);
     if (! sig.second ||
-        ! ripple::verify (
+        ! jbcoin::verify (
             publisherManifests_.getSigningKey(pubKey),
             makeSlice(data),
             makeSlice(sig.first)))
@@ -607,9 +607,9 @@ ValidatorList::calculateQuorum (
     // Use an 80% quorum to balance fork safety, liveness, and required UNL
     // overlap.
     //
-    // Theorem 8 of the Analysis of the XRP Ledger Consensus Protocol
+    // Theorem 8 of the Analysis of the JBC Ledger Consensus Protocol
     // (https://arxiv.org/abs/1802.07242) says:
-    //     XRP LCP guarantees fork safety if Oi,j > nj/2 + ni − qi + ti,j for
+    //     JBC LCP guarantees fork safety if Oi,j > nj/2 + ni − qi + ti,j for
     //     every pair of nodes Pi, Pj.
     //
     // ni: size of Pi's UNL
@@ -710,4 +710,4 @@ ValidatorList::updateTrusted(hash_set<NodeID> const& seenValidators)
     return trustChanges;
 }
 
-} // ripple
+} // jbcoin

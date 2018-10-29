@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_QUALITY_H_INCLUDED
-#define RIPPLE_PROTOCOL_QUALITY_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_QUALITY_H_INCLUDED
+#define JBCOIN_PROTOCOL_QUALITY_H_INCLUDED
 
-#include <ripple/protocol/AmountConversions.h>
-#include <ripple/protocol/IOUAmount.h>
-#include <ripple/protocol/STAmount.h>
-#include <ripple/protocol/XRPAmount.h>
+#include <jbcoin/protocol/AmountConversions.h>
+#include <jbcoin/protocol/IOUAmount.h>
+#include <jbcoin/protocol/STAmount.h>
+#include <jbcoin/protocol/JBCAmount.h>
 
 #include <cstdint>
 #include <ostream>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Represents a pair of input and output currencies.
 
@@ -109,7 +109,7 @@ operator!= (
 
 //------------------------------------------------------------------------------
 
-// Ripple specific constant used for parsing qualities and other things
+// JBCoin specific constant used for parsing qualities and other things
 #define QUALITY_ONE 1000000000
 
 /** Represents the logical ratio of output currency to input currency.
@@ -194,7 +194,7 @@ public:
             return amount;
 
         // Use the existing STAmount implementation for now, but consider
-        // replacing with code specific to IOUAMount and XRPAmount
+        // replacing with code specific to IOUAMount and JBCAmount
         Amounts stAmt (toSTAmount (amount.in), toSTAmount (amount.out));
         STAmount stLim (toSTAmount (limit));
         auto const stRes = ceil_in (stAmt, stLim);
@@ -216,7 +216,7 @@ public:
             return amount;
 
         // Use the existing STAmount implementation for now, but consider
-        // replacing with code specific to IOUAMount and XRPAmount
+        // replacing with code specific to IOUAMount and JBCAmount
         Amounts stAmt (toSTAmount (amount.in), toSTAmount (amount.out));
         STAmount stLim (toSTAmount (limit));
         auto const stRes = ceil_out (stAmt, stLim);

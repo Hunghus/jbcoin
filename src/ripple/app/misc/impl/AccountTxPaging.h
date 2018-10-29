@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_MISC_IMPL_ACCOUNTTXPAGING_H_INCLUDED
-#define RIPPLE_APP_MISC_IMPL_ACCOUNTTXPAGING_H_INCLUDED
+#ifndef JBCOIN_APP_MISC_IMPL_ACCOUNTTXPAGING_H_INCLUDED
+#define JBCOIN_APP_MISC_IMPL_ACCOUNTTXPAGING_H_INCLUDED
 
-#include <ripple/core/DatabaseCon.h>
-#include <ripple/app/misc/NetworkOPs.h>
+#include <jbcoin/core/DatabaseCon.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
 #include <cstdint>
 #include <string>
 #include <utility>
@@ -29,7 +29,7 @@
 
 //------------------------------------------------------------------------------
 
-namespace ripple {
+namespace jbcoin {
 
 void
 convertBlobsToTxResult (

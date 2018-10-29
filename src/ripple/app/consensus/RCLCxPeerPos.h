@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,22 +17,22 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_CONSENSUS_RCLCXPEERPOS_H_INCLUDED
-#define RIPPLE_APP_CONSENSUS_RCLCXPEERPOS_H_INCLUDED
+#ifndef JBCOIN_APP_CONSENSUS_RCLCXPEERPOS_H_INCLUDED
+#define JBCOIN_APP_CONSENSUS_RCLCXPEERPOS_H_INCLUDED
 
-#include <ripple/basics/CountedObject.h>
-#include <ripple/basics/base_uint.h>
-#include <ripple/beast/hash/hash_append.h>
-#include <ripple/consensus/ConsensusProposal.h>
-#include <ripple/json/json_value.h>
-#include <ripple/protocol/HashPrefix.h>
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/protocol/SecretKey.h>
+#include <jbcoin/basics/CountedObject.h>
+#include <jbcoin/basics/base_uint.h>
+#include <jbcoin/beast/hash/hash_append.h>
+#include <jbcoin/consensus/ConsensusProposal.h>
+#include <jbcoin/json/json_value.h>
+#include <jbcoin/protocol/HashPrefix.h>
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/protocol/SecretKey.h>
 #include <chrono>
 #include <cstdint>
 #include <string>
 
-namespace ripple {
+namespace jbcoin {
 
 /** A peer's signed, proposed position for use in RCLConsensus.
 
@@ -163,6 +163,6 @@ proposalUniqueId(
     Slice const& publicKey,
     Slice const& signature);
 
-}  // ripple
+}  // jbcoin
 
 #endif

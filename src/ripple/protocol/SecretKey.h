@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_SECRETKEY_H_INCLUDED
-#define RIPPLE_PROTOCOL_SECRETKEY_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_SECRETKEY_H_INCLUDED
+#define JBCOIN_PROTOCOL_SECRETKEY_H_INCLUDED
 
-#include <ripple/basics/Buffer.h>
-#include <ripple/basics/Slice.h>
-#include <ripple/crypto/KeyType.h> // move to protocol/
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/protocol/Seed.h>
-#include <ripple/protocol/tokens.h>
+#include <jbcoin/basics/Buffer.h>
+#include <jbcoin/basics/Slice.h>
+#include <jbcoin/crypto/KeyType.h> // move to protocol/
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/protocol/Seed.h>
+#include <jbcoin/protocol/tokens.h>
 #include <array>
 #include <string>
 
-namespace ripple {
+namespace jbcoin {
 
 /** A secret key. */
 class SecretKey
@@ -115,7 +115,7 @@ derivePublicKey (KeyType type, SecretKey const& sk);
 
 /** Generate a key pair deterministically.
 
-    This algorithm is specific to Ripple:
+    This algorithm is specific to JBCoin:
 
     For secp256k1 key pairs, the seed is converted
     to a Generator and used to compute the key pair
@@ -165,6 +165,6 @@ sign (KeyType type, SecretKey const& sk,
 }
 /** @} */
 
-} // ripple
+} // jbcoin
 
 #endif

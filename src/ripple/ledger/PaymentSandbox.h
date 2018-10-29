@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,17 +17,17 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_LEDGER_PAYMENTSANDBOX_H_INCLUDED
-#define RIPPLE_LEDGER_PAYMENTSANDBOX_H_INCLUDED
+#ifndef JBCOIN_LEDGER_PAYMENTSANDBOX_H_INCLUDED
+#define JBCOIN_LEDGER_PAYMENTSANDBOX_H_INCLUDED
 
-#include <ripple/ledger/RawView.h>
-#include <ripple/ledger/Sandbox.h>
-#include <ripple/ledger/detail/ApplyViewBase.h>
-#include <ripple/protocol/AccountID.h>
+#include <jbcoin/ledger/RawView.h>
+#include <jbcoin/ledger/Sandbox.h>
+#include <jbcoin/ledger/detail/ApplyViewBase.h>
+#include <jbcoin/protocol/AccountID.h>
 #include <map>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 namespace detail {
 
@@ -193,17 +193,17 @@ public:
     // Return a map of balance changes on trust lines. The low account is the
     // first account in the key. If the two accounts are equal, the map contains
     // the total changes in currency regardless of issuer. This is useful to get
-    // the total change in XRP balances.
+    // the total change in JBC balances.
     std::map<std::tuple<AccountID, AccountID, Currency>, STAmount>
     balanceChanges (ReadView const& view) const;
 
-    XRPAmount xrpDestroyed () const;
+    JBCAmount jbcDestroyed () const;
 
 private:
     detail::DeferredCredits tab_;
     PaymentSandbox const* ps_ = nullptr;
 };
 
-}  // ripple
+}  // jbcoin
 
 #endif

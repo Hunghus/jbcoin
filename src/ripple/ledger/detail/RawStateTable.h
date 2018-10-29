@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_LEDGER_RAWSTATETABLE_H_INCLUDED
-#define RIPPLE_LEDGER_RAWSTATETABLE_H_INCLUDED
+#ifndef JBCOIN_LEDGER_RAWSTATETABLE_H_INCLUDED
+#define JBCOIN_LEDGER_RAWSTATETABLE_H_INCLUDED
 
-#include <ripple/ledger/RawView.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/basics/qalloc.h>
+#include <jbcoin/ledger/RawView.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/basics/qalloc.h>
 #include <map>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 namespace detail {
 
 // Helper class that buffers raw modifications
@@ -68,7 +68,7 @@ public:
         Keylet const& k) const;
 
     void
-    destroyXRP (XRPAmount const& fee);
+    destroyJBC (JBCAmount const& fee);
 
     std::unique_ptr<ReadView::sles_type::iter_base>
     slesBegin (ReadView const& base) const;
@@ -95,10 +95,10 @@ private:
         std::pair<Action, std::shared_ptr<SLE>>>, false>>;
 
     items_t items_;
-    XRPAmount dropsDestroyed_ = 0;
+    JBCAmount dropsDestroyed_ = 0;
 };
 
 } // detail
-} // ripple
+} // jbcoin
 
 #endif

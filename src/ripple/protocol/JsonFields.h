@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_JSONFIELDS_H_INCLUDED
-#define RIPPLE_PROTOCOL_JSONFIELDS_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_JSONFIELDS_H_INCLUDED
+#define JBCOIN_PROTOCOL_JSONFIELDS_H_INCLUDED
 
-#include <ripple/json/json_value.h>
+#include <jbcoin/json/json_value.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace jss {
 
 // JSON static strings
@@ -76,7 +76,7 @@ JSS ( acquiring );                  // out: LedgerRequest
 JSS ( address );                    // out: PeerImp
 JSS ( affected );                   // out: AcceptedLedgerTx
 JSS ( age );                        // out: NetworkOPs, Peers
-JSS ( alternatives );               // out: PathRequest, RipplePathFind
+JSS ( alternatives );               // out: PathRequest, JBCoinPathFind
 JSS ( amendment_blocked );          // out: NetworkOPs
 JSS ( amendments );                 // in: AccountObjects, out: NetworkOPs
 JSS ( amount );                     // out: AccountChannels
@@ -90,7 +90,7 @@ JSS ( balance );                    // out: AccountLines
 JSS ( balances );                   // out: GatewayBalances
 JSS ( base );                       // out: LogLevel
 JSS ( base_fee );                   // out: NetworkOPs
-JSS ( base_fee_xrp );               // out: NetworkOPs
+JSS ( base_fee_jbc );               // out: NetworkOPs
 JSS ( bids );                       // out: Subscribe
 JSS ( binary );                     // in: AccountTX, LedgerEntry,
                                     //     AccountTxOld, Tx LedgerData
@@ -145,10 +145,10 @@ JSS ( deposit_authorized );         // out: deposit_authorized
 JSS ( deposit_preauth );            // in: AccountObjects, LedgerData
 JSS ( deprecated );                 // out
 JSS ( descending );                 // in: AccountTx*
-JSS ( destination_account );        // in: PathRequest, RipplePathFind, account_lines
+JSS ( destination_account );        // in: PathRequest, JBCoinPathFind, account_lines
                                     // out: AccountChannels
-JSS ( destination_amount );         // in: PathRequest, RipplePathFind
-JSS ( destination_currencies );     // in: PathRequest, RipplePathFind
+JSS ( destination_amount );         // in: PathRequest, JBCoinPathFind
+JSS ( destination_currencies );     // in: PathRequest, JBCoinPathFind
 JSS ( destination_tag );            // in: PathRequest
                                     // out: AccountChannels
 JSS ( dir_entry );                  // out: DirectoryEntryIterator
@@ -218,7 +218,7 @@ JSS ( info );                       // out: ServerInfo, ConsensusInfo, FetchInfo
 JSS ( internal_command );           // in: Internal
 JSS ( io_latency_ms );              // out: NetworkOPs
 JSS ( ip );                         // in: Connect, out: OverlayImpl
-JSS ( issuer );                     // in: RipplePathFind, Subscribe,
+JSS ( issuer );                     // in: JBCoinPathFind, Subscribe,
                                     //     Unsubscribe, BookOffers
                                     // out: paths/Node, STPathSet, STAmount
 JSS ( job );
@@ -242,7 +242,7 @@ JSS ( ledger_current_index );       // out: NetworkOPs, RPCHelpers,
                                     //      AccountLines
 JSS ( ledger_data );                // out: LedgerHeader
 JSS ( ledger_hash );                // in: RPCHelpers, LedgerRequest,
-                                    //     RipplePathFind, TransactionEntry,
+                                    //     JBCoinPathFind, TransactionEntry,
                                     //     handlers/Ledger
                                     // out: NetworkOPs, RPCHelpers,
                                     //      LedgerClosed, LedgerData,
@@ -307,8 +307,8 @@ JSS ( needed_state_hashes );        // out: InboundLedger
 JSS ( needed_transaction_hashes );  // out: InboundLedger
 JSS ( network_ledger );             // out: NetworkOPs
 JSS ( next_refresh_time );          // out: ValidatorSite
-JSS ( no_ripple );                  // out: AccountLines
-JSS ( no_ripple_peer );             // out: AccountLines
+JSS ( no_jbcoin );                  // out: AccountLines
+JSS ( no_jbcoin_peer );             // out: AccountLines
 JSS ( node );                       // out: LedgerEntry
 JSS ( node_binary );                // out: LedgerEntry
 JSS ( node_hit_rate );              // out: GetCounts
@@ -334,9 +334,9 @@ JSS ( parent_hash );                // out: LedgerToJson
 JSS ( partition );                  // in: LogLevel
 JSS ( passphrase );                 // in: WalletPropose
 JSS ( password );                   // in: Subscribe
-JSS ( paths );                      // in: RipplePathFind
-JSS ( paths_canonical );            // out: RipplePathFind
-JSS ( paths_computed );             // out: PathRequest, RipplePathFind
+JSS ( paths );                      // in: JBCoinPathFind
+JSS ( paths_canonical );            // out: JBCoinPathFind
+JSS ( paths_computed );             // out: PathRequest, JBCoinPathFind
 JSS ( payment_channel );            // in: LedgerEntry
 JSS ( peer );                       // in: AccountLines
 JSS ( peer_authorized );            // out: AccountLines
@@ -374,27 +374,27 @@ JSS ( regular_seed );               // in/out: LedgerEntry
 JSS ( remote );                     // out: Logic.h
 JSS ( request );                    // RPC
 JSS ( reserve_base );               // out: NetworkOPs
-JSS ( reserve_base_xrp );           // out: NetworkOPs
+JSS ( reserve_base_jbc );           // out: NetworkOPs
 JSS ( reserve_inc );                // out: NetworkOPs
-JSS ( reserve_inc_xrp );            // out: NetworkOPs
+JSS ( reserve_inc_jbc );            // out: NetworkOPs
 JSS ( response );                   // websocket
 JSS ( result );                     // RPC
-JSS ( ripple_lines );               // out: NetworkOPs
-JSS ( ripple_state );               // in: LedgerEntr
-JSS ( ripplerpc );                  // ripple RPC version
+JSS ( jbcoin_lines );               // out: NetworkOPs
+JSS ( jbcoin_state );               // in: LedgerEntr
+JSS ( jbcoinrpc );                  // jbcoin RPC version
 JSS ( role );                       // out: Ping.cpp
 JSS ( rpc );
 JSS ( rt_accounts );                // in: Subscribe, Unsubscribe
 JSS ( running_duration_us );
 JSS ( sanity );                     // out: PeerImp
-JSS ( search_depth );               // in: RipplePathFind
+JSS ( search_depth );               // in: JBCoinPathFind
 JSS ( secret );                     // in: TransactionSign,
                                     //     ValidationCreate, ValidationSeed,
                                     //     channel_authorize
 JSS ( seed );                       //
 JSS ( seed_hex );                   // in: WalletPropose, TransactionSign
 JSS ( send_currencies );            // out: AccountCurrencies
-JSS ( send_max );                   // in: PathRequest, RipplePathFind
+JSS ( send_max );                   // in: PathRequest, JBCoinPathFind
 JSS ( seq );                        // in: LedgerEntry;
                                     // out: NetworkOPs, RPCSub, AccountOffers,
                                     //      ValidatorList
@@ -412,9 +412,9 @@ JSS ( signing_time );               // out: NetworkOPs
 JSS ( signer_list );                // in: AccountObjects
 JSS ( signer_lists );               // in/out: AccountInfo
 JSS ( snapshot );                   // in: Subscribe
-JSS ( source_account );             // in: PathRequest, RipplePathFind
-JSS ( source_amount );              // in: PathRequest, RipplePathFind
-JSS ( source_currencies );          // in: PathRequest, RipplePathFind
+JSS ( source_account );             // in: PathRequest, JBCoinPathFind
+JSS ( source_amount );              // in: PathRequest, JBCoinPathFind
+JSS ( source_currencies );          // in: PathRequest, JBCoinPathFind
 JSS ( source_tag );                 // out: AccountChannels
 JSS ( stand_alone );                // out: NetworkOPs
 JSS ( start );                      // in: TxHistory
@@ -504,6 +504,6 @@ JSS ( write_load );                 // out: GetCounts
 #undef JSS
 
 } // jss
-} // ripple
+} // jbcoin
 
 #endif

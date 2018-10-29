@@ -17,9 +17,9 @@
 */
 //==============================================================================
 
-#include <ripple/beast/utility/Zero.h>
+#include <jbcoin/beast/utility/Zero.h>
 
-#include <ripple/beast/unit_test.h>
+#include <jbcoin/beast/unit_test.h>
 
 namespace beast {
 

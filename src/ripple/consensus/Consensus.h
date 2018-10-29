@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,20 +17,20 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_CONSENSUS_CONSENSUS_H_INCLUDED
-#define RIPPLE_CONSENSUS_CONSENSUS_H_INCLUDED
+#ifndef JBCOIN_CONSENSUS_CONSENSUS_H_INCLUDED
+#define JBCOIN_CONSENSUS_CONSENSUS_H_INCLUDED
 
-#include <ripple/basics/Log.h>
-#include <ripple/basics/chrono.h>
-#include <ripple/beast/utility/Journal.h>
-#include <ripple/consensus/ConsensusProposal.h>
-#include <ripple/consensus/ConsensusParms.h>
-#include <ripple/consensus/ConsensusTypes.h>
-#include <ripple/consensus/LedgerTiming.h>
-#include <ripple/consensus/DisputedTx.h>
-#include <ripple/json/json_writer.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/beast/utility/Journal.h>
+#include <jbcoin/consensus/ConsensusProposal.h>
+#include <jbcoin/consensus/ConsensusParms.h>
+#include <jbcoin/consensus/ConsensusTypes.h>
+#include <jbcoin/consensus/LedgerTiming.h>
+#include <jbcoin/consensus/DisputedTx.h>
+#include <jbcoin/json/json_writer.h>
 
-namespace ripple {
+namespace jbcoin {
 
 
 /** Determines whether the current ledger should close at this time.
@@ -1553,6 +1553,6 @@ Consensus<Adaptor>::asCloseTime(NetClock::time_point raw) const
         return effCloseTime(raw, closeResolution_, previousLedger_.closeTime());
 }
 
-}  // namespace ripple
+}  // namespace jbcoin
 
 #endif

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_TOKENS_H_INCLUDED
-#define RIPPLE_PROTOCOL_TOKENS_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_TOKENS_H_INCLUDED
+#define JBCOIN_PROTOCOL_TOKENS_H_INCLUDED
 
 #include <boost/optional.hpp>
 #include <cstdint>
 #include <string>
 
-namespace ripple {
+namespace jbcoin {
 
 enum class TokenType : std::uint8_t
 {
@@ -54,12 +54,12 @@ template <class T>
 boost::optional<T>
 parseHexOrBase58 (std::string const& s);
 
-// Facilities for converting Ripple tokens
+// Facilities for converting JBCoin tokens
 // to and from their human readable strings
 
-/*  Base-58 encode a Ripple Token
+/*  Base-58 encode a JBCoin Token
 
-    Ripple Tokens have a one-byte prefx indicating
+    JBCoin Tokens have a one-byte prefx indicating
     the type of token, followed by the data for the
     token, and finally a 4-byte checksum.
 
@@ -109,6 +109,6 @@ decodeBase58Token(std::string const& s, TokenType type);
 std::string
 decodeBase58TokenBitcoin(std::string const& s, TokenType type);
 
-} // ripple
+} // jbcoin
 
 #endif

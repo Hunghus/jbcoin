@@ -9,7 +9,7 @@ if (target)
     "The target option is deprecated and will be removed in a future release")
   parse_target()
 endif ()
-project (rippled)
+project (jbcoind)
 
 #[===================================================================[
    convenience variables and sanity checks
@@ -65,24 +65,24 @@ if ("${CMAKE_GENERATOR}" MATCHES "Visual Studio" AND
 endif ()
 
 if (NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
-  message (FATAL_ERROR "Rippled requires a 64 bit target architecture.\n"
-    "The most likely cause of this warning is trying to build rippled with a 32-bit OS.")
+  message (FATAL_ERROR "JBCoind requires a 64 bit target architecture.\n"
+    "The most likely cause of this warning is trying to build jbcoind with a 32-bit OS.")
 endif ()
 
 #[===================================================================[
    read version from source
 #]===================================================================]
 
-file (STRINGS src/ripple/protocol/impl/BuildInfo.cpp BUILD_INFO)
+file (STRINGS src/jbcoin/protocol/impl/BuildInfo.cpp BUILD_INFO)
 foreach (line_ ${BUILD_INFO})
   if (line_ MATCHES "versionString[ ]*=[ ]*\"(.+)\"")
-    set (rippled_version ${CMAKE_MATCH_1})
+    set (jbcoind_version ${CMAKE_MATCH_1})
   endif ()
 endforeach ()
-if (rippled_version)
-  message (STATUS "rippled version: ${rippled_version}")
+if (jbcoind_version)
+  message (STATUS "jbcoind version: ${jbcoind_version}")
 else ()
-  message (FATAL_ERROR "unable to determine rippled version")
+  message (FATAL_ERROR "unable to determine jbcoind version")
 endif ()
 
 #[===================================================================[
@@ -99,7 +99,7 @@ else ()
   set (coverage OFF CACHE BOOL "gcc/clang only" FORCE)
 endif ()
 if (is_linux)
-  option (BUILD_SHARED_LIBS "build shared ripple libraries" OFF)
+  option (BUILD_SHARED_LIBS "build shared jbcoin libraries" OFF)
   option (static "link protobuf, openssl, libc++, and boost statically" ON)
   option (perf "Enables flags that assist with perf recording" OFF)
   option (use_gold "enables detection of gold (binutils) linker" ON)
@@ -107,7 +107,7 @@ else ()
   # we are not ready to allow shared-libs on windows because it would require
   # export declarations. On macos it's more feasible, but static openssl
   # produces odd linker errors, thus we disable shared lib builds for now.
-  set (BUILD_SHARED_LIBS OFF CACHE BOOL "build shared ripple libraries - OFF for win/macos" FORCE)
+  set (BUILD_SHARED_LIBS OFF CACHE BOOL "build shared jbcoin libraries - OFF for win/macos" FORCE)
   set (static ON CACHE BOOL "static link, linux only. ON for WIN/macos" FORCE)
   set (perf OFF CACHE BOOL "perf flags, linux only" FORCE)
   set (use_gold OFF CACHE BOOL "gold linker, linux only" FORCE)
@@ -190,9 +190,9 @@ endif ()
    toolchain file, especially the ABI-impacting ones
 #]=========================================================]
 add_library (common INTERFACE)
-add_library (Ripple::common ALIAS common)
+add_library (JBCoin::common ALIAS common)
 # add a single global dependency on this interface lib
-link_libraries (Ripple::common)
+link_libraries (JBCoin::common)
 set_target_properties (common
   PROPERTIES INTERFACE_POSITION_INDEPENDENT_CODE ON)
 target_compile_features (common INTERFACE cxx_std_14)
@@ -343,11 +343,11 @@ if (assert)
 endif ()
 
 #[===================================================================[
-   rippled compile options/settings via an interface library
+   jbcoind compile options/settings via an interface library
 #]===================================================================]
 
 add_library (opts INTERFACE)
-add_library (Ripple::opts ALIAS opts)
+add_library (JBCoin::opts ALIAS opts)
 target_compile_definitions (opts
   INTERFACE
     BOOST_NO_AUTO_PTR
@@ -363,13 +363,13 @@ target_compile_definitions (opts
       BOOST_FILESYSTEM_DEPRECATED
     >
     BEAST_CHECK_MEMORY_LEAKS=$<BOOL:${beast_check_mem_leaks}>
-    RIPPLE_DUMP_LEAKS_ON_EXIT=$<BOOL:${dump_leaks_on_exit}>
+    JBCOIN_DUMP_LEAKS_ON_EXIT=$<BOOL:${dump_leaks_on_exit}>
     $<$<BOOL:${beast_no_unit_test_inline}>:BEAST_NO_UNIT_TEST_INLINE=1>
     $<$<BOOL:${beast_force_debug}>:BEAST_FORCE_DEBUG=1>
     $<$<BOOL:${beast_disable_autolink}>:BEAST_DONT_AUTOLINK_TO_WIN32_LIBRARIES=1>
-    $<$<BOOL:${single_io_service_thread}>:RIPPLE_SINGLE_IO_SERVICE_THREAD=1>
+    $<$<BOOL:${single_io_service_thread}>:JBCOIN_SINGLE_IO_SERVICE_THREAD=1>
     # doesn't currently compile ? :
-    $<$<BOOL:${verify_nodeobject_keys}>:RIPPLE_VERIFY_NODEOBJECT_KEYS=1>)
+    $<$<BOOL:${verify_nodeobject_keys}>:JBCOIN_VERIFY_NODEOBJECT_KEYS=1>)
 target_compile_options (opts
   INTERFACE
     $<$<AND:$<BOOL:${is_gcc}>,$<COMPILE_LANGUAGE:CXX>>:-Wsuggest-override>
@@ -409,12 +409,12 @@ if (san)
 endif ()
 
 #[===================================================================[
-   rippled transitive library deps via an interface library
+   jbcoind transitive library deps via an interface library
 #]===================================================================]
 
-add_library (ripple_syslibs INTERFACE)
-add_library (Ripple::syslibs ALIAS ripple_syslibs)
-target_link_libraries (ripple_syslibs
+add_library (jbcoin_syslibs INTERFACE)
+add_library (JBCoin::syslibs ALIAS jbcoin_syslibs)
+target_link_libraries (jbcoin_syslibs
   INTERFACE
     $<$<BOOL:${MSVC}>:
       legacy_stdio_definitions.lib
@@ -439,12 +439,12 @@ target_link_libraries (ripple_syslibs
 if (NOT MSVC)
   set (THREADS_PREFER_PTHREAD_FLAG ON)
   find_package (Threads)
-  target_link_libraries (ripple_syslibs INTERFACE Threads::Threads)
+  target_link_libraries (jbcoin_syslibs INTERFACE Threads::Threads)
 endif ()
 
-add_library (ripple_libs INTERFACE)
-add_library (Ripple::libs ALIAS ripple_libs)
-target_link_libraries (ripple_libs INTERFACE Ripple::syslibs)
+add_library (jbcoin_libs INTERFACE)
+add_library (JBCoin::libs ALIAS jbcoin_libs)
+target_link_libraries (jbcoin_libs INTERFACE JBCoin::syslibs)
 
 #[===================================================================[
    NIH dep: boost
@@ -497,16 +497,16 @@ find_package (Boost 1.67 REQUIRED
     system
     thread)
 
-add_library (ripple_boost INTERFACE)
-add_library (Ripple::boost ALIAS ripple_boost)
+add_library (jbcoin_boost INTERFACE)
+add_library (JBCoin::boost ALIAS jbcoin_boost)
 if (is_xcode)
-  target_include_directories (ripple_boost BEFORE INTERFACE ${Boost_INCLUDE_DIRS})
-  target_compile_options (ripple_boost INTERFACE --system-header-prefix="boost/")
+  target_include_directories (jbcoin_boost BEFORE INTERFACE ${Boost_INCLUDE_DIRS})
+  target_compile_options (jbcoin_boost INTERFACE --system-header-prefix="boost/")
 else ()
-  target_include_directories (ripple_boost SYSTEM INTERFACE ${Boost_INCLUDE_DIRS})
+  target_include_directories (jbcoin_boost SYSTEM INTERFACE ${Boost_INCLUDE_DIRS})
 endif()
 
-target_link_libraries (ripple_boost
+target_link_libraries (jbcoin_boost
   INTERFACE
     Boost::boost
     Boost::chrono
@@ -547,7 +547,7 @@ if ("$ENV{CI}" STREQUAL "true" AND "$ENV{TRAVIS}" STREQUAL "true")
   set (_ssl_min_ver 1.0.1)
 endif ()
 find_package (OpenSSL ${_ssl_min_ver} REQUIRED)
-target_link_libraries (ripple_libs
+target_link_libraries (jbcoin_libs
   INTERFACE
     OpenSSL::SSL
     OpenSSL::Crypto)
@@ -597,7 +597,7 @@ target_compile_options (secp256k1
     >
     $<$<BOOL:${is_gcc}>:-Wno-nonnull-compare>)
 add_library (NIH::secp256k1 ALIAS secp256k1)
-target_link_libraries (ripple_libs INTERFACE NIH::secp256k1)
+target_link_libraries (jbcoin_libs INTERFACE NIH::secp256k1)
 #[===========================[
    headers installation
 #]===========================]
@@ -626,7 +626,7 @@ target_include_directories (ed25519-donna
 #]=========================================================]
 target_link_libraries (ed25519-donna PUBLIC OpenSSL::SSL)
 add_library (NIH::ed25519-donna ALIAS ed25519-donna)
-target_link_libraries (ripple_libs INTERFACE NIH::ed25519-donna)
+target_link_libraries (jbcoin_libs INTERFACE NIH::ed25519-donna)
 #[===========================[
    headers installation
 #]===========================]
@@ -647,7 +647,7 @@ add_library (lz4 STATIC
 target_compile_definitions (lz4
   PRIVATE XXH_NAMESPACE=LZ4_)
 add_library (NIH::lz4 ALIAS lz4)
-target_link_libraries (ripple_libs INTERFACE NIH::lz4)
+target_link_libraries (jbcoin_libs INTERFACE NIH::lz4)
 ## pseudo-install our files so that dependent builds can find them
 file (MAKE_DIRECTORY
     ${CMAKE_BINARY_DIR}/lz4/include
@@ -756,7 +756,7 @@ set_target_properties (archive_lib PROPERTIES
   INTERFACE_COMPILE_DEFINITIONS LIBARCHIVE_STATIC)
 add_dependencies (archive_lib libarchive)
 target_link_libraries (archive_lib INTERFACE NIH::lz4)
-target_link_libraries (ripple_libs INTERFACE archive_lib)
+target_link_libraries (jbcoin_libs INTERFACE archive_lib)
 
 #[===================================================================[
    NIH dep: sqlite
@@ -796,7 +796,7 @@ target_compile_options (sqlite3
     $<$<NOT:$<BOOL:${MSVC}>>:-Wno-array-bounds>)
 add_library (NIH::sqlite3 ALIAS sqlite3)
 target_link_libraries (sqlite3 PUBLIC $<$<NOT:$<BOOL:${MSVC}>>:dl>)
-target_link_libraries (ripple_libs INTERFACE NIH::sqlite3)
+target_link_libraries (jbcoin_libs INTERFACE NIH::sqlite3)
 file (MAKE_DIRECTORY
     ${CMAKE_BINARY_DIR}/sqlite3/include
     ${CMAKE_BINARY_DIR}/sqlite3/lib)
@@ -823,7 +823,7 @@ add_library (soci STATIC
      this unity file is our interpretation of
      what sources constitute soci-lib.
   #]=========================================================]
-  src/ripple/unity/soci.cpp
+  src/jbcoin/unity/soci.cpp
   # this header is here to create dependency on the sqlite post-build step
   ${CMAKE_BINARY_DIR}/sqlite3/include/sqlite3.h)
 target_compile_definitions (soci PUBLIC SOCI_HAVE_CXX_C11=1)
@@ -845,9 +845,9 @@ target_include_directories (soci
     src/soci/include/private)
 target_link_libraries (soci
   NIH::sqlite3
-  Ripple::boost)
+  JBCoin::boost)
 add_library (NIH::soci ALIAS soci)
-target_link_libraries (ripple_libs INTERFACE NIH::soci)
+target_link_libraries (jbcoin_libs INTERFACE NIH::soci)
 exclude_if_included (soci)
 
 #[===================================================================[
@@ -870,7 +870,7 @@ target_include_directories (snappy
     src/snappy/snappy
     src/snappy/config)
 add_library (NIH::snappy ALIAS snappy)
-target_link_libraries (ripple_libs INTERFACE NIH::snappy)
+target_link_libraries (jbcoin_libs INTERFACE NIH::snappy)
 exclude_if_included (snappy)
 
 #[===================================================================[
@@ -883,7 +883,7 @@ if (NOT MSVC)
        this unity file is our interpretation of what sources
        constitute rocksdb
     #]=========================================================]
-    src/ripple/unity/rocksdb.cpp)
+    src/jbcoin/unity/rocksdb.cpp)
   target_compile_options (rocksdb
     PRIVATE
       $<$<BOOL:${is_gcc}>:-w>
@@ -902,7 +902,7 @@ if (NOT MSVC)
   target_compile_definitions (rocksdb
     PUBLIC
       SNAPPY
-      RIPPLE_ROCKSDB_AVAILABLE=1
+      JBCOIN_ROCKSDB_AVAILABLE=1
       $<$<BOOL:${WIN32}>:ROCKSDB_PLATFORM_WINDOWS>
       $<$<NOT:$<BOOL:${WIN32}>>:
         ROCKSDB_PLATFORM_POSIX
@@ -914,10 +914,10 @@ if (NOT MSVC)
   target_link_libraries (rocksdb NIH::snappy)
 else ()
   add_library (rocksdb INTERFACE)
-  target_compile_definitions (rocksdb INTERFACE RIPPLE_ROCKSDB_AVAILABLE=0)
+  target_compile_definitions (rocksdb INTERFACE JBCOIN_ROCKSDB_AVAILABLE=0)
 endif ()
 add_library (NIH::rocksdb ALIAS rocksdb)
-target_link_libraries (ripple_libs INTERFACE NIH::rocksdb)
+target_link_libraries (jbcoin_libs INTERFACE NIH::rocksdb)
 exclude_if_included (rocksdb)
 
 #[===================================================================[
@@ -935,7 +935,7 @@ target_link_libraries (nudb
     Boost::thread
     Boost::system)
 add_library (NIH::nudb ALIAS nudb)
-target_link_libraries (ripple_libs INTERFACE NIH::nudb)
+target_link_libraries (jbcoin_libs INTERFACE NIH::nudb)
 
 #[===================================================================[
    import protobuf (lib and compiler) and create a lib
@@ -954,7 +954,7 @@ if (MSVC AND NOT TARGET protobuf::protoc)
   if (NOT my_protoc)
     message (WARNING "No protoc found -- downloading now")
     file (DOWNLOAD
-      "https://ripple.github.io/Downloads/protoc/2.5.1/protoc.exe"
+      "https://jbcoin.github.io/Downloads/protoc/2.5.1/protoc.exe"
       ${CMAKE_BINARY_DIR}/tools/protoc.exe
       STATUS status
       TIMEOUT 30)
@@ -976,18 +976,18 @@ set (CMAKE_CURRENT_BINARY_DIR ${CMAKE_BINARY_DIR}/proto_gen)
 protobuf_generate_cpp (
   PROTO_SRCS
   PROTO_HDRS
-  src/ripple/proto/ripple.proto)
+  src/jbcoin/proto/jbcoin.proto)
 set (CMAKE_CURRENT_BINARY_DIR ${save_CBD})
 
 add_library (pbufs STATIC ${PROTO_SRCS} ${PROTO_HDRS})
 if ((NOT TARGET protobuf::libprotobuf) AND (NOT Protobuf_LIBRARIES))
   message (STATUS "protobuf lib not found - adding unity source for lib")
-  target_sources (pbufs PRIVATE src/ripple/unity/protobuf.cpp)
+  target_sources (pbufs PRIVATE src/jbcoin/unity/protobuf.cpp)
   target_include_directories (pbufs
     PUBLIC
       src/protobuf/src
       src/protobuf/vsprojects
-      src/ripple/proto)
+      src/jbcoin/proto)
   target_compile_definitions (pbufs
     PRIVATE
       _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS)
@@ -1021,50 +1021,50 @@ target_compile_options (pbufs
       -wd4800
       -wd4996
     >)
-add_library (Ripple::pbufs ALIAS pbufs)
-target_link_libraries (ripple_libs INTERFACE Ripple::pbufs)
+add_library (JBCoin::pbufs ALIAS pbufs)
+target_link_libraries (jbcoin_libs INTERFACE JBCoin::pbufs)
 exclude_if_included (pbufs)
 
 #[===================================================================[
-   xrpl_core
+   jbcl_core
    core functionality, useable by some client software perhaps
 #]===================================================================]
 
 file (GLOB_RECURSE rb_headers
-  src/ripple/beast/*.h
-  src/ripple/beast/*.hpp)
+  src/jbcoin/beast/*.h
+  src/jbcoin/beast/*.hpp)
 
-add_library (xrpl_core
+add_library (jbcl_core
   ${rb_headers} ## headers added here for benefit of IDEs
   #[===============================[
       beast/legacy FILES:
       TODO: review these sources for removal or replacement
   #]===============================]
   $<$<BOOL:${unity}>:
-    src/ripple/beast/core/core.unity.cpp
-    src/ripple/beast/unity/beast_hash_unity.cpp
-    src/ripple/beast/unity/beast_insight_unity.cpp
-    src/ripple/beast/unity/beast_net_unity.cpp
-    src/ripple/beast/unity/beast_utility_unity.cpp
+    src/jbcoin/beast/core/core.unity.cpp
+    src/jbcoin/beast/unity/beast_hash_unity.cpp
+    src/jbcoin/beast/unity/beast_insight_unity.cpp
+    src/jbcoin/beast/unity/beast_net_unity.cpp
+    src/jbcoin/beast/unity/beast_utility_unity.cpp
   >
   $<$<NOT:$<BOOL:${unity}>>:
-    src/ripple/beast/core/CurrentThreadName.cpp
-    src/ripple/beast/core/SemanticVersion.cpp
-    src/ripple/beast/core/WaitableEvent.cpp
-    src/ripple/beast/hash/impl/xxhash.cpp
-    src/ripple/beast/insight/impl/Collector.cpp
-    src/ripple/beast/insight/impl/Groups.cpp
-    src/ripple/beast/insight/impl/Hook.cpp
-    src/ripple/beast/insight/impl/Metric.cpp
-    src/ripple/beast/insight/impl/NullCollector.cpp
-    src/ripple/beast/insight/impl/StatsDCollector.cpp
-    src/ripple/beast/net/impl/IPAddressConversion.cpp
-    src/ripple/beast/net/impl/IPAddressV4.cpp
-    src/ripple/beast/net/impl/IPAddressV6.cpp
-    src/ripple/beast/net/impl/IPEndpoint.cpp
-    src/ripple/beast/utility/src/beast_Debug.cpp
-    src/ripple/beast/utility/src/beast_Journal.cpp
-    src/ripple/beast/utility/src/beast_PropertyStream.cpp
+    src/jbcoin/beast/core/CurrentThreadName.cpp
+    src/jbcoin/beast/core/SemanticVersion.cpp
+    src/jbcoin/beast/core/WaitableEvent.cpp
+    src/jbcoin/beast/hash/impl/xxhash.cpp
+    src/jbcoin/beast/insight/impl/Collector.cpp
+    src/jbcoin/beast/insight/impl/Groups.cpp
+    src/jbcoin/beast/insight/impl/Hook.cpp
+    src/jbcoin/beast/insight/impl/Metric.cpp
+    src/jbcoin/beast/insight/impl/NullCollector.cpp
+    src/jbcoin/beast/insight/impl/StatsDCollector.cpp
+    src/jbcoin/beast/net/impl/IPAddressConversion.cpp
+    src/jbcoin/beast/net/impl/IPAddressV4.cpp
+    src/jbcoin/beast/net/impl/IPAddressV6.cpp
+    src/jbcoin/beast/net/impl/IPEndpoint.cpp
+    src/jbcoin/beast/utility/src/beast_Debug.cpp
+    src/jbcoin/beast/utility/src/beast_Journal.cpp
+    src/jbcoin/beast/utility/src/beast_PropertyStream.cpp
   >
   # END beast/legacy
 
@@ -1072,270 +1072,270 @@ add_library (xrpl_core
      core sources
   #]===============================]
   $<$<BOOL:${unity}>:
-    src/ripple/unity/basics1.cpp
-    src/ripple/unity/json.cpp
-    src/ripple/unity/protocol.cpp
-    src/ripple/unity/crypto.cpp
+    src/jbcoin/unity/basics1.cpp
+    src/jbcoin/unity/json.cpp
+    src/jbcoin/unity/protocol.cpp
+    src/jbcoin/unity/crypto.cpp
   >
   $<$<NOT:$<BOOL:${unity}>>:
     #[===============================[
        nounity, main sources:
          subdir: basics (partial)
     #]===============================]
-    src/ripple/basics/impl/base64.cpp
-    src/ripple/basics/impl/contract.cpp
-    src/ripple/basics/impl/CountedObject.cpp
-    src/ripple/basics/impl/Log.cpp
-    src/ripple/basics/impl/strHex.cpp
-    src/ripple/basics/impl/StringUtilities.cpp
+    src/jbcoin/basics/impl/base64.cpp
+    src/jbcoin/basics/impl/contract.cpp
+    src/jbcoin/basics/impl/CountedObject.cpp
+    src/jbcoin/basics/impl/Log.cpp
+    src/jbcoin/basics/impl/strHex.cpp
+    src/jbcoin/basics/impl/StringUtilities.cpp
     #[===============================[
        nounity, main sources:
          subdir: json
     #]===============================]
-    src/ripple/json/impl/JsonPropertyStream.cpp
-    src/ripple/json/impl/Object.cpp
-    src/ripple/json/impl/Output.cpp
-    src/ripple/json/impl/Writer.cpp
-    src/ripple/json/impl/json_reader.cpp
-    src/ripple/json/impl/json_value.cpp
-    src/ripple/json/impl/json_valueiterator.cpp
-    src/ripple/json/impl/json_writer.cpp
-    src/ripple/json/impl/to_string.cpp
+    src/jbcoin/json/impl/JsonPropertyStream.cpp
+    src/jbcoin/json/impl/Object.cpp
+    src/jbcoin/json/impl/Output.cpp
+    src/jbcoin/json/impl/Writer.cpp
+    src/jbcoin/json/impl/json_reader.cpp
+    src/jbcoin/json/impl/json_value.cpp
+    src/jbcoin/json/impl/json_valueiterator.cpp
+    src/jbcoin/json/impl/json_writer.cpp
+    src/jbcoin/json/impl/to_string.cpp
     #[===============================[
        nounity, main sources:
          subdir: protocol
     #]===============================]
-    src/ripple/protocol/impl/AccountID.cpp
-    src/ripple/protocol/impl/Book.cpp
-    src/ripple/protocol/impl/BuildInfo.cpp
-    src/ripple/protocol/impl/ErrorCodes.cpp
-    src/ripple/protocol/impl/Feature.cpp
-    src/ripple/protocol/impl/HashPrefix.cpp
-    src/ripple/protocol/impl/IOUAmount.cpp
-    src/ripple/protocol/impl/Indexes.cpp
-    src/ripple/protocol/impl/InnerObjectFormats.cpp
-    src/ripple/protocol/impl/Issue.cpp
-    src/ripple/protocol/impl/Keylet.cpp
-    src/ripple/protocol/impl/LedgerFormats.cpp
-    src/ripple/protocol/impl/PublicKey.cpp
-    src/ripple/protocol/impl/Quality.cpp
-    src/ripple/protocol/impl/Rate2.cpp
-    src/ripple/protocol/impl/SField.cpp
-    src/ripple/protocol/impl/SOTemplate.cpp
-    src/ripple/protocol/impl/STAccount.cpp
-    src/ripple/protocol/impl/STAmount.cpp
-    src/ripple/protocol/impl/STArray.cpp
-    src/ripple/protocol/impl/STBase.cpp
-    src/ripple/protocol/impl/STBlob.cpp
-    src/ripple/protocol/impl/STInteger.cpp
-    src/ripple/protocol/impl/STLedgerEntry.cpp
-    src/ripple/protocol/impl/STObject.cpp
-    src/ripple/protocol/impl/STParsedJSON.cpp
-    src/ripple/protocol/impl/STPathSet.cpp
-    src/ripple/protocol/impl/STTx.cpp
-    src/ripple/protocol/impl/STValidation.cpp
-    src/ripple/protocol/impl/STVar.cpp
-    src/ripple/protocol/impl/STVector256.cpp
-    src/ripple/protocol/impl/SecretKey.cpp
-    src/ripple/protocol/impl/Seed.cpp
-    src/ripple/protocol/impl/Serializer.cpp
-    src/ripple/protocol/impl/Sign.cpp
-    src/ripple/protocol/impl/TER.cpp
-    src/ripple/protocol/impl/TxFormats.cpp
-    src/ripple/protocol/impl/UintTypes.cpp
-    src/ripple/protocol/impl/digest.cpp
-    src/ripple/protocol/impl/tokens.cpp
+    src/jbcoin/protocol/impl/AccountID.cpp
+    src/jbcoin/protocol/impl/Book.cpp
+    src/jbcoin/protocol/impl/BuildInfo.cpp
+    src/jbcoin/protocol/impl/ErrorCodes.cpp
+    src/jbcoin/protocol/impl/Feature.cpp
+    src/jbcoin/protocol/impl/HashPrefix.cpp
+    src/jbcoin/protocol/impl/IOUAmount.cpp
+    src/jbcoin/protocol/impl/Indexes.cpp
+    src/jbcoin/protocol/impl/InnerObjectFormats.cpp
+    src/jbcoin/protocol/impl/Issue.cpp
+    src/jbcoin/protocol/impl/Keylet.cpp
+    src/jbcoin/protocol/impl/LedgerFormats.cpp
+    src/jbcoin/protocol/impl/PublicKey.cpp
+    src/jbcoin/protocol/impl/Quality.cpp
+    src/jbcoin/protocol/impl/Rate2.cpp
+    src/jbcoin/protocol/impl/SField.cpp
+    src/jbcoin/protocol/impl/SOTemplate.cpp
+    src/jbcoin/protocol/impl/STAccount.cpp
+    src/jbcoin/protocol/impl/STAmount.cpp
+    src/jbcoin/protocol/impl/STArray.cpp
+    src/jbcoin/protocol/impl/STBase.cpp
+    src/jbcoin/protocol/impl/STBlob.cpp
+    src/jbcoin/protocol/impl/STInteger.cpp
+    src/jbcoin/protocol/impl/STLedgerEntry.cpp
+    src/jbcoin/protocol/impl/STObject.cpp
+    src/jbcoin/protocol/impl/STParsedJSON.cpp
+    src/jbcoin/protocol/impl/STPathSet.cpp
+    src/jbcoin/protocol/impl/STTx.cpp
+    src/jbcoin/protocol/impl/STValidation.cpp
+    src/jbcoin/protocol/impl/STVar.cpp
+    src/jbcoin/protocol/impl/STVector256.cpp
+    src/jbcoin/protocol/impl/SecretKey.cpp
+    src/jbcoin/protocol/impl/Seed.cpp
+    src/jbcoin/protocol/impl/Serializer.cpp
+    src/jbcoin/protocol/impl/Sign.cpp
+    src/jbcoin/protocol/impl/TER.cpp
+    src/jbcoin/protocol/impl/TxFormats.cpp
+    src/jbcoin/protocol/impl/UintTypes.cpp
+    src/jbcoin/protocol/impl/digest.cpp
+    src/jbcoin/protocol/impl/tokens.cpp
     #[===============================[
        nounity, main sources:
          subdir: crypto
     #]===============================]
-    src/ripple/crypto/impl/GenerateDeterministicKey.cpp
-    src/ripple/crypto/impl/KeyType.cpp
-    src/ripple/crypto/impl/RFC1751.cpp
-    src/ripple/crypto/impl/csprng.cpp
-    src/ripple/crypto/impl/ec_key.cpp
-    src/ripple/crypto/impl/openssl.cpp
+    src/jbcoin/crypto/impl/GenerateDeterministicKey.cpp
+    src/jbcoin/crypto/impl/KeyType.cpp
+    src/jbcoin/crypto/impl/RFC1751.cpp
+    src/jbcoin/crypto/impl/csprng.cpp
+    src/jbcoin/crypto/impl/ec_key.cpp
+    src/jbcoin/crypto/impl/openssl.cpp
   >)
-add_library (Ripple::xrpl_core ALIAS xrpl_core)
-target_include_directories (xrpl_core
+add_library (JBCoin::jbcl_core ALIAS jbcl_core)
+target_include_directories (jbcl_core
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/ripple>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/jbcoin>
     # this one is for beast/legacy files:
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/beast/extras>
     $<INSTALL_INTERFACE:include>)
-target_compile_options (xrpl_core
+target_compile_options (jbcl_core
   PUBLIC
     $<$<BOOL:${is_gcc}>:-Wno-maybe-uninitialized>)
-target_link_libraries (xrpl_core
+target_link_libraries (jbcl_core
   PUBLIC
     OpenSSL::Crypto
     NIH::secp256k1
     NIH::ed25519-donna
-    Ripple::syslibs
-    Ripple::boost
-    Ripple::opts)
+    JBCoin::syslibs
+    JBCoin::boost
+    JBCoin::opts)
 #[=================================[
    main/core headers installation
 #]=================================]
 install (
   FILES
-    src/ripple/basics/base64.h
-    src/ripple/basics/Blob.h
-    src/ripple/basics/Buffer.h
-    src/ripple/basics/CountedObject.h
-    src/ripple/basics/LocalValue.h
-    src/ripple/basics/Log.h
-    src/ripple/basics/Slice.h
-    src/ripple/basics/StringUtilities.h
-    src/ripple/basics/ToString.h
-    src/ripple/basics/UnorderedContainers.h
-    src/ripple/basics/base_uint.h
-    src/ripple/basics/chrono.h
-    src/ripple/basics/contract.h
-    src/ripple/basics/date.h
-    src/ripple/basics/hardened_hash.h
-    src/ripple/basics/strHex.h
-  DESTINATION include/ripple/basics)
+    src/jbcoin/basics/base64.h
+    src/jbcoin/basics/Blob.h
+    src/jbcoin/basics/Buffer.h
+    src/jbcoin/basics/CountedObject.h
+    src/jbcoin/basics/LocalValue.h
+    src/jbcoin/basics/Log.h
+    src/jbcoin/basics/Slice.h
+    src/jbcoin/basics/StringUtilities.h
+    src/jbcoin/basics/ToString.h
+    src/jbcoin/basics/UnorderedContainers.h
+    src/jbcoin/basics/base_uint.h
+    src/jbcoin/basics/chrono.h
+    src/jbcoin/basics/contract.h
+    src/jbcoin/basics/date.h
+    src/jbcoin/basics/hardened_hash.h
+    src/jbcoin/basics/strHex.h
+  DESTINATION include/jbcoin/basics)
 install (
   FILES
-    src/ripple/crypto/GenerateDeterministicKey.h
-    src/ripple/crypto/KeyType.h
-    src/ripple/crypto/RFC1751.h
-    src/ripple/crypto/csprng.h
-  DESTINATION include/ripple/crypto)
+    src/jbcoin/crypto/GenerateDeterministicKey.h
+    src/jbcoin/crypto/KeyType.h
+    src/jbcoin/crypto/RFC1751.h
+    src/jbcoin/crypto/csprng.h
+  DESTINATION include/jbcoin/crypto)
 install (
   FILES
-    src/ripple/crypto/impl/ec_key.h
-    src/ripple/crypto/impl/openssl.h
-  DESTINATION include/ripple/crypto/impl)
+    src/jbcoin/crypto/impl/ec_key.h
+    src/jbcoin/crypto/impl/openssl.h
+  DESTINATION include/jbcoin/crypto/impl)
 install (
   FILES
-    src/ripple/json/JsonPropertyStream.h
-    src/ripple/json/Object.h
-    src/ripple/json/Output.h
-    src/ripple/json/Writer.h
-    src/ripple/json/json_forwards.h
-    src/ripple/json/json_reader.h
-    src/ripple/json/json_value.h
-    src/ripple/json/json_writer.h
-    src/ripple/json/to_string.h
-  DESTINATION include/ripple/json)
+    src/jbcoin/json/JsonPropertyStream.h
+    src/jbcoin/json/Object.h
+    src/jbcoin/json/Output.h
+    src/jbcoin/json/Writer.h
+    src/jbcoin/json/json_forwards.h
+    src/jbcoin/json/json_reader.h
+    src/jbcoin/json/json_value.h
+    src/jbcoin/json/json_writer.h
+    src/jbcoin/json/to_string.h
+  DESTINATION include/jbcoin/json)
 install (
   FILES
-    src/ripple/json/impl/json_assert.h
-  DESTINATION include/ripple/json/impl)
+    src/jbcoin/json/impl/json_assert.h
+  DESTINATION include/jbcoin/json/impl)
 install (
   FILES
-    src/ripple/protocol/AccountID.h
-    src/ripple/protocol/AmountConversions.h
-    src/ripple/protocol/Book.h
-    src/ripple/protocol/BuildInfo.h
-    src/ripple/protocol/ErrorCodes.h
-    src/ripple/protocol/Feature.h
-    src/ripple/protocol/HashPrefix.h
-    src/ripple/protocol/IOUAmount.h
-    src/ripple/protocol/Indexes.h
-    src/ripple/protocol/InnerObjectFormats.h
-    src/ripple/protocol/Issue.h
-    src/ripple/protocol/JsonFields.h
-    src/ripple/protocol/Keylet.h
-    src/ripple/protocol/KnownFormats.h
-    src/ripple/protocol/LedgerFormats.h
-    src/ripple/protocol/Protocol.h
-    src/ripple/protocol/PublicKey.h
-    src/ripple/protocol/Quality.h
-    src/ripple/protocol/Rate.h
-    src/ripple/protocol/SField.h
-    src/ripple/protocol/SOTemplate.h
-    src/ripple/protocol/STAccount.h
-    src/ripple/protocol/STAmount.h
-    src/ripple/protocol/STArray.h
-    src/ripple/protocol/STBase.h
-    src/ripple/protocol/STBitString.h
-    src/ripple/protocol/STBlob.h
-    src/ripple/protocol/STExchange.h
-    src/ripple/protocol/STInteger.h
-    src/ripple/protocol/STLedgerEntry.h
-    src/ripple/protocol/STObject.h
-    src/ripple/protocol/STParsedJSON.h
-    src/ripple/protocol/STPathSet.h
-    src/ripple/protocol/STTx.h
-    src/ripple/protocol/STValidation.h
-    src/ripple/protocol/STVector256.h
-    src/ripple/protocol/SecretKey.h
-    src/ripple/protocol/Seed.h
-    src/ripple/protocol/Serializer.h
-    src/ripple/protocol/Sign.h
-    src/ripple/protocol/SystemParameters.h
-    src/ripple/protocol/TER.h
-    src/ripple/protocol/TxFlags.h
-    src/ripple/protocol/TxFormats.h
-    src/ripple/protocol/UintTypes.h
-    src/ripple/protocol/XRPAmount.h
-    src/ripple/protocol/digest.h
-    src/ripple/protocol/tokens.h
-  DESTINATION include/ripple/protocol)
+    src/jbcoin/protocol/AccountID.h
+    src/jbcoin/protocol/AmountConversions.h
+    src/jbcoin/protocol/Book.h
+    src/jbcoin/protocol/BuildInfo.h
+    src/jbcoin/protocol/ErrorCodes.h
+    src/jbcoin/protocol/Feature.h
+    src/jbcoin/protocol/HashPrefix.h
+    src/jbcoin/protocol/IOUAmount.h
+    src/jbcoin/protocol/Indexes.h
+    src/jbcoin/protocol/InnerObjectFormats.h
+    src/jbcoin/protocol/Issue.h
+    src/jbcoin/protocol/JsonFields.h
+    src/jbcoin/protocol/Keylet.h
+    src/jbcoin/protocol/KnownFormats.h
+    src/jbcoin/protocol/LedgerFormats.h
+    src/jbcoin/protocol/Protocol.h
+    src/jbcoin/protocol/PublicKey.h
+    src/jbcoin/protocol/Quality.h
+    src/jbcoin/protocol/Rate.h
+    src/jbcoin/protocol/SField.h
+    src/jbcoin/protocol/SOTemplate.h
+    src/jbcoin/protocol/STAccount.h
+    src/jbcoin/protocol/STAmount.h
+    src/jbcoin/protocol/STArray.h
+    src/jbcoin/protocol/STBase.h
+    src/jbcoin/protocol/STBitString.h
+    src/jbcoin/protocol/STBlob.h
+    src/jbcoin/protocol/STExchange.h
+    src/jbcoin/protocol/STInteger.h
+    src/jbcoin/protocol/STLedgerEntry.h
+    src/jbcoin/protocol/STObject.h
+    src/jbcoin/protocol/STParsedJSON.h
+    src/jbcoin/protocol/STPathSet.h
+    src/jbcoin/protocol/STTx.h
+    src/jbcoin/protocol/STValidation.h
+    src/jbcoin/protocol/STVector256.h
+    src/jbcoin/protocol/SecretKey.h
+    src/jbcoin/protocol/Seed.h
+    src/jbcoin/protocol/Serializer.h
+    src/jbcoin/protocol/Sign.h
+    src/jbcoin/protocol/SystemParameters.h
+    src/jbcoin/protocol/TER.h
+    src/jbcoin/protocol/TxFlags.h
+    src/jbcoin/protocol/TxFormats.h
+    src/jbcoin/protocol/UintTypes.h
+    src/jbcoin/protocol/JBCAmount.h
+    src/jbcoin/protocol/digest.h
+    src/jbcoin/protocol/tokens.h
+  DESTINATION include/jbcoin/protocol)
 install (
   FILES
-    src/ripple/protocol/impl/STVar.h
-    src/ripple/protocol/impl/secp256k1.h
-  DESTINATION include/ripple/protocol/impl)
+    src/jbcoin/protocol/impl/STVar.h
+    src/jbcoin/protocol/impl/secp256k1.h
+  DESTINATION include/jbcoin/protocol/impl)
 
 #[===================================[
    beast/legacy headers installation
 #]===================================]
 install (
   FILES
-    src/ripple/beast/clock/abstract_clock.h
-    src/ripple/beast/clock/basic_seconds_clock.h
-    src/ripple/beast/clock/manual_clock.h
-  DESTINATION include/ripple/beast/clock)
+    src/jbcoin/beast/clock/abstract_clock.h
+    src/jbcoin/beast/clock/basic_seconds_clock.h
+    src/jbcoin/beast/clock/manual_clock.h
+  DESTINATION include/jbcoin/beast/clock)
 install (
   FILES
-    src/ripple/beast/core/CompilerConfig.h
-    src/ripple/beast/core/Config.h
-    src/ripple/beast/core/ConfigCheck.h
-    src/ripple/beast/core/LexicalCast.h
-    src/ripple/beast/core/List.h
-    src/ripple/beast/core/PlatformConfig.h
-    src/ripple/beast/core/SemanticVersion.h
-    src/ripple/beast/core/StandardConfig.h
-  DESTINATION include/ripple/beast/core)
+    src/jbcoin/beast/core/CompilerConfig.h
+    src/jbcoin/beast/core/Config.h
+    src/jbcoin/beast/core/ConfigCheck.h
+    src/jbcoin/beast/core/LexicalCast.h
+    src/jbcoin/beast/core/List.h
+    src/jbcoin/beast/core/PlatformConfig.h
+    src/jbcoin/beast/core/SemanticVersion.h
+    src/jbcoin/beast/core/StandardConfig.h
+  DESTINATION include/jbcoin/beast/core)
 install (
   FILES
-    src/ripple/beast/crypto/detail/mac_facade.h
-    src/ripple/beast/crypto/detail/ripemd_context.h
-    src/ripple/beast/crypto/detail/sha2_context.h
-    src/ripple/beast/crypto/ripemd.h
-    src/ripple/beast/crypto/secure_erase.h
-    src/ripple/beast/crypto/sha2.h
-  DESTINATION include/ripple/beast/crypto)
+    src/jbcoin/beast/crypto/detail/mac_facade.h
+    src/jbcoin/beast/crypto/detail/ripemd_context.h
+    src/jbcoin/beast/crypto/detail/sha2_context.h
+    src/jbcoin/beast/crypto/ripemd.h
+    src/jbcoin/beast/crypto/secure_erase.h
+    src/jbcoin/beast/crypto/sha2.h
+  DESTINATION include/jbcoin/beast/crypto)
 install (
   FILES
-    src/ripple/beast/hash/endian.h
-    src/ripple/beast/hash/hash_append.h
-    src/ripple/beast/hash/meta.h
-    src/ripple/beast/hash/uhash.h
-    src/ripple/beast/hash/xxhasher.h
-  DESTINATION include/ripple/beast/hash)
+    src/jbcoin/beast/hash/endian.h
+    src/jbcoin/beast/hash/hash_append.h
+    src/jbcoin/beast/hash/meta.h
+    src/jbcoin/beast/hash/uhash.h
+    src/jbcoin/beast/hash/xxhasher.h
+  DESTINATION include/jbcoin/beast/hash)
 install (
-  FILES src/ripple/beast/hash/impl/xxhash.h
-  DESTINATION include/ripple/beast/hash/impl)
-install (
-  FILES
-    src/ripple/beast/rfc2616.h
-    src/ripple/beast/type_name.h
-    src/ripple/beast/unit_test.h
-    src/ripple/beast/xor_shift_engine.h
-  DESTINATION include/ripple/beast)
+  FILES src/jbcoin/beast/hash/impl/xxhash.h
+  DESTINATION include/jbcoin/beast/hash/impl)
 install (
   FILES
-    src/ripple/beast/utility/Journal.h
-    src/ripple/beast/utility/PropertyStream.h
-    src/ripple/beast/utility/Zero.h
-    src/ripple/beast/utility/rngfill.h
-  DESTINATION include/ripple/beast/utility)
+    src/jbcoin/beast/rfc2616.h
+    src/jbcoin/beast/type_name.h
+    src/jbcoin/beast/unit_test.h
+    src/jbcoin/beast/xor_shift_engine.h
+  DESTINATION include/jbcoin/beast)
+install (
+  FILES
+    src/jbcoin/beast/utility/Journal.h
+    src/jbcoin/beast/utility/PropertyStream.h
+    src/jbcoin/beast/utility/Zero.h
+    src/jbcoin/beast/utility/rngfill.h
+  DESTINATION include/jbcoin/beast/utility)
 # WARNING!! -- horrible levelization ahead
 # (these files should be isolated or moved...but
 #  unfortunately unit_test.h above creates this dependency)
@@ -1360,7 +1360,7 @@ install (
   DESTINATION include/beast/unit_test/detail)
 
 #[===================================================================[
-   rippled executable
+   jbcoind executable
 #]===================================================================]
 
 #[=========================================================[
@@ -1368,37 +1368,37 @@ install (
    versions of cmake happy. cmake 3.10+ allows
    add_executable with no sources
 #]=========================================================]
-add_executable (rippled src/ripple/app/main/Application.h)
-target_sources (rippled PRIVATE
+add_executable (jbcoind src/jbcoin/app/main/Application.h)
+target_sources (jbcoind PRIVATE
   $<$<BOOL:${unity}>:
     #[===============================[
        unity, main sources
     #]===============================]
-    src/ripple/unity/app_consensus.cpp
-    src/ripple/unity/app_ledger.cpp
-    src/ripple/unity/app_ledger_impl.cpp
-    src/ripple/unity/app_main1.cpp
-    src/ripple/unity/app_main2.cpp
-    src/ripple/unity/app_misc.cpp
-    src/ripple/unity/app_misc_impl.cpp
-    src/ripple/unity/app_paths.cpp
-    src/ripple/unity/app_tx.cpp
-    src/ripple/unity/conditions.cpp
-    src/ripple/unity/consensus.cpp
-    src/ripple/unity/core.cpp
-    src/ripple/unity/basics2.cpp
-    src/ripple/unity/ledger.cpp
-    src/ripple/unity/net.cpp
-    src/ripple/unity/nodestore.cpp
-    src/ripple/unity/overlay1.cpp
-    src/ripple/unity/overlay2.cpp
-    src/ripple/unity/peerfinder.cpp
-    src/ripple/unity/resource.cpp
-    src/ripple/unity/rpcx1.cpp
-    src/ripple/unity/rpcx2.cpp
-    src/ripple/unity/shamap.cpp
-    src/ripple/unity/server.cpp
-    src/ripple/unity/soci_ripple.cpp
+    src/jbcoin/unity/app_consensus.cpp
+    src/jbcoin/unity/app_ledger.cpp
+    src/jbcoin/unity/app_ledger_impl.cpp
+    src/jbcoin/unity/app_main1.cpp
+    src/jbcoin/unity/app_main2.cpp
+    src/jbcoin/unity/app_misc.cpp
+    src/jbcoin/unity/app_misc_impl.cpp
+    src/jbcoin/unity/app_paths.cpp
+    src/jbcoin/unity/app_tx.cpp
+    src/jbcoin/unity/conditions.cpp
+    src/jbcoin/unity/consensus.cpp
+    src/jbcoin/unity/core.cpp
+    src/jbcoin/unity/basics2.cpp
+    src/jbcoin/unity/ledger.cpp
+    src/jbcoin/unity/net.cpp
+    src/jbcoin/unity/nodestore.cpp
+    src/jbcoin/unity/overlay1.cpp
+    src/jbcoin/unity/overlay2.cpp
+    src/jbcoin/unity/peerfinder.cpp
+    src/jbcoin/unity/resource.cpp
+    src/jbcoin/unity/rpcx1.cpp
+    src/jbcoin/unity/rpcx2.cpp
+    src/jbcoin/unity/shamap.cpp
+    src/jbcoin/unity/server.cpp
+    src/jbcoin/unity/soci_jbcoin.cpp
     #[===============================[
        unity, test sources
     #]===============================]
@@ -1431,313 +1431,313 @@ target_sources (rippled PRIVATE
        nounity, main sources:
          subdir: app
     #]===============================]
-    src/ripple/app/consensus/RCLConsensus.cpp
-    src/ripple/app/consensus/RCLCxPeerPos.cpp
-    src/ripple/app/consensus/RCLValidations.cpp
-    src/ripple/app/ledger/AcceptedLedger.cpp
-    src/ripple/app/ledger/AcceptedLedgerTx.cpp
-    src/ripple/app/ledger/AccountStateSF.cpp
-    src/ripple/app/ledger/BookListeners.cpp
-    src/ripple/app/ledger/ConsensusTransSetSF.cpp
-    src/ripple/app/ledger/Ledger.cpp
-    src/ripple/app/ledger/LedgerHistory.cpp
-    src/ripple/app/ledger/OrderBookDB.cpp
-    src/ripple/app/ledger/TransactionStateSF.cpp
-    src/ripple/app/ledger/impl/BuildLedger.cpp
-    src/ripple/app/ledger/impl/InboundLedger.cpp
-    src/ripple/app/ledger/impl/InboundLedgers.cpp
-    src/ripple/app/ledger/impl/InboundTransactions.cpp
-    src/ripple/app/ledger/impl/LedgerCleaner.cpp
-    src/ripple/app/ledger/impl/LedgerMaster.cpp
-    src/ripple/app/ledger/impl/LedgerReplay.cpp
-    src/ripple/app/ledger/impl/LedgerToJson.cpp
-    src/ripple/app/ledger/impl/LocalTxs.cpp
-    src/ripple/app/ledger/impl/OpenLedger.cpp
-    src/ripple/app/ledger/impl/TransactionAcquire.cpp
-    src/ripple/app/ledger/impl/TransactionMaster.cpp
-    src/ripple/app/main/Application.cpp
-    src/ripple/app/main/BasicApp.cpp
-    src/ripple/app/main/CollectorManager.cpp
-    src/ripple/app/main/DBInit.cpp
-    src/ripple/app/main/LoadManager.cpp
-    src/ripple/app/main/Main.cpp
-    src/ripple/app/main/NodeIdentity.cpp
-    src/ripple/app/main/NodeStoreScheduler.cpp
-    src/ripple/app/misc/CanonicalTXSet.cpp
-    src/ripple/app/misc/FeeVoteImpl.cpp
-    src/ripple/app/misc/HashRouter.cpp
-    src/ripple/app/misc/NetworkOPs.cpp
-    src/ripple/app/misc/SHAMapStoreImp.cpp
-    src/ripple/app/misc/impl/AccountTxPaging.cpp
-    src/ripple/app/misc/impl/AmendmentTable.cpp
-    src/ripple/app/misc/impl/LoadFeeTrack.cpp
-    src/ripple/app/misc/impl/Manifest.cpp
-    src/ripple/app/misc/impl/Transaction.cpp
-    src/ripple/app/misc/impl/TxQ.cpp
-    src/ripple/app/misc/impl/ValidatorKeys.cpp
-    src/ripple/app/misc/impl/ValidatorList.cpp
-    src/ripple/app/misc/impl/ValidatorSite.cpp
-    src/ripple/app/paths/AccountCurrencies.cpp
-    src/ripple/app/paths/Credit.cpp
-    src/ripple/app/paths/Flow.cpp
-    src/ripple/app/paths/Node.cpp
-    src/ripple/app/paths/PathRequest.cpp
-    src/ripple/app/paths/PathRequests.cpp
-    src/ripple/app/paths/PathState.cpp
-    src/ripple/app/paths/Pathfinder.cpp
-    src/ripple/app/paths/RippleCalc.cpp
-    src/ripple/app/paths/RippleLineCache.cpp
-    src/ripple/app/paths/RippleState.cpp
-    src/ripple/app/paths/cursor/AdvanceNode.cpp
-    src/ripple/app/paths/cursor/DeliverNodeForward.cpp
-    src/ripple/app/paths/cursor/DeliverNodeReverse.cpp
-    src/ripple/app/paths/cursor/EffectiveRate.cpp
-    src/ripple/app/paths/cursor/ForwardLiquidity.cpp
-    src/ripple/app/paths/cursor/ForwardLiquidityForAccount.cpp
-    src/ripple/app/paths/cursor/Liquidity.cpp
-    src/ripple/app/paths/cursor/NextIncrement.cpp
-    src/ripple/app/paths/cursor/ReverseLiquidity.cpp
-    src/ripple/app/paths/cursor/ReverseLiquidityForAccount.cpp
-    src/ripple/app/paths/cursor/RippleLiquidity.cpp
-    src/ripple/app/paths/impl/BookStep.cpp
-    src/ripple/app/paths/impl/DirectStep.cpp
-    src/ripple/app/paths/impl/PaySteps.cpp
-    src/ripple/app/paths/impl/XRPEndpointStep.cpp
-    src/ripple/app/tx/impl/ApplyContext.cpp
-    src/ripple/app/tx/impl/BookTip.cpp
-    src/ripple/app/tx/impl/CancelCheck.cpp
-    src/ripple/app/tx/impl/CancelOffer.cpp
-    src/ripple/app/tx/impl/CancelTicket.cpp
-    src/ripple/app/tx/impl/CashCheck.cpp
-    src/ripple/app/tx/impl/Change.cpp
-    src/ripple/app/tx/impl/CreateCheck.cpp
-    src/ripple/app/tx/impl/CreateOffer.cpp
-    src/ripple/app/tx/impl/CreateTicket.cpp
-    src/ripple/app/tx/impl/DepositPreauth.cpp
-    src/ripple/app/tx/impl/Escrow.cpp
-    src/ripple/app/tx/impl/InvariantCheck.cpp
-    src/ripple/app/tx/impl/OfferStream.cpp
-    src/ripple/app/tx/impl/PayChan.cpp
-    src/ripple/app/tx/impl/Payment.cpp
-    src/ripple/app/tx/impl/SetAccount.cpp
-    src/ripple/app/tx/impl/SetRegularKey.cpp
-    src/ripple/app/tx/impl/SetSignerList.cpp
-    src/ripple/app/tx/impl/SetTrust.cpp
-    src/ripple/app/tx/impl/SignerEntries.cpp
-    src/ripple/app/tx/impl/Taker.cpp
-    src/ripple/app/tx/impl/Transactor.cpp
-    src/ripple/app/tx/impl/apply.cpp
-    src/ripple/app/tx/impl/applySteps.cpp
+    src/jbcoin/app/consensus/RCLConsensus.cpp
+    src/jbcoin/app/consensus/RCLCxPeerPos.cpp
+    src/jbcoin/app/consensus/RCLValidations.cpp
+    src/jbcoin/app/ledger/AcceptedLedger.cpp
+    src/jbcoin/app/ledger/AcceptedLedgerTx.cpp
+    src/jbcoin/app/ledger/AccountStateSF.cpp
+    src/jbcoin/app/ledger/BookListeners.cpp
+    src/jbcoin/app/ledger/ConsensusTransSetSF.cpp
+    src/jbcoin/app/ledger/Ledger.cpp
+    src/jbcoin/app/ledger/LedgerHistory.cpp
+    src/jbcoin/app/ledger/OrderBookDB.cpp
+    src/jbcoin/app/ledger/TransactionStateSF.cpp
+    src/jbcoin/app/ledger/impl/BuildLedger.cpp
+    src/jbcoin/app/ledger/impl/InboundLedger.cpp
+    src/jbcoin/app/ledger/impl/InboundLedgers.cpp
+    src/jbcoin/app/ledger/impl/InboundTransactions.cpp
+    src/jbcoin/app/ledger/impl/LedgerCleaner.cpp
+    src/jbcoin/app/ledger/impl/LedgerMaster.cpp
+    src/jbcoin/app/ledger/impl/LedgerReplay.cpp
+    src/jbcoin/app/ledger/impl/LedgerToJson.cpp
+    src/jbcoin/app/ledger/impl/LocalTxs.cpp
+    src/jbcoin/app/ledger/impl/OpenLedger.cpp
+    src/jbcoin/app/ledger/impl/TransactionAcquire.cpp
+    src/jbcoin/app/ledger/impl/TransactionMaster.cpp
+    src/jbcoin/app/main/Application.cpp
+    src/jbcoin/app/main/BasicApp.cpp
+    src/jbcoin/app/main/CollectorManager.cpp
+    src/jbcoin/app/main/DBInit.cpp
+    src/jbcoin/app/main/LoadManager.cpp
+    src/jbcoin/app/main/Main.cpp
+    src/jbcoin/app/main/NodeIdentity.cpp
+    src/jbcoin/app/main/NodeStoreScheduler.cpp
+    src/jbcoin/app/misc/CanonicalTXSet.cpp
+    src/jbcoin/app/misc/FeeVoteImpl.cpp
+    src/jbcoin/app/misc/HashRouter.cpp
+    src/jbcoin/app/misc/NetworkOPs.cpp
+    src/jbcoin/app/misc/SHAMapStoreImp.cpp
+    src/jbcoin/app/misc/impl/AccountTxPaging.cpp
+    src/jbcoin/app/misc/impl/AmendmentTable.cpp
+    src/jbcoin/app/misc/impl/LoadFeeTrack.cpp
+    src/jbcoin/app/misc/impl/Manifest.cpp
+    src/jbcoin/app/misc/impl/Transaction.cpp
+    src/jbcoin/app/misc/impl/TxQ.cpp
+    src/jbcoin/app/misc/impl/ValidatorKeys.cpp
+    src/jbcoin/app/misc/impl/ValidatorList.cpp
+    src/jbcoin/app/misc/impl/ValidatorSite.cpp
+    src/jbcoin/app/paths/AccountCurrencies.cpp
+    src/jbcoin/app/paths/Credit.cpp
+    src/jbcoin/app/paths/Flow.cpp
+    src/jbcoin/app/paths/Node.cpp
+    src/jbcoin/app/paths/PathRequest.cpp
+    src/jbcoin/app/paths/PathRequests.cpp
+    src/jbcoin/app/paths/PathState.cpp
+    src/jbcoin/app/paths/Pathfinder.cpp
+    src/jbcoin/app/paths/JBCoinCalc.cpp
+    src/jbcoin/app/paths/JBCoinLineCache.cpp
+    src/jbcoin/app/paths/JBCoinState.cpp
+    src/jbcoin/app/paths/cursor/AdvanceNode.cpp
+    src/jbcoin/app/paths/cursor/DeliverNodeForward.cpp
+    src/jbcoin/app/paths/cursor/DeliverNodeReverse.cpp
+    src/jbcoin/app/paths/cursor/EffectiveRate.cpp
+    src/jbcoin/app/paths/cursor/ForwardLiquidity.cpp
+    src/jbcoin/app/paths/cursor/ForwardLiquidityForAccount.cpp
+    src/jbcoin/app/paths/cursor/Liquidity.cpp
+    src/jbcoin/app/paths/cursor/NextIncrement.cpp
+    src/jbcoin/app/paths/cursor/ReverseLiquidity.cpp
+    src/jbcoin/app/paths/cursor/ReverseLiquidityForAccount.cpp
+    src/jbcoin/app/paths/cursor/JBCoinLiquidity.cpp
+    src/jbcoin/app/paths/impl/BookStep.cpp
+    src/jbcoin/app/paths/impl/DirectStep.cpp
+    src/jbcoin/app/paths/impl/PaySteps.cpp
+    src/jbcoin/app/paths/impl/JBCEndpointStep.cpp
+    src/jbcoin/app/tx/impl/ApplyContext.cpp
+    src/jbcoin/app/tx/impl/BookTip.cpp
+    src/jbcoin/app/tx/impl/CancelCheck.cpp
+    src/jbcoin/app/tx/impl/CancelOffer.cpp
+    src/jbcoin/app/tx/impl/CancelTicket.cpp
+    src/jbcoin/app/tx/impl/CashCheck.cpp
+    src/jbcoin/app/tx/impl/Change.cpp
+    src/jbcoin/app/tx/impl/CreateCheck.cpp
+    src/jbcoin/app/tx/impl/CreateOffer.cpp
+    src/jbcoin/app/tx/impl/CreateTicket.cpp
+    src/jbcoin/app/tx/impl/DepositPreauth.cpp
+    src/jbcoin/app/tx/impl/Escrow.cpp
+    src/jbcoin/app/tx/impl/InvariantCheck.cpp
+    src/jbcoin/app/tx/impl/OfferStream.cpp
+    src/jbcoin/app/tx/impl/PayChan.cpp
+    src/jbcoin/app/tx/impl/Payment.cpp
+    src/jbcoin/app/tx/impl/SetAccount.cpp
+    src/jbcoin/app/tx/impl/SetRegularKey.cpp
+    src/jbcoin/app/tx/impl/SetSignerList.cpp
+    src/jbcoin/app/tx/impl/SetTrust.cpp
+    src/jbcoin/app/tx/impl/SignerEntries.cpp
+    src/jbcoin/app/tx/impl/Taker.cpp
+    src/jbcoin/app/tx/impl/Transactor.cpp
+    src/jbcoin/app/tx/impl/apply.cpp
+    src/jbcoin/app/tx/impl/applySteps.cpp
     #[===============================[
        nounity, main sources:
          subdir: basics (partial)
     #]===============================]
-    src/ripple/basics/impl/Archive.cpp
-    src/ripple/basics/impl/BasicConfig.cpp
-    src/ripple/basics/impl/PerfLogImp.cpp
-    src/ripple/basics/impl/ResolverAsio.cpp
-    src/ripple/basics/impl/Sustain.cpp
-    src/ripple/basics/impl/UptimeClock.cpp
-    src/ripple/basics/impl/make_SSLContext.cpp
-    src/ripple/basics/impl/mulDiv.cpp
+    src/jbcoin/basics/impl/Archive.cpp
+    src/jbcoin/basics/impl/BasicConfig.cpp
+    src/jbcoin/basics/impl/PerfLogImp.cpp
+    src/jbcoin/basics/impl/ResolverAsio.cpp
+    src/jbcoin/basics/impl/Sustain.cpp
+    src/jbcoin/basics/impl/UptimeClock.cpp
+    src/jbcoin/basics/impl/make_SSLContext.cpp
+    src/jbcoin/basics/impl/mulDiv.cpp
     #[===============================[
        nounity, main sources:
          subdir: conditions
     #]===============================]
-    src/ripple/conditions/impl/Condition.cpp
-    src/ripple/conditions/impl/Fulfillment.cpp
-    src/ripple/conditions/impl/error.cpp
+    src/jbcoin/conditions/impl/Condition.cpp
+    src/jbcoin/conditions/impl/Fulfillment.cpp
+    src/jbcoin/conditions/impl/error.cpp
     #[===============================[
        nounity, main sources:
          subdir: core
     #]===============================]
-    src/ripple/core/impl/Config.cpp
-    src/ripple/core/impl/DatabaseCon.cpp
-    src/ripple/core/impl/DummySociDynamicBackend.cpp
-    src/ripple/core/impl/Job.cpp
-    src/ripple/core/impl/JobQueue.cpp
-    src/ripple/core/impl/LoadEvent.cpp
-    src/ripple/core/impl/LoadMonitor.cpp
-    src/ripple/core/impl/SNTPClock.cpp
-    src/ripple/core/impl/SociDB.cpp
-    src/ripple/core/impl/Stoppable.cpp
-    src/ripple/core/impl/TerminateHandler.cpp
-    src/ripple/core/impl/TimeKeeper.cpp
-    src/ripple/core/impl/Workers.cpp
+    src/jbcoin/core/impl/Config.cpp
+    src/jbcoin/core/impl/DatabaseCon.cpp
+    src/jbcoin/core/impl/DummySociDynamicBackend.cpp
+    src/jbcoin/core/impl/Job.cpp
+    src/jbcoin/core/impl/JobQueue.cpp
+    src/jbcoin/core/impl/LoadEvent.cpp
+    src/jbcoin/core/impl/LoadMonitor.cpp
+    src/jbcoin/core/impl/SNTPClock.cpp
+    src/jbcoin/core/impl/SociDB.cpp
+    src/jbcoin/core/impl/Stoppable.cpp
+    src/jbcoin/core/impl/TerminateHandler.cpp
+    src/jbcoin/core/impl/TimeKeeper.cpp
+    src/jbcoin/core/impl/Workers.cpp
     #[===============================[
        nounity, main sources:
          subdir: consensus
     #]===============================]
-    src/ripple/consensus/Consensus.cpp
+    src/jbcoin/consensus/Consensus.cpp
     #[===============================[
        nounity, main sources:
          subdir: ledger
     #]===============================]
-    src/ripple/ledger/impl/ApplyStateTable.cpp
-    src/ripple/ledger/impl/ApplyView.cpp
-    src/ripple/ledger/impl/ApplyViewBase.cpp
-    src/ripple/ledger/impl/ApplyViewImpl.cpp
-    src/ripple/ledger/impl/BookDirs.cpp
-    src/ripple/ledger/impl/CachedSLEs.cpp
-    src/ripple/ledger/impl/CachedView.cpp
-    src/ripple/ledger/impl/CashDiff.cpp
-    src/ripple/ledger/impl/Directory.cpp
-    src/ripple/ledger/impl/OpenView.cpp
-    src/ripple/ledger/impl/PaymentSandbox.cpp
-    src/ripple/ledger/impl/RawStateTable.cpp
-    src/ripple/ledger/impl/ReadView.cpp
-    src/ripple/ledger/impl/TxMeta.cpp
-    src/ripple/ledger/impl/View.cpp
+    src/jbcoin/ledger/impl/ApplyStateTable.cpp
+    src/jbcoin/ledger/impl/ApplyView.cpp
+    src/jbcoin/ledger/impl/ApplyViewBase.cpp
+    src/jbcoin/ledger/impl/ApplyViewImpl.cpp
+    src/jbcoin/ledger/impl/BookDirs.cpp
+    src/jbcoin/ledger/impl/CachedSLEs.cpp
+    src/jbcoin/ledger/impl/CachedView.cpp
+    src/jbcoin/ledger/impl/CashDiff.cpp
+    src/jbcoin/ledger/impl/Directory.cpp
+    src/jbcoin/ledger/impl/OpenView.cpp
+    src/jbcoin/ledger/impl/PaymentSandbox.cpp
+    src/jbcoin/ledger/impl/RawStateTable.cpp
+    src/jbcoin/ledger/impl/ReadView.cpp
+    src/jbcoin/ledger/impl/TxMeta.cpp
+    src/jbcoin/ledger/impl/View.cpp
     #[===============================[
        nounity, main sources:
          subdir: net
     #]===============================]
-    src/ripple/net/impl/HTTPClient.cpp
-    src/ripple/net/impl/InfoSub.cpp
-    src/ripple/net/impl/RPCCall.cpp
-    src/ripple/net/impl/RPCErr.cpp
-    src/ripple/net/impl/RPCSub.cpp
-    src/ripple/net/impl/RegisterSSLCerts.cpp
-    src/ripple/net/impl/SSLHTTPDownloader.cpp
+    src/jbcoin/net/impl/HTTPClient.cpp
+    src/jbcoin/net/impl/InfoSub.cpp
+    src/jbcoin/net/impl/RPCCall.cpp
+    src/jbcoin/net/impl/RPCErr.cpp
+    src/jbcoin/net/impl/RPCSub.cpp
+    src/jbcoin/net/impl/RegisterSSLCerts.cpp
+    src/jbcoin/net/impl/SSLHTTPDownloader.cpp
     #[===============================[
        nounity, main sources:
          subdir: nodestore
     #]===============================]
-    src/ripple/nodestore/backend/MemoryFactory.cpp
-    src/ripple/nodestore/backend/NuDBFactory.cpp
-    src/ripple/nodestore/backend/NullFactory.cpp
-    src/ripple/nodestore/backend/RocksDBFactory.cpp
-    src/ripple/nodestore/backend/RocksDBQuickFactory.cpp
-    src/ripple/nodestore/impl/BatchWriter.cpp
-    src/ripple/nodestore/impl/Database.cpp
-    src/ripple/nodestore/impl/DatabaseNodeImp.cpp
-    src/ripple/nodestore/impl/DatabaseRotatingImp.cpp
-    src/ripple/nodestore/impl/DatabaseShardImp.cpp
-    src/ripple/nodestore/impl/DecodedBlob.cpp
-    src/ripple/nodestore/impl/DummyScheduler.cpp
-    src/ripple/nodestore/impl/EncodedBlob.cpp
-    src/ripple/nodestore/impl/ManagerImp.cpp
-    src/ripple/nodestore/impl/NodeObject.cpp
-    src/ripple/nodestore/impl/Shard.cpp
+    src/jbcoin/nodestore/backend/MemoryFactory.cpp
+    src/jbcoin/nodestore/backend/NuDBFactory.cpp
+    src/jbcoin/nodestore/backend/NullFactory.cpp
+    src/jbcoin/nodestore/backend/RocksDBFactory.cpp
+    src/jbcoin/nodestore/backend/RocksDBQuickFactory.cpp
+    src/jbcoin/nodestore/impl/BatchWriter.cpp
+    src/jbcoin/nodestore/impl/Database.cpp
+    src/jbcoin/nodestore/impl/DatabaseNodeImp.cpp
+    src/jbcoin/nodestore/impl/DatabaseRotatingImp.cpp
+    src/jbcoin/nodestore/impl/DatabaseShardImp.cpp
+    src/jbcoin/nodestore/impl/DecodedBlob.cpp
+    src/jbcoin/nodestore/impl/DummyScheduler.cpp
+    src/jbcoin/nodestore/impl/EncodedBlob.cpp
+    src/jbcoin/nodestore/impl/ManagerImp.cpp
+    src/jbcoin/nodestore/impl/NodeObject.cpp
+    src/jbcoin/nodestore/impl/Shard.cpp
     #[===============================[
        nounity, main sources:
          subdir: overlay
     #]===============================]
-    src/ripple/overlay/impl/Cluster.cpp
-    src/ripple/overlay/impl/ConnectAttempt.cpp
-    src/ripple/overlay/impl/Message.cpp
-    src/ripple/overlay/impl/OverlayImpl.cpp
-    src/ripple/overlay/impl/PeerImp.cpp
-    src/ripple/overlay/impl/PeerSet.cpp
-    src/ripple/overlay/impl/TMHello.cpp
-    src/ripple/overlay/impl/TrafficCount.cpp
+    src/jbcoin/overlay/impl/Cluster.cpp
+    src/jbcoin/overlay/impl/ConnectAttempt.cpp
+    src/jbcoin/overlay/impl/Message.cpp
+    src/jbcoin/overlay/impl/OverlayImpl.cpp
+    src/jbcoin/overlay/impl/PeerImp.cpp
+    src/jbcoin/overlay/impl/PeerSet.cpp
+    src/jbcoin/overlay/impl/TMHello.cpp
+    src/jbcoin/overlay/impl/TrafficCount.cpp
     #[===============================[
        nounity, main sources:
          subdir: peerfinder
     #]===============================]
-    src/ripple/peerfinder/impl/Bootcache.cpp
-    src/ripple/peerfinder/impl/Endpoint.cpp
-    src/ripple/peerfinder/impl/PeerfinderConfig.cpp
-    src/ripple/peerfinder/impl/PeerfinderManager.cpp
-    src/ripple/peerfinder/impl/SlotImp.cpp
-    src/ripple/peerfinder/impl/SourceStrings.cpp
+    src/jbcoin/peerfinder/impl/Bootcache.cpp
+    src/jbcoin/peerfinder/impl/Endpoint.cpp
+    src/jbcoin/peerfinder/impl/PeerfinderConfig.cpp
+    src/jbcoin/peerfinder/impl/PeerfinderManager.cpp
+    src/jbcoin/peerfinder/impl/SlotImp.cpp
+    src/jbcoin/peerfinder/impl/SourceStrings.cpp
     #[===============================[
        nounity, main sources:
          subdir: resource
     #]===============================]
-    src/ripple/resource/impl/Charge.cpp
-    src/ripple/resource/impl/Consumer.cpp
-    src/ripple/resource/impl/Fees.cpp
-    src/ripple/resource/impl/ResourceManager.cpp
+    src/jbcoin/resource/impl/Charge.cpp
+    src/jbcoin/resource/impl/Consumer.cpp
+    src/jbcoin/resource/impl/Fees.cpp
+    src/jbcoin/resource/impl/ResourceManager.cpp
     #[===============================[
        nounity, main sources:
          subdir: rpc
     #]===============================]
-    src/ripple/rpc/handlers/AccountChannels.cpp
-    src/ripple/rpc/handlers/AccountCurrenciesHandler.cpp
-    src/ripple/rpc/handlers/AccountInfo.cpp
-    src/ripple/rpc/handlers/AccountLines.cpp
-    src/ripple/rpc/handlers/AccountObjects.cpp
-    src/ripple/rpc/handlers/AccountOffers.cpp
-    src/ripple/rpc/handlers/AccountTx.cpp
-    src/ripple/rpc/handlers/AccountTxOld.cpp
-    src/ripple/rpc/handlers/AccountTxSwitch.cpp
-    src/ripple/rpc/handlers/BlackList.cpp
-    src/ripple/rpc/handlers/BookOffers.cpp
-    src/ripple/rpc/handlers/CanDelete.cpp
-    src/ripple/rpc/handlers/Connect.cpp
-    src/ripple/rpc/handlers/ConsensusInfo.cpp
-    src/ripple/rpc/handlers/DepositAuthorized.cpp
-    src/ripple/rpc/handlers/DownloadShard.cpp
-    src/ripple/rpc/handlers/Feature1.cpp
-    src/ripple/rpc/handlers/Fee1.cpp
-    src/ripple/rpc/handlers/FetchInfo.cpp
-    src/ripple/rpc/handlers/GatewayBalances.cpp
-    src/ripple/rpc/handlers/GetCounts.cpp
-    src/ripple/rpc/handlers/LedgerAccept.cpp
-    src/ripple/rpc/handlers/LedgerCleanerHandler.cpp
-    src/ripple/rpc/handlers/LedgerClosed.cpp
-    src/ripple/rpc/handlers/LedgerCurrent.cpp
-    src/ripple/rpc/handlers/LedgerData.cpp
-    src/ripple/rpc/handlers/LedgerEntry.cpp
-    src/ripple/rpc/handlers/LedgerHandler.cpp
-    src/ripple/rpc/handlers/LedgerHeader.cpp
-    src/ripple/rpc/handlers/LedgerRequest.cpp
-    src/ripple/rpc/handlers/LogLevel.cpp
-    src/ripple/rpc/handlers/LogRotate.cpp
-    src/ripple/rpc/handlers/NoRippleCheck.cpp
-    src/ripple/rpc/handlers/OwnerInfo.cpp
-    src/ripple/rpc/handlers/PathFind.cpp
-    src/ripple/rpc/handlers/PayChanClaim.cpp
-    src/ripple/rpc/handlers/Peers.cpp
-    src/ripple/rpc/handlers/Ping.cpp
-    src/ripple/rpc/handlers/Print.cpp
-    src/ripple/rpc/handlers/Random.cpp
-    src/ripple/rpc/handlers/RipplePathFind.cpp
-    src/ripple/rpc/handlers/ServerInfo.cpp
-    src/ripple/rpc/handlers/ServerState.cpp
-    src/ripple/rpc/handlers/SignFor.cpp
-    src/ripple/rpc/handlers/SignHandler.cpp
-    src/ripple/rpc/handlers/Stop.cpp
-    src/ripple/rpc/handlers/Submit.cpp
-    src/ripple/rpc/handlers/SubmitMultiSigned.cpp
-    src/ripple/rpc/handlers/Subscribe.cpp
-    src/ripple/rpc/handlers/TransactionEntry.cpp
-    src/ripple/rpc/handlers/Tx.cpp
-    src/ripple/rpc/handlers/TxHistory.cpp
-    src/ripple/rpc/handlers/UnlList.cpp
-    src/ripple/rpc/handlers/Unsubscribe.cpp
-    src/ripple/rpc/handlers/ValidationCreate.cpp
-    src/ripple/rpc/handlers/ValidationSeed.cpp
-    src/ripple/rpc/handlers/ValidatorListSites.cpp
-    src/ripple/rpc/handlers/Validators.cpp
-    src/ripple/rpc/handlers/WalletPropose.cpp
-    src/ripple/rpc/impl/Handler.cpp
-    src/ripple/rpc/impl/LegacyPathFind.cpp
-    src/ripple/rpc/impl/RPCHandler.cpp
-    src/ripple/rpc/impl/RPCHelpers.cpp
-    src/ripple/rpc/impl/Role.cpp
-    src/ripple/rpc/impl/ServerHandlerImp.cpp
-    src/ripple/rpc/impl/ShardArchiveHandler.cpp
-    src/ripple/rpc/impl/Status.cpp
-    src/ripple/rpc/impl/TransactionSign.cpp
+    src/jbcoin/rpc/handlers/AccountChannels.cpp
+    src/jbcoin/rpc/handlers/AccountCurrenciesHandler.cpp
+    src/jbcoin/rpc/handlers/AccountInfo.cpp
+    src/jbcoin/rpc/handlers/AccountLines.cpp
+    src/jbcoin/rpc/handlers/AccountObjects.cpp
+    src/jbcoin/rpc/handlers/AccountOffers.cpp
+    src/jbcoin/rpc/handlers/AccountTx.cpp
+    src/jbcoin/rpc/handlers/AccountTxOld.cpp
+    src/jbcoin/rpc/handlers/AccountTxSwitch.cpp
+    src/jbcoin/rpc/handlers/BlackList.cpp
+    src/jbcoin/rpc/handlers/BookOffers.cpp
+    src/jbcoin/rpc/handlers/CanDelete.cpp
+    src/jbcoin/rpc/handlers/Connect.cpp
+    src/jbcoin/rpc/handlers/ConsensusInfo.cpp
+    src/jbcoin/rpc/handlers/DepositAuthorized.cpp
+    src/jbcoin/rpc/handlers/DownloadShard.cpp
+    src/jbcoin/rpc/handlers/Feature1.cpp
+    src/jbcoin/rpc/handlers/Fee1.cpp
+    src/jbcoin/rpc/handlers/FetchInfo.cpp
+    src/jbcoin/rpc/handlers/GatewayBalances.cpp
+    src/jbcoin/rpc/handlers/GetCounts.cpp
+    src/jbcoin/rpc/handlers/LedgerAccept.cpp
+    src/jbcoin/rpc/handlers/LedgerCleanerHandler.cpp
+    src/jbcoin/rpc/handlers/LedgerClosed.cpp
+    src/jbcoin/rpc/handlers/LedgerCurrent.cpp
+    src/jbcoin/rpc/handlers/LedgerData.cpp
+    src/jbcoin/rpc/handlers/LedgerEntry.cpp
+    src/jbcoin/rpc/handlers/LedgerHandler.cpp
+    src/jbcoin/rpc/handlers/LedgerHeader.cpp
+    src/jbcoin/rpc/handlers/LedgerRequest.cpp
+    src/jbcoin/rpc/handlers/LogLevel.cpp
+    src/jbcoin/rpc/handlers/LogRotate.cpp
+    src/jbcoin/rpc/handlers/NoJBCoinCheck.cpp
+    src/jbcoin/rpc/handlers/OwnerInfo.cpp
+    src/jbcoin/rpc/handlers/PathFind.cpp
+    src/jbcoin/rpc/handlers/PayChanClaim.cpp
+    src/jbcoin/rpc/handlers/Peers.cpp
+    src/jbcoin/rpc/handlers/Ping.cpp
+    src/jbcoin/rpc/handlers/Print.cpp
+    src/jbcoin/rpc/handlers/Random.cpp
+    src/jbcoin/rpc/handlers/JBCoinPathFind.cpp
+    src/jbcoin/rpc/handlers/ServerInfo.cpp
+    src/jbcoin/rpc/handlers/ServerState.cpp
+    src/jbcoin/rpc/handlers/SignFor.cpp
+    src/jbcoin/rpc/handlers/SignHandler.cpp
+    src/jbcoin/rpc/handlers/Stop.cpp
+    src/jbcoin/rpc/handlers/Submit.cpp
+    src/jbcoin/rpc/handlers/SubmitMultiSigned.cpp
+    src/jbcoin/rpc/handlers/Subscribe.cpp
+    src/jbcoin/rpc/handlers/TransactionEntry.cpp
+    src/jbcoin/rpc/handlers/Tx.cpp
+    src/jbcoin/rpc/handlers/TxHistory.cpp
+    src/jbcoin/rpc/handlers/UnlList.cpp
+    src/jbcoin/rpc/handlers/Unsubscribe.cpp
+    src/jbcoin/rpc/handlers/ValidationCreate.cpp
+    src/jbcoin/rpc/handlers/ValidationSeed.cpp
+    src/jbcoin/rpc/handlers/ValidatorListSites.cpp
+    src/jbcoin/rpc/handlers/Validators.cpp
+    src/jbcoin/rpc/handlers/WalletPropose.cpp
+    src/jbcoin/rpc/impl/Handler.cpp
+    src/jbcoin/rpc/impl/LegacyPathFind.cpp
+    src/jbcoin/rpc/impl/RPCHandler.cpp
+    src/jbcoin/rpc/impl/RPCHelpers.cpp
+    src/jbcoin/rpc/impl/Role.cpp
+    src/jbcoin/rpc/impl/ServerHandlerImp.cpp
+    src/jbcoin/rpc/impl/ShardArchiveHandler.cpp
+    src/jbcoin/rpc/impl/Status.cpp
+    src/jbcoin/rpc/impl/TransactionSign.cpp
     #[===============================[
        nounity, main sources:
          subdir: server
     #]===============================]
-    src/ripple/server/impl/JSONRPCUtil.cpp
-    src/ripple/server/impl/Port.cpp
+    src/jbcoin/server/impl/JSONRPCUtil.cpp
+    src/jbcoin/server/impl/Port.cpp
     #[===============================[
        nounity, main sources:
          subdir: shamap
     #]===============================]
-    src/ripple/shamap/impl/SHAMap.cpp
-    src/ripple/shamap/impl/SHAMapDelta.cpp
-    src/ripple/shamap/impl/SHAMapItem.cpp
-    src/ripple/shamap/impl/SHAMapMissingNode.cpp
-    src/ripple/shamap/impl/SHAMapNodeID.cpp
-    src/ripple/shamap/impl/SHAMapSync.cpp
-    src/ripple/shamap/impl/SHAMapTreeNode.cpp
+    src/jbcoin/shamap/impl/SHAMap.cpp
+    src/jbcoin/shamap/impl/SHAMapDelta.cpp
+    src/jbcoin/shamap/impl/SHAMapItem.cpp
+    src/jbcoin/shamap/impl/SHAMapMissingNode.cpp
+    src/jbcoin/shamap/impl/SHAMapNodeID.cpp
+    src/jbcoin/shamap/impl/SHAMapSync.cpp
+    src/jbcoin/shamap/impl/SHAMapTreeNode.cpp
     #[===============================[
        nounity, test sources:
          subdir: app
@@ -1960,7 +1960,7 @@ target_sources (rippled PRIVATE
     src/test/protocol/SecretKey_test.cpp
     src/test/protocol/Seed_test.cpp
     src/test/protocol/TER_test.cpp
-    src/test/protocol/XRPAmount_test.cpp
+    src/test/protocol/JBCAmount_test.cpp
     src/test/protocol/digest_test.cpp
     src/test/protocol/types_test.cpp
     #[===============================[
@@ -1991,8 +1991,8 @@ target_sources (rippled PRIVATE
     src/test/rpc/LedgerData_test.cpp
     src/test/rpc/LedgerRPC_test.cpp
     src/test/rpc/LedgerRequestRPC_test.cpp
-    src/test/rpc/NoRippleCheck_test.cpp
-    src/test/rpc/NoRipple_test.cpp
+    src/test/rpc/NoJBCoinCheck_test.cpp
+    src/test/rpc/NoJBCoin_test.cpp
     src/test/rpc/OwnerInfo_test.cpp
     src/test/rpc/Peers_test.cpp
     src/test/rpc/RPCOverload_test.cpp
@@ -2022,12 +2022,12 @@ target_sources (rippled PRIVATE
     #]===============================]
     src/test/unit_test/multi_runner.cpp
     >)
-target_link_libraries (rippled
-  Ripple::opts
-  Ripple::libs
-  Ripple::boost
-  Ripple::xrpl_core)
-exclude_if_included (rippled)
+target_link_libraries (jbcoind
+  JBCoin::opts
+  JBCoin::libs
+  JBCoin::boost
+  JBCoin::jbcl_core)
+exclude_if_included (jbcoind)
 
 #[===================================================================[
    install stuff
@@ -2039,32 +2039,32 @@ install (
     ed25519-donna
     common
     opts
-    ripple_syslibs
-    ripple_boost
-    xrpl_core
-  EXPORT RippleExports
+    jbcoin_syslibs
+    jbcoin_boost
+    jbcl_core
+  EXPORT JBCoinExports
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
   RUNTIME DESTINATION bin
   INCLUDES DESTINATION include)
-install (EXPORT RippleExports
-  FILE RippleTargets.cmake
-  NAMESPACE Ripple::
-  DESTINATION lib/cmake/ripple)
+install (EXPORT JBCoinExports
+  FILE JBCoinTargets.cmake
+  NAMESPACE JBCoin::
+  DESTINATION lib/cmake/jbcoin)
 include (CMakePackageConfigHelpers)
 write_basic_package_version_file (
-  RippleConfigVersion.cmake
-  VERSION ${rippled_version}
+  JBCoinConfigVersion.cmake
+  VERSION ${jbcoind_version}
   COMPATIBILITY SameMajorVersion)
 
 if (is_root_project)
-  install (TARGETS rippled RUNTIME DESTINATION bin)
-  set_target_properties(rippled PROPERTIES INSTALL_RPATH_USE_LINK_PATH ON)
+  install (TARGETS jbcoind RUNTIME DESTINATION bin)
+  set_target_properties(jbcoind PROPERTIES INSTALL_RPATH_USE_LINK_PATH ON)
   install (
     FILES
-      ${CMAKE_CURRENT_SOURCE_DIR}/Builds/CMake/RippleConfig.cmake
-      ${CMAKE_CURRENT_BINARY_DIR}/RippleConfigVersion.cmake
-    DESTINATION lib/cmake/ripple)
+      ${CMAKE_CURRENT_SOURCE_DIR}/Builds/CMake/JBCoinConfig.cmake
+      ${CMAKE_CURRENT_BINARY_DIR}/JBCoinConfigVersion.cmake
+    DESTINATION lib/cmake/jbcoin)
   # sample configs should not overwrite existing files
   # install if-not-exists workaround as suggested by
   # https://cmake.org/Bug/view.php?id=12646
@@ -2076,7 +2076,7 @@ if (is_root_project)
         message (\"-- Skipping : \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/\${DEST}/\${NEWNAME}\")
       endif ()
     endmacro()
-    copy_if_not_exists(\"${CMAKE_CURRENT_SOURCE_DIR}/cfg/rippled-example.cfg\" etc rippled.cfg)
+    copy_if_not_exists(\"${CMAKE_CURRENT_SOURCE_DIR}/cfg/jbcoind-example.cfg\" etc jbcoind.cfg)
     copy_if_not_exists(\"${CMAKE_CURRENT_SOURCE_DIR}/cfg/validators-example.txt\" etc validators.txt)
   ")
 endif ()
@@ -2086,17 +2086,17 @@ endif ()
 #]===================================================================]
 
 if (is_multiconfig)
-  # Rippled headers. Only useful for IDEs.
-  file (GLOB_RECURSE rippled_headers src/*.h src/*.hpp *.md)
-  target_sources (rippled PRIVATE ${rippled_headers})
+  # JBCoind headers. Only useful for IDEs.
+  file (GLOB_RECURSE jbcoind_headers src/*.h src/*.hpp *.md)
+  target_sources (jbcoind PRIVATE ${jbcoind_headers})
   set_property (
-    SOURCE ${rippled_headers}
+    SOURCE ${jbcoind_headers}
     APPEND
     PROPERTY HEADER_FILE_ONLY true)
   if (MSVC)
     set_property(
       DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-      PROPERTY VS_STARTUP_PROJECT rippled)
+      PROPERTY VS_STARTUP_PROJECT jbcoind)
   endif ()
 endif ()
 

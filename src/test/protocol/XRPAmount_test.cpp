@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#include <ripple/protocol/XRPAmount.h>
-#include <ripple/beast/unit_test.h>
+#include <jbcoin/protocol/JBCAmount.h>
+#include <jbcoin/beast/unit_test.h>
 
-namespace ripple {
+namespace jbcoin {
 
-class XRPAmount_test : public beast::unit_test::suite
+class JBCAmount_test : public beast::unit_test::suite
 {
 public:
     void testSigNum ()
@@ -31,7 +31,7 @@ public:
 
         for (auto i : { -1, 0, 1})
         {
-            XRPAmount const x(i);
+            JBCAmount const x(i);
 
             if (i < 0)
                 BEAST_EXPECT(x.signum () < 0);
@@ -50,7 +50,7 @@ public:
 
         for (auto i : { -1, 0, 1})
         {
-            XRPAmount const x (i);
+            JBCAmount const x (i);
 
             BEAST_EXPECT((i == 0) == (x == zero));
             BEAST_EXPECT((i != 0) == (x != zero));
@@ -70,15 +70,15 @@ public:
 
     void testComparisons ()
     {
-        testcase ("XRP Comparisons");
+        testcase ("JBC Comparisons");
 
         for (auto i : { -1, 0, 1})
         {
-            XRPAmount const x (i);
+            JBCAmount const x (i);
 
             for (auto j : { -1, 0, 1})
             {
-                XRPAmount const y (j);
+                JBCAmount const y (j);
 
                 BEAST_EXPECT((i == j) == (x == y));
                 BEAST_EXPECT((i != j) == (x != y));
@@ -96,14 +96,14 @@ public:
 
         for (auto i : { -1, 0, 1})
         {
-            XRPAmount const x (i);
+            JBCAmount const x (i);
 
             for (auto j : { -1, 0, 1})
             {
-                XRPAmount const y (j);
+                JBCAmount const y (j);
 
-                BEAST_EXPECT(XRPAmount(i + j) == (x + y));
-                BEAST_EXPECT(XRPAmount(i - j) == (x - y));
+                BEAST_EXPECT(JBCAmount(i + j) == (x + y));
+                BEAST_EXPECT(JBCAmount(i - j) == (x - y));
 
                 BEAST_EXPECT((x + y) == (y + x));   // addition is commutative
             }
@@ -120,7 +120,7 @@ public:
         {
             // multiply by a number that would overflow then divide by the same
             // number, and check we didn't lose any value
-            XRPAmount big (maxUInt64);
+            JBCAmount big (maxUInt64);
             BEAST_EXPECT(big == mulRatio (big, maxUInt32, maxUInt32, true));
             // rounding mode shouldn't matter as the result is exact
             BEAST_EXPECT(big == mulRatio (big, maxUInt32, maxUInt32, false));
@@ -128,7 +128,7 @@ public:
 
         {
             // Similar test as above, but for neative values
-            XRPAmount big (maxUInt64);
+            JBCAmount big (maxUInt64);
             BEAST_EXPECT(big == mulRatio (big, maxUInt32, maxUInt32, true));
             // rounding mode shouldn't matter as the result is exact
             BEAST_EXPECT(big == mulRatio (big, maxUInt32, maxUInt32, false));
@@ -136,7 +136,7 @@ public:
 
         {
             // small amounts
-            XRPAmount tiny (1);
+            JBCAmount tiny (1);
             // Round up should give the smallest allowable number
             BEAST_EXPECT(tiny == mulRatio (tiny, 1, maxUInt32, true));
             // rounding down should be zero
@@ -145,7 +145,7 @@ public:
                 mulRatio (tiny, maxUInt32 - 1, maxUInt32, false));
 
             // tiny negative numbers
-            XRPAmount tinyNeg (-1);
+            JBCAmount tinyNeg (-1);
             // Round up should give zero
             BEAST_EXPECT(beast::zero == mulRatio (tinyNeg, 1, maxUInt32, true));
             BEAST_EXPECT(beast::zero == mulRatio (tinyNeg, maxUInt32 - 1, maxUInt32, true));
@@ -156,21 +156,21 @@ public:
         {
             // rounding
             {
-                XRPAmount one (1);
+                JBCAmount one (1);
                 auto const rup = mulRatio (one, maxUInt32 - 1, maxUInt32, true);
                 auto const rdown = mulRatio (one, maxUInt32 - 1, maxUInt32, false);
                 BEAST_EXPECT(rup.drops () - rdown.drops () == 1);
             }
 
             {
-                XRPAmount big (maxUInt64);
+                JBCAmount big (maxUInt64);
                 auto const rup = mulRatio (big, maxUInt32 - 1, maxUInt32, true);
                 auto const rdown = mulRatio (big, maxUInt32 - 1, maxUInt32, false);
                 BEAST_EXPECT(rup.drops () - rdown.drops () == 1);
             }
 
             {
-                XRPAmount negOne (-1);
+                JBCAmount negOne (-1);
                 auto const rup = mulRatio (negOne, maxUInt32 - 1, maxUInt32, true);
                 auto const rdown = mulRatio (negOne, maxUInt32 - 1, maxUInt32, false);
                 BEAST_EXPECT(rup.drops () - rdown.drops () == 1);
@@ -179,13 +179,13 @@ public:
 
         {
             // division by zero
-            XRPAmount one (1);
+            JBCAmount one (1);
             except ([&] {mulRatio (one, 1, 0, true);});
         }
 
         {
             // overflow
-            XRPAmount big (maxUInt64);
+            JBCAmount big (maxUInt64);
             except ([&] {mulRatio (big, 2, 0, true);});
         }
     }
@@ -202,6 +202,6 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE(XRPAmount,protocol,ripple);
+BEAST_DEFINE_TESTSUITE(JBCAmount,protocol,jbcoin);
 
-} // ripple
+} // jbcoin

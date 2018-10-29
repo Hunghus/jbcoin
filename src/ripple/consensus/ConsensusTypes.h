@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_CONSENSUS_CONSENSUS_TYPES_H_INCLUDED
-#define RIPPLE_CONSENSUS_CONSENSUS_TYPES_H_INCLUDED
+#ifndef JBCOIN_CONSENSUS_CONSENSUS_TYPES_H_INCLUDED
+#define JBCOIN_CONSENSUS_CONSENSUS_TYPES_H_INCLUDED
 
-#include <ripple/basics/chrono.h>
-#include <ripple/consensus/ConsensusProposal.h>
-#include <ripple/consensus/DisputedTx.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/consensus/ConsensusProposal.h>
+#include <jbcoin/consensus/DisputedTx.h>
 #include <chrono>
 #include <map>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Represents how a node currently participates in Consensus.
 
@@ -239,6 +239,6 @@ struct ConsensusResult
     // The number of peers proposing during the round
     std::size_t proposers = 0;
 };
-}  // namespace ripple
+}  // namespace jbcoin
 
 #endif

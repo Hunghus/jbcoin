@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2015 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2015 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,13 +17,13 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/basics/Log.h>
-#include <ripple/ledger/View.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/ledger/View.h>
 #include <test/jtx.h>
-#include <ripple/beast/unit_test.h>
+#include <jbcoin/beast/unit_test.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace test {
 
 class SkipList_test : public beast::unit_test::suite
@@ -107,7 +107,7 @@ class SkipList_test : public beast::unit_test::suite
     }
 };
 
-BEAST_DEFINE_TESTSUITE(SkipList,ledger,ripple);
+BEAST_DEFINE_TESTSUITE(SkipList,ledger,jbcoin);
 
 }  // test
-}  // ripple
+}  // jbcoin

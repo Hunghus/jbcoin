@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,24 +17,24 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_MISC_NETWORKOPS_H_INCLUDED
-#define RIPPLE_APP_MISC_NETWORKOPS_H_INCLUDED
+#ifndef JBCOIN_APP_MISC_NETWORKOPS_H_INCLUDED
+#define JBCOIN_APP_MISC_NETWORKOPS_H_INCLUDED
 
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/app/consensus/RCLCxPeerPos.h>
-#include <ripple/core/JobQueue.h>
-#include <ripple/core/Stoppable.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/net/InfoSub.h>
-#include <ripple/protocol/STValidation.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/app/consensus/RCLCxPeerPos.h>
+#include <jbcoin/core/JobQueue.h>
+#include <jbcoin/core/Stoppable.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/net/InfoSub.h>
+#include <jbcoin/protocol/STValidation.h>
 #include <boost/asio.hpp>
 #include <memory>
 #include <deque>
 #include <tuple>
 
-#include <ripple/protocol/messages.h>
+#include <jbcoin/protocol/messages.h>
 
-namespace ripple {
+namespace jbcoin {
 
 // Operations that clients may wish to perform against the network
 // Master operational handler, server sequencer, network tracker
@@ -63,8 +63,8 @@ class ValidatorKeys;
     needed.
 
     A backend application or local client can trust a local instance of
-    rippled / NetworkOPs. However, client software connecting to non-local
-    instances of rippled will need to be hardened to protect against hostile
+    jbcoind / NetworkOPs. However, client software connecting to non-local
+    instances of jbcoind will need to be hardened to protect against hostile
     or unreliable servers.
 */
 class NetworkOPs
@@ -243,6 +243,6 @@ make_NetworkOPs (Application& app, NetworkOPs::clock_type& clock,
     ValidatorKeys const & validatorKeys, boost::asio::io_service& io_svc,
     beast::Journal journal);
 
-} // ripple
+} // jbcoin
 
 #endif

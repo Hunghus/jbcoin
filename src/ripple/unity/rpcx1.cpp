@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -21,41 +21,41 @@
 // This has to be included early to prevent an obscure MSVC compile error
 #include <boost/asio/deadline_timer.hpp>
 
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/rpc/RPCHandler.h>
-#include <ripple/rpc/handlers/Handlers.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/rpc/RPCHandler.h>
+#include <jbcoin/rpc/handlers/Handlers.h>
 
-#include <ripple/rpc/handlers/AccountCurrenciesHandler.cpp>
-#include <ripple/rpc/handlers/AccountInfo.cpp>
-#include <ripple/rpc/handlers/AccountLines.cpp>
-#include <ripple/rpc/handlers/AccountChannels.cpp>
-#include <ripple/rpc/handlers/AccountObjects.cpp>
-#include <ripple/rpc/handlers/AccountOffers.cpp>
-#include <ripple/rpc/handlers/AccountTx.cpp>
-#include <ripple/rpc/handlers/AccountTxOld.cpp>
-#include <ripple/rpc/handlers/AccountTxSwitch.cpp>
-#include <ripple/rpc/handlers/BlackList.cpp>
-#include <ripple/rpc/handlers/BookOffers.cpp>
-#include <ripple/rpc/handlers/CanDelete.cpp>
-#include <ripple/rpc/handlers/Connect.cpp>
-#include <ripple/rpc/handlers/ConsensusInfo.cpp>
-#include <ripple/rpc/handlers/DepositAuthorized.cpp>
-#include <ripple/rpc/handlers/DownloadShard.cpp>
-#include <ripple/rpc/handlers/Feature1.cpp>
-#include <ripple/rpc/handlers/Fee1.cpp>
-#include <ripple/rpc/handlers/FetchInfo.cpp>
-#include <ripple/rpc/handlers/GatewayBalances.cpp>
-#include <ripple/rpc/handlers/GetCounts.cpp>
-#include <ripple/rpc/handlers/LedgerHandler.cpp>
-#include <ripple/rpc/handlers/LedgerAccept.cpp>
-#include <ripple/rpc/handlers/LedgerCleanerHandler.cpp>
-#include <ripple/rpc/handlers/LedgerClosed.cpp>
-#include <ripple/rpc/handlers/LedgerCurrent.cpp>
-#include <ripple/rpc/handlers/LedgerData.cpp>
-#include <ripple/rpc/handlers/LedgerEntry.cpp>
-#include <ripple/rpc/handlers/LedgerHeader.cpp>
-#include <ripple/rpc/handlers/LedgerRequest.cpp>
-#include <ripple/rpc/handlers/LogLevel.cpp>
-#include <ripple/rpc/handlers/LogRotate.cpp>
-#include <ripple/rpc/handlers/NoRippleCheck.cpp>
-#include <ripple/rpc/handlers/OwnerInfo.cpp>
+#include <jbcoin/rpc/handlers/AccountCurrenciesHandler.cpp>
+#include <jbcoin/rpc/handlers/AccountInfo.cpp>
+#include <jbcoin/rpc/handlers/AccountLines.cpp>
+#include <jbcoin/rpc/handlers/AccountChannels.cpp>
+#include <jbcoin/rpc/handlers/AccountObjects.cpp>
+#include <jbcoin/rpc/handlers/AccountOffers.cpp>
+#include <jbcoin/rpc/handlers/AccountTx.cpp>
+#include <jbcoin/rpc/handlers/AccountTxOld.cpp>
+#include <jbcoin/rpc/handlers/AccountTxSwitch.cpp>
+#include <jbcoin/rpc/handlers/BlackList.cpp>
+#include <jbcoin/rpc/handlers/BookOffers.cpp>
+#include <jbcoin/rpc/handlers/CanDelete.cpp>
+#include <jbcoin/rpc/handlers/Connect.cpp>
+#include <jbcoin/rpc/handlers/ConsensusInfo.cpp>
+#include <jbcoin/rpc/handlers/DepositAuthorized.cpp>
+#include <jbcoin/rpc/handlers/DownloadShard.cpp>
+#include <jbcoin/rpc/handlers/Feature1.cpp>
+#include <jbcoin/rpc/handlers/Fee1.cpp>
+#include <jbcoin/rpc/handlers/FetchInfo.cpp>
+#include <jbcoin/rpc/handlers/GatewayBalances.cpp>
+#include <jbcoin/rpc/handlers/GetCounts.cpp>
+#include <jbcoin/rpc/handlers/LedgerHandler.cpp>
+#include <jbcoin/rpc/handlers/LedgerAccept.cpp>
+#include <jbcoin/rpc/handlers/LedgerCleanerHandler.cpp>
+#include <jbcoin/rpc/handlers/LedgerClosed.cpp>
+#include <jbcoin/rpc/handlers/LedgerCurrent.cpp>
+#include <jbcoin/rpc/handlers/LedgerData.cpp>
+#include <jbcoin/rpc/handlers/LedgerEntry.cpp>
+#include <jbcoin/rpc/handlers/LedgerHeader.cpp>
+#include <jbcoin/rpc/handlers/LedgerRequest.cpp>
+#include <jbcoin/rpc/handlers/LogLevel.cpp>
+#include <jbcoin/rpc/handlers/LogRotate.cpp>
+#include <jbcoin/rpc/handlers/NoJBCoinCheck.cpp>
+#include <jbcoin/rpc/handlers/OwnerInfo.cpp>

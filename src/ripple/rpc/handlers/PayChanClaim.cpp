@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,22 +17,22 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/PayChan.h>
-#include <ripple/protocol/STAccount.h>
-#include <ripple/resource/Fees.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
-#include <ripple/rpc/impl/Tuning.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/PayChan.h>
+#include <jbcoin/protocol/STAccount.h>
+#include <jbcoin/resource/Fees.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
+#include <jbcoin/rpc/impl/Tuning.h>
 
 #include <boost/optional.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 // {
 //   secret_key: <signing_secret_key>
@@ -66,7 +66,7 @@ Json::Value doChannelAuthorize (RPC::Context& context)
     std::uint64_t const drops = *optDrops;
 
     Serializer msg;
-    serializePayChanAuthorization (msg, channelId, XRPAmount (drops));
+    serializePayChanAuthorization (msg, channelId, JBCAmount (drops));
 
     try
     {
@@ -131,7 +131,7 @@ Json::Value doChannelVerify (RPC::Context& context)
         return rpcError (rpcINVALID_PARAMS);
 
     Serializer msg;
-    serializePayChanAuthorization (msg, channelId, XRPAmount (drops));
+    serializePayChanAuthorization (msg, channelId, JBCAmount (drops));
 
     Json::Value result;
     result[jss::signature_verified] =
@@ -139,4 +139,4 @@ Json::Value doChannelVerify (RPC::Context& context)
     return result;
 }
 
-} // ripple
+} // jbcoin

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,10 +17,10 @@
 */
 //==============================================================================
 
-#include <ripple/core/impl/SNTPClock.h>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/random.h>
-#include <ripple/beast/core/CurrentThreadName.h>
+#include <jbcoin/core/impl/SNTPClock.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/random.h>
+#include <jbcoin/beast/core/CurrentThreadName.h>
 #include <boost/asio.hpp>
 #include <boost/optional.hpp>
 #include <cmath>
@@ -30,7 +30,7 @@
 #include <mutex>
 #include <thread>
 
-namespace ripple {
+namespace jbcoin {
 
 static uint8_t SNTPQueryData[48] =
 { 0x1B, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -197,7 +197,7 @@ public:
 
     void doRun ()
     {
-        beast::setCurrentThreadName("rippled: SNTPClock");
+        beast::setCurrentThreadName("jbcoind: SNTPClock");
         io_service_.run();
     }
 
@@ -478,4 +478,4 @@ make_SNTPClock (beast::Journal j)
     return std::make_unique<SNTPClientImp>(j);
 }
 
-} // ripple
+} // jbcoin

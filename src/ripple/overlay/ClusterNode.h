@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_PEERS_CLUSTERNODESTATUS_H_INCLUDED
-#define RIPPLE_APP_PEERS_CLUSTERNODESTATUS_H_INCLUDED
+#ifndef JBCOIN_APP_PEERS_CLUSTERNODESTATUS_H_INCLUDED
+#define JBCOIN_APP_PEERS_CLUSTERNODESTATUS_H_INCLUDED
 
-#include <ripple/basics/chrono.h>
-#include <ripple/protocol/PublicKey.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/protocol/PublicKey.h>
 #include <cstdint>
 #include <string>
 
-namespace ripple {
+namespace jbcoin {
 
 class ClusterNode
 {
@@ -71,6 +71,6 @@ private:
     NetClock::time_point mReportTime = {};
 };
 
-} // ripple
+} // jbcoin
 
 #endif

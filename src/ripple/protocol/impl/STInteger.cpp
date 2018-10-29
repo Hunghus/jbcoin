@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#include <ripple/basics/Log.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/protocol/LedgerFormats.h>
-#include <ripple/protocol/STInteger.h>
-#include <ripple/protocol/TxFormats.h>
-#include <ripple/protocol/TER.h>
-#include <ripple/beast/core/LexicalCast.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/protocol/LedgerFormats.h>
+#include <jbcoin/protocol/STInteger.h>
+#include <jbcoin/protocol/TxFormats.h>
+#include <jbcoin/protocol/TER.h>
+#include <jbcoin/beast/core/LexicalCast.h>
 
-namespace ripple {
+namespace jbcoin {
 
 template<>
 STInteger<unsigned char>::STInteger(SerialIter& sit, SField const& name)
@@ -199,4 +199,4 @@ STUInt64::getJson (int) const
     return strHex (value_);
 }
 
-} // ripple
+} // jbcoin

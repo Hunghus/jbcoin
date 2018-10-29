@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,21 +17,21 @@
 */
 //==============================================================================
 
-#include <ripple/app/misc/Manifest.h>
-#include <ripple/basics/base64.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/beast/rfc2616.h>
-#include <ripple/core/DatabaseCon.h>
-#include <ripple/json/json_reader.h>
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/protocol/Sign.h>
+#include <jbcoin/app/misc/Manifest.h>
+#include <jbcoin/basics/base64.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/beast/rfc2616.h>
+#include <jbcoin/core/DatabaseCon.h>
+#include <jbcoin/json/json_reader.h>
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/protocol/Sign.h>
 #include <boost/regex.hpp>
 #include <numeric>
 #include <stdexcept>
 
-namespace ripple {
+namespace jbcoin {
 
 boost::optional<Manifest>
 Manifest::make_Manifest (std::string s)
@@ -120,10 +120,10 @@ bool Manifest::verify () const
 
     // Signing key and signature are not required for
     // master key revocations
-    if (! revoked () && ! ripple::verify (st, HashPrefix::manifest, signingKey))
+    if (! revoked () && ! jbcoin::verify (st, HashPrefix::manifest, signingKey))
         return false;
 
-    return ripple::verify (
+    return jbcoin::verify (
         st, HashPrefix::manifest, masterKey, sfMasterSignature);
 }
 

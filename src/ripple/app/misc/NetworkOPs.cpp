@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,49 +17,49 @@
 */
 //==============================================================================
 
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/consensus/Consensus.h>
-#include <ripple/app/consensus/RCLConsensus.h>
-#include <ripple/app/consensus/RCLValidations.h>
-#include <ripple/app/ledger/AcceptedLedger.h>
-#include <ripple/app/ledger/InboundLedgers.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/consensus/ConsensusParms.h>
-#include <ripple/app/ledger/LedgerToJson.h>
-#include <ripple/app/ledger/LocalTxs.h>
-#include <ripple/app/ledger/OpenLedger.h>
-#include <ripple/app/ledger/OrderBookDB.h>
-#include <ripple/app/ledger/TransactionMaster.h>
-#include <ripple/app/main/LoadManager.h>
-#include <ripple/app/misc/HashRouter.h>
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/app/misc/Transaction.h>
-#include <ripple/app/misc/TxQ.h>
-#include <ripple/app/misc/ValidatorKeys.h>
-#include <ripple/app/misc/ValidatorList.h>
-#include <ripple/app/misc/impl/AccountTxPaging.h>
-#include <ripple/app/tx/apply.h>
-#include <ripple/basics/base64.h>
-#include <ripple/basics/mulDiv.h>
-#include <ripple/basics/PerfLog.h>
-#include <ripple/basics/UptimeClock.h>
-#include <ripple/core/ConfigSections.h>
-#include <ripple/crypto/csprng.h>
-#include <ripple/crypto/RFC1751.h>
-#include <ripple/json/to_string.h>
-#include <ripple/overlay/Cluster.h>
-#include <ripple/overlay/Overlay.h>
-#include <ripple/overlay/predicates.h>
-#include <ripple/protocol/BuildInfo.h>
-#include <ripple/resource/ResourceManager.h>
-#include <ripple/beast/rfc2616.h>
-#include <ripple/beast/core/LexicalCast.h>
-#include <ripple/beast/utility/rngfill.h>
-#include <ripple/basics/make_lock.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/consensus/Consensus.h>
+#include <jbcoin/app/consensus/RCLConsensus.h>
+#include <jbcoin/app/consensus/RCLValidations.h>
+#include <jbcoin/app/ledger/AcceptedLedger.h>
+#include <jbcoin/app/ledger/InboundLedgers.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/consensus/ConsensusParms.h>
+#include <jbcoin/app/ledger/LedgerToJson.h>
+#include <jbcoin/app/ledger/LocalTxs.h>
+#include <jbcoin/app/ledger/OpenLedger.h>
+#include <jbcoin/app/ledger/OrderBookDB.h>
+#include <jbcoin/app/ledger/TransactionMaster.h>
+#include <jbcoin/app/main/LoadManager.h>
+#include <jbcoin/app/misc/HashRouter.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/app/misc/Transaction.h>
+#include <jbcoin/app/misc/TxQ.h>
+#include <jbcoin/app/misc/ValidatorKeys.h>
+#include <jbcoin/app/misc/ValidatorList.h>
+#include <jbcoin/app/misc/impl/AccountTxPaging.h>
+#include <jbcoin/app/tx/apply.h>
+#include <jbcoin/basics/base64.h>
+#include <jbcoin/basics/mulDiv.h>
+#include <jbcoin/basics/PerfLog.h>
+#include <jbcoin/basics/UptimeClock.h>
+#include <jbcoin/core/ConfigSections.h>
+#include <jbcoin/crypto/csprng.h>
+#include <jbcoin/crypto/RFC1751.h>
+#include <jbcoin/json/to_string.h>
+#include <jbcoin/overlay/Cluster.h>
+#include <jbcoin/overlay/Overlay.h>
+#include <jbcoin/overlay/predicates.h>
+#include <jbcoin/protocol/BuildInfo.h>
+#include <jbcoin/resource/ResourceManager.h>
+#include <jbcoin/beast/rfc2616.h>
+#include <jbcoin/beast/core/LexicalCast.h>
+#include <jbcoin/beast/utility/rngfill.h>
+#include <jbcoin/basics/make_lock.h>
 #include <boost/asio/steady_timer.hpp>
 #include <boost/asio/ip/host_name.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 class NetworkOPsImp final
     : public NetworkOPs
@@ -1215,14 +1215,14 @@ Json::Value NetworkOPsImp::getOwnerInfo (
                     jvObjects[jss::offers].append (sleCur->getJson (0));
                     break;
 
-                case ltRIPPLE_STATE:
-                    if (!jvObjects.isMember (jss::ripple_lines))
+                case ltJBCOIN_STATE:
+                    if (!jvObjects.isMember (jss::jbcoin_lines))
                     {
-                        jvObjects[jss::ripple_lines] =
+                        jvObjects[jss::jbcoin_lines] =
                                 Json::Value (Json::arrayValue);
                     }
 
-                    jvObjects[jss::ripple_lines].append (sleCur->getJson (0));
+                    jvObjects[jss::jbcoin_lines].append (sleCur->getJson (0));
                     break;
 
                 case ltACCOUNT_ROOT:
@@ -2232,7 +2232,7 @@ Json::Value NetworkOPsImp::getServerInfo (bool human, bool admin, bool counters)
 
             /* Json::Value doesn't support uint64, so clamp to max
                 uint32 value. This is mostly theoretical, since there
-                probably isn't enough extant XRP to drive the factor
+                probably isn't enough extant JBC to drive the factor
                 that high.
             */
             info[jss::load_factor_fee_escalation] =
@@ -2312,13 +2312,13 @@ Json::Value NetworkOPsImp::getServerInfo (bool human, bool admin, bool counters)
         }
         else
         {
-            l[jss::base_fee_xrp] = static_cast<double> (baseFee) /
+            l[jss::base_fee_jbc] = static_cast<double> (baseFee) /
                     SYSTEM_CURRENCY_PARTS;
-            l[jss::reserve_base_xrp]   =
+            l[jss::reserve_base_jbc]   =
                 static_cast<double> (Json::UInt (
                     lpClosed->fees().accountReserve(0).drops() * baseFee / baseRef))
                     / SYSTEM_CURRENCY_PARTS;
-            l[jss::reserve_inc_xrp]    =
+            l[jss::reserve_inc_jbc]    =
                 static_cast<double> (Json::UInt (
                     lpClosed->fees().increment * baseFee / baseRef))
                     / SYSTEM_CURRENCY_PARTS;
@@ -3382,4 +3382,4 @@ make_NetworkOPs (Application& app, NetworkOPs::clock_type& clock,
         validatorKeys, io_svc, journal);
 }
 
-} // ripple
+} // jbcoin

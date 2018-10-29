@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,46 +17,46 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/core/DatabaseCon.h>
-#include <ripple/app/consensus/RCLValidations.h>
-#include <ripple/app/main/DBInit.h>
-#include <ripple/app/main/BasicApp.h>
-#include <ripple/app/main/Tuning.h>
-#include <ripple/app/ledger/InboundLedgers.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/ledger/LedgerToJson.h>
-#include <ripple/app/ledger/OpenLedger.h>
-#include <ripple/app/ledger/OrderBookDB.h>
-#include <ripple/app/ledger/PendingSaves.h>
-#include <ripple/app/ledger/InboundTransactions.h>
-#include <ripple/app/ledger/TransactionMaster.h>
-#include <ripple/app/main/LoadManager.h>
-#include <ripple/app/main/NodeIdentity.h>
-#include <ripple/app/main/NodeStoreScheduler.h>
-#include <ripple/app/misc/AmendmentTable.h>
-#include <ripple/app/misc/HashRouter.h>
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/app/misc/SHAMapStore.h>
-#include <ripple/app/misc/TxQ.h>
-#include <ripple/app/misc/ValidatorSite.h>
-#include <ripple/app/misc/ValidatorKeys.h>
-#include <ripple/app/paths/PathRequests.h>
-#include <ripple/app/tx/apply.h>
-#include <ripple/basics/ResolverAsio.h>
-#include <ripple/basics/Sustain.h>
-#include <ripple/basics/PerfLog.h>
-#include <ripple/json/json_reader.h>
-#include <ripple/nodestore/DummyScheduler.h>
-#include <ripple/overlay/Cluster.h>
-#include <ripple/overlay/make_Overlay.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/STParsedJSON.h>
-#include <ripple/protocol/Protocol.h>
-#include <ripple/resource/Fees.h>
-#include <ripple/beast/asio/io_latency_probe.h>
-#include <ripple/beast/core/LexicalCast.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/core/DatabaseCon.h>
+#include <jbcoin/app/consensus/RCLValidations.h>
+#include <jbcoin/app/main/DBInit.h>
+#include <jbcoin/app/main/BasicApp.h>
+#include <jbcoin/app/main/Tuning.h>
+#include <jbcoin/app/ledger/InboundLedgers.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/ledger/LedgerToJson.h>
+#include <jbcoin/app/ledger/OpenLedger.h>
+#include <jbcoin/app/ledger/OrderBookDB.h>
+#include <jbcoin/app/ledger/PendingSaves.h>
+#include <jbcoin/app/ledger/InboundTransactions.h>
+#include <jbcoin/app/ledger/TransactionMaster.h>
+#include <jbcoin/app/main/LoadManager.h>
+#include <jbcoin/app/main/NodeIdentity.h>
+#include <jbcoin/app/main/NodeStoreScheduler.h>
+#include <jbcoin/app/misc/AmendmentTable.h>
+#include <jbcoin/app/misc/HashRouter.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/app/misc/SHAMapStore.h>
+#include <jbcoin/app/misc/TxQ.h>
+#include <jbcoin/app/misc/ValidatorSite.h>
+#include <jbcoin/app/misc/ValidatorKeys.h>
+#include <jbcoin/app/paths/PathRequests.h>
+#include <jbcoin/app/tx/apply.h>
+#include <jbcoin/basics/ResolverAsio.h>
+#include <jbcoin/basics/Sustain.h>
+#include <jbcoin/basics/PerfLog.h>
+#include <jbcoin/json/json_reader.h>
+#include <jbcoin/nodestore/DummyScheduler.h>
+#include <jbcoin/overlay/Cluster.h>
+#include <jbcoin/overlay/make_Overlay.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/STParsedJSON.h>
+#include <jbcoin/protocol/Protocol.h>
+#include <jbcoin/resource/Fees.h>
+#include <jbcoin/beast/asio/io_latency_probe.h>
+#include <jbcoin/beast/core/LexicalCast.h>
 #include <boost/asio/steady_timer.hpp>
 #include <boost/system/error_code.hpp>
 #include <fstream>
@@ -64,7 +64,7 @@
 #include <iostream>
 #include <cstring>
 
-namespace ripple {
+namespace jbcoin {
 
 // 204/256 about 80%
 static int const MAJORITY_FRACTION (204);
@@ -381,7 +381,7 @@ public:
     std::size_t
     numberOfThreads(Config const& config)
     {
-    #if RIPPLE_SINGLE_IO_SERVICE_THREAD
+    #if JBCOIN_SINGLE_IO_SERVICE_THREAD
         return 1;
     #else
         return (config.NODE_SIZE >= 2) ? 2 : 1;
@@ -1078,7 +1078,7 @@ public:
             {
                 JLOG(m_journal.fatal())
                     << "Free SQLite space for transaction db is less than "
-                       "512MB. To fix this, rippled must be executed with the "
+                       "512MB. To fix this, jbcoind must be executed with the "
                        "vacuum <sqlitetmpdir> parameter before restarting. "
                        "Note that this activity can take multiple days, "
                        "depending on database size.";
@@ -1408,7 +1408,7 @@ bool ApplicationImp::setup()
         JLOG(m_journal.warn()) <<
             "*** been deprecated. They will be removed in a future release of";
         JLOG(m_journal.warn()) <<
-            "*** rippled.";
+            "*** jbcoind.";
         JLOG(m_journal.warn()) <<
             "*** If you do not use them to sign transactions please edit your";
         JLOG(m_journal.warn()) <<

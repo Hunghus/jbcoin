@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,12 +18,12 @@
 //==============================================================================
 #include <test/jtx.h>
 
-#include <ripple/beast/unit_test.h>
-#include <ripple/protocol/AccountID.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/STAmount.h>
+#include <jbcoin/beast/unit_test.h>
+#include <jbcoin/protocol/AccountID.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/STAmount.h>
 
-namespace ripple {
+namespace jbcoin {
 
 class OwnerInfo_test : public beast::unit_test::suite
 {
@@ -36,7 +36,7 @@ class OwnerInfo_test : public beast::unit_test::suite
         Env env {*this};
 
         auto const alice = Account {"alice"};
-        env.fund (XRP(10000), alice);
+        env.fund (JBC(10000), alice);
         env.close ();
 
         { // missing account field
@@ -88,17 +88,17 @@ class OwnerInfo_test : public beast::unit_test::suite
 
         auto const alice = Account {"alice"};
         auto const gw = Account {"gateway"};
-        env.fund (XRP(10000), alice, gw);
+        env.fund (JBC(10000), alice, gw);
         auto const USD = gw["USD"];
         auto const CNY = gw["CNY"];
         env(trust(alice, USD(1000)));
         env(trust(alice, CNY(1000)));
-        env(offer(alice, USD(1), XRP(1000)));
+        env(offer(alice, USD(1), JBC(1000)));
         env.close();
 
         env(pay(gw, alice, USD(50)));
         env(pay(gw, alice, CNY(50)));
-        env(offer(alice, CNY(2), XRP(1000)));
+        env(offer(alice, CNY(2), JBC(1000)));
 
         Json::Value params;
         params[jss::account] = alice.human();
@@ -112,9 +112,9 @@ class OwnerInfo_test : public beast::unit_test::suite
         }
 
         // accepted ledger entry
-        if (! BEAST_EXPECT (result[jss::accepted].isMember(jss::ripple_lines)))
+        if (! BEAST_EXPECT (result[jss::accepted].isMember(jss::jbcoin_lines)))
             return;
-        auto lines = result[jss::accepted][jss::ripple_lines];
+        auto lines = result[jss::accepted][jss::jbcoin_lines];
         if (! BEAST_EXPECT (lines.isArray() && lines.size() == 2))
             return;
 
@@ -149,15 +149,15 @@ class OwnerInfo_test : public beast::unit_test::suite
         BEAST_EXPECT (
             offers[0u][jss::Account] == alice.human());
         BEAST_EXPECT (
-            offers[0u][sfTakerGets.fieldName] == XRP(1000).value().getJson(0));
+            offers[0u][sfTakerGets.fieldName] == JBC(1000).value().getJson(0));
         BEAST_EXPECT (
             offers[0u][sfTakerPays.fieldName] == USD(1).value().getJson(0));
 
 
         // current ledger entry
-        if (! BEAST_EXPECT (result[jss::current].isMember(jss::ripple_lines)))
+        if (! BEAST_EXPECT (result[jss::current].isMember(jss::jbcoin_lines)))
             return;
-        lines = result[jss::current][jss::ripple_lines];
+        lines = result[jss::current][jss::jbcoin_lines];
         if (! BEAST_EXPECT (lines.isArray() && lines.size() == 2))
             return;
 
@@ -195,7 +195,7 @@ class OwnerInfo_test : public beast::unit_test::suite
         BEAST_EXPECT (
             offers[0u][jss::Account] == alice.human());
         BEAST_EXPECT (
-            offers[0u][sfTakerGets.fieldName] == XRP(1000).value().getJson(0));
+            offers[0u][sfTakerGets.fieldName] == JBC(1000).value().getJson(0));
         BEAST_EXPECT (
             offers[0u][sfTakerPays.fieldName] == CNY(2).value().getJson(0));
     }
@@ -208,7 +208,7 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE(OwnerInfo,app,ripple);
+BEAST_DEFINE_TESTSUITE(OwnerInfo,app,jbcoin);
 
-} // ripple
+} // jbcoin
 

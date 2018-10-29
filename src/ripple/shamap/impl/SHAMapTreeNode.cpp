@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/shamap/SHAMapTreeNode.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/digest.h>
-#include <ripple/basics/Slice.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/protocol/HashPrefix.h>
-#include <ripple/beast/core/LexicalCast.h>
+#include <jbcoin/shamap/SHAMapTreeNode.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/digest.h>
+#include <jbcoin/basics/Slice.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/protocol/HashPrefix.h>
+#include <jbcoin/beast/core/LexicalCast.h>
 #include <mutex>
 
 #include <openssl/sha.h>
 
-namespace ripple {
+namespace jbcoin {
 
 std::mutex SHAMapInnerNode::childLock;
 
@@ -942,4 +942,4 @@ SHAMapTreeNode::invariants(bool, bool) const
     assert(mItem != nullptr);
 }
 
-} // ripple
+} // jbcoin

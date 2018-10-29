@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,17 +17,17 @@
 */
 //==============================================================================
 
-#include <ripple/beast/unit_test.h>
+#include <jbcoin/beast/unit_test.h>
 #include <test/jtx.h>
 #include <test/jtx/Env.h>
-#include <ripple/beast/utility/temp_dir.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/SField.h>
+#include <jbcoin/beast/utility/temp_dir.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/SField.h>
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 #include <fstream>
 
-namespace ripple {
+namespace jbcoin {
 
 class LedgerLoad_test : public beast::unit_test::suite
 {
@@ -67,14 +67,14 @@ class LedgerLoad_test : public beast::unit_test::suite
         for(auto i = 0; i < 20; ++i)
         {
             Account acct {"A" + std::to_string(i)};
-            env.fund(XRP(10000), acct);
+            env.fund(JBC(10000), acct);
             env.close();
             if(i > 0)
             {
                 env.trust(acct["USD"](1000), prev);
                 env(pay(acct, prev, acct["USD"](5)));
             }
-            env(offer(acct, XRP(100), acct["USD"](1)));
+            env(offer(acct, JBC(100), acct["USD"](1)));
             env.close();
             prev = std::move(acct);
         }
@@ -231,6 +231,6 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE (LedgerLoad, app, ripple);
+BEAST_DEFINE_TESTSUITE (LedgerLoad, app, jbcoin);
 
-}  // ripple
+}  // jbcoin

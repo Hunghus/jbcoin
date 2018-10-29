@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,20 +17,20 @@
 */
 //==============================================================================
 
-#include <ripple/protocol/Issue.h>
+#include <jbcoin/protocol/Issue.h>
 
-namespace ripple {
+namespace jbcoin {
 
 bool
 isConsistent (Issue const& ac)
 {
-    return isXRP (ac.currency) == isXRP (ac.account);
+    return isJBC (ac.currency) == isJBC (ac.account);
 }
 
 std::string
 to_string (Issue const& ac)
 {
-    if (isXRP (ac.account))
+    if (isJBC (ac.account))
         return to_string (ac.currency);
 
     return to_string(ac.account) + "/" + to_string(ac.currency);
@@ -45,7 +45,7 @@ operator<< (std::ostream& os, Issue const& x)
 
 /** Ordered comparison.
     The assets are ordered first by currency and then by account,
-    if the currency is not XRP.
+    if the currency is not JBC.
 */
 int
 compare (Issue const& lhs, Issue const& rhs)
@@ -53,7 +53,7 @@ compare (Issue const& lhs, Issue const& rhs)
     int diff = compare (lhs.currency, rhs.currency);
     if (diff != 0)
         return diff;
-    if (isXRP (lhs.currency))
+    if (isJBC (lhs.currency))
         return 0;
     return compare (lhs.account, rhs.account);
 }
@@ -99,4 +99,4 @@ operator<= (Issue const& lhs, Issue const& rhs)
     return ! (rhs < lhs);
 }
 
-} // ripple
+} // jbcoin

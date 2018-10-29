@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_LEDGER_LEDGERTIMING_H_INCLUDED
-#define RIPPLE_APP_LEDGER_LEDGERTIMING_H_INCLUDED
+#ifndef JBCOIN_APP_LEDGER_LEDGERTIMING_H_INCLUDED
+#define JBCOIN_APP_LEDGER_LEDGERTIMING_H_INCLUDED
 
-#include <ripple/basics/chrono.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <chrono>
 #include <cstdint>
 
-namespace ripple {
+namespace jbcoin {
 
 /**  Possible ledger close time resolutions.
 
@@ -53,7 +53,7 @@ auto constexpr decreaseLedgerTimeResolutionEvery = 1;
 
 /** Calculates the close time resolution for the specified ledger.
 
-    The Ripple protocol uses binning to represent time intervals using only one
+    The JBCoin protocol uses binning to represent time intervals using only one
     timestamp. This allows servers to derive a common time for the next ledger,
     without the need for perfectly synchronized clocks.
     The time resolution (i.e. the size of the intervals) is adjusted dynamically

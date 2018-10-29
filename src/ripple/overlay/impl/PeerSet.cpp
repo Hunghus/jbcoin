@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#include <ripple/overlay/PeerSet.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/core/JobQueue.h>
-#include <ripple/overlay/Overlay.h>
+#include <jbcoin/overlay/PeerSet.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/core/JobQueue.h>
+#include <jbcoin/overlay/Overlay.h>
 
-namespace ripple {
+namespace jbcoin {
 
 using namespace std::chrono_literals;
 
@@ -148,4 +148,4 @@ std::size_t PeerSet::getPeerCount () const
     return ret;
 }
 
-} // ripple
+} // jbcoin

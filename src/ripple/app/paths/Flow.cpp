@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,21 +17,21 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/Credit.h>
-#include <ripple/app/paths/Flow.h>
-#include <ripple/app/paths/impl/AmountSpec.h>
-#include <ripple/app/paths/impl/StrandFlow.h>
-#include <ripple/app/paths/impl/Steps.h>
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/IOUAmount.h>
-#include <ripple/protocol/XRPAmount.h>
+#include <jbcoin/app/paths/Credit.h>
+#include <jbcoin/app/paths/Flow.h>
+#include <jbcoin/app/paths/impl/AmountSpec.h>
+#include <jbcoin/app/paths/impl/StrandFlow.h>
+#include <jbcoin/app/paths/impl/Steps.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/IOUAmount.h>
+#include <jbcoin/protocol/JBCAmount.h>
 
 #include <boost/container/flat_set.hpp>
 
 #include <numeric>
 #include <sstream>
 
-namespace ripple {
+namespace jbcoin {
 
 template<class FlowResult>
 static
@@ -39,7 +39,7 @@ auto finishFlow (PaymentSandbox& sb,
     Issue const& srcIssue, Issue const& dstIssue,
     FlowResult&& f)
 {
-    path::RippleCalc::Output result;
+    path::JBCoinCalc::Output result;
     if (f.ter == tesSUCCESS)
         f.sandbox->apply (sb);
     else
@@ -52,7 +52,7 @@ auto finishFlow (PaymentSandbox& sb,
     return result;
 };
 
-path::RippleCalc::Output
+path::JBCoinCalc::Output
 flow (
     PaymentSandbox& sb,
     STAmount const& deliver,
@@ -71,9 +71,9 @@ flow (
     Issue const srcIssue = [&] {
         if (sendMax)
             return sendMax->issue ();
-        if (!isXRP (deliver.issue ().currency))
+        if (!isJBC (deliver.issue ().currency))
             return Issue (deliver.issue ().currency, src);
-        return xrpIssue ();
+        return jbcIssue ();
     }();
 
     Issue const dstIssue = deliver.issue ();
@@ -89,7 +89,7 @@ flow (
 
     if (sr.first != tesSUCCESS)
     {
-        path::RippleCalc::Output result;
+        path::JBCoinCalc::Output result;
         result.setResult (sr.first);
         return result;
     }
@@ -111,39 +111,39 @@ flow (
         }
     }
 
-    const bool srcIsXRP = isXRP (srcIssue.currency);
-    const bool dstIsXRP = isXRP (dstIssue.currency);
+    const bool srcIsJBC = isJBC (srcIssue.currency);
+    const bool dstIsJBC = isJBC (dstIssue.currency);
 
     auto const asDeliver = toAmountSpec (deliver);
 
-    // The src account may send either xrp or iou. The dst account may receive
-    // either xrp or iou. Since XRP and IOU amounts are represented by different
+    // The src account may send either jbc or iou. The dst account may receive
+    // either jbc or iou. Since JBC and IOU amounts are represented by different
     // types, use templates to tell `flow` about the amount types.
-    if (srcIsXRP && dstIsXRP)
+    if (srcIsJBC && dstIsJBC)
     {
         return finishFlow (sb, srcIssue, dstIssue,
-            flow<XRPAmount, XRPAmount> (
-                sb, strands, asDeliver.xrp, partialPayment, offerCrossing,
+            flow<JBCAmount, JBCAmount> (
+                sb, strands, asDeliver.jbc, partialPayment, offerCrossing,
                 limitQuality, sendMax, j, flowDebugInfo));
     }
 
-    if (srcIsXRP && !dstIsXRP)
+    if (srcIsJBC && !dstIsJBC)
     {
         return finishFlow (sb, srcIssue, dstIssue,
-            flow<XRPAmount, IOUAmount> (
+            flow<JBCAmount, IOUAmount> (
                 sb, strands, asDeliver.iou, partialPayment, offerCrossing,
                 limitQuality, sendMax, j, flowDebugInfo));
     }
 
-    if (!srcIsXRP && dstIsXRP)
+    if (!srcIsJBC && dstIsJBC)
     {
         return finishFlow (sb, srcIssue, dstIssue,
-            flow<IOUAmount, XRPAmount> (
-                sb, strands, asDeliver.xrp, partialPayment, offerCrossing,
+            flow<IOUAmount, JBCAmount> (
+                sb, strands, asDeliver.jbc, partialPayment, offerCrossing,
                 limitQuality, sendMax, j, flowDebugInfo));
     }
 
-    assert (!srcIsXRP && !dstIsXRP);
+    assert (!srcIsJBC && !dstIsJBC);
     return finishFlow (sb, srcIssue, dstIssue,
         flow<IOUAmount, IOUAmount> (
             sb, strands, asDeliver.iou, partialPayment, offerCrossing,
@@ -151,4 +151,4 @@ flow (
 
 }
 
-} // ripple
+} // jbcoin

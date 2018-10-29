@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,22 +17,22 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_SHAMAP_SHAMAP_H_INCLUDED
-#define RIPPLE_SHAMAP_SHAMAP_H_INCLUDED
+#ifndef JBCOIN_SHAMAP_SHAMAP_H_INCLUDED
+#define JBCOIN_SHAMAP_SHAMAP_H_INCLUDED
 
-#include <ripple/shamap/Family.h>
-#include <ripple/shamap/FullBelowCache.h>
-#include <ripple/shamap/SHAMapAddNode.h>
-#include <ripple/shamap/SHAMapItem.h>
-#include <ripple/shamap/SHAMapMissingNode.h>
-#include <ripple/shamap/SHAMapNodeID.h>
-#include <ripple/shamap/SHAMapSyncFilter.h>
-#include <ripple/shamap/SHAMapTreeNode.h>
-#include <ripple/shamap/TreeNodeCache.h>
-#include <ripple/basics/UnorderedContainers.h>
-#include <ripple/nodestore/Database.h>
-#include <ripple/nodestore/NodeObject.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/shamap/Family.h>
+#include <jbcoin/shamap/FullBelowCache.h>
+#include <jbcoin/shamap/SHAMapAddNode.h>
+#include <jbcoin/shamap/SHAMapItem.h>
+#include <jbcoin/shamap/SHAMapMissingNode.h>
+#include <jbcoin/shamap/SHAMapNodeID.h>
+#include <jbcoin/shamap/SHAMapSyncFilter.h>
+#include <jbcoin/shamap/SHAMapTreeNode.h>
+#include <jbcoin/shamap/TreeNodeCache.h>
+#include <jbcoin/basics/UnorderedContainers.h>
+#include <jbcoin/nodestore/Database.h>
+#include <jbcoin/nodestore/NodeObject.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/shared_lock_guard.hpp>
 #include <boost/thread/shared_mutex.hpp>
@@ -40,7 +40,7 @@
 #include <stack>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 
 enum class SHAMapState
 {

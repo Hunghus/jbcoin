@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,28 +17,28 @@
 */
 //==============================================================================
 
-#include <ripple/basics/contract.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/LedgerFormats.h>
-#include <ripple/protocol/STAccount.h>
-#include <ripple/protocol/STAmount.h>
-#include <ripple/protocol/STArray.h>
-#include <ripple/protocol/STBitString.h>
-#include <ripple/protocol/STBlob.h>
-#include <ripple/protocol/STVector256.h>
-#include <ripple/protocol/STInteger.h>
-#include <ripple/protocol/STParsedJSON.h>
-#include <ripple/protocol/STPathSet.h>
-#include <ripple/protocol/TER.h>
-#include <ripple/protocol/TxFormats.h>
-#include <ripple/protocol/UintTypes.h>
-#include <ripple/protocol/impl/STVar.h>
-#include <ripple/beast/core/LexicalCast.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/LedgerFormats.h>
+#include <jbcoin/protocol/STAccount.h>
+#include <jbcoin/protocol/STAmount.h>
+#include <jbcoin/protocol/STArray.h>
+#include <jbcoin/protocol/STBitString.h>
+#include <jbcoin/protocol/STBlob.h>
+#include <jbcoin/protocol/STVector256.h>
+#include <jbcoin/protocol/STInteger.h>
+#include <jbcoin/protocol/STParsedJSON.h>
+#include <jbcoin/protocol/STPathSet.h>
+#include <jbcoin/protocol/TER.h>
+#include <jbcoin/protocol/TxFormats.h>
+#include <jbcoin/protocol/UintTypes.h>
+#include <jbcoin/protocol/impl/STVar.h>
+#include <jbcoin/beast/core/LexicalCast.h>
 #include <cassert>
 #include <memory>
 
-namespace ripple {
+namespace jbcoin {
 
 namespace STParsedJSONDetail
 {
@@ -935,4 +935,4 @@ STParsedJSONArray::STParsedJSONArray (
 
 
 
-} // ripple
+} // jbcoin

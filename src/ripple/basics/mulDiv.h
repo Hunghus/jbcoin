@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2015 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2015 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,13 +17,13 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_BASICS_MULDIV_H_INCLUDED
-#define RIPPLE_BASICS_MULDIV_H_INCLUDED
+#ifndef JBCOIN_BASICS_MULDIV_H_INCLUDED
+#define JBCOIN_BASICS_MULDIV_H_INCLUDED
 
 #include <cstdint>
 #include <utility>
 
-namespace ripple
+namespace jbcoin
 {
 
 /** Return value*mul/div accurately.
@@ -42,6 +42,6 @@ namespace ripple
 std::pair<bool, std::uint64_t>
 mulDiv(std::uint64_t value, std::uint64_t mul, std::uint64_t div);
 
-} // ripple
+} // jbcoin
 
 #endif

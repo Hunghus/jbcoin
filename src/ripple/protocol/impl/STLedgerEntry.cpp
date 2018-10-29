@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/json/to_string.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/STLedgerEntry.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/json/to_string.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/STLedgerEntry.h>
 #include <boost/format.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 STLedgerEntry::STLedgerEntry (Keylet const& k)
     :  STObject(sfLedgerEntry)
@@ -150,4 +150,4 @@ bool STLedgerEntry::thread (
     return true;
 }
 
-} // ripple
+} // jbcoin

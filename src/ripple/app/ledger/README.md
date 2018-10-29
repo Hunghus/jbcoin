@@ -63,7 +63,7 @@ that the validator sends its proposals and validations to the network.
 
 ## Ledger Priorities ##
 
-There are two ledgers that are the most important for a rippled server to have:
+There are two ledgers that are the most important for a jbcoind server to have:
 
  - The consensus ledger and
  - The last validated ledger.
@@ -222,7 +222,7 @@ conclusion about which last closed ledger is authoritative.
 
 ## Consensus ##
 
-A distributed agreement protocol. Ripple uses the consensus process to solve
+A distributed agreement protocol. JBCoin uses the consensus process to solve
 the problem of double-spending.
 
 ## Validation ##
@@ -276,7 +276,7 @@ transaction on this account.
 **Sequence:** Must be a value of 1 for the account to process a valid
 transaction.  The value initially matches the sequence number of the state
 tree of the account that signed the transaction.  The process of executing
-the transaction increments the sequence number.  This is how ripple prevents
+the transaction increments the sequence number.  This is how jbcoin prevents
 a transaction from executing more than once.
 
 **index:** 256-bit hash of this AccountRoot.
@@ -305,7 +305,7 @@ same value as a trust line between accounts B and A.
 
 **HighNode:** A deletion hint.
 
-**LedgerEntryType:** "RippleState".
+**LedgerEntryType:** "JBCoinState".
 
 **LowLimit:**
  - **currency:** Same as for Balance.
@@ -319,7 +319,7 @@ same value as a trust line between accounts B and A.
 **PreviousTxnLgrSeq:** Ledger number sequence number of the previous
 transaction on this account.
 
-**index:** 256-bit hash of this RippleState.
+**index:** 256-bit hash of this JBCoinState.
 
 
 ## Ledger Hashes ##
@@ -357,7 +357,7 @@ Lists all of the offers and trust lines that are associated with an account.
 Lists one or more offers that have the same quality.
 
 If a pair of Currency and Issuer fields are all zeros, then that pair is
-dealing in XRP.
+dealing in JBC.
 
 The code, at the moment, does not recognize that the Currency and Issuer
 fields are currencies and issuers.  So those values are presented in hex,
@@ -401,7 +401,7 @@ are occupied by the exchange rate.
 
 ## Overview ##
 
-The Ripple server permits clients to subscribe to a continuous stream of
+The JBCoin server permits clients to subscribe to a continuous stream of
 fully-validated ledgers. The publication code maintains this stream.
 
 The server attempts to maintain this continuous stream unless it falls

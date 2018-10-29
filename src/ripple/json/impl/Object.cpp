@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,8 +17,8 @@
 */
 //==============================================================================
 
-#include <ripple/basics/contract.h>
-#include <ripple/json/Object.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/json/Object.h>
 #include <cassert>
 
 namespace Json {
@@ -63,9 +63,9 @@ Collection::Collection (Collection&& that) noexcept
 void Collection::checkWritable (std::string const& label)
 {
     if (! enabled_)
-        ripple::Throw<std::logic_error> (label + ": not enabled");
+        jbcoin::Throw<std::logic_error> (label + ": not enabled");
     if (! writer_)
-        ripple::Throw<std::logic_error> (label + ": not writable");
+        jbcoin::Throw<std::logic_error> (label + ": not writable");
 }
 
 //------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#include <ripple/shamap/SHAMap.h>
+#include <jbcoin/shamap/SHAMap.h>
 #include <test/shamap/common.h>
-#include <ripple/basics/Blob.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/beast/unit_test.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/basics/Blob.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/beast/unit_test.h>
+#include <jbcoin/beast/utility/Journal.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace tests {
 
 #ifndef __INTELLISENSE__
@@ -321,7 +321,7 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE(SHAMap,ripple_app,ripple);
+BEAST_DEFINE_TESTSUITE(SHAMap,jbcoin_app,jbcoin);
 
 } // tests
-} // ripple
+} // jbcoin

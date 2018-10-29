@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2016 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2016 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#include <ripple/app/misc/TxQ.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/JsonFields.h>
+#include <jbcoin/app/misc/TxQ.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/JsonFields.h>
 #include <test/jtx.h>
-#include <ripple/beast/unit_test.h>
+#include <jbcoin/beast/unit_test.h>
 
-namespace ripple {
+namespace jbcoin {
 
 class LedgerRPC_test : public beast::unit_test::suite
 {
@@ -49,7 +49,7 @@ class LedgerRPC_test : public beast::unit_test::suite
     }
 
     // Corrupt a valid address by replacing the 10th character with '!'.
-    // '!' is not part of the ripple alphabet.
+    // '!' is not part of the jbcoin alphabet.
     std::string
     makeBadAddress (std::string good)
     {
@@ -95,7 +95,7 @@ class LedgerRPC_test : public beast::unit_test::suite
         auto const USD = gw["USD"];
         Account const bob { "bob" };
 
-        env.fund(XRP(10000), gw, bob);
+        env.fund(JBC(10000), gw, bob);
         env.close();
         env.trust(USD(1000), bob);
         env.close();
@@ -168,7 +168,7 @@ class LedgerRPC_test : public beast::unit_test::suite
         using namespace test::jtx;
         Env env {*this};
         Account const alice {"alice"};
-        env.fund(XRP(10000), alice);
+        env.fund(JBC(10000), alice);
         env.close();
 
         Json::Value jvParams;
@@ -237,7 +237,7 @@ class LedgerRPC_test : public beast::unit_test::suite
         using namespace test::jtx;
         Env env {*this};
         Account const alice {"alice"};
-        env.fund (XRP(10000), alice);
+        env.fund (JBC(10000), alice);
         env.close();
 
         std::string const ledgerHash {to_string (env.closed()->info().hash)};
@@ -324,7 +324,7 @@ class LedgerRPC_test : public beast::unit_test::suite
         using namespace test::jtx;
         Env env {*this};
         Account const alice {"alice"};
-        env.fund (XRP(10000), alice);
+        env.fund (JBC(10000), alice);
         env.close();
 
         uint256 const checkId {
@@ -343,7 +343,7 @@ class LedgerRPC_test : public beast::unit_test::suite
             return jv;
         };
 
-        env (checkCreate (env.master, alice, XRP(100)));
+        env (checkCreate (env.master, alice, JBC(100)));
         env.close();
 
         std::string const ledgerHash {to_string (env.closed()->info().hash)};
@@ -385,7 +385,7 @@ class LedgerRPC_test : public beast::unit_test::suite
         Account const alice {"alice"};
         Account const becky {"becky"};
 
-        env.fund (XRP(10000), alice, becky);
+        env.fund (JBC(10000), alice, becky);
         env.close();
 
         env (deposit::auth (alice, becky));
@@ -511,7 +511,7 @@ class LedgerRPC_test : public beast::unit_test::suite
         Account const alice {"alice"};
         Account const gw { "gateway" };
         auto const USD = gw["USD"];
-        env.fund (XRP(10000), alice, gw);
+        env.fund (JBC(10000), alice, gw);
         env.close();
 
         env.trust(USD(1000), alice);
@@ -647,7 +647,7 @@ class LedgerRPC_test : public beast::unit_test::suite
         using namespace test::jtx;
         Env env {*this};
         Account const alice {"alice"};
-        env.fund (XRP(10000), alice);
+        env.fund (JBC(10000), alice);
         env.close();
 
         // Lambda to create an escrow.
@@ -667,7 +667,7 @@ class LedgerRPC_test : public beast::unit_test::suite
         };
 
         using namespace std::chrono_literals;
-        env (escrowCreate (alice, alice, XRP(333), env.now() + 2s));
+        env (escrowCreate (alice, alice, JBC(333), env.now() + 2s));
         env.close();
 
         std::string const ledgerHash {to_string (env.closed()->info().hash)};
@@ -681,7 +681,7 @@ class LedgerRPC_test : public beast::unit_test::suite
             Json::Value const jrr = env.rpc (
                 "json", "ledger_entry", to_string (jvParams))[jss::result];
             BEAST_EXPECT(
-                jrr[jss::node][jss::Amount] == XRP(333).value().getText());
+                jrr[jss::node][jss::Amount] == JBC(333).value().getText());
             escrowIndex = jrr[jss::index].asString();
         }
         {
@@ -692,7 +692,7 @@ class LedgerRPC_test : public beast::unit_test::suite
             Json::Value const jrr = env.rpc (
                 "json", "ledger_entry", to_string (jvParams))[jss::result];
             BEAST_EXPECT(
-                jrr[jss::node][jss::Amount] == XRP(333).value().getText());
+                jrr[jss::node][jss::Amount] == JBC(333).value().getText());
 
         }
         {
@@ -765,10 +765,10 @@ class LedgerRPC_test : public beast::unit_test::suite
         Account const alice {"alice"};
         Account const gw { "gateway" };
         auto const USD = gw["USD"];
-        env.fund (XRP(10000), alice, gw);
+        env.fund (JBC(10000), alice, gw);
         env.close();
 
-        env (offer (alice, USD (321), XRP (322)));
+        env (offer (alice, USD (321), JBC (322)));
         env.close();
 
         std::string const ledgerHash {to_string (env.closed()->info().hash)};
@@ -848,7 +848,7 @@ class LedgerRPC_test : public beast::unit_test::suite
         Env env {*this};
         Account const alice {"alice"};
 
-        env.fund (XRP(10000), alice);
+        env.fund (JBC(10000), alice);
         env.close();
 
         // Lambda to create a PayChan.
@@ -869,7 +869,7 @@ class LedgerRPC_test : public beast::unit_test::suite
             return jv;
         };
 
-        env (payChanCreate (alice, env.master, XRP(57), 18s, alice.pk()));
+        env (payChanCreate (alice, env.master, JBC(57), 18s, alice.pk()));
         env.close();
 
         std::string const ledgerHash {to_string (env.closed()->info().hash)};
@@ -898,15 +898,15 @@ class LedgerRPC_test : public beast::unit_test::suite
         }
     }
 
-    void testLedgerEntryRippleState()
+    void testLedgerEntryJBCoinState()
     {
-        testcase ("ledger_entry Request RippleState");
+        testcase ("ledger_entry Request JBCoinState");
         using namespace test::jtx;
         Env env {*this};
         Account const alice {"alice"};
         Account const gw { "gateway" };
         auto const USD = gw["USD"];
-        env.fund(XRP(10000), alice, gw);
+        env.fund(JBC(10000), alice, gw);
         env.close();
 
         env.trust(USD(999), alice);
@@ -919,11 +919,11 @@ class LedgerRPC_test : public beast::unit_test::suite
         {
             // Request the trust line using the accounts and currency.
             Json::Value jvParams;
-            jvParams[jss::ripple_state] = Json::objectValue;
-            jvParams[jss::ripple_state][jss::accounts] = Json::arrayValue;
-            jvParams[jss::ripple_state][jss::accounts][0u] = alice.human();
-            jvParams[jss::ripple_state][jss::accounts][1u] = gw.human();
-            jvParams[jss::ripple_state][jss::currency] = "USD";
+            jvParams[jss::jbcoin_state] = Json::objectValue;
+            jvParams[jss::jbcoin_state][jss::accounts] = Json::arrayValue;
+            jvParams[jss::jbcoin_state][jss::accounts][0u] = alice.human();
+            jvParams[jss::jbcoin_state][jss::accounts][1u] = gw.human();
+            jvParams[jss::jbcoin_state][jss::currency] = "USD";
             jvParams[jss::ledger_hash] = ledgerHash;
             Json::Value const jrr = env.rpc (
                 "json", "ledger_entry", to_string (jvParams))[jss::result];
@@ -933,138 +933,138 @@ class LedgerRPC_test : public beast::unit_test::suite
                 jrr[jss::node][sfHighLimit.jsonName][jss::value] == "999");
         }
         {
-            // ripple_state is not an object.
+            // jbcoin_state is not an object.
             Json::Value jvParams;
-            jvParams[jss::ripple_state] = "ripple_state";
+            jvParams[jss::jbcoin_state] = "jbcoin_state";
             jvParams[jss::ledger_hash] = ledgerHash;
             Json::Value const jrr = env.rpc (
                 "json", "ledger_entry", to_string (jvParams))[jss::result];
             checkErrorValue (jrr, "malformedRequest", "");
         }
         {
-            // ripple_state.currency is missing.
+            // jbcoin_state.currency is missing.
             Json::Value jvParams;
-            jvParams[jss::ripple_state] = Json::objectValue;
-            jvParams[jss::ripple_state][jss::accounts] = Json::arrayValue;
-            jvParams[jss::ripple_state][jss::accounts][0u] = alice.human();
-            jvParams[jss::ripple_state][jss::accounts][1u] = gw.human();
+            jvParams[jss::jbcoin_state] = Json::objectValue;
+            jvParams[jss::jbcoin_state][jss::accounts] = Json::arrayValue;
+            jvParams[jss::jbcoin_state][jss::accounts][0u] = alice.human();
+            jvParams[jss::jbcoin_state][jss::accounts][1u] = gw.human();
             jvParams[jss::ledger_hash] = ledgerHash;
             Json::Value const jrr = env.rpc (
                 "json", "ledger_entry", to_string (jvParams))[jss::result];
             checkErrorValue (jrr, "malformedRequest", "");
         }
         {
-            // ripple_state accounts is not an array.
+            // jbcoin_state accounts is not an array.
             Json::Value jvParams;
-            jvParams[jss::ripple_state] = Json::objectValue;
-            jvParams[jss::ripple_state][jss::accounts] = 2;
-            jvParams[jss::ripple_state][jss::currency] = "USD";
+            jvParams[jss::jbcoin_state] = Json::objectValue;
+            jvParams[jss::jbcoin_state][jss::accounts] = 2;
+            jvParams[jss::jbcoin_state][jss::currency] = "USD";
             jvParams[jss::ledger_hash] = ledgerHash;
             Json::Value const jrr = env.rpc (
                 "json", "ledger_entry", to_string (jvParams))[jss::result];
             checkErrorValue (jrr, "malformedRequest", "");
         }
         {
-            // ripple_state one of the accounts is missing.
+            // jbcoin_state one of the accounts is missing.
             Json::Value jvParams;
-            jvParams[jss::ripple_state] = Json::objectValue;
-            jvParams[jss::ripple_state][jss::accounts] = Json::arrayValue;
-            jvParams[jss::ripple_state][jss::accounts][0u] = alice.human();
-            jvParams[jss::ripple_state][jss::currency] = "USD";
+            jvParams[jss::jbcoin_state] = Json::objectValue;
+            jvParams[jss::jbcoin_state][jss::accounts] = Json::arrayValue;
+            jvParams[jss::jbcoin_state][jss::accounts][0u] = alice.human();
+            jvParams[jss::jbcoin_state][jss::currency] = "USD";
             jvParams[jss::ledger_hash] = ledgerHash;
             Json::Value const jrr = env.rpc (
                 "json", "ledger_entry", to_string (jvParams))[jss::result];
             checkErrorValue (jrr, "malformedRequest", "");
         }
         {
-            // ripple_state more than 2 accounts.
+            // jbcoin_state more than 2 accounts.
             Json::Value jvParams;
-            jvParams[jss::ripple_state] = Json::objectValue;
-            jvParams[jss::ripple_state][jss::accounts] = Json::arrayValue;
-            jvParams[jss::ripple_state][jss::accounts][0u] = alice.human();
-            jvParams[jss::ripple_state][jss::accounts][1u] = gw.human();
-            jvParams[jss::ripple_state][jss::accounts][2u] = alice.human();
-            jvParams[jss::ripple_state][jss::currency] = "USD";
+            jvParams[jss::jbcoin_state] = Json::objectValue;
+            jvParams[jss::jbcoin_state][jss::accounts] = Json::arrayValue;
+            jvParams[jss::jbcoin_state][jss::accounts][0u] = alice.human();
+            jvParams[jss::jbcoin_state][jss::accounts][1u] = gw.human();
+            jvParams[jss::jbcoin_state][jss::accounts][2u] = alice.human();
+            jvParams[jss::jbcoin_state][jss::currency] = "USD";
             jvParams[jss::ledger_hash] = ledgerHash;
             Json::Value const jrr = env.rpc (
                 "json", "ledger_entry", to_string (jvParams))[jss::result];
             checkErrorValue (jrr, "malformedRequest", "");
         }
         {
-            // ripple_state account[0] is not a string.
+            // jbcoin_state account[0] is not a string.
             Json::Value jvParams;
-            jvParams[jss::ripple_state] = Json::objectValue;
-            jvParams[jss::ripple_state][jss::accounts] = Json::arrayValue;
-            jvParams[jss::ripple_state][jss::accounts][0u] = 44;
-            jvParams[jss::ripple_state][jss::accounts][1u] = gw.human();
-            jvParams[jss::ripple_state][jss::currency] = "USD";
+            jvParams[jss::jbcoin_state] = Json::objectValue;
+            jvParams[jss::jbcoin_state][jss::accounts] = Json::arrayValue;
+            jvParams[jss::jbcoin_state][jss::accounts][0u] = 44;
+            jvParams[jss::jbcoin_state][jss::accounts][1u] = gw.human();
+            jvParams[jss::jbcoin_state][jss::currency] = "USD";
             jvParams[jss::ledger_hash] = ledgerHash;
             Json::Value const jrr = env.rpc (
                 "json", "ledger_entry", to_string (jvParams))[jss::result];
             checkErrorValue (jrr, "malformedRequest", "");
         }
         {
-            // ripple_state account[1] is not a string.
+            // jbcoin_state account[1] is not a string.
             Json::Value jvParams;
-            jvParams[jss::ripple_state] = Json::objectValue;
-            jvParams[jss::ripple_state][jss::accounts] = Json::arrayValue;
-            jvParams[jss::ripple_state][jss::accounts][0u] = alice.human();
-            jvParams[jss::ripple_state][jss::accounts][1u] = 21;
-            jvParams[jss::ripple_state][jss::currency] = "USD";
+            jvParams[jss::jbcoin_state] = Json::objectValue;
+            jvParams[jss::jbcoin_state][jss::accounts] = Json::arrayValue;
+            jvParams[jss::jbcoin_state][jss::accounts][0u] = alice.human();
+            jvParams[jss::jbcoin_state][jss::accounts][1u] = 21;
+            jvParams[jss::jbcoin_state][jss::currency] = "USD";
             jvParams[jss::ledger_hash] = ledgerHash;
             Json::Value const jrr = env.rpc (
                 "json", "ledger_entry", to_string (jvParams))[jss::result];
             checkErrorValue (jrr, "malformedRequest", "");
         }
         {
-            // ripple_state account[0] == account[1].
+            // jbcoin_state account[0] == account[1].
             Json::Value jvParams;
-            jvParams[jss::ripple_state] = Json::objectValue;
-            jvParams[jss::ripple_state][jss::accounts] = Json::arrayValue;
-            jvParams[jss::ripple_state][jss::accounts][0u] = alice.human();
-            jvParams[jss::ripple_state][jss::accounts][1u] = alice.human();
-            jvParams[jss::ripple_state][jss::currency] = "USD";
+            jvParams[jss::jbcoin_state] = Json::objectValue;
+            jvParams[jss::jbcoin_state][jss::accounts] = Json::arrayValue;
+            jvParams[jss::jbcoin_state][jss::accounts][0u] = alice.human();
+            jvParams[jss::jbcoin_state][jss::accounts][1u] = alice.human();
+            jvParams[jss::jbcoin_state][jss::currency] = "USD";
             jvParams[jss::ledger_hash] = ledgerHash;
             Json::Value const jrr = env.rpc (
                 "json", "ledger_entry", to_string (jvParams))[jss::result];
             checkErrorValue (jrr, "malformedRequest", "");
         }
         {
-            // ripple_state malformed account[0].
+            // jbcoin_state malformed account[0].
             Json::Value jvParams;
-            jvParams[jss::ripple_state] = Json::objectValue;
-            jvParams[jss::ripple_state][jss::accounts] = Json::arrayValue;
-            jvParams[jss::ripple_state][jss::accounts][0u] =
+            jvParams[jss::jbcoin_state] = Json::objectValue;
+            jvParams[jss::jbcoin_state][jss::accounts] = Json::arrayValue;
+            jvParams[jss::jbcoin_state][jss::accounts][0u] =
                 makeBadAddress (alice.human());
-            jvParams[jss::ripple_state][jss::accounts][1u] = gw.human();
-            jvParams[jss::ripple_state][jss::currency] = "USD";
+            jvParams[jss::jbcoin_state][jss::accounts][1u] = gw.human();
+            jvParams[jss::jbcoin_state][jss::currency] = "USD";
             jvParams[jss::ledger_hash] = ledgerHash;
             Json::Value const jrr = env.rpc (
                 "json", "ledger_entry", to_string (jvParams))[jss::result];
             checkErrorValue (jrr, "malformedAddress", "");
         }
         {
-            // ripple_state malformed account[1].
+            // jbcoin_state malformed account[1].
             Json::Value jvParams;
-            jvParams[jss::ripple_state] = Json::objectValue;
-            jvParams[jss::ripple_state][jss::accounts] = Json::arrayValue;
-            jvParams[jss::ripple_state][jss::accounts][0u] = alice.human();
-            jvParams[jss::ripple_state][jss::accounts][1u] =
+            jvParams[jss::jbcoin_state] = Json::objectValue;
+            jvParams[jss::jbcoin_state][jss::accounts] = Json::arrayValue;
+            jvParams[jss::jbcoin_state][jss::accounts][0u] = alice.human();
+            jvParams[jss::jbcoin_state][jss::accounts][1u] =
                 makeBadAddress (gw.human());
-            jvParams[jss::ripple_state][jss::currency] = "USD";
+            jvParams[jss::jbcoin_state][jss::currency] = "USD";
             jvParams[jss::ledger_hash] = ledgerHash;
             Json::Value const jrr = env.rpc (
                 "json", "ledger_entry", to_string (jvParams))[jss::result];
             checkErrorValue (jrr, "malformedAddress", "");
         }
         {
-            // ripple_state malformed currency.
+            // jbcoin_state malformed currency.
             Json::Value jvParams;
-            jvParams[jss::ripple_state] = Json::objectValue;
-            jvParams[jss::ripple_state][jss::accounts] = Json::arrayValue;
-            jvParams[jss::ripple_state][jss::accounts][0u] = alice.human();
-            jvParams[jss::ripple_state][jss::accounts][1u] = gw.human();
-            jvParams[jss::ripple_state][jss::currency] = "USDollars";
+            jvParams[jss::jbcoin_state] = Json::objectValue;
+            jvParams[jss::jbcoin_state][jss::accounts] = Json::arrayValue;
+            jvParams[jss::jbcoin_state][jss::accounts][0u] = alice.human();
+            jvParams[jss::jbcoin_state][jss::accounts][1u] = gw.human();
+            jvParams[jss::jbcoin_state][jss::currency] = "USDollars";
             jvParams[jss::ledger_hash] = ledgerHash;
             Json::Value const jrr = env.rpc (
                 "json", "ledger_entry", to_string (jvParams))[jss::result];
@@ -1099,13 +1099,13 @@ class LedgerRPC_test : public beast::unit_test::suite
         using namespace test::jtx;
         Env env {*this, FeatureBitset{}}; // hashes requested below assume
                                      //no amendments
-        env.fund(XRP(10000), "alice");
+        env.fund(JBC(10000), "alice");
         env.close();
-        env.fund(XRP(10000), "bob");
+        env.fund(JBC(10000), "bob");
         env.close();
-        env.fund(XRP(10000), "jim");
+        env.fund(JBC(10000), "jim");
         env.close();
-        env.fund(XRP(10000), "jill");
+        env.fund(JBC(10000), "jill");
 
         // closed ledger hashes are:
         //1 - AB868A6CFEEC779C2FF845C0AF00A642259986AF40C01976A7F842B6918936C7
@@ -1297,11 +1297,11 @@ class LedgerRPC_test : public beast::unit_test::suite
         Account const bob{ "bob" };
         Account const charlie{ "charlie" };
         Account const daria{ "daria" };
-        env.fund(XRP(10000), alice);
-        env.fund(XRP(10000), bob);
+        env.fund(JBC(10000), alice);
+        env.fund(JBC(10000), bob);
         env.close();
-        env.fund(XRP(10000), charlie);
-        env.fund(XRP(10000), daria);
+        env.fund(JBC(10000), charlie);
+        env.fund(JBC(10000), daria);
         env.close();
 
         auto jrr = env.rpc("json", "ledger", to_string(jv))[jss::result];
@@ -1322,9 +1322,9 @@ class LedgerRPC_test : public beast::unit_test::suite
         // Put some txs in the queue
         // Alice
         auto aliceSeq = env.seq(alice);
-        env(pay(alice, "george", XRP(1000)), json(R"({"LastLedgerSequence":7})"),
+        env(pay(alice, "george", JBC(1000)), json(R"({"LastLedgerSequence":7})"),
             ter(terQUEUED));
-        env(offer(alice, XRP(50000), alice["USD"](5000)), seq(aliceSeq + 1),
+        env(offer(alice, JBC(50000), alice["USD"](5000)), seq(aliceSeq + 1),
             ter(terQUEUED));
         env(noop(alice), seq(aliceSeq + 2), ter(terQUEUED));
         // Bob
@@ -1518,7 +1518,7 @@ public:
         testLedgerEntryGenerator();
         testLedgerEntryOffer();
         testLedgerEntryPayChan();
-        testLedgerEntryRippleState();
+        testLedgerEntryJBCoinState();
         testLedgerEntryUnknownOption();
         testLookupLedger();
         testNoQueue();
@@ -1527,7 +1527,7 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE(LedgerRPC,app,ripple);
+BEAST_DEFINE_TESTSUITE(LedgerRPC,app,jbcoin);
 
-} // ripple
+} // jbcoin
 

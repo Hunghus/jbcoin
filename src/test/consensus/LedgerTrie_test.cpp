@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -16,13 +16,13 @@
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 //==============================================================================
-#include <ripple/beast/unit_test.h>
-#include <ripple/consensus/LedgerTrie.h>
+#include <jbcoin/beast/unit_test.h>
+#include <jbcoin/consensus/LedgerTrie.h>
 #include <test/csf/ledgers.h>
 #include <unordered_map>
 #include <random>
 
-namespace ripple {
+namespace jbcoin {
 namespace test {
 
 class LedgerTrie_test : public beast::unit_test::suite
@@ -657,6 +657,6 @@ class LedgerTrie_test : public beast::unit_test::suite
     }
 };
 
-BEAST_DEFINE_TESTSUITE(LedgerTrie, consensus, ripple);
+BEAST_DEFINE_TESTSUITE(LedgerTrie, consensus, jbcoin);
 }  // namespace test
-}  // namespace ripple
+}  // namespace jbcoin

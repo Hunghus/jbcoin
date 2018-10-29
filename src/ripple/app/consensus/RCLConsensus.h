@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,26 +17,26 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_CONSENSUS_RCLCONSENSUS_H_INCLUDED
-#define RIPPLE_APP_CONSENSUS_RCLCONSENSUS_H_INCLUDED
+#ifndef JBCOIN_APP_CONSENSUS_RCLCONSENSUS_H_INCLUDED
+#define JBCOIN_APP_CONSENSUS_RCLCONSENSUS_H_INCLUDED
 
-#include <ripple/app/consensus/RCLCxLedger.h>
-#include <ripple/app/consensus/RCLCxPeerPos.h>
-#include <ripple/app/consensus/RCLCxTx.h>
-#include <ripple/app/misc/FeeVote.h>
-#include <ripple/basics/CountedObject.h>
-#include <ripple/basics/Log.h>
-#include <ripple/beast/utility/Journal.h>
-#include <ripple/consensus/Consensus.h>
-#include <ripple/core/JobQueue.h>
-#include <ripple/overlay/Message.h>
-#include <ripple/protocol/RippleLedgerHash.h>
-#include <ripple/protocol/STValidation.h>
-#include <ripple/shamap/SHAMap.h>
+#include <jbcoin/app/consensus/RCLCxLedger.h>
+#include <jbcoin/app/consensus/RCLCxPeerPos.h>
+#include <jbcoin/app/consensus/RCLCxTx.h>
+#include <jbcoin/app/misc/FeeVote.h>
+#include <jbcoin/basics/CountedObject.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/beast/utility/Journal.h>
+#include <jbcoin/consensus/Consensus.h>
+#include <jbcoin/core/JobQueue.h>
+#include <jbcoin/overlay/Message.h>
+#include <jbcoin/protocol/JBCoinLedgerHash.h>
+#include <jbcoin/protocol/STValidation.h>
+#include <jbcoin/shamap/SHAMap.h>
 #include <atomic>
 #include <mutex>
 
-namespace ripple {
+namespace jbcoin {
 
 class InboundTransactions;
 class LocalTxs;

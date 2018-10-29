@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,17 +17,17 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_LEDGER_LEDGERCLEANER_H_INCLUDED
-#define RIPPLE_APP_LEDGER_LEDGERCLEANER_H_INCLUDED
+#ifndef JBCOIN_APP_LEDGER_LEDGERCLEANER_H_INCLUDED
+#define JBCOIN_APP_LEDGER_LEDGERCLEANER_H_INCLUDED
 
-#include <ripple/app/main/Application.h>
-#include <ripple/json/json_value.h>
-#include <ripple/core/Stoppable.h>
-#include <ripple/beast/utility/PropertyStream.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/json/json_value.h>
+#include <jbcoin/core/Stoppable.h>
+#include <jbcoin/beast/utility/PropertyStream.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <memory>
 
-namespace ripple {
+namespace jbcoin {
 namespace detail {
 
 /** Check the ledger/transaction databases to make sure they have continuity */
@@ -60,6 +60,6 @@ make_LedgerCleaner (Application& app,
     Stoppable& parent, beast::Journal journal);
 
 } // detail
-} // ripple
+} // jbcoin
 
 #endif

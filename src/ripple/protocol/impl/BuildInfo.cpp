@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#include <ripple/basics/contract.h>
-#include <ripple/beast/core/PlatformConfig.h>
-#include <ripple/beast/core/SemanticVersion.h>
-#include <ripple/protocol/BuildInfo.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/beast/core/PlatformConfig.h>
+#include <jbcoin/beast/core/SemanticVersion.h>
+#include <jbcoin/protocol/BuildInfo.h>
 
-namespace ripple {
+namespace jbcoin {
 
 namespace BuildInfo {
 
@@ -106,7 +106,7 @@ getVersionString ()
 std::string const& getFullVersionString ()
 {
     static std::string const value =
-        "rippled-" + getVersionString();
+        "jbcoind-" + getVersionString();
     return value;
 }
 
@@ -132,4 +132,4 @@ to_packed (ProtocolVersion const& p)
     return (static_cast<std::uint32_t> (p.first) << 16) + p.second;
 }
 
-} // ripple
+} // jbcoin

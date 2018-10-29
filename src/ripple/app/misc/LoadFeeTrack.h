@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,23 +17,23 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_CORE_LOADFEETRACK_H_INCLUDED
-#define RIPPLE_CORE_LOADFEETRACK_H_INCLUDED
+#ifndef JBCOIN_CORE_LOADFEETRACK_H_INCLUDED
+#define JBCOIN_CORE_LOADFEETRACK_H_INCLUDED
 
-#include <ripple/json/json_value.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/json/json_value.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <algorithm>
 #include <cstdint>
 #include <mutex>
 
-namespace ripple {
+namespace jbcoin {
 
 struct Fees;
 
 /** Manages the current fee schedule.
 
     The "base" fee is the cost to send a reference transaction under no load,
-    expressed in millionths of one XRP.
+    expressed in millionths of one JBC.
 
     The "load" fee is how much the local server currently charges to send a
     reference transaction. This fee fluctuates based on the load of the
@@ -142,6 +142,6 @@ private:
 std::uint64_t scaleFeeLoad(std::uint64_t fee, LoadFeeTrack const& feeTrack,
     Fees const& fees, bool bUnlimited);
 
-} // ripple
+} // jbcoin
 
 #endif

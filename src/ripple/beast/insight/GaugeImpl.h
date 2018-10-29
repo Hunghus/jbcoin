@@ -20,7 +20,7 @@
 #ifndef BEAST_INSIGHT_GAUGEIMPL_H_INCLUDED
 #define BEAST_INSIGHT_GAUGEIMPL_H_INCLUDED
 
-#include <ripple/beast/insight/BaseImpl.h>
+#include <jbcoin/beast/insight/BaseImpl.h>
 
 namespace beast {
 namespace insight {

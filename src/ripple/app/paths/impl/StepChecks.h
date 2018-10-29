@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2015 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2015 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_PATHS_IMPL_STEP_CHECKS_H_INCLUDED
-#define RIPPLE_APP_PATHS_IMPL_STEP_CHECKS_H_INCLUDED
+#ifndef JBCOIN_APP_PATHS_IMPL_STEP_CHECKS_H_INCLUDED
+#define JBCOIN_APP_PATHS_IMPL_STEP_CHECKS_H_INCLUDED
 
-#include <ripple/basics/Log.h>
-#include <ripple/beast/utility/Journal.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/protocol/AccountID.h>
-#include <ripple/protocol/UintTypes.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/beast/utility/Journal.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/protocol/AccountID.h>
+#include <jbcoin/protocol/UintTypes.h>
 
-namespace ripple {
+namespace jbcoin {
 
 inline
 TER
@@ -60,7 +60,7 @@ checkFreeze (
 
 inline
 TER
-checkNoRipple (
+checkNoJBCoin (
     ReadView const& view,
     AccountID const& prev,
     AccountID const& cur,
@@ -69,7 +69,7 @@ checkNoRipple (
     Currency const& currency,
     beast::Journal j)
 {
-    // fetch the ripple lines into and out of this node
+    // fetch the jbcoin lines into and out of this node
     auto sleIn = view.read (keylet::line (prev, cur, currency));
     auto sleOut = view.read (keylet::line (cur, next, currency));
 
@@ -77,14 +77,14 @@ checkNoRipple (
         return terNO_LINE;
 
     if ((*sleIn)[sfFlags] &
-            ((cur > prev) ? lsfHighNoRipple : lsfLowNoRipple) &&
+            ((cur > prev) ? lsfHighNoJBCoin : lsfLowNoJBCoin) &&
         (*sleOut)[sfFlags] &
-            ((cur > next) ? lsfHighNoRipple : lsfLowNoRipple))
+            ((cur > next) ? lsfHighNoJBCoin : lsfLowNoJBCoin))
     {
-        JLOG (j.info()) << "Path violates noRipple constraint between " << prev
+        JLOG (j.info()) << "Path violates noJBCoin constraint between " << prev
                       << ", " << cur << " and " << next;
 
-        return terNO_RIPPLE;
+        return terNO_JBCOIN;
     }
     return tesSUCCESS;
 }

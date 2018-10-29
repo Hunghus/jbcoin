@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,28 +17,28 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/paths/RippleState.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/resource/Fees.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
-#include <ripple/rpc/impl/Tuning.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/paths/JBCoinState.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/resource/Fees.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
+#include <jbcoin/rpc/impl/Tuning.h>
 
-namespace ripple {
+namespace jbcoin {
 
 struct VisitData
 {
-    std::vector <RippleState::pointer> items;
+    std::vector <JBCoinState::pointer> items;
     AccountID const& accountID;
     bool hasPeer;
     AccountID const& raPeerAccount;
 };
 
-void addLine (Json::Value& jsonLines, RippleState const& line)
+void addLine (Json::Value& jsonLines, JBCoinState const& line)
 {
     STAmount const& saBalance (line.getBalance ());
     STAmount const& saLimit (line.getLimit ());
@@ -61,10 +61,10 @@ void addLine (Json::Value& jsonLines, RippleState const& line)
         jPeer[jss::authorized] = true;
     if (line.getAuthPeer ())
         jPeer[jss::peer_authorized] = true;
-    if (line.getNoRipple ())
-        jPeer[jss::no_ripple] = true;
-    if (line.getNoRipplePeer ())
-        jPeer[jss::no_ripple_peer] = true;
+    if (line.getNoJBCoin ())
+        jPeer[jss::no_jbcoin] = true;
+    if (line.getNoJBCoinPeer ())
+        jPeer[jss::no_jbcoin_peer] = true;
     if (line.getFreeze ())
         jPeer[jss::freeze] = true;
     if (line.getFreezePeer ())
@@ -138,7 +138,7 @@ Json::Value doAccountLines (RPC::Context& context)
             return RPC::expected_field_error (jss::marker, "string");
 
         startAfter.SetHex (marker.asString ());
-        auto const sleLine = ledger->read({ltRIPPLE_STATE, startAfter});
+        auto const sleLine = ledger->read({ltJBCOIN_STATE, startAfter});
 
         if (! sleLine)
             return rpcError (rpcINVALID_PARAMS);
@@ -151,7 +151,7 @@ Json::Value doAccountLines (RPC::Context& context)
             return rpcError (rpcINVALID_PARAMS);
 
         // Caller provided the first line (startAfter), add it as first result
-        auto const line = RippleState::makeItem (accountID, sleLine);
+        auto const line = JBCoinState::makeItem (accountID, sleLine);
         if (line == nullptr)
             return rpcError (rpcINVALID_PARAMS);
 
@@ -171,7 +171,7 @@ Json::Value doAccountLines (RPC::Context& context)
             [&visitData](std::shared_ptr<SLE const> const& sleCur)
             {
                 auto const line =
-                    RippleState::makeItem (visitData.accountID, sleCur);
+                    JBCoinState::makeItem (visitData.accountID, sleCur);
                 if (line != nullptr &&
                     (! visitData.hasPeer ||
                      visitData.raPeerAccount == line->getAccountIDPeer ()))
@@ -191,7 +191,7 @@ Json::Value doAccountLines (RPC::Context& context)
     {
         result[jss::limit] = limit;
 
-        RippleState::pointer line (visitData.items.back ());
+        JBCoinState::pointer line (visitData.items.back ());
         result[jss::marker] = to_string (line->key());
         visitData.items.pop_back ();
     }
@@ -205,4 +205,4 @@ Json::Value doAccountLines (RPC::Context& context)
     return result;
 }
 
-} // ripple
+} // jbcoin

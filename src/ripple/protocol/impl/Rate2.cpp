@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2015 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2015 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,10 +17,10 @@
 */
 //==============================================================================
 
-#include <ripple/protocol/Quality.h>
-#include <ripple/protocol/Rate.h>
+#include <jbcoin/protocol/Quality.h>
+#include <jbcoin/protocol/Rate.h>
 
-namespace ripple {
+namespace jbcoin {
 
 Rate const parityRate (QUALITY_ONE);
 

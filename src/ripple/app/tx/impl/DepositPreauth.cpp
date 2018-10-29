@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2018 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2018 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#include <ripple/app/tx/impl/DepositPreauth.h>
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/st.h>
-#include <ripple/protocol/TxFlags.h>
-#include <ripple/ledger/View.h>
+#include <jbcoin/app/tx/impl/DepositPreauth.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/st.h>
+#include <jbcoin/protocol/TxFlags.h>
+#include <jbcoin/ledger/View.h>
 
-namespace ripple {
+namespace jbcoin {
 
 NotTEC
 DepositPreauth::preflight (PreflightContext const& ctx)
@@ -186,4 +186,4 @@ DepositPreauth::doApply ()
     return tesSUCCESS;
 }
 
-} // namespace ripple
+} // namespace jbcoin

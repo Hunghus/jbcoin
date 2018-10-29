@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_CONSENSUS_LEDGERS_TRIE_H_INCLUDED
-#define RIPPLE_APP_CONSENSUS_LEDGERS_TRIE_H_INCLUDED
+#ifndef JBCOIN_APP_CONSENSUS_LEDGERS_TRIE_H_INCLUDED
+#define JBCOIN_APP_CONSENSUS_LEDGERS_TRIE_H_INCLUDED
 
-#include <ripple/json/json_value.h>
+#include <jbcoin/json/json_value.h>
 #include <boost/optional.hpp>
 #include <algorithm>
 #include <memory>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 
 /** The tip of a span of ledger ancestry
 */
@@ -811,5 +811,5 @@ public:
     }
 };
 
-}  // namespace ripple
+}  // namespace jbcoin
 #endif

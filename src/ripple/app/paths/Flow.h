@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_PATHS_FLOW_H_INCLUDED
-#define RIPPLE_APP_PATHS_FLOW_H_INCLUDED
+#ifndef JBCOIN_APP_PATHS_FLOW_H_INCLUDED
+#define JBCOIN_APP_PATHS_FLOW_H_INCLUDED
 
-#include <ripple/app/paths/impl/Steps.h>
-#include <ripple/app/paths/RippleCalc.h>
-#include <ripple/protocol/Quality.h>
+#include <jbcoin/app/paths/impl/Steps.h>
+#include <jbcoin/app/paths/JBCoinCalc.h>
+#include <jbcoin/protocol/Quality.h>
 
-namespace ripple
+namespace jbcoin
 {
 
 namespace path {
@@ -52,7 +52,7 @@ struct FlowDebugInfo;
   @param flowDebugInfo If non-null a pointer to FlowDebugInfo for debugging
   @return Actual amount in and out, and the result code
 */
-path::RippleCalc::Output
+path::JBCoinCalc::Output
 flow (PaymentSandbox& view,
     STAmount const& deliver,
     AccountID const& src,
@@ -67,6 +67,6 @@ flow (PaymentSandbox& view,
     beast::Journal j,
     path::detail::FlowDebugInfo* flowDebugInfo=nullptr);
 
-}  // ripple
+}  // jbcoin
 
 #endif

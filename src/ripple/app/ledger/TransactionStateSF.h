@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_LEDGER_TRANSACTIONSTATESF_H_INCLUDED
-#define RIPPLE_APP_LEDGER_TRANSACTIONSTATESF_H_INCLUDED
+#ifndef JBCOIN_APP_LEDGER_TRANSACTIONSTATESF_H_INCLUDED
+#define JBCOIN_APP_LEDGER_TRANSACTIONSTATESF_H_INCLUDED
 
-#include <ripple/app/ledger/AbstractFetchPackContainer.h>
-#include <ripple/nodestore/Database.h>
-#include <ripple/shamap/SHAMapSyncFilter.h>
+#include <jbcoin/app/ledger/AbstractFetchPackContainer.h>
+#include <jbcoin/nodestore/Database.h>
+#include <jbcoin/shamap/SHAMapSyncFilter.h>
 
-namespace ripple {
+namespace jbcoin {
 
 // This class is only needed on add functions
 // sync filter for transactions tree during ledger sync
@@ -49,6 +49,6 @@ private:
     AbstractFetchPackContainer& fp_;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

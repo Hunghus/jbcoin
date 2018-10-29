@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -19,10 +19,10 @@
 
 #include <test/jtx/jtx_json.h>
 #include <test/jtx/utility.h>
-#include <ripple/json/json_reader.h>
-#include <ripple/basics/contract.h>
+#include <jbcoin/json/json_reader.h>
+#include <jbcoin/basics/contract.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace test {
 namespace jtx {
 
@@ -52,4 +52,4 @@ json::operator()(Env&, JTx& jt) const
 
 } // jtx
 } // test
-} // ripple
+} // jbcoin

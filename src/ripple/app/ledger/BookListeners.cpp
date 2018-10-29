@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/OrderBookDB.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/json/to_string.h>
+#include <jbcoin/app/ledger/OrderBookDB.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/json/to_string.h>
 
-namespace ripple {
+namespace jbcoin {
 
 void
 BookListeners::addSubscriber(InfoSub::ref sub)
@@ -63,4 +63,4 @@ BookListeners::publish(
     }
 }
 
-}  // namespace ripple
+}  // namespace jbcoin

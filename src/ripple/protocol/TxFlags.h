@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_TXFLAGS_H_INCLUDED
-#define RIPPLE_PROTOCOL_TXFLAGS_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_TXFLAGS_H_INCLUDED
+#define JBCOIN_PROTOCOL_TXFLAGS_H_INCLUDED
 
 #include <cstdint>
 
-namespace ripple {
+namespace jbcoin {
 
 //
 // Transaction flags.
@@ -55,21 +55,21 @@ const std::uint32_t tfUniversalMask        = ~ tfUniversal;
 const std::uint32_t tfOptionalDestTag      = 0x00020000;
 const std::uint32_t tfRequireAuth          = 0x00040000;
 const std::uint32_t tfOptionalAuth         = 0x00080000;
-const std::uint32_t tfDisallowXRP          = 0x00100000;
-const std::uint32_t tfAllowXRP             = 0x00200000;
+const std::uint32_t tfDisallowJBC          = 0x00100000;
+const std::uint32_t tfAllowJBC             = 0x00200000;
 const std::uint32_t tfAccountSetMask       = ~ (tfUniversal | TxFlag::requireDestTag | tfOptionalDestTag
                                              | tfRequireAuth | tfOptionalAuth
-                                             | tfDisallowXRP | tfAllowXRP);
+                                             | tfDisallowJBC | tfAllowJBC);
 
 // AccountSet SetFlag/ClearFlag values
 const std::uint32_t asfRequireDest         = 1;
 const std::uint32_t asfRequireAuth         = 2;
-const std::uint32_t asfDisallowXRP         = 3;
+const std::uint32_t asfDisallowJBC         = 3;
 const std::uint32_t asfDisableMaster       = 4;
 const std::uint32_t asfAccountTxnID        = 5;
 const std::uint32_t asfNoFreeze            = 6;
 const std::uint32_t asfGlobalFreeze        = 7;
-const std::uint32_t asfDefaultRipple       = 8;
+const std::uint32_t asfDefaultJBCoin       = 8;
 const std::uint32_t asfDepositAuth         = 9;
 
 // OfferCreate flags:
@@ -80,18 +80,18 @@ const std::uint32_t tfSell                 = 0x00080000;
 const std::uint32_t tfOfferCreateMask      = ~ (tfUniversal | tfPassive | tfImmediateOrCancel | tfFillOrKill | tfSell);
 
 // Payment flags:
-const std::uint32_t tfNoRippleDirect       = 0x00010000;
+const std::uint32_t tfNoJBCoinDirect       = 0x00010000;
 const std::uint32_t tfPartialPayment       = 0x00020000;
 const std::uint32_t tfLimitQuality         = 0x00040000;
-const std::uint32_t tfPaymentMask          = ~ (tfUniversal | tfPartialPayment | tfLimitQuality | tfNoRippleDirect);
+const std::uint32_t tfPaymentMask          = ~ (tfUniversal | tfPartialPayment | tfLimitQuality | tfNoJBCoinDirect);
 
 // TrustSet flags:
 const std::uint32_t tfSetfAuth             = 0x00010000;
-const std::uint32_t tfSetNoRipple          = 0x00020000;
-const std::uint32_t tfClearNoRipple        = 0x00040000;
+const std::uint32_t tfSetNoJBCoin          = 0x00020000;
+const std::uint32_t tfClearNoJBCoin        = 0x00040000;
 const std::uint32_t tfSetFreeze            = 0x00100000;
 const std::uint32_t tfClearFreeze          = 0x00200000;
-const std::uint32_t tfTrustSetMask         = ~ (tfUniversal | tfSetfAuth | tfSetNoRipple | tfClearNoRipple
+const std::uint32_t tfTrustSetMask         = ~ (tfUniversal | tfSetfAuth | tfSetNoJBCoin | tfClearNoJBCoin
                                              | tfSetFreeze | tfClearFreeze);
 
 // EnableAmendment flags:
@@ -103,6 +103,6 @@ const std::uint32_t tfRenew                = 0x00010000;
 const std::uint32_t tfClose                = 0x00020000;
 const std::uint32_t tfPayChanClaimMask     = ~ (tfUniversal | tfRenew | tfClose);
 
-} // ripple
+} // jbcoin
 
 #endif

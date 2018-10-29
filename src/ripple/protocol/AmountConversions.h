@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_AMOUNTCONVERSION_H_INCLUDED
-#define RIPPLE_PROTOCOL_AMOUNTCONVERSION_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_AMOUNTCONVERSION_H_INCLUDED
+#define JBCOIN_PROTOCOL_AMOUNTCONVERSION_H_INCLUDED
 
-#include <ripple/protocol/IOUAmount.h>
-#include <ripple/protocol/XRPAmount.h>
-#include <ripple/protocol/STAmount.h>
+#include <jbcoin/protocol/IOUAmount.h>
+#include <jbcoin/protocol/JBCAmount.h>
+#include <jbcoin/protocol/STAmount.h>
 
-namespace ripple {
+namespace jbcoin {
 
 inline
 STAmount
@@ -45,19 +45,19 @@ toSTAmount (IOUAmount const& iou)
 
 inline
 STAmount
-toSTAmount (XRPAmount const& xrp)
+toSTAmount (JBCAmount const& jbc)
 {
-    bool const isNeg = xrp.signum() < 0;
-    std::uint64_t const umant = isNeg ? - xrp.drops () : xrp.drops ();
+    bool const isNeg = jbc.signum() < 0;
+    std::uint64_t const umant = isNeg ? - jbc.drops () : jbc.drops ();
     return STAmount (umant, isNeg);
 }
 
 inline
 STAmount
-toSTAmount (XRPAmount const& xrp, Issue const& iss)
+toSTAmount (JBCAmount const& jbc, Issue const& iss)
 {
-    assert (isXRP(iss.account) && isXRP(iss.currency));
-    return toSTAmount (xrp);
+    assert (isJBC(iss.account) && isJBC(iss.currency));
+    return toSTAmount (jbc);
 }
 
 template <class T>
@@ -86,22 +86,22 @@ toAmount<IOUAmount> (STAmount const& amt)
     std::int64_t const sMant =
             isNeg ? - std::int64_t (amt.mantissa ()) : amt.mantissa ();
 
-    assert (! isXRP (amt));
+    assert (! isJBC (amt));
     return IOUAmount (sMant, amt.exponent ());
 }
 
 template <>
 inline
-XRPAmount
-toAmount<XRPAmount> (STAmount const& amt)
+JBCAmount
+toAmount<JBCAmount> (STAmount const& amt)
 {
     assert (amt.mantissa () < std::numeric_limits<std::int64_t>::max ());
     bool const isNeg = amt.negative ();
     std::int64_t const sMant =
             isNeg ? - std::int64_t (amt.mantissa ()) : amt.mantissa ();
 
-    assert (isXRP (amt));
-    return XRPAmount (sMant);
+    assert (isJBC (amt));
+    return JBCAmount (sMant);
 }
 
 

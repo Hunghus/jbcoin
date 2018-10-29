@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,26 +17,26 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/paths/Tuning.h>
-#include <ripple/app/paths/Pathfinder.h>
-#include <ripple/app/paths/RippleCalc.h>
-#include <ripple/app/paths/RippleLineCache.h>
-#include <ripple/ledger/PaymentSandbox.h>
-#include <ripple/app/ledger/OrderBookDB.h>
-#include <ripple/basics/Log.h>
-#include <ripple/json/to_string.h>
-#include <ripple/core/JobQueue.h>
-#include <ripple/core/Config.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/paths/Tuning.h>
+#include <jbcoin/app/paths/Pathfinder.h>
+#include <jbcoin/app/paths/JBCoinCalc.h>
+#include <jbcoin/app/paths/JBCoinLineCache.h>
+#include <jbcoin/ledger/PaymentSandbox.h>
+#include <jbcoin/app/ledger/OrderBookDB.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/json/to_string.h>
+#include <jbcoin/core/JobQueue.h>
+#include <jbcoin/core/Config.h>
 #include <tuple>
 
 /*
 
 Core Pathfinding Engine
 
-The pathfinding request is identified by category, XRP to XRP, XRP to
-non-XRP, non-XRP to XRP, same currency non-XRP to non-XRP, cross-currency
-non-XRP to non-XRP.  For each category, there is a table of paths that the
+The pathfinding request is identified by category, JBC to JBC, JBC to
+non-JBC, non-JBC to JBC, same currency non-JBC to non-JBC, cross-currency
+non-JBC to non-JBC.  For each category, there is a table of paths that the
 pathfinder searches for.  Complete paths are collected.
 
 Each complete path is then rated and sorted. Paths with no or trivial
@@ -62,7 +62,7 @@ same path request (particularly if the search depth may change).
 
 */
 
-namespace ripple {
+namespace jbcoin {
 
 namespace {
 
@@ -124,7 +124,7 @@ std::string pathTypeToString (Pathfinder::PathType const& type)
             case Pathfinder::nt_BOOKS:
                 ret.append("b");
                 break;
-            case Pathfinder::nt_XRP_BOOK:
+            case Pathfinder::nt_JBC_BOOK:
                 ret.append("x");
                 break;
             case Pathfinder::nt_DEST_BOOK:
@@ -142,7 +142,7 @@ std::string pathTypeToString (Pathfinder::PathType const& type)
 }  // namespace
 
 Pathfinder::Pathfinder (
-    std::shared_ptr<RippleLineCache> const& cache,
+    std::shared_ptr<JBCoinLineCache> const& cache,
     AccountID const& uSrcAccount,
     AccountID const& uDstAccount,
     Currency const& uSrcCurrency,
@@ -152,14 +152,14 @@ Pathfinder::Pathfinder (
     Application& app)
     :   mSrcAccount (uSrcAccount),
         mDstAccount (uDstAccount),
-        mEffectiveDst (isXRP(saDstAmount.getIssuer ()) ?
+        mEffectiveDst (isJBC(saDstAmount.getIssuer ()) ?
             uDstAccount : saDstAmount.getIssuer ()),
         mDstAmount (saDstAmount),
         mSrcCurrency (uSrcCurrency),
         mSrcIssuer (uSrcIssuer),
         mSrcAmount (srcAmount.value_or(STAmount({uSrcCurrency,
-            uSrcIssuer.value_or(isXRP(uSrcCurrency) ?
-                xrpAccount() : uSrcAccount)}, 1u, 0, true))),
+            uSrcIssuer.value_or(isJBC(uSrcCurrency) ?
+                jbcAccount() : uSrcAccount)}, 1u, 0, true))),
         convert_all_ (mDstAmount ==
             STAmount(mDstAmount.issue(), STAmount::cMaxValue, STAmount::cMaxOffset)),
         mLedger (cache->getLedger ()),
@@ -167,7 +167,7 @@ Pathfinder::Pathfinder (
         app_ (app),
         j_ (app.journal ("Pathfinder"))
 {
-    assert (! uSrcIssuer || isXRP(uSrcCurrency) == isXRP(uSrcIssuer.get()));
+    assert (! uSrcIssuer || isJBC(uSrcCurrency) == isJBC(uSrcIssuer.get()));
 }
 
 bool Pathfinder::findPaths (int searchLevel)
@@ -202,12 +202,12 @@ bool Pathfinder::findPaths (int searchLevel)
 
     m_loadEvent = app_.getJobQueue ().makeLoadEvent (
         jtPATH_FIND, "FindPath");
-    auto currencyIsXRP = isXRP (mSrcCurrency);
+    auto currencyIsJBC = isJBC (mSrcCurrency);
 
     bool useIssuerAccount
-            = mSrcIssuer && !currencyIsXRP && !isXRP (*mSrcIssuer);
+            = mSrcIssuer && !currencyIsJBC && !isJBC (*mSrcIssuer);
     auto& account = useIssuerAccount ? *mSrcIssuer : mSrcAccount;
-    auto issuer = currencyIsXRP ? AccountID() : account;
+    auto issuer = currencyIsJBC ? AccountID() : account;
     mSource = STPathElement (account, mSrcCurrency, issuer);
     auto issuerString = mSrcIssuer
             ? to_string (*mSrcIssuer) : std::string ("none");
@@ -225,8 +225,8 @@ bool Pathfinder::findPaths (int searchLevel)
         return false;
     }
 
-    bool bSrcXrp = isXRP (mSrcCurrency);
-    bool bDstXrp = isXRP (mDstAmount.getCurrency());
+    bool bSrcJrp = isJBC (mSrcCurrency);
+    bool bDstJrp = isJBC (mDstAmount.getCurrency());
 
     if (! mLedger->exists (keylet::account(mSrcAccount)))
     {
@@ -247,10 +247,10 @@ bool Pathfinder::findPaths (int searchLevel)
     {
         // Can't find the destination account - we must be funding a new
         // account.
-        if (!bDstXrp)
+        if (!bDstJrp)
         {
             JLOG (j_.debug())
-                    << "New account not being funded in XRP ";
+                    << "New account not being funded in JBC ";
             return false;
         }
 
@@ -267,35 +267,35 @@ bool Pathfinder::findPaths (int searchLevel)
     // Now compute the payment type from the types of the source and destination
     // currencies.
     PaymentType paymentType;
-    if (bSrcXrp && bDstXrp)
+    if (bSrcJrp && bDstJrp)
     {
-        // XRP -> XRP
-        JLOG (j_.debug()) << "XRP to XRP payment";
-        paymentType = pt_XRP_to_XRP;
+        // JBC -> JBC
+        JLOG (j_.debug()) << "JBC to JBC payment";
+        paymentType = pt_JBC_to_JBC;
     }
-    else if (bSrcXrp)
+    else if (bSrcJrp)
     {
-        // XRP -> non-XRP
-        JLOG (j_.debug()) << "XRP to non-XRP payment";
-        paymentType = pt_XRP_to_nonXRP;
+        // JBC -> non-JBC
+        JLOG (j_.debug()) << "JBC to non-JBC payment";
+        paymentType = pt_JBC_to_nonJBC;
     }
-    else if (bDstXrp)
+    else if (bDstJrp)
     {
-        // non-XRP -> XRP
-        JLOG (j_.debug()) << "non-XRP to XRP payment";
-        paymentType = pt_nonXRP_to_XRP;
+        // non-JBC -> JBC
+        JLOG (j_.debug()) << "non-JBC to JBC payment";
+        paymentType = pt_nonJBC_to_JBC;
     }
     else if (mSrcCurrency == mDstAmount.getCurrency ())
     {
-        // non-XRP -> non-XRP - Same currency
-        JLOG (j_.debug()) << "non-XRP to non-XRP - same currency";
-        paymentType = pt_nonXRP_to_same;
+        // non-JBC -> non-JBC - Same currency
+        JLOG (j_.debug()) << "non-JBC to non-JBC - same currency";
+        paymentType = pt_nonJBC_to_same;
     }
     else
     {
-        // non-XRP to non-XRP - Different currency
-        JLOG (j_.debug()) << "non-XRP to non-XRP - cross currency";
-        paymentType = pt_nonXRP_to_nonXRP;
+        // non-JBC to non-JBC - Different currency
+        JLOG (j_.debug()) << "non-JBC to non-JBC - cross currency";
+        paymentType = pt_nonJBC_to_nonJBC;
     }
 
     // Now iterate over all paths for that paymentType.
@@ -331,7 +331,7 @@ TER Pathfinder::getPathLiquidity (
     STPathSet pathSet;
     pathSet.push_back (path);
 
-    path::RippleCalc::Input rcInput;
+    path::JBCoinCalc::Input rcInput;
     rcInput.defaultPathsAllowed = false;
 
     PaymentSandbox sandbox (&*mLedger, tapNONE);
@@ -342,7 +342,7 @@ TER Pathfinder::getPathLiquidity (
         if (convert_all_)
             rcInput.partialPaymentAllowed = true;
 
-        auto rc = path::RippleCalc::rippleCalculate (
+        auto rc = path::JBCoinCalc::jbcoinCalculate (
             sandbox,
             mSrcAmount,
             minDstAmount,
@@ -362,7 +362,7 @@ TER Pathfinder::getPathLiquidity (
         {
             // Now try to compute the remaining liquidity.
             rcInput.partialPaymentAllowed = true;
-            rc = path::RippleCalc::rippleCalculate (
+            rc = path::JBCoinCalc::jbcoinCalculate (
                 sandbox,
                 mSrcAmount,
                 mDstAmount - amountOut,
@@ -411,9 +411,9 @@ void Pathfinder::computePathRanks (int maxPaths)
     {
         PaymentSandbox sandbox (&*mLedger, tapNONE);
 
-        path::RippleCalc::Input rcInput;
+        path::JBCoinCalc::Input rcInput;
         rcInput.partialPaymentAllowed = true;
-        auto rc = path::RippleCalc::rippleCalculate (
+        auto rc = path::JBCoinCalc::jbcoinCalculate (
             sandbox,
             mSrcAmount,
             mRemainingAmount,
@@ -446,7 +446,7 @@ void Pathfinder::computePathRanks (int maxPaths)
 static bool isDefaultPath (STPath const& path)
 {
     // TODO(tom): default paths can consist of more than just an account:
-    // https://forum.ripple.com/viewtopic.php?f=2&t=8206&start=10#p57713
+    // https://forum.jbcoin.com/viewtopic.php?f=2&t=8206&start=10#p57713
     //
     // JoelKatz writes:
     // So the test for whether a path is a default path is incorrect. I'm not
@@ -566,7 +566,7 @@ Pathfinder::getBestPaths (
         return mCompletePaths;
 
     assert (fullLiquidityPath.empty ());
-    const bool issuerIsSender = isXRP (mSrcCurrency) || (srcIssuer == mSrcAccount);
+    const bool issuerIsSender = isJBC (mSrcCurrency) || (srcIssuer == mSrcAccount);
 
     std::vector <PathRank> extraPathRanks;
     rankPaths (maxPaths, extraPaths, extraPathRanks);
@@ -683,7 +683,7 @@ bool Pathfinder::issueMatchesOrigin (Issue const& issue)
 {
     bool matchingCurrency = (issue.currency == mSrcCurrency);
     bool matchingAccount =
-            isXRP (issue.currency) ||
+            isJBC (issue.currency) ||
             (mSrcIssuer && issue.account == mSrcIssuer) ||
             issue.account == mSrcAccount;
 
@@ -719,9 +719,9 @@ int Pathfinder::getPathsOut (
     {
         count = app_.getOrderBookDB ().getBookSize (issue);
 
-        for (auto const& item : mRLCache->getRippleLines (account))
+        for (auto const& item : mRLCache->getJBCoinLines (account))
         {
-            RippleState* rspEntry = (RippleState*) item.get ();
+            JBCoinState* rspEntry = (JBCoinState*) item.get ();
 
             if (currency != rspEntry->getLimit ().getCurrency ())
             {
@@ -737,7 +737,7 @@ int Pathfinder::getPathsOut (
             {
                 count += 10000; // count a path to the destination extra
             }
-            else if (rspEntry->getNoRipplePeer ())
+            else if (rspEntry->getNoJBCoinPeer ())
             {
                 // This probably isn't a useful path out
             }
@@ -811,8 +811,8 @@ STPathSet& Pathfinder::addPathsForType (PathType const& pathType)
         addLinks (parentPaths, pathsOut, afADD_BOOKS);
         break;
 
-    case nt_XRP_BOOK:
-        addLinks (parentPaths, pathsOut, afADD_BOOKS | afOB_XRP);
+    case nt_JBC_BOOK:
+        addLinks (parentPaths, pathsOut, afADD_BOOKS | afOB_JBC);
         break;
 
     case nt_DEST_BOOK:
@@ -839,23 +839,23 @@ STPathSet& Pathfinder::addPathsForType (PathType const& pathType)
     return pathsOut;
 }
 
-bool Pathfinder::isNoRipple (
+bool Pathfinder::isNoJBCoin (
     AccountID const& fromAccount,
     AccountID const& toAccount,
     Currency const& currency)
 {
-    auto sleRipple = mLedger->read(keylet::line(
+    auto sleJBCoin = mLedger->read(keylet::line(
         toAccount, fromAccount, currency));
 
     auto const flag ((toAccount > fromAccount)
-                     ? lsfHighNoRipple : lsfLowNoRipple);
+                     ? lsfHighNoJBCoin : lsfLowNoJBCoin);
 
-    return sleRipple && (sleRipple->getFieldU32 (sfFlags) & flag);
+    return sleJBCoin && (sleJBCoin->getFieldU32 (sfFlags) & flag);
 }
 
 // Does this path end on an account-to-account link whose last account has
-// set "no ripple" on the link?
-bool Pathfinder::isNoRippleOut (STPath const& currentPath)
+// set "no jbcoin" on the link?
+bool Pathfinder::isNoJBCoinOut (STPath const& currentPath)
 {
     // Must have at least one link.
     if (currentPath.empty ())
@@ -867,13 +867,13 @@ bool Pathfinder::isNoRippleOut (STPath const& currentPath)
         return false;
 
     // If there's only one item in the path, return true if that item specifies
-    // no ripple on the output. A path with no ripple on its output can't be
-    // followed by a link with no ripple on its input.
+    // no jbcoin on the output. A path with no jbcoin on its output can't be
+    // followed by a link with no jbcoin on its input.
     auto const& fromAccount = (currentPath.size () == 1)
         ? mSrcAccount
         : (currentPath.end () - 2)->getAccountID ();
     auto const& toAccount = endElement.getAccountID ();
-    return isNoRipple (fromAccount, toAccount, endElement.getCurrency ());
+    return isNoJBCoin (fromAccount, toAccount, endElement.getCurrency ());
 }
 
 void addUniquePath (STPathSet& pathSet, STPath const& path)
@@ -897,7 +897,7 @@ void Pathfinder::addLink (
     auto const& uEndCurrency = pathEnd.getCurrency ();
     auto const& uEndIssuer = pathEnd.getIssuerID ();
     auto const& uEndAccount = pathEnd.getAccountID ();
-    bool const bOnXRP = uEndCurrency.isZero ();
+    bool const bOnJBC = uEndCurrency.isZero ();
 
     // Does pathfinding really need to get this to
     // a gateway (the issuer of the destination amount)
@@ -905,16 +905,16 @@ void Pathfinder::addLink (
     bool const hasEffectiveDestination = mEffectiveDst != mDstAccount;
 
     JLOG (j_.trace()) << "addLink< flags="
-                                   << addFlags << " onXRP=" << bOnXRP;
+                                   << addFlags << " onJBC=" << bOnJBC;
     JLOG (j_.trace()) << currentPath.getJson (0);
 
     if (addFlags & afADD_ACCOUNTS)
     {
         // add accounts
-        if (bOnXRP)
+        if (bOnJBC)
         {
             if (mDstAmount.native () && !currentPath.empty ())
-            { // non-default path to XRP destination
+            { // non-default path to JBC destination
                 JLOG (j_.trace())
                     << "complete path found ax: " << currentPath.getJson(0);
                 addUniquePath (mCompletePaths, currentPath);
@@ -931,23 +931,23 @@ void Pathfinder::addLink (
                     sleEnd->getFieldU32 (sfFlags) & lsfRequireAuth);
                 bool const bIsEndCurrency (
                     uEndCurrency == mDstAmount.getCurrency ());
-                bool const bIsNoRippleOut (
-                    isNoRippleOut (currentPath));
+                bool const bIsNoJBCoinOut (
+                    isNoJBCoinOut (currentPath));
                 bool const bDestOnly (
                     addFlags & afAC_LAST);
 
-                auto& rippleLines (mRLCache->getRippleLines (uEndAccount));
+                auto& jbcoinLines (mRLCache->getJBCoinLines (uEndAccount));
 
                 AccountCandidates candidates;
-                candidates.reserve (rippleLines.size ());
+                candidates.reserve (jbcoinLines.size ());
 
-                for (auto const& item : rippleLines)
+                for (auto const& item : jbcoinLines)
                 {
-                    auto* rs = dynamic_cast<RippleState const *> (item.get ());
+                    auto* rs = dynamic_cast<JBCoinState const *> (item.get ());
                     if (!rs)
                     {
                         JLOG (j_.error())
-                                << "Couldn't decipher RippleState";
+                                << "Couldn't decipher JBCoinState";
                         continue;
                     }
                     auto const& acct = rs->getAccountIDPeer ();
@@ -976,7 +976,7 @@ void Pathfinder::addLink (
                         {
                             // path has no credit
                         }
-                        else if (bIsNoRippleOut && rs->getNoRipple ())
+                        else if (bIsNoJBCoinOut && rs->getNoJBCoin ())
                         {
                             // Can't leave on this path
                         }
@@ -1060,17 +1060,17 @@ void Pathfinder::addLink (
     if (addFlags & afADD_BOOKS)
     {
         // add order books
-        if (addFlags & afOB_XRP)
+        if (addFlags & afOB_JBC)
         {
-            // to XRP only
-            if (!bOnXRP && app_.getOrderBookDB ().isBookToXRP (
+            // to JBC only
+            if (!bOnJBC && app_.getOrderBookDB ().isBookToJBC (
                     {uEndCurrency, uEndIssuer}))
             {
                 STPathElement pathElement(
                     STPathElement::typeCurrency,
-                    xrpAccount (),
-                    xrpCurrency (),
-                    xrpAccount ());
+                    jbcAccount (),
+                    jbcCurrency (),
+                    jbcAccount ());
                 incompletePaths.assembleAdd (currentPath, pathElement);
             }
         }
@@ -1085,7 +1085,7 @@ void Pathfinder::addLink (
             for (auto const& book : books)
             {
                 if (!currentPath.hasSeen (
-                        xrpAccount(),
+                        jbcAccount(),
                         book->getCurrencyOut (),
                         book->getIssuerOut ()) &&
                     !issueMatchesOrigin (book->book ().out) &&
@@ -1095,18 +1095,18 @@ void Pathfinder::addLink (
                     STPath newPath (currentPath);
 
                     if (book->getCurrencyOut().isZero())
-                    { // to XRP
+                    { // to JBC
 
                         // add the order book itself
                         newPath.emplace_back (
                             STPathElement::typeCurrency,
-                            xrpAccount (),
-                            xrpCurrency (),
-                            xrpAccount ());
+                            jbcAccount (),
+                            jbcCurrency (),
+                            jbcAccount ());
 
                         if (mDstAmount.getCurrency ().isZero ())
                         {
-                            // destination is XRP, add account and path is
+                            // destination is JBC, add account and path is
                             // complete
                             JLOG (j_.trace())
                                 << "complete path found bx: "
@@ -1130,7 +1130,7 @@ void Pathfinder::addLink (
                             // replace the redundant account with the order book
                             newPath[newPath.size() - 1] = STPathElement (
                                 STPathElement::typeCurrency | STPathElement::typeIssuer,
-                                xrpAccount(), book->getCurrencyOut(),
+                                jbcAccount(), book->getCurrencyOut(),
                                 book->getIssuerOut());
                         }
                         else
@@ -1138,7 +1138,7 @@ void Pathfinder::addLink (
                             // add the order book
                             newPath.emplace_back(
                                 STPathElement::typeCurrency | STPathElement::typeIssuer,
-                                xrpAccount(), book->getCurrencyOut(),
+                                jbcAccount(), book->getCurrencyOut(),
                                 book->getIssuerOut());
                         }
 
@@ -1195,8 +1195,8 @@ Pathfinder::PathType makePath (char const *string)
                 ret.push_back (Pathfinder::nt_BOOKS);
                 break;
 
-            case 'x': // xrp book
-                ret.push_back (Pathfinder::nt_XRP_BOOK);
+            case 'x': // jbc book
+                ret.push_back (Pathfinder::nt_JBC_BOOK);
                 break;
 
             case 'f': // book to final currency
@@ -1238,10 +1238,10 @@ void Pathfinder::initPathTable ()
     // CAUTION: Do not include rules that build default paths
 
     mPathTable.clear();
-    fillPaths (pt_XRP_to_XRP, {});
+    fillPaths (pt_JBC_to_JBC, {});
 
     fillPaths(
-        pt_XRP_to_nonXRP, {
+        pt_JBC_to_nonJBC, {
             {1, "sfd"},   // source -> book -> gateway
             {3, "sfad"},  // source -> book -> account -> destination
             {5, "sfaad"}, // source -> book -> account -> account -> destination
@@ -1252,18 +1252,18 @@ void Pathfinder::initPathTable ()
         });
 
     fillPaths(
-        pt_nonXRP_to_XRP, {
-            {1, "sxd"},       // gateway buys XRP
-            {2, "saxd"},      // source -> gateway -> book(XRP) -> dest
+        pt_nonJBC_to_JBC, {
+            {1, "sxd"},       // gateway buys JBC
+            {2, "saxd"},      // source -> gateway -> book(JBC) -> dest
             {6, "saaxd"},
             {7, "sbxd"},
             {8, "sabxd"},
             {9, "sabaxd"}
         });
 
-    // non-XRP to non-XRP (same currency)
+    // non-JBC to non-JBC (same currency)
     fillPaths(
-        pt_nonXRP_to_same,  {
+        pt_nonJBC_to_same,  {
             {1, "sad"},     // source -> gateway -> destination
             {1, "sfd"},     // source -> book -> destination
             {4, "safd"},    // source -> gateway -> book -> destination
@@ -1272,16 +1272,16 @@ void Pathfinder::initPathTable ()
             {5, "sbfd"},
             {6, "sxfad"},
             {6, "safad"},
-            {6, "saxfd"},   // source -> gateway -> book to XRP -> book ->
+            {6, "saxfd"},   // source -> gateway -> book to JBC -> book ->
                             // destination
             {6, "saxfad"},
             {6, "sabfd"},   // source -> gateway -> book -> book -> destination
             {7, "saaad"},
         });
 
-    // non-XRP to non-XRP (different currency)
+    // non-JBC to non-JBC (different currency)
     fillPaths(
-        pt_nonXRP_to_nonXRP, {
+        pt_nonJBC_to_nonJBC, {
             {1, "sfad"},
             {1, "safd"},
             {3, "safad"},
@@ -1297,4 +1297,4 @@ void Pathfinder::initPathTable ()
         });
 }
 
-} // ripple
+} // jbcoin

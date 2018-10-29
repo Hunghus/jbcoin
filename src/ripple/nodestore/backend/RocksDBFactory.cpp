@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,22 +18,22 @@
 //==============================================================================
 
 
-#include <ripple/unity/rocksdb.h>
+#include <jbcoin/unity/rocksdb.h>
 
-#if RIPPLE_ROCKSDB_AVAILABLE
+#if JBCOIN_ROCKSDB_AVAILABLE
 
-#include <ripple/basics/contract.h>
-#include <ripple/core/Config.h> // VFALCO Bad dependency
-#include <ripple/nodestore/Factory.h>
-#include <ripple/nodestore/Manager.h>
-#include <ripple/nodestore/impl/BatchWriter.h>
-#include <ripple/nodestore/impl/DecodedBlob.h>
-#include <ripple/nodestore/impl/EncodedBlob.h>
-#include <ripple/beast/core/CurrentThreadName.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/core/Config.h> // VFALCO Bad dependency
+#include <jbcoin/nodestore/Factory.h>
+#include <jbcoin/nodestore/Manager.h>
+#include <jbcoin/nodestore/impl/BatchWriter.h>
+#include <jbcoin/nodestore/impl/DecodedBlob.h>
+#include <jbcoin/nodestore/impl/EncodedBlob.h>
+#include <jbcoin/beast/core/CurrentThreadName.h>
 #include <atomic>
 #include <memory>
 
-namespace ripple {
+namespace jbcoin {
 namespace NodeStore {
 
 class RocksDBEnv : public rocksdb::EnvWrapper

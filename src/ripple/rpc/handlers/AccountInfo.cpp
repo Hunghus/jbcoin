@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,18 +18,18 @@
 //==============================================================================
 
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/TxQ.h>
-#include <ripple/json/json_value.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/UintTypes.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/TxQ.h>
+#include <jbcoin/json/json_value.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/UintTypes.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
 
-namespace ripple {
+namespace jbcoin {
 
 // {
 //   account: <ident>,
@@ -126,7 +126,7 @@ Json::Value doAccountInfo (RPC::Context& context)
                 jvQueueTx = Json::arrayValue;
 
                 boost::optional<bool> anyAuthChanged(false);
-                boost::optional<XRPAmount> totalSpend(0);
+                boost::optional<JBCAmount> totalSpend(0);
 
                 for (auto const& tx : txs)
                 {
@@ -183,4 +183,4 @@ Json::Value doAccountInfo (RPC::Context& context)
     return result;
 }
 
-} // ripple
+} // jbcoin

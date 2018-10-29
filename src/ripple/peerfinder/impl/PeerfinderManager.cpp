@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/peerfinder/PeerfinderManager.h>
-#include <ripple/peerfinder/impl/Checker.h>
-#include <ripple/peerfinder/impl/Logic.h>
-#include <ripple/peerfinder/impl/SourceStrings.h>
-#include <ripple/peerfinder/impl/StoreSqdb.h>
-#include <ripple/core/SociDB.h>
+#include <jbcoin/peerfinder/PeerfinderManager.h>
+#include <jbcoin/peerfinder/impl/Checker.h>
+#include <jbcoin/peerfinder/impl/Logic.h>
+#include <jbcoin/peerfinder/impl/SourceStrings.h>
+#include <jbcoin/peerfinder/impl/StoreSqdb.h>
+#include <jbcoin/core/SociDB.h>
 #include <boost/asio/io_service.hpp>
 #include <boost/optional.hpp>
 #include <boost/utility/in_place_factory.hpp>
 #include <memory>
 #include <thread>
 
-namespace ripple {
+namespace jbcoin {
 namespace PeerFinder {
 
 class ManagerImp

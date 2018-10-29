@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,26 +17,26 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_LEDGER_READVIEW_H_INCLUDED
-#define RIPPLE_LEDGER_READVIEW_H_INCLUDED
+#ifndef JBCOIN_LEDGER_READVIEW_H_INCLUDED
+#define JBCOIN_LEDGER_READVIEW_H_INCLUDED
 
-#include <ripple/ledger/detail/ReadViewFwdRange.h>
-#include <ripple/basics/chrono.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/IOUAmount.h>
-#include <ripple/protocol/Protocol.h>
-#include <ripple/protocol/STLedgerEntry.h>
-#include <ripple/protocol/STTx.h>
-#include <ripple/protocol/XRPAmount.h>
-#include <ripple/beast/hash/uhash.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/ledger/detail/ReadViewFwdRange.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/IOUAmount.h>
+#include <jbcoin/protocol/Protocol.h>
+#include <jbcoin/protocol/STLedgerEntry.h>
+#include <jbcoin/protocol/STTx.h>
+#include <jbcoin/protocol/JBCAmount.h>
+#include <jbcoin/beast/hash/uhash.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <boost/optional.hpp>
 #include <cassert>
 #include <cstdint>
 #include <memory>
 #include <unordered_set>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Reflects the fee settings for a particular ledger.
 
@@ -59,7 +59,7 @@ struct Fees
         The reserve is calculated as the reserve base plus
         the reserve increment times the number of increments.
     */
-    XRPAmount
+    JBCAmount
     accountReserve (std::size_t ownerCount) const
     {
         return { reserve + ownerCount * increment };
@@ -90,7 +90,7 @@ struct LedgerInfo
     uint256 accountHash = beast::zero;
     uint256 parentHash = beast::zero;
 
-    XRPAmount drops = beast::zero;
+    JBCAmount drops = beast::zero;
 
     // If validated is false, it means "not yet validated."
     // Once validated is true, it will never be set false at a later time.
@@ -438,8 +438,8 @@ bool getSHAMapV2 (LedgerInfo const& info)
 
 void addRaw (LedgerInfo const&, Serializer&);
 
-} // ripple
+} // jbcoin
 
-#include <ripple/ledger/detail/ReadViewFwdRange.ipp>
+#include <jbcoin/ledger/detail/ReadViewFwdRange.ipp>
 
 #endif

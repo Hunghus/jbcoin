@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,10 +17,10 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/cursor/EffectiveRate.h>
-#include <ripple/basics/contract.h>
+#include <jbcoin/app/paths/cursor/EffectiveRate.h>
+#include <jbcoin/basics/contract.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace path {
 
 Rate
@@ -30,8 +30,8 @@ effectiveRate(
     AccountID const& account2,
     boost::optional<Rate> const& rate)
 {
-    // 1:1 transfer rate for XRP
-    if (isXRP (issue))
+    // 1:1 transfer rate for JBC
+    if (isJBC (issue))
         return parityRate;
 
     if (!rate)
@@ -45,4 +45,4 @@ effectiveRate(
 }
 
 } // path
-} // ripple
+} // jbcoin

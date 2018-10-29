@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PEERFINDER_MANAGER_H_INCLUDED
-#define RIPPLE_PEERFINDER_MANAGER_H_INCLUDED
+#ifndef JBCOIN_PEERFINDER_MANAGER_H_INCLUDED
+#define JBCOIN_PEERFINDER_MANAGER_H_INCLUDED
 
-#include <ripple/peerfinder/Slot.h>
-#include <ripple/beast/clock/abstract_clock.h>
-#include <ripple/core/Stoppable.h>
-#include <ripple/beast/utility/PropertyStream.h>
+#include <jbcoin/peerfinder/Slot.h>
+#include <jbcoin/beast/clock/abstract_clock.h>
+#include <jbcoin/core/Stoppable.h>
+#include <jbcoin/beast/utility/PropertyStream.h>
 #include <boost/asio/ip/tcp.hpp>
 
-namespace ripple {
+namespace jbcoin {
 namespace PeerFinder {
 
 using clock_type = beast::abstract_clock <std::chrono::steady_clock>;

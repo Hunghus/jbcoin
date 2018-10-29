@@ -17,8 +17,8 @@ fi
 : ${BUILD_TYPE:=Debug}
 echo "BUILD TYPE: $BUILD_TYPE"
 
-# Ensure APP defaults to rippled if it's not set.
-: ${APP:=rippled}
+# Ensure APP defaults to jbcoind if it's not set.
+: ${APP:=jbcoind}
 echo "using APP: $APP"
 
 JOBS=${NUM_PROCESSORS:-2}
@@ -97,34 +97,34 @@ ldd $APP_PATH
 function join_by { local IFS="$1"; shift; echo "$*"; }
 
 # This is a list of manual tests
-# in rippled that we want to run
+# in jbcoind that we want to run
 declare -a manual_tests=(
   "beast.chrono.abstract_clock"
   "beast.unit_test.print"
-  "ripple.NodeStore.Timing"
-  "ripple.app.Flow_manual"
-  "ripple.app.NoRippleCheckLimits"
-  "ripple.app.PayStrandAllPairs"
-  "ripple.consensus.ByzantineFailureSim"
-  "ripple.consensus.DistributedValidators"
-  "ripple.consensus.ScaleFreeSim"
-  "ripple.ripple_data.digest"
-  "ripple.tx.CrossingLimits"
-  "ripple.tx.FindOversizeCross"
-  "ripple.tx.Offer_manual"
-  "ripple.tx.OversizeMeta"
-  "ripple.tx.PlumpBook"
+  "jbcoin.NodeStore.Timing"
+  "jbcoin.app.Flow_manual"
+  "jbcoin.app.NoJBCoinCheckLimits"
+  "jbcoin.app.PayStrandAllPairs"
+  "jbcoin.consensus.ByzantineFailureSim"
+  "jbcoin.consensus.DistributedValidators"
+  "jbcoin.consensus.ScaleFreeSim"
+  "jbcoin.jbcoin_data.digest"
+  "jbcoin.tx.CrossingLimits"
+  "jbcoin.tx.FindOversizeCross"
+  "jbcoin.tx.Offer_manual"
+  "jbcoin.tx.OversizeMeta"
+  "jbcoin.tx.PlumpBook"
 )
 
 : ${APP_ARGS:=}
-if [[ ${APP} == "rippled" ]]; then
+if [[ ${APP} == "jbcoind" ]]; then
   if [[ ${MANUAL_TESTS:-} == true ]]; then
     APP_ARGS+=" --unittest=$(join_by , "${manual_tests[@]}")"
   else
     APP_ARGS+=" --unittest --quiet --unittest-log"
   fi
-  # Only report on src/ripple files
-  export LCOV_FILES="*/src/ripple/*"
+  # Only report on src/jbcoin files
+  export LCOV_FILES="*/src/jbcoin/*"
   # Nothing to explicitly exclude
   export LCOV_EXCLUDE_FILES="LCOV_NO_EXCLUDE"
   if [[ ${coverage} == false && ${PARALLEL_TESTS:-} == true ]]; then

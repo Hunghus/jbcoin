@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/STBase.h>
-#include <ripple/protocol/STArray.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/STBase.h>
+#include <jbcoin/protocol/STArray.h>
 
-namespace ripple {
+namespace jbcoin {
 
 STArray::STArray()
 {
@@ -180,4 +180,4 @@ void STArray::sort (bool (*compare) (const STObject&, const STObject&))
     std::sort(v_.begin(), v_.end(), compare);
 }
 
-} // ripple
+} // jbcoin

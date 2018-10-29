@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2018 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2018 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#include <ripple/basics/BasicConfig.h>
-#include <ripple/basics/impl/PerfLogImp.h>
-#include <ripple/beast/core/CurrentThreadName.h>
-#include <ripple/beast/utility/Journal.h>
-#include <ripple/json/json_writer.h>
-#include <ripple/json/to_string.h>
+#include <jbcoin/basics/BasicConfig.h>
+#include <jbcoin/basics/impl/PerfLogImp.h>
+#include <jbcoin/beast/core/CurrentThreadName.h>
+#include <jbcoin/beast/utility/Journal.h>
+#include <jbcoin/json/json_writer.h>
+#include <jbcoin/json/to_string.h>
 #include <boost/optional.hpp>
 #include <atomic>
 #include <cstdint>
@@ -35,7 +35,7 @@
 #include <unordered_map>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 namespace perf {
 
 PerfLogImp::Counters::Counters(std::vector<char const*> const& labels,
@@ -525,4 +525,4 @@ make_PerfLog(
 }
 
 } // perf
-} // ripple
+} // jbcoin

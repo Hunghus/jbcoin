@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/OrderBookDB.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/basics/Log.h>
-#include <ripple/core/Config.h>
-#include <ripple/core/JobQueue.h>
-#include <ripple/protocol/Indexes.h>
+#include <jbcoin/app/ledger/OrderBookDB.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/core/JobQueue.h>
+#include <jbcoin/protocol/Indexes.h>
 
-namespace ripple {
+namespace jbcoin {
 
 OrderBookDB::OrderBookDB (Application& app, Stoppable& parent)
     : Stoppable ("OrderBookDB", parent)
@@ -83,7 +83,7 @@ void OrderBookDB::update(
     hash_set< uint256 > seen;
     OrderBookDB::IssueToOrderBook destMap;
     OrderBookDB::IssueToOrderBook sourceMap;
-    hash_set< Issue > XRPBooks;
+    hash_set< Issue > JBCBooks;
 
     JLOG (j_.debug()) << "OrderBookDB::update>";
 
@@ -129,8 +129,8 @@ void OrderBookDB::update(
                     auto orderBook = std::make_shared<OrderBook> (index, book);
                     sourceMap[book.in].push_back (orderBook);
                     destMap[book.out].push_back (orderBook);
-                    if (isXRP(book.out))
-                        XRPBooks.insert(book.in);
+                    if (isJBC(book.out))
+                        JBCBooks.insert(book.in);
                     ++books;
                 }
             }
@@ -150,7 +150,7 @@ void OrderBookDB::update(
     {
         std::lock_guard <std::recursive_mutex> sl (mLock);
 
-        mXRPBooks.swap(XRPBooks);
+        mJBCBooks.swap(JBCBooks);
         mSourceMap.swap(sourceMap);
         mDestMap.swap(destMap);
     }
@@ -159,16 +159,16 @@ void OrderBookDB::update(
 
 void OrderBookDB::addOrderBook(Book const& book)
 {
-    bool toXRP = isXRP (book.out);
+    bool toJBC = isJBC (book.out);
     std::lock_guard <std::recursive_mutex> sl (mLock);
 
-    if (toXRP)
+    if (toJBC)
     {
-        // We don't want to search through all the to-XRP or from-XRP order
+        // We don't want to search through all the to-JBC or from-JBC order
         // books!
         for (auto ob: mSourceMap[book.in])
         {
-            if (isXRP (ob->getCurrencyOut ())) // also to XRP
+            if (isJBC (ob->getCurrencyOut ())) // also to JBC
                 return;
         }
     }
@@ -188,8 +188,8 @@ void OrderBookDB::addOrderBook(Book const& book)
 
     mSourceMap[book.in].push_back (orderBook);
     mDestMap[book.out].push_back (orderBook);
-    if (toXRP)
-        mXRPBooks.insert(book.in);
+    if (toJBC)
+        mJBCBooks.insert(book.in);
 }
 
 // return list of all orderbooks that want this issuerID and currencyID
@@ -206,10 +206,10 @@ int OrderBookDB::getBookSize(Issue const& issue) {
     return it == mSourceMap.end () ? 0 : it->second.size();
 }
 
-bool OrderBookDB::isBookToXRP(Issue const& issue)
+bool OrderBookDB::isBookToJBC(Issue const& issue)
 {
     std::lock_guard <std::recursive_mutex> sl (mLock);
-    return mXRPBooks.count(issue) > 0;
+    return mJBCBooks.count(issue) > 0;
 }
 
 BookListeners::pointer OrderBookDB::makeBookListeners (Book const& book)
@@ -307,4 +307,4 @@ void OrderBookDB::processTxn (
     }
 }
 
-} // ripple
+} // jbcoin

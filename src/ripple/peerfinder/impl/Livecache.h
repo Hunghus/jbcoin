@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,22 +17,22 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PEERFINDER_LIVECACHE_H_INCLUDED
-#define RIPPLE_PEERFINDER_LIVECACHE_H_INCLUDED
+#ifndef JBCOIN_PEERFINDER_LIVECACHE_H_INCLUDED
+#define JBCOIN_PEERFINDER_LIVECACHE_H_INCLUDED
 
-#include <ripple/basics/Log.h>
-#include <ripple/basics/random.h>
-#include <ripple/peerfinder/PeerfinderManager.h>
-#include <ripple/peerfinder/impl/iosformat.h>
-#include <ripple/peerfinder/impl/Tuning.h>
-#include <ripple/beast/container/aged_map.h>
-#include <ripple/beast/utility/maybe_const.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/random.h>
+#include <jbcoin/peerfinder/PeerfinderManager.h>
+#include <jbcoin/peerfinder/impl/iosformat.h>
+#include <jbcoin/peerfinder/impl/Tuning.h>
+#include <jbcoin/beast/container/aged_map.h>
+#include <jbcoin/beast/utility/maybe_const.h>
 #include <boost/intrusive/list.hpp>
 #include <boost/iterator/transform_iterator.hpp>
 
 #include <algorithm>
 
-namespace ripple {
+namespace jbcoin {
 namespace PeerFinder {
 
 template <class>

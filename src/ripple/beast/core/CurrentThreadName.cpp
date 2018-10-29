@@ -21,11 +21,11 @@
 */
 //==============================================================================
 
-#include <ripple/beast/core/CurrentThreadName.h>
-#include <ripple/beast/core/Config.h>
+#include <jbcoin/beast/core/CurrentThreadName.h>
+#include <jbcoin/beast/core/Config.h>
 #include <boost/thread/tss.hpp>
-#include <ripple/beast/core/BasicNativeHeaders.h>
-#include <ripple/beast/core/StandardIncludes.h>
+#include <jbcoin/beast/core/BasicNativeHeaders.h>
+#include <jbcoin/beast/core/StandardIncludes.h>
 
 namespace beast {
 namespace detail {

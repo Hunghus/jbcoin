@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright 2016 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright 2016 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,22 +17,22 @@
 */
 //==============================================================================
 
-#include <ripple/app/misc/ValidatorSite.h>
-#include <ripple/basics/base64.h>
-#include <ripple/basics/Slice.h>
-#include <ripple/basics/strHex.h>
-#include <ripple/protocol/digest.h>
-#include <ripple/protocol/HashPrefix.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/protocol/SecretKey.h>
-#include <ripple/protocol/Sign.h>
+#include <jbcoin/app/misc/ValidatorSite.h>
+#include <jbcoin/basics/base64.h>
+#include <jbcoin/basics/Slice.h>
+#include <jbcoin/basics/strHex.h>
+#include <jbcoin/protocol/digest.h>
+#include <jbcoin/protocol/HashPrefix.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/protocol/SecretKey.h>
+#include <jbcoin/protocol/Sign.h>
 #include <test/jtx.h>
 #include <test/jtx/TrustedPublisherServer.h>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/asio.hpp>
 
-namespace ripple {
+namespace jbcoin {
 namespace test {
 
 class ValidatorSite_test : public beast::unit_test::suite
@@ -102,24 +102,24 @@ private:
 
         // load should accept valid validator site uris
         std::vector<std::string> cfgSites({
-            "http://ripple.com/",
-            "http://ripple.com/validators",
-            "http://ripple.com:8080/validators",
+            "http://jbcoin.com/",
+            "http://jbcoin.com/validators",
+            "http://jbcoin.com:8080/validators",
             "http://207.261.33.37/validators",
             "http://207.261.33.37:8080/validators",
-            "https://ripple.com/validators",
-            "https://ripple.com:443/validators"});
+            "https://jbcoin.com/validators",
+            "https://jbcoin.com:443/validators"});
         BEAST_EXPECT(trustedSites->load (cfgSites));
 
         // load should reject validator site uris with invalid schemes
         std::vector<std::string> badSites(
-            {"ftp://ripple.com/validators"});
+            {"ftp://jbcoin.com/validators"});
         BEAST_EXPECT(!trustedSites->load (badSites));
 
-        badSites[0] = "wss://ripple.com/validators";
+        badSites[0] = "wss://jbcoin.com/validators";
         BEAST_EXPECT(!trustedSites->load (badSites));
 
-        badSites[0] = "ripple.com/validators";
+        badSites[0] = "jbcoin.com/validators";
         BEAST_EXPECT(!trustedSites->load (badSites));
     }
 
@@ -296,7 +296,7 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE(ValidatorSite, app, ripple);
+BEAST_DEFINE_TESTSUITE(ValidatorSite, app, jbcoin);
 
 } // test
-} // ripple
+} // jbcoin

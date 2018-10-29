@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,20 +17,20 @@
 */
 //==============================================================================
 
-#include <ripple/overlay/impl/TMHello.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/basics/base64.h>
-#include <ripple/beast/rfc2616.h>
-#include <ripple/beast/core/LexicalCast.h>
-#include <ripple/protocol/digest.h>
+#include <jbcoin/overlay/impl/TMHello.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/basics/base64.h>
+#include <jbcoin/beast/rfc2616.h>
+#include <jbcoin/beast/core/LexicalCast.h>
+#include <jbcoin/protocol/digest.h>
 #include <boost/regex.hpp>
 #include <algorithm>
 
 // VFALCO Shouldn't we have to include the OpenSSL
 // headers or something for SSL_get_finished?
 
-namespace ripple {
+namespace jbcoin {
 
 /** Hashes the latest finished message from an SSL stream
     @param sslSession the session to get the message from.

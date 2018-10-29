@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,10 +17,10 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/app/ledger/LocalTxs.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/protocol/Indexes.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/app/ledger/LocalTxs.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/protocol/Indexes.h>
 
 /*
  This code prevents scenarios like the following:
@@ -46,7 +46,7 @@ test-applied to all new open ledgers until seen in a fully-
 validated ledger
 */
 
-namespace ripple {
+namespace jbcoin {
 
 // This class wraps a pointer to a transaction along with
 // its expiration ledger. It also caches the issuing account.
@@ -176,4 +176,4 @@ make_LocalTxs ()
     return std::make_unique<LocalTxsImp> ();
 }
 
-} // ripple
+} // jbcoin

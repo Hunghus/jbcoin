@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2018 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2018 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_BASICS_PERFLOGIMP_H
-#define RIPPLE_BASICS_PERFLOGIMP_H
+#ifndef JBCOIN_BASICS_PERFLOGIMP_H
+#define JBCOIN_BASICS_PERFLOGIMP_H
 
-#include <ripple/basics/chrono.h>
-#include <ripple/basics/PerfLog.h>
-#include <ripple/beast/utility/Journal.h>
-#include <ripple/core/Stoppable.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/rpc/impl/Handler.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/basics/PerfLog.h>
+#include <jbcoin/beast/utility/Journal.h>
+#include <jbcoin/core/Stoppable.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/rpc/impl/Handler.h>
 #include <boost/asio/ip/host_name.hpp>
 #include <condition_variable>
 #include <cstdint>
@@ -39,7 +39,7 @@
 #include <utility>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 namespace perf {
 
 /**
@@ -135,7 +135,7 @@ class PerfLogImp
     Setup const setup_;
     beast::Journal j_;
     std::function<void()> const signalStop_;
-    Counters counters_ {ripple::RPC::getHandlerNames(), JobTypes::instance()};
+    Counters counters_ {jbcoin::RPC::getHandlerNames(), JobTypes::instance()};
     std::ofstream logFile_;
     std::thread thread_;
     std::mutex mutex_;
@@ -214,6 +214,6 @@ public:
 };
 
 } // perf
-} // ripple
+} // jbcoin
 
-#endif //RIPPLE_BASICS_PERFLOGIMP_H
+#endif //JBCOIN_BASICS_PERFLOGIMP_H

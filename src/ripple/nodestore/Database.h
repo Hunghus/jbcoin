@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,21 +17,21 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_NODESTORE_DATABASE_H_INCLUDED
-#define RIPPLE_NODESTORE_DATABASE_H_INCLUDED
+#ifndef JBCOIN_NODESTORE_DATABASE_H_INCLUDED
+#define JBCOIN_NODESTORE_DATABASE_H_INCLUDED
 
-#include <ripple/basics/TaggedCache.h>
-#include <ripple/basics/KeyCache.h>
-#include <ripple/core/Stoppable.h>
-#include <ripple/nodestore/Backend.h>
-#include <ripple/nodestore/impl/Tuning.h>
-#include <ripple/nodestore/Scheduler.h>
-#include <ripple/nodestore/NodeObject.h>
-#include <ripple/protocol/SystemParameters.h>
+#include <jbcoin/basics/TaggedCache.h>
+#include <jbcoin/basics/KeyCache.h>
+#include <jbcoin/core/Stoppable.h>
+#include <jbcoin/nodestore/Backend.h>
+#include <jbcoin/nodestore/impl/Tuning.h>
+#include <jbcoin/nodestore/Scheduler.h>
+#include <jbcoin/nodestore/NodeObject.h>
+#include <jbcoin/protocol/SystemParameters.h>
 
 #include <thread>
 
-namespace ripple {
+namespace jbcoin {
 
 class Ledger;
 
@@ -280,9 +280,9 @@ private:
     // current read generation
     uint64_t readGen_ {0};
 
-    // The default is 32570 to match the XRP ledger network's earliest
+    // The default is 32570 to match the JBC ledger network's earliest
     // allowed sequence. Alternate networks may set this value.
-    std::uint32_t earliestSeq_ {XRP_LEDGER_EARLIEST_SEQ};
+    std::uint32_t earliestSeq_ {JBC_LEDGER_EARLIEST_SEQ};
 
     virtual
     std::shared_ptr<NodeObject>

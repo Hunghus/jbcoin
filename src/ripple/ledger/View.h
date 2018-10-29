@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,22 +17,22 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_LEDGER_VIEW_H_INCLUDED
-#define RIPPLE_LEDGER_VIEW_H_INCLUDED
+#ifndef JBCOIN_LEDGER_VIEW_H_INCLUDED
+#define JBCOIN_LEDGER_VIEW_H_INCLUDED
 
-#include <ripple/ledger/ApplyView.h>
-#include <ripple/ledger/OpenView.h>
-#include <ripple/ledger/RawView.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/protocol/Protocol.h>
-#include <ripple/protocol/Rate.h>
-#include <ripple/protocol/Serializer.h>
-#include <ripple/protocol/STLedgerEntry.h>
-#include <ripple/protocol/STObject.h>
-#include <ripple/protocol/STTx.h>
-#include <ripple/protocol/TER.h>
-#include <ripple/core/Config.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/ledger/ApplyView.h>
+#include <jbcoin/ledger/OpenView.h>
+#include <jbcoin/ledger/RawView.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/protocol/Protocol.h>
+#include <jbcoin/protocol/Rate.h>
+#include <jbcoin/protocol/Serializer.h>
+#include <jbcoin/protocol/STLedgerEntry.h>
+#include <jbcoin/protocol/STObject.h>
+#include <jbcoin/protocol/STTx.h>
+#include <jbcoin/protocol/TER.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <boost/optional.hpp>
 #include <functional>
 #include <map>
@@ -41,7 +41,7 @@
 
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 
 //------------------------------------------------------------------------------
 //
@@ -78,14 +78,14 @@ accountFunds (ReadView const& view, AccountID const& id,
     STAmount const& saDefault, FreezeHandling freezeHandling,
         beast::Journal j);
 
-// Return the account's liquid (not reserved) XRP.  Generally prefer
+// Return the account's liquid (not reserved) JBC.  Generally prefer
 // calling accountHolds() over this interface.  However this interface
 // allows the caller to temporarily adjust the owner count should that be
 // necessary.
 //
 // @param ownerCountAdj positive to add to count, negative to reduce count.
-XRPAmount
-xrpLiquid (ReadView const& view, AccountID const& id,
+JBCAmount
+jbcLiquid (ReadView const& view, AccountID const& id,
     std::int32_t ownerCountAdj, beast::Journal j);
 
 /** Iterate all items in an account's owner directory. */
@@ -248,10 +248,10 @@ trustCreate (ApplyView& view,
     const bool      bSrcHigh,
     AccountID const&  uSrcAccountID,
     AccountID const&  uDstAccountID,
-    uint256 const&  uIndex,             // --> ripple state entry
+    uint256 const&  uIndex,             // --> jbcoin state entry
     SLE::ref        sleAccount,         // --> the account being set.
     const bool      bAuth,              // --> authorize account.
-    const bool      bNoRipple,          // --> others cannot ripple through
+    const bool      bNoJBCoin,          // --> others cannot jbcoin through
     const bool      bFreeze,            // --> funds cannot leave
     STAmount const& saBalance,          // --> balance of account being set.
                                         // Issuer should be noAccount()
@@ -263,7 +263,7 @@ trustCreate (ApplyView& view,
 
 TER
 trustDelete (ApplyView& view,
-    std::shared_ptr<SLE> const& sleRippleState,
+    std::shared_ptr<SLE> const& sleJBCoinState,
         AccountID const& uLowAccountID,
             AccountID const& uHighAccountID,
                 beast::Journal j);
@@ -290,7 +290,7 @@ offerDelete (ApplyView& view,
 // - Create trust line of needed.
 // --> bCheckIssuer : normally require issuer to be involved.
 TER
-rippleCredit (ApplyView& view,
+jbcoinCredit (ApplyView& view,
     AccountID const& uSenderID, AccountID const& uReceiverID,
     const STAmount & saAmount, bool bCheckIssuer,
     beast::Journal j);
@@ -317,7 +317,7 @@ redeemIOU (ApplyView& view,
                 beast::Journal j);
 
 TER
-transferXRP (ApplyView& view,
+transferJBC (ApplyView& view,
     AccountID const& from,
         AccountID const& to,
             STAmount const& amount,
@@ -338,6 +338,6 @@ bool fix1443 (NetClock::time_point const closeTime);
 NetClock::time_point const& fix1449Time ();
 bool fix1449 (NetClock::time_point const closeTime);
 
-} // ripple
+} // jbcoin
 
 #endif

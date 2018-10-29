@@ -20,10 +20,10 @@
 #ifndef BEAST_INSIGHT_EVENT_H_INCLUDED
 #define BEAST_INSIGHT_EVENT_H_INCLUDED
 
-#include <ripple/beast/insight/Base.h>
-#include <ripple/beast/insight/EventImpl.h>
+#include <jbcoin/beast/insight/Base.h>
+#include <jbcoin/beast/insight/EventImpl.h>
 
-#include <ripple/basics/date.h>
+#include <jbcoin/basics/date.h>
 
 #include <chrono>
 #include <memory>

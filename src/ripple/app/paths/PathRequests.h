@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_PATHS_PATHREQUESTS_H_INCLUDED
-#define RIPPLE_APP_PATHS_PATHREQUESTS_H_INCLUDED
+#ifndef JBCOIN_APP_PATHS_PATHREQUESTS_H_INCLUDED
+#define JBCOIN_APP_PATHS_PATHREQUESTS_H_INCLUDED
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/paths/PathRequest.h>
-#include <ripple/app/paths/RippleLineCache.h>
-#include <ripple/core/Job.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/paths/PathRequest.h>
+#include <jbcoin/app/paths/JBCoinLineCache.h>
+#include <jbcoin/core/Job.h>
 #include <atomic>
 #include <mutex>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 
 class PathRequests
 {
@@ -52,7 +52,7 @@ public:
     void updateAll (std::shared_ptr<ReadView const> const& ledger,
                     Job::CancelCallback shouldCancel);
 
-    std::shared_ptr<RippleLineCache> getLineCache (
+    std::shared_ptr<JBCoinLineCache> getLineCache (
         std::shared_ptr <ReadView const> const& ledger, bool authoritative);
 
     // Create a new-style path request that pushes
@@ -101,8 +101,8 @@ private:
     // Track all requests
     std::vector<PathRequest::wptr> requests_;
 
-    // Use a RippleLineCache
-    std::shared_ptr<RippleLineCache>         mLineCache;
+    // Use a JBCoinLineCache
+    std::shared_ptr<JBCoinLineCache>         mLineCache;
 
     std::atomic<int>                 mLastIdentifier;
 
@@ -111,6 +111,6 @@ private:
 
 };
 
-} // ripple
+} // jbcoin
 
 #endif

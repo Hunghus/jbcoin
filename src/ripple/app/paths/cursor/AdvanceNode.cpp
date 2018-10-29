@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/cursor/RippleLiquidity.h>
-#include <ripple/basics/Log.h>
-#include <ripple/ledger/View.h>
+#include <jbcoin/app/paths/cursor/JBCoinLiquidity.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/ledger/View.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace path {
 
 TER PathCursor::advanceNode (STAmount const& amount, bool reverse, bool callerHasLiquidity) const
@@ -35,7 +35,7 @@ TER PathCursor::advanceNode (STAmount const& amount, bool reverse, bool callerHa
         return advanceNode (reverse);
 
     // Otherwise, use a new PathCursor with the new multiQuality_.
-    PathCursor withMultiQuality {rippleCalc_, pathState_, multi, j_, nodeIndex_};
+    PathCursor withMultiQuality {jbcoinCalc_, pathState_, multi, j_, nodeIndex_};
     return withMultiQuality.advanceNode (reverse);
 }
 
@@ -53,7 +53,7 @@ TER PathCursor::advanceNode (bool const bReverse) const
             << node().saTakerPays << " TakerGets:" << node().saTakerGets;
 
     int loopCount = 0;
-    auto viewJ = rippleCalc_.logs_.journal ("View");
+    auto viewJ = jbcoinCalc_.logs_.journal ("View");
 
     do
     {
@@ -219,7 +219,7 @@ TER PathCursor::advanceNode (bool const bReverse) const
                     // Offer is expired.
                     JLOG (j_.trace())
                         << "advanceNode: expired offer";
-                    rippleCalc_.permanentlyUnfundedOffers_.insert(
+                    jbcoinCalc_.permanentlyUnfundedOffers_.insert(
                         node().offerIndex_);
                     continue;
                 }
@@ -240,11 +240,11 @@ TER PathCursor::advanceNode (bool const bReverse) const
                             << " node.saTakerGets=" << node().saTakerGets;
 
                         // Mark offer for always deletion.
-                        rippleCalc_.permanentlyUnfundedOffers_.insert (
+                        jbcoinCalc_.permanentlyUnfundedOffers_.insert (
                             node().offerIndex_);
                     }
-                    else if (rippleCalc_.permanentlyUnfundedOffers_.find (index)
-                             != rippleCalc_.permanentlyUnfundedOffers_.end ())
+                    else if (jbcoinCalc_.permanentlyUnfundedOffers_.find (index)
+                             != jbcoinCalc_.permanentlyUnfundedOffers_.end ())
                     {
                         // Past internal error, offer was found failed to place
                         // this in permanentlyUnfundedOffers_.
@@ -325,8 +325,8 @@ TER PathCursor::advanceNode (bool const bReverse) const
 
                 // Determine if used in past.
                 // We only need to know if it might need to be marked unfunded.
-                auto itPast = rippleCalc_.mumSource_.find (accountIssue);
-                bool bFoundPast = (itPast != rippleCalc_.mumSource_.end ());
+                auto itPast = jbcoinCalc_.mumSource_.find (accountIssue);
+                bool bFoundPast = (itPast != jbcoinCalc_.mumSource_.end ());
 
                 // Only the current node is allowed to use the source.
 
@@ -348,7 +348,7 @@ TER PathCursor::advanceNode (bool const bReverse) const
                         // That is, even if this offer fails due to fill or kill
                         // still do deletions.
                         // Mark offer for always deletion.
-                        rippleCalc_.permanentlyUnfundedOffers_.insert (node().offerIndex_);
+                        jbcoinCalc_.permanentlyUnfundedOffers_.insert (node().offerIndex_);
                     }
                     else
                     {
@@ -397,4 +397,4 @@ TER PathCursor::advanceNode (bool const bReverse) const
 }
 
 }  // path
-}  // ripple
+}  // jbcoin

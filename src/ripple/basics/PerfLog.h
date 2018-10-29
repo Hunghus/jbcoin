@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2018 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2018 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_BASICS_PERFLOG_H
-#define RIPPLE_BASICS_PERFLOG_H
+#ifndef JBCOIN_BASICS_PERFLOG_H
+#define JBCOIN_BASICS_PERFLOG_H
 
-#include <ripple/core/JobTypes.h>
+#include <jbcoin/core/JobTypes.h>
 #include <boost/filesystem.hpp>
-#include <ripple/json/json_value.h>
+#include <jbcoin/json/json_value.h>
 #include <chrono>
 #include <cstdint>
 #include <functional>
@@ -31,7 +31,7 @@
 
 namespace beast { class Journal; }
 
-namespace ripple {
+namespace jbcoin {
 namespace perf {
 
 /**
@@ -53,7 +53,7 @@ public:
     using microseconds = std::chrono::microseconds;
 
     /**
-     * Configuration from [perf] section of rippled.cfg.
+     * Configuration from [perf] section of jbcoind.cfg.
      */
     struct Setup
     {
@@ -165,6 +165,6 @@ std::unique_ptr<PerfLog> make_PerfLog(
     std::function<void()>&& signalStop);
 
 } // perf
-} // ripple
+} // jbcoin
 
-#endif //RIPPLE_BASICS_PERFLOG_H
+#endif //JBCOIN_BASICS_PERFLOG_H

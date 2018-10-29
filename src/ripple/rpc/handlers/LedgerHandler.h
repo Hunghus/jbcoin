@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,25 +17,25 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_RPC_HANDLERS_LEDGER_H_INCLUDED
-#define RIPPLE_RPC_HANDLERS_LEDGER_H_INCLUDED
+#ifndef JBCOIN_RPC_HANDLERS_LEDGER_H_INCLUDED
+#define JBCOIN_RPC_HANDLERS_LEDGER_H_INCLUDED
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/ledger/LedgerToJson.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/json/Object.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/Status.h>
-#include <ripple/rpc/impl/Handler.h>
-#include <ripple/rpc/Role.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/ledger/LedgerToJson.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/json/Object.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/Status.h>
+#include <jbcoin/rpc/impl/Handler.h>
+#include <jbcoin/rpc/Role.h>
 
 namespace Json {
 class Object;
 }
 
-namespace ripple {
+namespace jbcoin {
 namespace RPC {
 
 struct Context;
@@ -107,6 +107,6 @@ void LedgerHandler::writeResult (Object& value)
 }
 
 } // RPC
-} // ripple
+} // jbcoin
 
 #endif

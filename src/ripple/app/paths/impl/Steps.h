@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_PATHS_IMPL_PAYSTEPS_H_INCLUDED
-#define RIPPLE_APP_PATHS_IMPL_PAYSTEPS_H_INCLUDED
+#ifndef JBCOIN_APP_PATHS_IMPL_PAYSTEPS_H_INCLUDED
+#define JBCOIN_APP_PATHS_IMPL_PAYSTEPS_H_INCLUDED
 
-#include <ripple/app/paths/impl/AmountSpec.h>
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/Quality.h>
-#include <ripple/protocol/STLedgerEntry.h>
-#include <ripple/protocol/TER.h>
+#include <jbcoin/app/paths/impl/AmountSpec.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/Quality.h>
+#include <jbcoin/protocol/STLedgerEntry.h>
+#include <jbcoin/protocol/TER.h>
 
 #include <boost/container/flat_set.hpp>
 #include <boost/optional.hpp>
 
-namespace ripple {
+namespace jbcoin {
 class PaymentSandbox;
 class ReadView;
 class ApplyView;
@@ -40,9 +40,9 @@ class ApplyView;
    There are five concrete step classes:
      DirectStepI is an IOU step between accounts
      BookStepII is an IOU/IOU offer book
-     BookStepIX is an IOU/XRP offer book
-     BookStepXI is an XRP/IOU offer book
-     XRPEndpointStep is the source or destination account for XRP
+     BookStepIX is an IOU/JBC offer book
+     BookStepXI is an JBC/IOU offer book
+     JBCEndpointStep is the source or destination account for JBC
 
    Amounts may be transformed through a step in either the forward or the
    reverse direction. In the forward direction, the function `fwd` is used to
@@ -122,7 +122,7 @@ public:
 
     /**
        If this step is DirectStepI (IOU->IOU direct step), return the src
-       account. This is needed for checkNoRipple.
+       account. This is needed for checkNoJBCoin.
     */
     virtual boost::optional<AccountID>
     directStepSrcAcct () const
@@ -131,7 +131,7 @@ public:
     }
 
     // for debugging. Return the src and dst accounts for a direct step
-    // For XRP endpoints, one of src or dst will be the root account
+    // For JBC endpoints, one of src or dst will be the root account
     virtual boost::optional<std::pair<AccountID,AccountID>>
     directStepAccts () const
     {
@@ -301,7 +301,7 @@ bool operator==(Strand const& lhs, Strand const& rhs)
    @param sendMax Optional asset to send.
    @param path Liquidity sources to use for this strand of the payment. The path
                contains an ordered collection of the offer books to use and
-               accounts to ripple through.
+               accounts to jbcoin through.
    @return error code and normalized path
 */
 std::pair<TER, STPath>
@@ -326,7 +326,7 @@ normalizePath(AccountID const& src,
    @param sendMaxIssue Optional asset to send.
    @param path Liquidity sources to use for this strand of the payment. The path
                contains an ordered collection of the offer books to use and
-               accounts to ripple through.
+               accounts to jbcoin through.
    @param ownerPaysTransferFee false -> charge sender; true -> charge offer owner
    @param offerCrossing false -> payment; true -> offer crossing
    @param j Journal for logging messages
@@ -361,7 +361,7 @@ toStrand (
    @param sendMax Optional asset to send.
    @param paths Paths to use to fullfill the payment. Each path in the pathset
                 contains an ordered collection of the offer books to use and
-                accounts to ripple through.
+                accounts to jbcoin through.
    @param addDefaultPath Determines if the default path should be included
    @param ownerPaysTransferFee false -> charge sender; true -> charge offer owner
    @param offerCrossing false -> payment; true -> offer crossing
@@ -459,7 +459,7 @@ public:
 /// @cond INTERNAL
 // Check equal with tolerance
 bool checkNear (IOUAmount const& expected, IOUAmount const& actual);
-bool checkNear (XRPAmount const& expected, XRPAmount const& actual);
+bool checkNear (JBCAmount const& expected, JBCAmount const& actual);
 /// @endcond
 
 /**
@@ -478,7 +478,7 @@ struct StrandContext
     bool const offerCrossing;          ///< true if offer crossing, not payment
     bool const isDefaultPath;          ///< true if Strand is default path
     size_t const strandSize;           ///< Length of Strand
-    /** The previous step in the strand. Needed to check the no ripple
+    /** The previous step in the strand. Needed to check the no jbcoin
         constraint
      */
     Step const* const prevStep = nullptr;
@@ -521,9 +521,9 @@ bool directStepEqual (Step const& step,
     AccountID const& dst,
     Currency const& currency);
 
-bool xrpEndpointStepEqual (Step const& step, AccountID const& acc);
+bool jbcEndpointStepEqual (Step const& step, AccountID const& acc);
 
-bool bookStepEqual (Step const& step, ripple::Book const& book);
+bool bookStepEqual (Step const& step, jbcoin::Book const& book);
 }
 
 std::pair<TER, std::unique_ptr<Step>>
@@ -550,15 +550,15 @@ make_BookStepXI (
     Issue const& out);
 
 std::pair<TER, std::unique_ptr<Step>>
-make_XRPEndpointStep (
+make_JBCEndpointStep (
     StrandContext const& ctx,
     AccountID const& acc);
 
 template<class InAmt, class OutAmt>
 bool
-isDirectXrpToXrp(Strand const& strand);
+isDirectJrpToJrp(Strand const& strand);
 /// @endcond
 
-} // ripple
+} // jbcoin
 
 #endif

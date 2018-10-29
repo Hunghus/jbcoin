@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_CORE_JOBQUEUE_H_INCLUDED
-#define RIPPLE_CORE_JOBQUEUE_H_INCLUDED
+#ifndef JBCOIN_CORE_JOBQUEUE_H_INCLUDED
+#define JBCOIN_CORE_JOBQUEUE_H_INCLUDED
 
-#include <ripple/basics/LocalValue.h>
-#include <ripple/basics/win32_workaround.h>
-#include <ripple/core/JobTypes.h>
-#include <ripple/core/JobTypeData.h>
-#include <ripple/core/Stoppable.h>
-#include <ripple/core/impl/Workers.h>
-#include <ripple/json/json_value.h>
+#include <jbcoin/basics/LocalValue.h>
+#include <jbcoin/basics/win32_workaround.h>
+#include <jbcoin/core/JobTypes.h>
+#include <jbcoin/core/JobTypeData.h>
+#include <jbcoin/core/Stoppable.h>
+#include <jbcoin/core/impl/Workers.h>
+#include <jbcoin/json/json_value.h>
 #include <boost/coroutine/all.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 namespace perf
 {
@@ -383,11 +383,11 @@ private:
             lock is released which only happens after the coroutine completes.
 */
 
-} // ripple
+} // jbcoin
 
-#include <ripple/core/Coro.ipp>
+#include <jbcoin/core/Coro.ipp>
 
-namespace ripple {
+namespace jbcoin {
 
 template <class F>
 std::shared_ptr<JobQueue::Coro>

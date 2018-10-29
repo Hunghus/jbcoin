@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2016 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2016 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#include <ripple/ledger/CashDiff.h>
-#include <ripple/ledger/detail/ApplyStateTable.h>
-#include <ripple/protocol/st.h>
+#include <jbcoin/ledger/CashDiff.h>
+#include <jbcoin/ledger/detail/ApplyStateTable.h>
+#include <jbcoin/protocol/st.h>
 #include <boost/container/static_vector.hpp>
 #include <cassert>
 #include <cstdlib>                                  // std::abs()
 
-namespace ripple {
+namespace jbcoin {
 namespace detail {
 
 // Data structure that summarize cash changes in a single ApplyStateTable.
@@ -34,7 +34,7 @@ struct CashSummary
 
     // Sorted vectors.  All of the vectors fill in for std::maps.
     std::vector<std::pair<
-        AccountID, XRPAmount>> xrpChanges;
+        AccountID, JBCAmount>> jbcChanges;
 
     std::vector<std::pair<
         std::tuple<AccountID, AccountID, Currency>, STAmount>> trustChanges;
@@ -53,7 +53,7 @@ struct CashSummary
 
     bool hasDiff () const
     {
-        return !xrpChanges.empty()
+        return !jbcChanges.empty()
             || !trustChanges.empty()
             || !trustDeletions.empty()
             || !offerChanges.empty()
@@ -62,7 +62,7 @@ struct CashSummary
 
     void reserve (size_t newCap)
     {
-        xrpChanges.reserve (newCap);
+        jbcChanges.reserve (newCap);
         trustChanges.reserve (newCap);
         trustDeletions.reserve (newCap);
         offerChanges.reserve (newCap);
@@ -71,7 +71,7 @@ struct CashSummary
 
     void shrink_to_fit()
     {
-        xrpChanges.shrink_to_fit();
+        jbcChanges.shrink_to_fit();
         trustChanges.shrink_to_fit();
         trustDeletions.shrink_to_fit();
         offerChanges.shrink_to_fit();
@@ -80,7 +80,7 @@ struct CashSummary
 
     void sort()
     {
-        std::sort (xrpChanges.begin(), xrpChanges.end());
+        std::sort (jbcChanges.begin(), jbcChanges.end());
         std::sort (trustChanges.begin(), trustChanges.end());
         std::sort (trustDeletions.begin(), trustDeletions.end());
         std::sort (offerChanges.begin(), offerChanges.end());
@@ -164,11 +164,11 @@ static bool getBasicCashFlow (CashSummary& result, bool isDelete,
         switch(prev.getType())
         {
         case ltACCOUNT_ROOT:
-            result.xrpChanges.push_back (
-                std::make_pair (prev[sfAccount], XRPAmount {0}));
+            result.jbcChanges.push_back (
+                std::make_pair (prev[sfAccount], JBCAmount {0}));
             return true;
 
-        case ltRIPPLE_STATE:
+        case ltJBCOIN_STATE:
             result.trustDeletions.push_back(
                 std::make_pair (
                     std::make_tuple (
@@ -204,13 +204,13 @@ static bool getBasicCashFlow (CashSummary& result, bool isDelete,
         {
         case ltACCOUNT_ROOT:
         {
-            auto const curXrp = cur[sfBalance].xrp();
-            if (!before || (*before)[sfBalance].xrp() != curXrp)
-                result.xrpChanges.push_back (
-                    std::make_pair (cur[sfAccount], curXrp));
+            auto const curJrp = cur[sfBalance].jbc();
+            if (!before || (*before)[sfBalance].jbc() != curJrp)
+                result.jbcChanges.push_back (
+                    std::make_pair (cur[sfAccount], curJrp));
             return true;
         }
-        case ltRIPPLE_STATE:
+        case ltJBCOIN_STATE:
         {
             auto const curBalance = cur[sfBalance];
             if (!before || (*before)[sfBalance] != curBalance)
@@ -284,11 +284,11 @@ getCashFlow (ReadView const& view, CashFilter f, ApplyStateTable const& table)
 class CashDiff::Impl
 {
 private:
-    // Note differences in destroyed XRP between two ApplyStateTables.
+    // Note differences in destroyed JBC between two ApplyStateTables.
     struct DropsGone
     {
-        XRPAmount lhs;
-        XRPAmount rhs;
+        JBCAmount lhs;
+        JBCAmount rhs;
     };
 
     ReadView const& view_;
@@ -332,7 +332,7 @@ public:
             || rhsDiffs_.hasDiff();
     }
 
-    int xrpRoundToZero () const;
+    int jbcRoundToZero () const;
 
     // Filter out differences that are small enough to be in the floating
     // point noise.
@@ -420,7 +420,7 @@ countKeys (detail::CashSummary const& lhs, detail::CashSummary const& rhs)
         std::transform (a.cbegin(), a.cend(),
             ret.cbegin(), ret.begin(), std::plus<std::size_t>());
     };
-    addIn (countKeys(lhs.xrpChanges,     rhs.xrpChanges));
+    addIn (countKeys(lhs.jbcChanges,     rhs.jbcChanges));
     addIn (countKeys(lhs.trustChanges,   rhs.trustChanges));
     addIn (countKeys(lhs.trustDeletions, rhs.trustDeletions));
     addIn (countKeys(lhs.offerChanges,   rhs.offerChanges));
@@ -428,10 +428,10 @@ countKeys (detail::CashSummary const& lhs, detail::CashSummary const& rhs)
     return ret;
 }
 
-int CashDiff::Impl::xrpRoundToZero () const
+int CashDiff::Impl::jbcRoundToZero () const
 {
     // The case has one OfferChange that is present on both lhs_ and rhs_.
-    // That OfferChange should have XRP for TakerGets.  There should be a 1
+    // That OfferChange should have JBC for TakerGets.  There should be a 1
     // drop difference between the TakerGets of lhsDiffs_ and rhsDiffs_.
     if (lhsDiffs_.offerChanges.size() != 1 ||
         rhsDiffs_.offerChanges.size() != 1)
@@ -451,11 +451,11 @@ int CashDiff::Impl::xrpRoundToZero () const
         smaller.offerChanges[0].second.takerGets().mantissa() != 1)
            return 0;
 
-    // The side with the smaller XRP balance in the OfferChange should have
-    // two XRP differences.  The other side should have no XRP differences.
-    if (smaller.xrpChanges.size() != 2)
+    // The side with the smaller JBC balance in the OfferChange should have
+    // two JBC differences.  The other side should have no JBC differences.
+    if (smaller.jbcChanges.size() != 2)
         return 0;
-    if (! bigger.xrpChanges.empty())
+    if (! bigger.jbcChanges.empty())
         return 0;
 
     // There should be no other differences.
@@ -528,13 +528,13 @@ bool CashDiff::Impl::rmDust ()
     bool removedDust = false;
 
     // Four of the containers can have small (floating point style)
-    // amount differences: xrpChanges, trustChanges, offerChanges, and
+    // amount differences: jbcChanges, trustChanges, offerChanges, and
     // offerDeletions.  Rifle through those containers and remove any
     // entries that are _almost_ the same between lhs and rhs.
 
-    // xrpChanges.  We call a difference of 2 drops or less dust.
-    removedDust |= rmVecDust (lhsDiffs_.xrpChanges, rhsDiffs_.xrpChanges,
-        [](XRPAmount const& lhs, XRPAmount const& rhs)
+    // jbcChanges.  We call a difference of 2 drops or less dust.
+    removedDust |= rmVecDust (lhsDiffs_.jbcChanges, rhsDiffs_.jbcChanges,
+        [](JBCAmount const& lhs, JBCAmount const& rhs)
         {
             return diffIsDust (lhs, rhs);
         });
@@ -611,9 +611,9 @@ void CashDiff::Impl::findDiffs (
     rhsKeys_    = counts[2];
 
     // Save only the differences between the results.
-    // xrpChanges:
-    setDiff (lhsDiffs.xrpChanges, rhsDiffs.xrpChanges, lhsDiffs_.xrpChanges);
-    setDiff (rhsDiffs.xrpChanges, lhsDiffs.xrpChanges, rhsDiffs_.xrpChanges);
+    // jbcChanges:
+    setDiff (lhsDiffs.jbcChanges, rhsDiffs.jbcChanges, lhsDiffs_.jbcChanges);
+    setDiff (rhsDiffs.jbcChanges, lhsDiffs.jbcChanges, rhsDiffs_.jbcChanges);
 
     // trustChanges:
     setDiff (lhsDiffs.trustChanges, rhsDiffs.trustChanges, lhsDiffs_.trustChanges);
@@ -669,9 +669,9 @@ bool CashDiff::hasDiff() const
     return impl_->hasDiff();
 }
 
-int CashDiff::xrpRoundToZero() const
+int CashDiff::jbcRoundToZero() const
 {
-    return impl_->xrpRoundToZero();
+    return impl_->jbcRoundToZero();
 }
 
 bool CashDiff::rmDust()
@@ -714,7 +714,7 @@ bool diffIsDust (STAmount const& v1, STAmount const& v2, std::uint8_t e10)
     STAmount const& small = v1 < v2 ? v1 : v2;
     STAmount const& large = v1 < v2 ? v2 : v1;
 
-    // Handling XRP is different from IOU.
+    // Handling JBC is different from IOU.
     if (v1.native())
     {
         std::uint64_t const s = small.mantissa();
@@ -778,4 +778,4 @@ bool diffIsDust (STAmount const& v1, STAmount const& v2, std::uint8_t e10)
     return ratioExp >= e10;
 };
 
-} // ripple
+} // jbcoin

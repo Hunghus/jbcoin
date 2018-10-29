@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2015 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2015 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,17 +17,17 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_SHAMAP_FAMILY_H_INCLUDED
-#define RIPPLE_SHAMAP_FAMILY_H_INCLUDED
+#ifndef JBCOIN_SHAMAP_FAMILY_H_INCLUDED
+#define JBCOIN_SHAMAP_FAMILY_H_INCLUDED
 
-#include <ripple/basics/Log.h>
-#include <ripple/shamap/FullBelowCache.h>
-#include <ripple/shamap/TreeNodeCache.h>
-#include <ripple/nodestore/Database.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/shamap/FullBelowCache.h>
+#include <jbcoin/shamap/TreeNodeCache.h>
+#include <jbcoin/nodestore/Database.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <cstdint>
 
-namespace ripple {
+namespace jbcoin {
 
 class Family
 {
@@ -79,6 +79,6 @@ public:
     reset () = 0;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

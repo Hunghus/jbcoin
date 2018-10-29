@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,17 +17,17 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_LEDGER_LEDGERTOJSON_H_INCLUDED
-#define RIPPLE_APP_LEDGER_LEDGERTOJSON_H_INCLUDED
+#ifndef JBCOIN_APP_LEDGER_LEDGERTOJSON_H_INCLUDED
+#define JBCOIN_APP_LEDGER_LEDGERTOJSON_H_INCLUDED
 
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/app/misc/TxQ.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/STTx.h>
-#include <ripple/json/Object.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/app/misc/TxQ.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/STTx.h>
+#include <jbcoin/json/Object.h>
 
-namespace ripple {
+namespace jbcoin {
 
 struct LedgerFill
 {
@@ -41,7 +41,7 @@ struct LedgerFill
     }
 
     enum Options {
-        dumpTxrp = 1,
+        dumpTjbc = 1,
         dumpState = 2,
         expand = 4,
         full = 8,
@@ -80,6 +80,6 @@ std::string serializeHex(STObject const& o)
 {
     return strHex(serializeBlob(o));
 }
-} // ripple
+} // jbcoin
 
 #endif

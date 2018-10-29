@@ -17,5 +17,5 @@
 */
 //==============================================================================
 
-#include <ripple/beast/hash/xxhasher.h>
-#include <ripple/beast/hash/impl/xxhash.cpp>
+#include <jbcoin/beast/hash/xxhasher.h>
+#include <jbcoin/beast/hash/impl/xxhash.cpp>

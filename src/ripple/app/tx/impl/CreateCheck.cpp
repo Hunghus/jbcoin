@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#include <ripple/app/tx/impl/CreateCheck.h>
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/STAccount.h>
-#include <ripple/protocol/TER.h>
-#include <ripple/protocol/TxFlags.h>
+#include <jbcoin/app/tx/impl/CreateCheck.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/STAccount.h>
+#include <jbcoin/protocol/TER.h>
+#include <jbcoin/protocol/TxFlags.h>
 
-namespace ripple {
+namespace jbcoin {
 
 NotTEC
 CreateCheck::preflight (PreflightContext const& ctx)
@@ -239,4 +239,4 @@ CreateCheck::doApply ()
     return tesSUCCESS;
 }
 
-} // namespace ripple
+} // namespace jbcoin

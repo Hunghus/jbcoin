@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -28,29 +28,29 @@
 #include <test/jtx/sig.h>
 #include <test/jtx/utility.h>
 #include <test/jtx/JSONRPCClient.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/consensus/LedgerTiming.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/app/misc/TxQ.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Slice.h>
-#include <ripple/json/to_string.h>
-#include <ripple/net/HTTPClient.h>
-#include <ripple/net/RPCCall.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/HashPrefix.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/LedgerFormats.h>
-#include <ripple/protocol/Serializer.h>
-#include <ripple/protocol/SystemParameters.h>
-#include <ripple/protocol/TER.h>
-#include <ripple/protocol/TxFlags.h>
-#include <ripple/protocol/UintTypes.h>
-#include <ripple/protocol/Feature.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/consensus/LedgerTiming.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/app/misc/TxQ.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Slice.h>
+#include <jbcoin/json/to_string.h>
+#include <jbcoin/net/HTTPClient.h>
+#include <jbcoin/net/RPCCall.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/HashPrefix.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/LedgerFormats.h>
+#include <jbcoin/protocol/Serializer.h>
+#include <jbcoin/protocol/SystemParameters.h>
+#include <jbcoin/protocol/TER.h>
+#include <jbcoin/protocol/TxFlags.h>
+#include <jbcoin/protocol/UintTypes.h>
+#include <jbcoin/protocol/Feature.h>
 #include <memory>
 
-namespace ripple {
+namespace jbcoin {
 namespace test {
 namespace jtx {
 
@@ -178,7 +178,7 @@ Env::balance (Account const& account) const
 {
     auto const sle = le(account);
     if (! sle)
-        return XRP(0);
+        return JBC(0);
     return {
         sle->getFieldAmount(sfBalance),
             "" };
@@ -188,7 +188,7 @@ PrettyAmount
 Env::balance (Account const& account,
     Issue const& issue) const
 {
-    if (isXRP(issue.currency))
+    if (isJBC(issue.currency))
         return balance(account);
     auto const sle = le(keylet::line(
         account.id(), issue));
@@ -226,12 +226,12 @@ Env::le (Keylet const& k) const
 }
 
 void
-Env::fund (bool setDefaultRipple,
+Env::fund (bool setDefaultJBCoin,
     STAmount const& amount,
         Account const& account)
 {
     memoize(account);
-    if (setDefaultRipple)
+    if (setDefaultJBCoin)
     {
         // VFALCO NOTE Is the fee formula correct?
         apply(pay(master, account, amount +
@@ -239,11 +239,11 @@ Env::fund (bool setDefaultRipple,
                 jtx::seq(jtx::autofill),
                     fee(jtx::autofill),
                         sig(jtx::autofill));
-        apply(fset(account, asfDefaultRipple),
+        apply(fset(account, asfDefaultJBCoin),
             jtx::seq(jtx::autofill),
                 fee(jtx::autofill),
                     sig(jtx::autofill));
-        require(flags(account, asfDefaultRipple));
+        require(flags(account, asfDefaultJBCoin));
     }
     else
     {
@@ -251,7 +251,7 @@ Env::fund (bool setDefaultRipple,
             jtx::seq(jtx::autofill),
                 fee(jtx::autofill),
                     sig(jtx::autofill));
-        require(nflags(account, asfDefaultRipple));
+        require(nflags(account, asfDefaultJBCoin));
     }
     require(jtx::balance(account, amount));
 }
@@ -478,4 +478,4 @@ Env::enableFeature(uint256 const feature)
 } // jtx
 
 } // test
-} // ripple
+} // jbcoin

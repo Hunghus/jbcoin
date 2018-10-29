@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,20 +17,20 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_INDEXES_H_INCLUDED
-#define RIPPLE_PROTOCOL_INDEXES_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_INDEXES_H_INCLUDED
+#define JBCOIN_PROTOCOL_INDEXES_H_INCLUDED
 
-#include <ripple/protocol/Keylet.h>
-#include <ripple/protocol/LedgerFormats.h>
-#include <ripple/protocol/Protocol.h>
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/protocol/Serializer.h>
-#include <ripple/protocol/UintTypes.h>
-#include <ripple/basics/base_uint.h>
-#include <ripple/protocol/Book.h>
+#include <jbcoin/protocol/Keylet.h>
+#include <jbcoin/protocol/LedgerFormats.h>
+#include <jbcoin/protocol/Protocol.h>
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/protocol/Serializer.h>
+#include <jbcoin/protocol/UintTypes.h>
+#include <jbcoin/basics/base_uint.h>
+#include <jbcoin/protocol/Book.h>
 #include <cstdint>
 
-namespace ripple {
+namespace jbcoin {
 
 // get the index of the node that holds the last 256 ledgers
 uint256
@@ -82,10 +82,10 @@ uint256
 getTicketIndex (AccountID const& account, std::uint32_t uSequence);
 
 uint256
-getRippleStateIndex (AccountID const& a, AccountID const& b, Currency const& currency);
+getJBCoinStateIndex (AccountID const& a, AccountID const& b, Currency const& currency);
 
 uint256
-getRippleStateIndex (AccountID const& a, Issue const& issue);
+getJBCoinStateIndex (AccountID const& a, Issue const& issue);
 
 uint256
 getSignerListIndex (AccountID const& account);
@@ -173,7 +173,7 @@ struct line_t
 
     Keylet operator()(uint256 const& key) const
     {
-        return { ltRIPPLE_STATE, key };
+        return { ltJBCOIN_STATE, key };
     }
 };
 static line_t const line {};

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2018 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2018 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#include <ripple/beast/unit_test.h>
-#include <ripple/crypto/impl/openssl.h>
+#include <jbcoin/beast/unit_test.h>
+#include <jbcoin/crypto/impl/openssl.h>
 #include <type_traits>
 
-namespace ripple {
+namespace jbcoin {
 struct Openssl_test : public beast::unit_test::suite
 {
     void
@@ -49,6 +49,6 @@ struct Openssl_test : public beast::unit_test::suite
     };
 };
 
-BEAST_DEFINE_TESTSUITE(Openssl, crypto, ripple);
+BEAST_DEFINE_TESTSUITE(Openssl, crypto, jbcoin);
 
-}  // namespace ripple
+}  // namespace jbcoin

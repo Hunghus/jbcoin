@@ -17,6 +17,6 @@
 */
 //==============================================================================
 
-#include <ripple/beast/utility/src/beast_Debug.cpp>
-#include <ripple/beast/utility/src/beast_Journal.cpp>
-#include <ripple/beast/utility/src/beast_PropertyStream.cpp>
+#include <jbcoin/beast/utility/src/beast_Debug.cpp>
+#include <jbcoin/beast/utility/src/beast_Journal.cpp>
+#include <jbcoin/beast/utility/src/beast_PropertyStream.cpp>

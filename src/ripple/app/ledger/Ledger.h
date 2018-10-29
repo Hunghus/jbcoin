@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,24 +17,24 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_LEDGER_LEDGER_H_INCLUDED
-#define RIPPLE_APP_LEDGER_LEDGER_H_INCLUDED
+#ifndef JBCOIN_APP_LEDGER_LEDGER_H_INCLUDED
+#define JBCOIN_APP_LEDGER_LEDGER_H_INCLUDED
 
-#include <ripple/ledger/TxMeta.h>
-#include <ripple/ledger/View.h>
-#include <ripple/ledger/CachedView.h>
-#include <ripple/basics/CountedObject.h>
-#include <ripple/core/TimeKeeper.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/STLedgerEntry.h>
-#include <ripple/protocol/Serializer.h>
-#include <ripple/protocol/Book.h>
-#include <ripple/shamap/SHAMap.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/ledger/TxMeta.h>
+#include <jbcoin/ledger/View.h>
+#include <jbcoin/ledger/CachedView.h>
+#include <jbcoin/basics/CountedObject.h>
+#include <jbcoin/core/TimeKeeper.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/STLedgerEntry.h>
+#include <jbcoin/protocol/Serializer.h>
+#include <jbcoin/protocol/Book.h>
+#include <jbcoin/shamap/SHAMap.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <boost/optional.hpp>
 #include <mutex>
 
-namespace ripple {
+namespace jbcoin {
 
 class Application;
 class Job;
@@ -93,8 +93,8 @@ public:
         computed from the string "masterpassphrase" and ordinal
         zero.
 
-        The account has an XRP balance equal to the total amount
-        of XRP in the system. No more XRP than the amount which
+        The account has an JBC balance equal to the total amount
+        of JBC in the system. No more JBC than the amount which
         starts in this account can ever exist, with amounts
         used to pay fees being destroyed.
 
@@ -222,7 +222,7 @@ public:
         SLE> const& sle) override;
 
     void
-    rawDestroyXRP (XRPAmount const& fee) override
+    rawDestroyJBC (JBCAmount const& fee) override
     {
         info_.drops -= fee;
     }
@@ -421,6 +421,6 @@ cachedRead (ReadView const& ledger, uint256 const& key,
     return ledger.read(keylet::unchecked(key));
 }
 
-} // ripple
+} // jbcoin
 
 #endif

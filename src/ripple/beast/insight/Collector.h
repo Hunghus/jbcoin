@@ -20,11 +20,11 @@
 #ifndef BEAST_INSIGHT_COLLECTOR_H_INCLUDED
 #define BEAST_INSIGHT_COLLECTOR_H_INCLUDED
 
-#include <ripple/beast/insight/Counter.h>
-#include <ripple/beast/insight/Event.h>
-#include <ripple/beast/insight/Gauge.h>
-#include <ripple/beast/insight/Hook.h>
-#include <ripple/beast/insight/Meter.h>
+#include <jbcoin/beast/insight/Counter.h>
+#include <jbcoin/beast/insight/Event.h>
+#include <jbcoin/beast/insight/Gauge.h>
+#include <jbcoin/beast/insight/Hook.h>
+#include <jbcoin/beast/insight/Meter.h>
 
 #include <string>
 

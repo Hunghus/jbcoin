@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_TX_APPLYCONTEXT_H_INCLUDED
-#define RIPPLE_TX_APPLYCONTEXT_H_INCLUDED
+#ifndef JBCOIN_TX_APPLYCONTEXT_H_INCLUDED
+#define JBCOIN_TX_APPLYCONTEXT_H_INCLUDED
 
-#include <ripple/app/main/Application.h>
-#include <ripple/ledger/ApplyViewImpl.h>
-#include <ripple/core/Config.h>
-#include <ripple/protocol/STTx.h>
-#include <ripple/protocol/XRPAmount.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/ledger/ApplyViewImpl.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/protocol/STTx.h>
+#include <jbcoin/protocol/JBCAmount.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <boost/optional.hpp>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 // tx_enable_test
 
@@ -96,9 +96,9 @@ public:
         std::shared_ptr <SLE const> const& after)> const& func);
 
     void
-    destroyXRP (XRPAmount const& fee)
+    destroyJBC (JBCAmount const& fee)
     {
-        view_->rawDestroyXRP(fee);
+        view_->rawDestroyJBC(fee);
     }
 
     /** Applies all invariant checkers one by one.
@@ -108,7 +108,7 @@ public:
         @return the result code that should be returned for this transaction.
      */
     TER
-    checkInvariants(TER const result, XRPAmount const fee);
+    checkInvariants(TER const result, JBCAmount const fee);
 
 private:
     TER
@@ -116,13 +116,13 @@ private:
 
     template<std::size_t... Is>
     TER
-    checkInvariantsHelper(TER const result, XRPAmount const fee, std::index_sequence<Is...>);
+    checkInvariantsHelper(TER const result, JBCAmount const fee, std::index_sequence<Is...>);
 
     OpenView& base_;
     ApplyFlags flags_;
     boost::optional<ApplyViewImpl> view_;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

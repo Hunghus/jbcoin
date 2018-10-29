@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,13 +17,13 @@
 */
 //==============================================================================
 
-#include <ripple/protocol/AccountID.h>
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/protocol/digest.h>
-#include <ripple/protocol/tokens.h>
+#include <jbcoin/protocol/AccountID.h>
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/protocol/digest.h>
+#include <jbcoin/protocol/tokens.h>
 #include <cstring>
 
-namespace ripple {
+namespace jbcoin {
 
 std::string
 toBase58 (AccountID const& v)
@@ -119,7 +119,7 @@ parseHexOrBase58 (std::string const& s)
 
         The short answer is that we kept Bitcoin's behavior.
         The longer answer was that:
-            1) Using a single hash could leave ripple
+            1) Using a single hash could leave jbcoin
                vulnerable to length extension attacks.
             2) Only RIPEMD160 is generally considered safe at 160 bits.
 
@@ -146,7 +146,7 @@ calcAccountID (PublicKey const& pk)
 }
 
 AccountID const&
-xrpAccount()
+jbcAccount()
 {
     static AccountID const account(0);
     return account;
@@ -216,7 +216,7 @@ AccountIDCache::toBase58(
     else
     {
         result =
-            ripple::toBase58(id);
+            jbcoin::toBase58(id);
     }
     if (m1_.size() >= capacity_)
     {
@@ -228,4 +228,4 @@ AccountIDCache::toBase58(
     return result;
 }
 
-} // ripple
+} // jbcoin

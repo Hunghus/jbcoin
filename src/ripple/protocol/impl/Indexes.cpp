@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#include <ripple/protocol/digest.h>
-#include <ripple/protocol/Indexes.h>
+#include <jbcoin/protocol/digest.h>
+#include <jbcoin/protocol/Indexes.h>
 #include <boost/endian/conversion.hpp>
 #include <cassert>
 
-namespace ripple {
+namespace jbcoin {
 
 // get the index of the node that holds the last 256 ledgers
 uint256
@@ -156,25 +156,25 @@ getTicketIndex (AccountID const& account, std::uint32_t uSequence)
 }
 
 uint256
-getRippleStateIndex (AccountID const& a, AccountID const& b, Currency const& currency)
+getJBCoinStateIndex (AccountID const& a, AccountID const& b, Currency const& currency)
 {
     if (a < b)
         return sha512Half(
-            std::uint16_t(spaceRipple),
+            std::uint16_t(spaceJBCoin),
             a,
             b,
             currency);
     return sha512Half(
-        std::uint16_t(spaceRipple),
+        std::uint16_t(spaceJBCoin),
         b,
         a,
         currency);
 }
 
 uint256
-getRippleStateIndex (AccountID const& a, Issue const& issue)
+getJBCoinStateIndex (AccountID const& a, Issue const& issue)
 {
-    return getRippleStateIndex (a, issue.account, issue.currency);
+    return getJBCoinStateIndex (a, issue.account, issue.currency);
 }
 
 uint256
@@ -257,15 +257,15 @@ Keylet book_t::operator()(Book const& b) const
 Keylet line_t::operator()(AccountID const& id0,
     AccountID const& id1, Currency const& currency) const
 {
-    return { ltRIPPLE_STATE,
-        getRippleStateIndex(id0, id1, currency) };
+    return { ltJBCOIN_STATE,
+        getJBCoinStateIndex(id0, id1, currency) };
 }
 
 Keylet line_t::operator()(AccountID const& id,
     Issue const& issue) const
 {
-    return { ltRIPPLE_STATE,
-        getRippleStateIndex(id, issue) };
+    return { ltJBCOIN_STATE,
+        getJBCoinStateIndex(id, issue) };
 }
 
 Keylet offer_t::operator()(AccountID const& id,
@@ -360,7 +360,7 @@ payChan (AccountID const& source, AccountID const& dst, std::uint32_t seq)
 {
     sha512_half_hasher h;
     using beast::hash_append;
-    hash_append(h, std::uint16_t(spaceXRPUChannel));
+    hash_append(h, std::uint16_t(spaceJBCUChannel));
     hash_append(h, source);
     hash_append(h, dst);
     hash_append(h, seq);
@@ -369,4 +369,4 @@ payChan (AccountID const& source, AccountID const& dst, std::uint32_t seq)
 
 } // keylet
 
-} // ripple
+} // jbcoin

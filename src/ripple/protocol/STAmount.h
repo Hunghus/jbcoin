@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,20 +17,20 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_STAMOUNT_H_INCLUDED
-#define RIPPLE_PROTOCOL_STAMOUNT_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_STAMOUNT_H_INCLUDED
+#define JBCOIN_PROTOCOL_STAMOUNT_H_INCLUDED
 
-#include <ripple/basics/chrono.h>
-#include <ripple/basics/LocalValue.h>
-#include <ripple/protocol/SField.h>
-#include <ripple/protocol/Serializer.h>
-#include <ripple/protocol/STBase.h>
-#include <ripple/protocol/Issue.h>
-#include <ripple/protocol/IOUAmount.h>
-#include <ripple/protocol/XRPAmount.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/basics/LocalValue.h>
+#include <jbcoin/protocol/SField.h>
+#include <jbcoin/protocol/Serializer.h>
+#include <jbcoin/protocol/STBase.h>
+#include <jbcoin/protocol/Issue.h>
+#include <jbcoin/protocol/IOUAmount.h>
+#include <jbcoin/protocol/JBCAmount.h>
 #include <memory>
 
-namespace ripple {
+namespace jbcoin {
 
 // Internal form:
 // 1: If amount is zero, then value is zero and offset is -100
@@ -54,7 +54,7 @@ private:
     Issue mIssue;
     mantissa_type mValue;
     exponent_type mOffset;
-    bool mIsNative;      // A shorthand for isXRP(mIssue).
+    bool mIsNative;      // A shorthand for isJBC(mIssue).
     bool mIsNegative;
 
 public:
@@ -120,7 +120,7 @@ public:
 
     // Legacy support for new-style amounts
     STAmount (IOUAmount const& amount, Issue const& issue);
-    STAmount (XRPAmount const& amount);
+    STAmount (JBCAmount const& amount);
 
     STBase*
     copy (std::size_t n, void* buf) const override
@@ -203,7 +203,7 @@ public:
         return *this;
     }
 
-    STAmount& operator= (XRPAmount const& amount)
+    STAmount& operator= (JBCAmount const& amount)
     {
         *this = STAmount (amount);
         return *this;
@@ -284,7 +284,7 @@ public:
         return (mValue == 0) && mIsNative;
     }
 
-    XRPAmount xrp () const;
+    JBCAmount jbc () const;
     IOUAmount iou () const;
 };
 
@@ -307,7 +307,7 @@ amountFromJson (SField const& name, Json::Value const& v);
 bool
 amountFromJsonNoThrow (STAmount& result, Json::Value const& jvSource);
 
-// IOUAmount and XRPAmount define toSTAmount, defining this
+// IOUAmount and JBCAmount define toSTAmount, defining this
 // trivial conversion here makes writing generic code easier
 inline
 STAmount const&
@@ -400,9 +400,9 @@ getRate (STAmount const& offerOut, STAmount const& offerIn);
 
 //------------------------------------------------------------------------------
 
-inline bool isXRP(STAmount const& amount)
+inline bool isJBC(STAmount const& amount)
 {
-    return isXRP (amount.issue().currency);
+    return isJBC (amount.issue().currency);
 }
 
 extern LocalValue<bool> stAmountCalcSwitchover;
@@ -437,6 +437,6 @@ private:
     bool saved2_;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

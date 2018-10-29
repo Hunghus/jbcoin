@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,11 +18,11 @@
 //==============================================================================
 
 
-#include <ripple/overlay/impl/PeerImp.cpp>
-#include <ripple/overlay/impl/PeerSet.cpp>
-#include <ripple/overlay/impl/TMHello.cpp>
-#include <ripple/overlay/impl/TrafficCount.cpp>
+#include <jbcoin/overlay/impl/PeerImp.cpp>
+#include <jbcoin/overlay/impl/PeerSet.cpp>
+#include <jbcoin/overlay/impl/TMHello.cpp>
+#include <jbcoin/overlay/impl/TrafficCount.cpp>
 
 #if DOXYGEN
-#include <ripple/overlay/README.md>
+#include <jbcoin/overlay/README.md>
 #endif

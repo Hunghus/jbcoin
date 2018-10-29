@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/cursor/PathCursor.h>
-#include <ripple/basics/Log.h>
-#include <ripple/ledger/View.h>
+#include <jbcoin/app/paths/cursor/PathCursor.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/ledger/View.h>
 #include <tuple>
 
-namespace ripple {
+namespace jbcoin {
 namespace path {
 
 // Calculate a node and its previous nodes.  The eventual goal is to determine1
@@ -61,7 +61,7 @@ TER PathCursor::reverseLiquidity () const
         return reverseLiquidityForAccount ();
 
     // Otherwise the node is an Offer.
-    if (isXRP (nextNode().account_))
+    if (isJBC (nextNode().account_))
     {
         JLOG (j_.trace())
             << "reverseLiquidityForOffer: "
@@ -89,4 +89,4 @@ TER PathCursor::reverseLiquidity () const
 }
 
 } // path
-} // ripple
+} // jbcoin

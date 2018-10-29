@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,38 +17,38 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_XRPAMOUNT_H_INCLUDED
-#define RIPPLE_PROTOCOL_XRPAMOUNT_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_JBCAMOUNT_H_INCLUDED
+#define JBCOIN_PROTOCOL_JBCAMOUNT_H_INCLUDED
 
-#include <ripple/basics/contract.h>
-#include <ripple/protocol/SystemParameters.h>
-#include <ripple/beast/utility/Zero.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/protocol/SystemParameters.h>
+#include <jbcoin/beast/utility/Zero.h>
 #include <boost/operators.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <cstdint>
 #include <string>
 #include <type_traits>
 
-namespace ripple {
+namespace jbcoin {
 
-class XRPAmount
-    : private boost::totally_ordered <XRPAmount>
-    , private boost::additive <XRPAmount>
+class JBCAmount
+    : private boost::totally_ordered <JBCAmount>
+    , private boost::additive <JBCAmount>
 {
 private:
     std::int64_t drops_;
 
 public:
-    XRPAmount () = default;
-    XRPAmount (XRPAmount const& other) = default;
-    XRPAmount& operator= (XRPAmount const& other) = default;
+    JBCAmount () = default;
+    JBCAmount (JBCAmount const& other) = default;
+    JBCAmount& operator= (JBCAmount const& other) = default;
 
-    XRPAmount (beast::Zero)
+    JBCAmount (beast::Zero)
         : drops_ (0)
     {
     }
 
-    XRPAmount&
+    JBCAmount&
     operator= (beast::Zero)
     {
         drops_ = 0;
@@ -58,7 +58,7 @@ public:
     template <class Integer,
         class = typename std::enable_if_t <
             std::is_integral<Integer>::value>>
-    XRPAmount (Integer drops)
+    JBCAmount (Integer drops)
         : drops_ (static_cast<std::int64_t> (drops))
     {
     }
@@ -66,41 +66,41 @@ public:
     template <class Integer,
         class = typename std::enable_if_t <
             std::is_integral<Integer>::value>>
-    XRPAmount&
+    JBCAmount&
     operator= (Integer drops)
     {
         drops_ = static_cast<std::int64_t> (drops);
         return *this;
     }
 
-    XRPAmount&
-    operator+= (XRPAmount const& other)
+    JBCAmount&
+    operator+= (JBCAmount const& other)
     {
         drops_ += other.drops_;
         return *this;
     }
 
-    XRPAmount&
-    operator-= (XRPAmount const& other)
+    JBCAmount&
+    operator-= (JBCAmount const& other)
     {
         drops_ -= other.drops_;
         return *this;
     }
 
-    XRPAmount
+    JBCAmount
     operator- () const
     {
         return { -drops_ };
     }
 
     bool
-    operator==(XRPAmount const& other) const
+    operator==(JBCAmount const& other) const
     {
         return drops_ == other.drops_;
     }
 
     bool
-    operator<(XRPAmount const& other) const
+    operator<(JBCAmount const& other) const
     {
         return drops_ < other.drops_;
     }
@@ -129,15 +129,15 @@ public:
 
 inline
 std::string
-to_string (XRPAmount const& amount)
+to_string (JBCAmount const& amount)
 {
     return std::to_string (amount.drops ());
 }
 
 inline
-XRPAmount
+JBCAmount
 mulRatio (
-    XRPAmount const& amt,
+    JBCAmount const& amt,
     std::uint32_t num,
     std::uint32_t den,
     bool roundUp)
@@ -159,13 +159,13 @@ mulRatio (
             r -= 1;
     }
     if (r > std::numeric_limits<std::int64_t>::max ())
-        Throw<std::overflow_error> ("XRP mulRatio overflow");
-    return XRPAmount (r.convert_to<std::int64_t> ());
+        Throw<std::overflow_error> ("JBC mulRatio overflow");
+    return JBCAmount (r.convert_to<std::int64_t> ());
 }
 
-/** Returns true if the amount does not exceed the initial XRP in existence. */
+/** Returns true if the amount does not exceed the initial JBC in existence. */
 inline
-bool isLegalAmount (XRPAmount const& amount)
+bool isLegalAmount (JBCAmount const& amount)
 {
     return amount.drops () <= SYSTEM_CURRENCY_START;
 }

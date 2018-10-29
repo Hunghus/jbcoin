@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -22,20 +22,20 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file license.txt or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RIPPLE_BASICS_BASE_UINT_H_INCLUDED
-#define RIPPLE_BASICS_BASE_UINT_H_INCLUDED
+#ifndef JBCOIN_BASICS_BASE_UINT_H_INCLUDED
+#define JBCOIN_BASICS_BASE_UINT_H_INCLUDED
 
-#include <ripple/basics/Blob.h>
-#include <ripple/basics/strHex.h>
-#include <ripple/basics/hardened_hash.h>
-#include <ripple/beast/utility/Zero.h>
+#include <jbcoin/basics/Blob.h>
+#include <jbcoin/basics/strHex.h>
+#include <jbcoin/basics/hardened_hash.h>
+#include <jbcoin/beast/utility/Zero.h>
 #include <boost/endian/conversion.hpp>
 #include <boost/functional/hash.hpp>
 #include <array>
 #include <functional>
 #include <type_traits>
 
-namespace ripple {
+namespace jbcoin {
 
 // This class stores its values internally in big-endian form
 
@@ -547,13 +547,13 @@ static_assert(sizeof(uint160) == 160/8, "There should be no padding bytes");
 static_assert(sizeof(uint256) == 256/8, "There should be no padding bytes");
 #endif
 
-} // rippled
+} // jbcoind
 
 namespace beast
 {
 
 template <std::size_t Bits, class Tag>
-struct is_uniquely_represented<ripple::base_uint<Bits, Tag>>
+struct is_uniquely_represented<jbcoin::base_uint<Bits, Tag>>
     : public std::true_type
     {
         explicit is_uniquely_represented() = default;

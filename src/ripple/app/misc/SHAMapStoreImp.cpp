@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,15 +18,15 @@
 //==============================================================================
 
 
-#include <ripple/app/ledger/TransactionMaster.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/app/misc/SHAMapStoreImp.h>
-#include <ripple/beast/core/CurrentThreadName.h>
-#include <ripple/core/ConfigSections.h>
-#include <ripple/nodestore/impl/DatabaseRotatingImp.h>
-#include <ripple/nodestore/impl/DatabaseShardImp.h>
+#include <jbcoin/app/ledger/TransactionMaster.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/app/misc/SHAMapStoreImp.h>
+#include <jbcoin/beast/core/CurrentThreadName.h>
+#include <jbcoin/core/ConfigSections.h>
+#include <jbcoin/nodestore/impl/DatabaseRotatingImp.h>
+#include <jbcoin/nodestore/impl/DatabaseShardImp.h>
 
-namespace ripple {
+namespace jbcoin {
 void SHAMapStoreImp::SavedStateDB::init (BasicConfig const& config,
                                          std::string const& dbName)
 {
@@ -673,7 +673,7 @@ SHAMapStoreImp::clearPrior (LedgerIndex lastRotated)
                Validations with InitialSeq approximately 1080 (exact value
                doesn't matter), and later validated with the matching
                LedgerSeq value.
-            3) rippled participates in ledgers 1091-1100. Validations
+            3) jbcoind participates in ledgers 1091-1100. Validations
                 received are created with InitialSeq in that range, and
                 appropriate LedgerSeqs. Maybe some of those ledgers are
                 not accepted, so LedgerSeq stays null.

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_RPC_HANDLERS_HANDLERS_H_INCLUDED
-#define RIPPLE_RPC_HANDLERS_HANDLERS_H_INCLUDED
+#ifndef JBCOIN_RPC_HANDLERS_HANDLERS_H_INCLUDED
+#define JBCOIN_RPC_HANDLERS_HANDLERS_H_INCLUDED
 
-#include <ripple/rpc/handlers/LedgerHandler.h>
+#include <jbcoin/rpc/handlers/LedgerHandler.h>
 
-namespace ripple {
+namespace jbcoin {
 
 Json::Value doAccountCurrencies     (RPC::Context&);
 Json::Value doAccountInfo           (RPC::Context&);
@@ -57,14 +57,14 @@ Json::Value doLedgerHeader          (RPC::Context&);
 Json::Value doLedgerRequest         (RPC::Context&);
 Json::Value doLogLevel              (RPC::Context&);
 Json::Value doLogRotate             (RPC::Context&);
-Json::Value doNoRippleCheck         (RPC::Context&);
+Json::Value doNoJBCoinCheck         (RPC::Context&);
 Json::Value doOwnerInfo             (RPC::Context&);
 Json::Value doPathFind              (RPC::Context&);
 Json::Value doPeers                 (RPC::Context&);
 Json::Value doPing                  (RPC::Context&);
 Json::Value doPrint                 (RPC::Context&);
 Json::Value doRandom                (RPC::Context&);
-Json::Value doRipplePathFind        (RPC::Context&);
+Json::Value doJBCoinPathFind        (RPC::Context&);
 Json::Value doServerInfo            (RPC::Context&); // for humans
 Json::Value doServerState           (RPC::Context&); // for machines
 Json::Value doSign                  (RPC::Context&);
@@ -83,6 +83,6 @@ Json::Value doValidationSeed        (RPC::Context&);
 Json::Value doWalletPropose         (RPC::Context&);
 Json::Value doValidators            (RPC::Context&);
 Json::Value doValidatorListSites    (RPC::Context&);
-} // ripple
+} // jbcoin
 
 #endif

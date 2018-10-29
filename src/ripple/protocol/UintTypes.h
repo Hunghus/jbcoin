@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_UINTTYPES_H_INCLUDED
-#define RIPPLE_PROTOCOL_UINTTYPES_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_UINTTYPES_H_INCLUDED
+#define JBCOIN_PROTOCOL_UINTTYPES_H_INCLUDED
 
-#include <ripple/basics/UnorderedContainers.h>
-#include <ripple/basics/base_uint.h>
-#include <ripple/protocol/AccountID.h>
-#include <ripple/beast/utility/Zero.h>
+#include <jbcoin/basics/UnorderedContainers.h>
+#include <jbcoin/basics/base_uint.h>
+#include <jbcoin/protocol/AccountID.h>
+#include <jbcoin/beast/utility/Zero.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace detail {
 
 class CurrencyTag
@@ -58,22 +58,22 @@ using Currency = base_uint<160, detail::CurrencyTag>;
 /** NodeID is a 160-bit hash representing one node. */
 using NodeID = base_uint<160, detail::NodeIDTag>;
 
-/** XRP currency. */
-Currency const& xrpCurrency();
+/** JBC currency. */
+Currency const& jbcCurrency();
 
 /** A placeholder for empty currencies. */
 Currency const& noCurrency();
 
-/** We deliberately disallow the currency that looks like "XRP" because too
-    many people were using it instead of the correct XRP currency. */
+/** We deliberately disallow the currency that looks like "JBC" because too
+    many people were using it instead of the correct JBC currency. */
 Currency const& badCurrency();
 
-inline bool isXRP(Currency const& c)
+inline bool isJBC(Currency const& c)
 {
     return c == beast::zero;
 }
 
-/** Returns "", "XRP", or three letter ISO code. */
+/** Returns "", "JBC", or three letter ISO code. */
 std::string to_string(Currency const& c);
 
 /** Tries to convert a string to a Currency, returns true on success. */
@@ -88,24 +88,24 @@ inline std::ostream& operator<< (std::ostream& os, Currency const& x)
     return os;
 }
 
-} // ripple
+} // jbcoin
 
 namespace std {
 
 template <>
-struct hash <ripple::Currency> : ripple::Currency::hasher
+struct hash <jbcoin::Currency> : jbcoin::Currency::hasher
 {
     explicit hash() = default;
 };
 
 template <>
-struct hash <ripple::NodeID> : ripple::NodeID::hasher
+struct hash <jbcoin::NodeID> : jbcoin::NodeID::hasher
 {
     explicit hash() = default;
 };
 
 template <>
-struct hash <ripple::Directory> : ripple::Directory::hasher
+struct hash <jbcoin::Directory> : jbcoin::Directory::hasher
 {
     explicit hash() = default;
 };

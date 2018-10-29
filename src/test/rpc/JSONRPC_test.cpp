@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/app/misc/TxQ.h>
-#include <ripple/basics/contract.h>
-#include <ripple/core/ConfigSections.h>
-#include <ripple/json/json_reader.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/rpc/impl/TransactionSign.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/app/misc/TxQ.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/core/ConfigSections.h>
+#include <jbcoin/json/json_reader.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/rpc/impl/TransactionSign.h>
 #include <test/jtx.h>
 #include <test/jtx/envconfig.h>
-#include <ripple/beast/unit_test.h>
+#include <jbcoin/beast/unit_test.h>
 
-namespace ripple {
+namespace jbcoin {
 
 namespace RPC {
 
@@ -391,7 +391,7 @@ R"({
 "Missing field 'tx_json.Sequence'.",
 "Missing field 'tx_json.Sequence'."}},
 
-{ "Cannot create XRP to XRP paths.",
+{ "Cannot create JBC to JBC paths.",
 R"({
     "command": "doesnt_matter",
     "account": "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
@@ -405,8 +405,8 @@ R"({
     }
 })",
 {
-"Cannot build XRP to XRP paths.",
-"Cannot build XRP to XRP paths.",
+"Cannot build JBC to JBC paths.",
+"Cannot build JBC to JBC paths.",
 "Missing field 'tx_json.Sequence'.",
 "Missing field 'tx_json.Sequence'."}},
 
@@ -485,7 +485,7 @@ R"({
 "Missing field 'tx_json.Sequence'.",
 "Missing field 'tx_json.Sequence'."}},
 
-{ "Even though 'Amount' may not be XRP for pathfinding, 'SendMax' may be XRP.",
+{ "Even though 'Amount' may not be JBC for pathfinding, 'SendMax' may be JBC.",
 R"({
     "command": "doesnt_matter",
     "account": "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh",
@@ -2266,7 +2266,7 @@ public:
         // "c" (phantom signer) is rPcNzota6B8YBokhYtcTNqQVCngtbnWfux.
 
         test::jtx::Env env(*this);
-        env.fund(test::jtx::XRP(100000), a, ed, g);
+        env.fund(test::jtx::JBC(100000), a, ed, g);
         env.close();
 
         env(trust(a, USD(1000)));
@@ -2364,8 +2364,8 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE(JSONRPC,ripple_app,ripple);
+BEAST_DEFINE_TESTSUITE(JSONRPC,jbcoin_app,jbcoin);
 
 } // RPC
-} // ripple
+} // jbcoin
 

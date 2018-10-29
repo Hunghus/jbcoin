@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,18 +18,18 @@
 //==============================================================================
 
 
-#include <ripple/ledger/impl/ApplyStateTable.cpp>
-#include <ripple/ledger/impl/ApplyView.cpp>
-#include <ripple/ledger/impl/ApplyViewBase.cpp>
-#include <ripple/ledger/impl/ApplyViewImpl.cpp>
-#include <ripple/ledger/impl/BookDirs.cpp>
-#include <ripple/ledger/impl/CachedSLEs.cpp>
-#include <ripple/ledger/impl/CachedView.cpp>
-#include <ripple/ledger/impl/CashDiff.cpp>
-#include <ripple/ledger/impl/Directory.cpp>
-#include <ripple/ledger/impl/OpenView.cpp>
-#include <ripple/ledger/impl/PaymentSandbox.cpp>
-#include <ripple/ledger/impl/RawStateTable.cpp>
-#include <ripple/ledger/impl/ReadView.cpp>
-#include <ripple/ledger/impl/TxMeta.cpp>
-#include <ripple/ledger/impl/View.cpp>
+#include <jbcoin/ledger/impl/ApplyStateTable.cpp>
+#include <jbcoin/ledger/impl/ApplyView.cpp>
+#include <jbcoin/ledger/impl/ApplyViewBase.cpp>
+#include <jbcoin/ledger/impl/ApplyViewImpl.cpp>
+#include <jbcoin/ledger/impl/BookDirs.cpp>
+#include <jbcoin/ledger/impl/CachedSLEs.cpp>
+#include <jbcoin/ledger/impl/CachedView.cpp>
+#include <jbcoin/ledger/impl/CashDiff.cpp>
+#include <jbcoin/ledger/impl/Directory.cpp>
+#include <jbcoin/ledger/impl/OpenView.cpp>
+#include <jbcoin/ledger/impl/PaymentSandbox.cpp>
+#include <jbcoin/ledger/impl/RawStateTable.cpp>
+#include <jbcoin/ledger/impl/ReadView.cpp>
+#include <jbcoin/ledger/impl/TxMeta.cpp>
+#include <jbcoin/ledger/impl/View.cpp>

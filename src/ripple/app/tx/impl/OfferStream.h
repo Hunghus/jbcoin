@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,20 +17,20 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_BOOK_OFFERSTREAM_H_INCLUDED
-#define RIPPLE_APP_BOOK_OFFERSTREAM_H_INCLUDED
+#ifndef JBCOIN_APP_BOOK_OFFERSTREAM_H_INCLUDED
+#define JBCOIN_APP_BOOK_OFFERSTREAM_H_INCLUDED
 
-#include <ripple/app/tx/impl/BookTip.h>
-#include <ripple/app/tx/impl/Offer.h>
-#include <ripple/basics/chrono.h>
-#include <ripple/basics/Log.h>
-#include <ripple/ledger/View.h>
-#include <ripple/protocol/Quality.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/app/tx/impl/BookTip.h>
+#include <jbcoin/app/tx/impl/Offer.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/ledger/View.h>
+#include <jbcoin/protocol/Quality.h>
+#include <jbcoin/beast/utility/Journal.h>
 
 #include <boost/container/flat_set.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 template<class TIn, class TOut>
 class TOfferStreamBase

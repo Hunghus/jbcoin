@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#include <ripple/basics/Slice.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/basics/ToString.h>
-#include <ripple/beast/unit_test.h>
+#include <jbcoin/basics/Slice.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/basics/ToString.h>
+#include <jbcoin/beast/unit_test.h>
 
-namespace ripple {
+namespace jbcoin {
 
 class StringUtilities_test : public beast::unit_test::suite
 {
@@ -45,7 +45,7 @@ public:
     {
         testcase ("strUnHex");
 
-        testUnHexSuccess ("526970706c6544", "RippleD");
+        testUnHexSuccess ("526970706c6544", "JBCoinD");
         testUnHexSuccess ("A", "\n");
         testUnHexSuccess ("0A", "\n");
         testUnHexSuccess ("D0A", "\r\n");
@@ -56,7 +56,7 @@ public:
         // Check for things which contain some or only invalid characters
         testUnHexFailure ("123X");
         testUnHexFailure ("V");
-        testUnHexFailure ("XRP");
+        testUnHexFailure ("JBC");
     }
 
     void testParseUrl ()
@@ -97,6 +97,6 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE(StringUtilities, ripple_basics, ripple);
+BEAST_DEFINE_TESTSUITE(StringUtilities, jbcoin_basics, jbcoin);
 
-} // ripple
+} // jbcoin

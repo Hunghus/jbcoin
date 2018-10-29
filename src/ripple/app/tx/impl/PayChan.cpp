@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,27 +17,27 @@
 */
 //==============================================================================
 
-#include <ripple/app/tx/impl/PayChan.h>
-#include <ripple/basics/chrono.h>
-#include <ripple/basics/Log.h>
-#include <ripple/ledger/ApplyView.h>
-#include <ripple/ledger/View.h>
-#include <ripple/protocol/digest.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/PayChan.h>
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/protocol/st.h>
-#include <ripple/protocol/TxFlags.h>
-#include <ripple/protocol/XRPAmount.h>
+#include <jbcoin/app/tx/impl/PayChan.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/ledger/ApplyView.h>
+#include <jbcoin/ledger/View.h>
+#include <jbcoin/protocol/digest.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/PayChan.h>
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/protocol/st.h>
+#include <jbcoin/protocol/TxFlags.h>
+#include <jbcoin/protocol/JBCAmount.h>
 
-namespace ripple {
+namespace jbcoin {
 
 /*
     PaymentChannel
 
-        Payment channels permit off-ledger checkpoints of XRP payments flowing
-        in a single direction. A channel sequesters the owner's XRP in its own
+        Payment channels permit off-ledger checkpoints of JBC payments flowing
+        in a single direction. A channel sequesters the owner's JBC in its own
         ledger entry. The owner can authorize the recipient to claim up to a
         given balance by giving the receiver a signed message (off-ledger). The
         recipient can use this signed message to claim any unpaid balance while
@@ -58,7 +58,7 @@ namespace ripple {
         Destination
             The recipient at the end of the channel.
         Amount
-            The amount of XRP to deposit in the channel immediately.
+            The amount of JBC to deposit in the channel immediately.
         SettleDelay
             The amount of time everyone but the recipient must wait for a
             superior claim.
@@ -69,13 +69,13 @@ namespace ripple {
             `CancelAfter` time will close it.
         DestinationTag (optional)
             Destination tags allow the different accounts inside of a Hosted
-            Wallet to be mapped back onto the Ripple ledger. The destination tag
+            Wallet to be mapped back onto the JBCoin ledger. The destination tag
             tells the server to which account in the Hosted Wallet the funds are
             intended to go to. Required if the destination has lsfRequireDestTag
             set.
         SourceTag (optional)
             Source tags allow the different accounts inside of a Hosted Wallet
-            to be mapped back onto the Ripple ledger. Source tags are similar to
+            to be mapped back onto the JBCoin ledger. Source tags are similar to
             destination tags but are for the channel owner to identify their own
             transactions.
 
@@ -86,7 +86,7 @@ namespace ripple {
         Channel
             The 256-bit ID of the channel.
         Amount
-            The amount of XRP to add.
+            The amount of JBC to add.
         Expiration (optional)
             Time the channel closes. The transaction will fail if the expiration
             times does not satisfy the SettleDelay constraints.
@@ -97,10 +97,10 @@ namespace ripple {
         Channel
             The 256-bit ID of the channel.
         Balance (optional)
-            The total amount of XRP delivered after this claim is processed (optional, not
+            The total amount of JBC delivered after this claim is processed (optional, not
             needed if just closing).
         Amount (optional)
-            The amount of XRP the signature is for (not needed if equal to Balance or just
+            The amount of JBC the signature is for (not needed if equal to Balance or just
             closing the line).
         Signature (optional)
             Authorization for the balance above, signed by the owner (optional,
@@ -167,7 +167,7 @@ PayChanCreate::preflight (PreflightContext const& ctx)
     if (!isTesSuccess (ret))
         return ret;
 
-    if (!isXRP (ctx.tx[sfAmount]) || (ctx.tx[sfAmount] <= beast::zero))
+    if (!isJBC (ctx.tx[sfAmount]) || (ctx.tx[sfAmount] <= beast::zero))
         return temBAD_AMOUNT;
 
     if (ctx.tx[sfAccount] == ctx.tx[sfDestination])
@@ -209,10 +209,10 @@ PayChanCreate::preclaim(PreclaimContext const &ctx)
             !ctx.tx[~sfDestinationTag])
             return tecDST_TAG_NEEDED;
 
-        // Obeying the lsfDisallowXRP flag was a bug.  Piggyback on
+        // Obeying the lsfDisallowJBC flag was a bug.  Piggyback on
         // featureDepositAuth to remove the bug.
         if (!ctx.view.rules().enabled(featureDepositAuth) &&
-            ((*sled)[sfFlags] & lsfDisallowXRP))
+            ((*sled)[sfFlags] & lsfDisallowJBC))
             return tecNO_TARGET;
     }
 
@@ -275,7 +275,7 @@ PayChanFund::preflight (PreflightContext const& ctx)
     if (!isTesSuccess (ret))
         return ret;
 
-    if (!isXRP (ctx.tx[sfAmount]) || (ctx.tx[sfAmount] <= beast::zero))
+    if (!isJBC (ctx.tx[sfAmount]) || (ctx.tx[sfAmount] <= beast::zero))
         return temBAD_AMOUNT;
 
     return preflight2 (ctx);
@@ -364,11 +364,11 @@ PayChanClaim::preflight (PreflightContext const& ctx)
         return ret;
 
     auto const bal = ctx.tx[~sfBalance];
-    if (bal && (!isXRP (*bal) || *bal <= beast::zero))
+    if (bal && (!isJBC (*bal) || *bal <= beast::zero))
         return temBAD_AMOUNT;
 
     auto const amt = ctx.tx[~sfAmount];
-    if (amt && (!isXRP (*amt) || *amt <= beast::zero))
+    if (amt && (!isJBC (*amt) || *amt <= beast::zero))
         return temBAD_AMOUNT;
 
     if (bal && amt && *bal > *amt)
@@ -393,8 +393,8 @@ PayChanClaim::preflight (PreflightContext const& ctx)
         // The signature isn't needed if txAccount == src, but if it's
         // present, check it
 
-        auto const reqBalance = bal->xrp ();
-        auto const authAmt = amt ? amt->xrp() : reqBalance;
+        auto const reqBalance = bal->jbc ();
+        auto const authAmt = amt ? amt->jbc() : reqBalance;
 
         if (reqBalance > authAmt)
             return temBAD_AMOUNT;
@@ -440,9 +440,9 @@ PayChanClaim::doApply()
 
     if (ctx_.tx[~sfBalance])
     {
-        auto const chanBalance = slep->getFieldAmount (sfBalance).xrp ();
-        auto const chanFunds = slep->getFieldAmount (sfAmount).xrp ();
-        auto const reqBalance = ctx_.tx[sfBalance].xrp ();
+        auto const chanBalance = slep->getFieldAmount (sfBalance).jbc ();
+        auto const chanFunds = slep->getFieldAmount (sfAmount).jbc ();
+        auto const reqBalance = ctx_.tx[sfBalance].jbc ();
 
         if (txAccount == dst && !ctx_.tx[~sfSignature])
             return temBAD_SIGNATURE;
@@ -465,11 +465,11 @@ PayChanClaim::doApply()
         if (!sled)
             return terNO_ACCOUNT;
 
-        // Obeying the lsfDisallowXRP flag was a bug.  Piggyback on
+        // Obeying the lsfDisallowJBC flag was a bug.  Piggyback on
         // featureDepositAuth to remove the bug.
         bool const depositAuth {ctx_.view().rules().enabled(featureDepositAuth)};
         if (!depositAuth &&
-            (txAccount == src && (sled->getFlags() & lsfDisallowXRP)))
+            (txAccount == src && (sled->getFlags() & lsfDisallowJBC)))
             return tecNO_TARGET;
 
         // Check whether the destination account requires deposit authorization.
@@ -487,7 +487,7 @@ PayChanClaim::doApply()
         }
 
         (*slep)[sfBalance] = ctx_.tx[sfBalance];
-        XRPAmount const reqDelta = reqBalance - chanBalance;
+        JBCAmount const reqDelta = reqBalance - chanBalance;
         assert (reqDelta >= beast::zero);
         (*sled)[sfBalance] = (*sled)[sfBalance] + reqDelta;
         ctx_.view ().update (sled);
@@ -523,5 +523,5 @@ PayChanClaim::doApply()
     return tesSUCCESS;
 }
 
-} // ripple
+} // jbcoin
 

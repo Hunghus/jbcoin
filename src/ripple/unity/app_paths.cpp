@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,30 +18,30 @@
 //==============================================================================
 
 
-#include <ripple/app/paths/RippleState.cpp>
-#include <ripple/app/paths/AccountCurrencies.cpp>
-#include <ripple/app/paths/Credit.cpp>
-#include <ripple/app/paths/Pathfinder.cpp>
-#include <ripple/app/paths/Node.cpp>
-#include <ripple/app/paths/PathRequest.cpp>
-#include <ripple/app/paths/PathRequests.cpp>
-#include <ripple/app/paths/PathState.cpp>
-#include <ripple/app/paths/RippleCalc.cpp>
-#include <ripple/app/paths/RippleLineCache.cpp>
-#include <ripple/app/paths/Flow.cpp>
-#include <ripple/app/paths/impl/PaySteps.cpp>
-#include <ripple/app/paths/impl/DirectStep.cpp>
-#include <ripple/app/paths/impl/BookStep.cpp>
-#include <ripple/app/paths/impl/XRPEndpointStep.cpp>
+#include <jbcoin/app/paths/JBCoinState.cpp>
+#include <jbcoin/app/paths/AccountCurrencies.cpp>
+#include <jbcoin/app/paths/Credit.cpp>
+#include <jbcoin/app/paths/Pathfinder.cpp>
+#include <jbcoin/app/paths/Node.cpp>
+#include <jbcoin/app/paths/PathRequest.cpp>
+#include <jbcoin/app/paths/PathRequests.cpp>
+#include <jbcoin/app/paths/PathState.cpp>
+#include <jbcoin/app/paths/JBCoinCalc.cpp>
+#include <jbcoin/app/paths/JBCoinLineCache.cpp>
+#include <jbcoin/app/paths/Flow.cpp>
+#include <jbcoin/app/paths/impl/PaySteps.cpp>
+#include <jbcoin/app/paths/impl/DirectStep.cpp>
+#include <jbcoin/app/paths/impl/BookStep.cpp>
+#include <jbcoin/app/paths/impl/JBCEndpointStep.cpp>
 
-#include <ripple/app/paths/cursor/AdvanceNode.cpp>
-#include <ripple/app/paths/cursor/DeliverNodeForward.cpp>
-#include <ripple/app/paths/cursor/DeliverNodeReverse.cpp>
-#include <ripple/app/paths/cursor/EffectiveRate.cpp>
-#include <ripple/app/paths/cursor/ForwardLiquidity.cpp>
-#include <ripple/app/paths/cursor/ForwardLiquidityForAccount.cpp>
-#include <ripple/app/paths/cursor/Liquidity.cpp>
-#include <ripple/app/paths/cursor/NextIncrement.cpp>
-#include <ripple/app/paths/cursor/ReverseLiquidity.cpp>
-#include <ripple/app/paths/cursor/ReverseLiquidityForAccount.cpp>
-#include <ripple/app/paths/cursor/RippleLiquidity.cpp>
+#include <jbcoin/app/paths/cursor/AdvanceNode.cpp>
+#include <jbcoin/app/paths/cursor/DeliverNodeForward.cpp>
+#include <jbcoin/app/paths/cursor/DeliverNodeReverse.cpp>
+#include <jbcoin/app/paths/cursor/EffectiveRate.cpp>
+#include <jbcoin/app/paths/cursor/ForwardLiquidity.cpp>
+#include <jbcoin/app/paths/cursor/ForwardLiquidityForAccount.cpp>
+#include <jbcoin/app/paths/cursor/Liquidity.cpp>
+#include <jbcoin/app/paths/cursor/NextIncrement.cpp>
+#include <jbcoin/app/paths/cursor/ReverseLiquidity.cpp>
+#include <jbcoin/app/paths/cursor/ReverseLiquidityForAccount.cpp>
+#include <jbcoin/app/paths/cursor/JBCoinLiquidity.cpp>

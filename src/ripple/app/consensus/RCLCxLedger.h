@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2016 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2016 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_CONSENSUS_RCLCXLEDGER_H_INCLUDED
-#define RIPPLE_APP_CONSENSUS_RCLCXLEDGER_H_INCLUDED
+#ifndef JBCOIN_APP_CONSENSUS_RCLCXLEDGER_H_INCLUDED
+#define JBCOIN_APP_CONSENSUS_RCLCXLEDGER_H_INCLUDED
 
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/app/ledger/LedgerToJson.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/protocol/RippleLedgerHash.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/app/ledger/LedgerToJson.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/protocol/JBCoinLedgerHash.h>
 #include <memory>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Represents a ledger in RCLConsensus.
 
@@ -88,7 +88,7 @@ public:
     bool
     closeAgree() const
     {
-        return ripple::getCloseAgree(ledger_->info());
+        return jbcoin::getCloseAgree(ledger_->info());
     }
 
     //! The close time of this ledger
@@ -109,7 +109,7 @@ public:
     Json::Value
     getJson() const
     {
-        return ripple::getJson(*ledger_);
+        return jbcoin::getJson(*ledger_);
     }
 
     /** The ledger instance.

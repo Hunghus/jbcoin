@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_NET_RPCCALL_H_INCLUDED
-#define RIPPLE_NET_RPCCALL_H_INCLUDED
+#ifndef JBCOIN_NET_RPCCALL_H_INCLUDED
+#define JBCOIN_NET_RPCCALL_H_INCLUDED
 
-#include <ripple/core/Config.h>
-#include <ripple/json/json_value.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/json/json_value.h>
 #include <boost/asio/io_service.hpp>
 #include <functional>
 #include <string>
 #include <utility>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 
 // This a trusted interface, the user is expected to provide valid input to
 // perform valid requests. Error catching and reporting is not a requirement of
@@ -36,7 +36,7 @@ namespace ripple {
 //
 // Improvements to be more strict and to provide better diagnostics are welcome.
 
-/** Processes Ripple RPC calls. */
+/** Processes JBCoin RPC calls. */
 namespace RPCCall {
 
 int fromCommandLine (
@@ -54,7 +54,7 @@ void fromNetwork (
     std::function<void (Json::Value const& jvInput)> callbackFuncP = std::function<void (Json::Value const& jvInput)> ());
 }
 
-/** Given a rippled command line, return the corresponding JSON.
+/** Given a jbcoind command line, return the corresponding JSON.
 */
 Json::Value
 cmdLineToJSONRPC (std::vector<std::string> const& args, beast::Journal j);
@@ -65,6 +65,6 @@ std::pair<int, Json::Value>
 rpcClient(std::vector<std::string> const& args,
     Config const& config, Logs& logs);
 
-} // ripple
+} // jbcoin
 
 #endif

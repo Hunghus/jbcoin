@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_STPATHSET_H_INCLUDED
-#define RIPPLE_PROTOCOL_STPATHSET_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_STPATHSET_H_INCLUDED
+#define JBCOIN_PROTOCOL_STPATHSET_H_INCLUDED
 
-#include <ripple/json/json_value.h>
-#include <ripple/protocol/SField.h>
-#include <ripple/protocol/STBase.h>
-#include <ripple/protocol/UintTypes.h>
+#include <jbcoin/json/json_value.h>
+#include <jbcoin/protocol/SField.h>
+#include <jbcoin/protocol/STBase.h>
+#include <jbcoin/protocol/UintTypes.h>
 #include <boost/optional.hpp>
 #include <cassert>
 #include <cstddef>
 
-namespace ripple {
+namespace jbcoin {
 
 class STPathElement
 {
@@ -88,15 +88,15 @@ public:
         AccountID const& account, Currency const& currency,
         AccountID const& issuer, bool forceCurrency = false)
         : mType (typeNone), mAccountID (account), mCurrencyID (currency)
-        , mIssuerID (issuer), is_offer_ (isXRP(mAccountID))
+        , mIssuerID (issuer), is_offer_ (isJBC(mAccountID))
     {
         if (!is_offer_)
             mType |= typeAccount;
 
-        if (forceCurrency || !isXRP(currency))
+        if (forceCurrency || !isJBC(currency))
             mType |= typeCurrency;
 
-        if (!isXRP(issuer))
+        if (!isJBC(issuer))
             mType |= typeIssuer;
 
         hash_value_ = get_hash (*this);
@@ -106,7 +106,7 @@ public:
         unsigned int uType, AccountID const& account, Currency const& currency,
         AccountID const& issuer)
         : mType (uType), mAccountID (account), mCurrencyID (currency)
-        , mIssuerID (issuer), is_offer_ (isXRP(mAccountID))
+        , mIssuerID (issuer), is_offer_ (isJBC(mAccountID))
     {
         hash_value_ = get_hash (*this);
     }
@@ -395,6 +395,6 @@ private:
     std::vector<STPath> value;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

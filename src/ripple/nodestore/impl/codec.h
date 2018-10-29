@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,24 +17,24 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_NODESTORE_CODEC_H_INCLUDED
-#define RIPPLE_NODESTORE_CODEC_H_INCLUDED
+#ifndef JBCOIN_NODESTORE_CODEC_H_INCLUDED
+#define JBCOIN_NODESTORE_CODEC_H_INCLUDED
 
 // Disable lz4 deprecation warning due to incompatibility with clang attributes
 #define LZ4_DISABLE_DEPRECATE_WARNINGS
 
-#include <ripple/basics/contract.h>
+#include <jbcoin/basics/contract.h>
 #include <nudb/detail/field.hpp>
-#include <ripple/nodestore/impl/varint.h>
-#include <ripple/nodestore/NodeObject.h>
-#include <ripple/protocol/HashPrefix.h>
+#include <jbcoin/nodestore/impl/varint.h>
+#include <jbcoin/nodestore/NodeObject.h>
+#include <jbcoin/protocol/HashPrefix.h>
 #include <lz4/lib/lz4.h>
 #include <cstddef>
 #include <cstring>
 #include <string>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 namespace NodeStore {
 
 template <class BufferFactory>
@@ -533,6 +533,6 @@ filter_inner (void* in, std::size_t in_size)
 }
 
 } // NodeStore
-} // ripple
+} // jbcoin
 
 #endif

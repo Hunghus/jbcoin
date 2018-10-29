@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2015 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2015 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,8 +17,8 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_SOCIDB_H_INCLUDED
-#define RIPPLE_SOCIDB_H_INCLUDED
+#ifndef JBCOIN_SOCIDB_H_INCLUDED
+#define JBCOIN_SOCIDB_H_INCLUDED
 
 /** An embedded database wrapper with an intuitive, type-safe interface.
 
@@ -33,8 +33,8 @@
 #pragma clang diagnostic ignored "-Wdeprecated"
 #endif
 
-#include <ripple/basics/Log.h>
-#include <ripple/core/JobQueue.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/core/JobQueue.h>
 #define SOCI_USE_BOOST
 #include <soci/soci.h>
 #include <string>
@@ -45,7 +45,7 @@ namespace sqlite_api {
     struct sqlite3;
 }
 
-namespace ripple {
+namespace jbcoin {
 
 template <class T, class C>
 T rangeCheckedCast (C c)
@@ -136,7 +136,7 @@ class Checkpointer
  */
 std::unique_ptr <Checkpointer> makeCheckpointer (soci::session&, JobQueue&, Logs&);
 
-} // ripple
+} // jbcoin
 
 #if defined(__clang__)
 #pragma clang diagnostic pop

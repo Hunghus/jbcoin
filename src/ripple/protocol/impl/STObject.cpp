@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#include <ripple/protocol/STObject.h>
-#include <ripple/protocol/InnerObjectFormats.h>
-#include <ripple/protocol/STAccount.h>
-#include <ripple/protocol/STArray.h>
-#include <ripple/protocol/STBlob.h>
-#include <ripple/basics/Log.h>
+#include <jbcoin/protocol/STObject.h>
+#include <jbcoin/protocol/InnerObjectFormats.h>
+#include <jbcoin/protocol/STAccount.h>
+#include <jbcoin/protocol/STArray.h>
+#include <jbcoin/protocol/STBlob.h>
+#include <jbcoin/basics/Log.h>
 
-namespace ripple {
+namespace jbcoin {
 
 STObject::~STObject()
 {
@@ -780,4 +780,4 @@ bool STObject::equivalentSTObject (STObject const& obj1, STObject const& obj2)
         });
 }
 
-} // ripple
+} // jbcoin

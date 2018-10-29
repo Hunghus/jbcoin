@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,12 +18,12 @@
 //==============================================================================
 
 
-#include <ripple/app/ledger/AcceptedLedger.cpp>
-#include <ripple/app/ledger/AcceptedLedgerTx.cpp>
-#include <ripple/app/ledger/AccountStateSF.cpp>
-#include <ripple/app/ledger/BookListeners.cpp>
-#include <ripple/app/ledger/ConsensusTransSetSF.cpp>
-#include <ripple/app/ledger/Ledger.cpp>
-#include <ripple/app/ledger/LedgerHistory.cpp>
-#include <ripple/app/ledger/OrderBookDB.cpp>
-#include <ripple/app/ledger/TransactionStateSF.cpp>
+#include <jbcoin/app/ledger/AcceptedLedger.cpp>
+#include <jbcoin/app/ledger/AcceptedLedgerTx.cpp>
+#include <jbcoin/app/ledger/AccountStateSF.cpp>
+#include <jbcoin/app/ledger/BookListeners.cpp>
+#include <jbcoin/app/ledger/ConsensusTransSetSF.cpp>
+#include <jbcoin/app/ledger/Ledger.cpp>
+#include <jbcoin/app/ledger/LedgerHistory.cpp>
+#include <jbcoin/app/ledger/OrderBookDB.cpp>
+#include <jbcoin/app/ledger/TransactionStateSF.cpp>

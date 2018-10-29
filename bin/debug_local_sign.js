@@ -1,11 +1,11 @@
-var ripple = require('ripple-lib');
+var jbcoin = require('jbcoin-lib');
 
 var v = {
   seed: "snoPBrXtMeMyMHUVTgbuqAfg1SUTb",
   addr: "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh"
 };
 
-var remote = ripple.Remote.from_config({
+var remote = jbcoin.Remote.from_config({
   "trusted" : true,
   "websocket_ip" : "127.0.0.1",
   "websocket_port" : 5006,

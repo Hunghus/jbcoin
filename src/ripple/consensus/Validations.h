@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,21 +17,21 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_CONSENSUS_VALIDATIONS_H_INCLUDED
-#define RIPPLE_CONSENSUS_VALIDATIONS_H_INCLUDED
+#ifndef JBCOIN_CONSENSUS_VALIDATIONS_H_INCLUDED
+#define JBCOIN_CONSENSUS_VALIDATIONS_H_INCLUDED
 
-#include <ripple/basics/Log.h>
-#include <ripple/basics/UnorderedContainers.h>
-#include <ripple/basics/chrono.h>
-#include <ripple/beast/container/aged_container_utility.h>
-#include <ripple/beast/container/aged_unordered_map.h>
-#include <ripple/consensus/LedgerTrie.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/UnorderedContainers.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/beast/container/aged_container_utility.h>
+#include <jbcoin/beast/container/aged_unordered_map.h>
+#include <jbcoin/consensus/LedgerTrie.h>
 #include <boost/optional.hpp>
 #include <mutex>
 #include <utility>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Timing parameters to control validation staleness and expiration.
 
@@ -967,5 +967,5 @@ public:
     }
 };
 
-}  // namespace ripple
+}  // namespace jbcoin
 #endif

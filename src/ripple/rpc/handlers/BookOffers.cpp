@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/basics/Log.h>
-#include <ripple/ledger/ReadView.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/UintTypes.h>
-#include <ripple/resource/Fees.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/ledger/ReadView.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/UintTypes.h>
+#include <jbcoin/resource/Fees.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
 
-namespace ripple {
+namespace jbcoin {
 
 Json::Value doBookOffers (RPC::Context& context)
 {
@@ -108,17 +108,17 @@ Json::Value doBookOffers (RPC::Context& context)
     }
     else
     {
-        pay_issuer = xrpAccount ();
+        pay_issuer = jbcAccount ();
     }
 
-    if (isXRP (pay_currency) && ! isXRP (pay_issuer))
+    if (isJBC (pay_currency) && ! isJBC (pay_issuer))
         return RPC::make_error (
             rpcSRC_ISR_MALFORMED, "Unneeded field 'taker_pays.issuer' for "
-            "XRP currency specification.");
+            "JBC currency specification.");
 
-    if (!isXRP (pay_currency) && isXRP (pay_issuer))
+    if (!isJBC (pay_currency) && isJBC (pay_issuer))
         return RPC::make_error (rpcSRC_ISR_MALFORMED,
-            "Invalid field 'taker_pays.issuer', expected non-XRP issuer.");
+            "Invalid field 'taker_pays.issuer', expected non-JBC issuer.");
 
     AccountID get_issuer;
 
@@ -138,18 +138,18 @@ Json::Value doBookOffers (RPC::Context& context)
     }
     else
     {
-        get_issuer = xrpAccount ();
+        get_issuer = jbcAccount ();
     }
 
 
-    if (isXRP (get_currency) && ! isXRP (get_issuer))
+    if (isJBC (get_currency) && ! isJBC (get_issuer))
         return RPC::make_error (rpcDST_ISR_MALFORMED,
             "Unneeded field 'taker_gets.issuer' for "
-                               "XRP currency specification.");
+                               "JBC currency specification.");
 
-    if (!isXRP (get_currency) && isXRP (get_issuer))
+    if (!isJBC (get_currency) && isJBC (get_issuer))
         return RPC::make_error (rpcDST_ISR_MALFORMED,
-            "Invalid field 'taker_gets.issuer', expected non-XRP issuer.");
+            "Invalid field 'taker_gets.issuer', expected non-JBC issuer.");
 
     boost::optional<AccountID> takerID;
     if (context.params.isMember (jss::taker))
@@ -189,4 +189,4 @@ Json::Value doBookOffers (RPC::Context& context)
     return jvResult;
 }
 
-} // ripple
+} // jbcoin

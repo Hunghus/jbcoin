@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/LedgerHistory.h>
-#include <ripple/app/ledger/LedgerToJson.h>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/chrono.h>
-#include <ripple/basics/contract.h>
-#include <ripple/json/to_string.h>
+#include <jbcoin/app/ledger/LedgerHistory.h>
+#include <jbcoin/app/ledger/LedgerToJson.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/json/to_string.h>
 
-namespace ripple {
+namespace jbcoin {
 
 // VFALCO TODO replace macros
 
@@ -531,4 +531,4 @@ void LedgerHistory::clearLedgerCachePrior (LedgerIndex seq)
     }
 }
 
-} // ripple
+} // jbcoin

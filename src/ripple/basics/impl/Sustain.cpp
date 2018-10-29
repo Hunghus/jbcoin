@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,8 +17,8 @@
 */
 //==============================================================================
 
-#include <ripple/basics/Sustain.h>
-#include <ripple/beast/core/CurrentThreadName.h>
+#include <jbcoin/basics/Sustain.h>
+#include <jbcoin/beast/core/CurrentThreadName.h>
 #include <boost/format.hpp>
 
 // For Sustain Linux variants
@@ -34,7 +34,7 @@
 #include <sys/wait.h>
 #endif
 
-namespace ripple {
+namespace jbcoin {
 
 #ifdef __unix__
 
@@ -102,7 +102,7 @@ std::string DoSustain ()
         auto cc = std::to_string (childCount);
         if (pChild == 0)
         {
-            beast::setCurrentThreadName ("rippled: main");
+            beast::setCurrentThreadName ("jbcoind: main");
             signal (SIGINT, SIG_DFL);
             signal (SIGHUP, SIG_DFL);
             signal (SIGUSR1, SIG_DFL);
@@ -110,7 +110,7 @@ std::string DoSustain ()
             return "Launching child " + cc;
         }
 
-        beast::setCurrentThreadName (("rippled: #" + cc).c_str());
+        beast::setCurrentThreadName (("jbcoind: #" + cc).c_str());
 
         sleep (sleepBeforeWaiting);
 
@@ -154,4 +154,4 @@ std::string StopSustain ()
 
 #endif
 
-} // ripple
+} // jbcoin

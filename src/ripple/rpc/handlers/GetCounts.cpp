@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,23 +17,23 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/AcceptedLedger.h>
-#include <ripple/app/ledger/InboundLedgers.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/basics/UptimeClock.h>
-#include <ripple/core/DatabaseCon.h>
-#include <ripple/json/json_value.h>
-#include <ripple/ledger/CachedSLEs.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/nodestore/Database.h>
-#include <ripple/nodestore/DatabaseShard.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/rpc/Context.h>
+#include <jbcoin/app/ledger/AcceptedLedger.h>
+#include <jbcoin/app/ledger/InboundLedgers.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/basics/UptimeClock.h>
+#include <jbcoin/core/DatabaseCon.h>
+#include <jbcoin/json/json_value.h>
+#include <jbcoin/ledger/CachedSLEs.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/nodestore/Database.h>
+#include <jbcoin/nodestore/DatabaseShard.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/rpc/Context.h>
 
-namespace ripple {
+namespace jbcoin {
 
 static
 void
@@ -148,4 +148,4 @@ Json::Value doGetCounts (RPC::Context& context)
     return ret;
 }
 
-} // ripple
+} // jbcoin

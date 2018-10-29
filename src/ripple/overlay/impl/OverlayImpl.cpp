@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,26 +17,26 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/misc/HashRouter.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/app/misc/ValidatorList.h>
-#include <ripple/basics/base64.h>
-#include <ripple/basics/make_SSLContext.h>
-#include <ripple/beast/core/LexicalCast.h>
-#include <ripple/core/DatabaseCon.h>
-#include <ripple/nodestore/DatabaseShard.h>
-#include <ripple/overlay/Cluster.h>
-#include <ripple/overlay/predicates.h>
-#include <ripple/overlay/impl/ConnectAttempt.h>
-#include <ripple/overlay/impl/PeerImp.h>
-#include <ripple/peerfinder/make_Manager.h>
-#include <ripple/rpc/json_body.h>
-#include <ripple/server/SimpleWriter.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/misc/HashRouter.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/app/misc/ValidatorList.h>
+#include <jbcoin/basics/base64.h>
+#include <jbcoin/basics/make_SSLContext.h>
+#include <jbcoin/beast/core/LexicalCast.h>
+#include <jbcoin/core/DatabaseCon.h>
+#include <jbcoin/nodestore/DatabaseShard.h>
+#include <jbcoin/overlay/Cluster.h>
+#include <jbcoin/overlay/predicates.h>
+#include <jbcoin/overlay/impl/ConnectAttempt.h>
+#include <jbcoin/overlay/impl/PeerImp.h>
+#include <jbcoin/peerfinder/make_Manager.h>
+#include <jbcoin/rpc/json_body.h>
+#include <jbcoin/server/SimpleWriter.h>
 
 #include <boost/utility/in_place_factory.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 /** A functor to visit all active peers and retrieve their JSON data */
 struct get_peer_json
@@ -491,7 +491,7 @@ OverlayImpl::onPrepare()
         ? app_.config().IPS_FIXED
         : app_.config().IPS;
     if (bootstrapIps.empty ())
-        bootstrapIps.push_back ("r.ripple.com 51235");
+        bootstrapIps.push_back ("r.jbcoin.com 51235");
 
     m_resolver.resolve (bootstrapIps,
         [this](std::string const& name,
@@ -515,7 +515,7 @@ OverlayImpl::onPrepare()
                 m_peerFinder->addFallbackStrings (base + name, ips);
         });
 
-    // Add the ips_fixed from the rippled.cfg file
+    // Add the ips_fixed from the jbcoind.cfg file
     if (! app_.config().standalone() && !app_.config().IPS_FIXED.empty ())
     {
         m_resolver.resolve (app_.config().IPS_FIXED,
@@ -740,7 +740,7 @@ OverlayImpl::selectPeers (PeerSet& set, std::size_t limit,
 
 /** The number of active peers on the network
     Active peers are only those peers that have completed the handshake
-    and are running the Ripple protocol.
+    and are running the JBCoin protocol.
 */
 std::size_t
 OverlayImpl::size()

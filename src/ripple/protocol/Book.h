@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,13 +17,13 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_BOOK_H_INCLUDED
-#define RIPPLE_PROTOCOL_BOOK_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_BOOK_H_INCLUDED
+#define JBCOIN_PROTOCOL_BOOK_H_INCLUDED
 
-#include <ripple/protocol/Issue.h>
+#include <jbcoin/protocol/Issue.h>
 #include <boost/utility/base_from_member.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Specifies an order book.
     The order book is a pair of Issues called in and out.
@@ -97,26 +97,26 @@ operator<= (Book const& lhs, Book const& rhs);
 namespace std {
 
 template <>
-struct hash <ripple::Issue>
-    : private boost::base_from_member <std::hash <ripple::Currency>, 0>
-    , private boost::base_from_member <std::hash <ripple::AccountID>, 1>
+struct hash <jbcoin::Issue>
+    : private boost::base_from_member <std::hash <jbcoin::Currency>, 0>
+    , private boost::base_from_member <std::hash <jbcoin::AccountID>, 1>
 {
 private:
     using currency_hash_type = boost::base_from_member <
-        std::hash <ripple::Currency>, 0>;
+        std::hash <jbcoin::Currency>, 0>;
     using issuer_hash_type = boost::base_from_member <
-        std::hash <ripple::AccountID>, 1>;
+        std::hash <jbcoin::AccountID>, 1>;
 
 public:
     explicit hash() = default;
 
     using value_type = std::size_t;
-    using argument_type = ripple::Issue;
+    using argument_type = jbcoin::Issue;
 
     value_type operator() (argument_type const& value) const
     {
         value_type result (currency_hash_type::member (value.currency));
-        if (!isXRP (value.currency))
+        if (!isJBC (value.currency))
             boost::hash_combine (result,
                 issuer_hash_type::member (value.account));
         return result;
@@ -126,10 +126,10 @@ public:
 //------------------------------------------------------------------------------
 
 template <>
-struct hash <ripple::Book>
+struct hash <jbcoin::Book>
 {
 private:
-    using hasher = std::hash <ripple::Issue>;
+    using hasher = std::hash <jbcoin::Issue>;
 
     hasher m_hasher;
 
@@ -137,7 +137,7 @@ public:
     explicit hash() = default;
 
     using value_type = std::size_t;
-    using argument_type = ripple::Book;
+    using argument_type = jbcoin::Book;
 
     value_type operator() (argument_type const& value) const
     {
@@ -154,23 +154,23 @@ public:
 namespace boost {
 
 template <>
-struct hash <ripple::Issue>
-    : std::hash <ripple::Issue>
+struct hash <jbcoin::Issue>
+    : std::hash <jbcoin::Issue>
 {
     explicit hash() = default;
 
-    using Base = std::hash <ripple::Issue>;
+    using Base = std::hash <jbcoin::Issue>;
     // VFALCO NOTE broken in vs2012
     //using Base::Base; // inherit ctors
 };
 
 template <>
-struct hash <ripple::Book>
-    : std::hash <ripple::Book>
+struct hash <jbcoin::Book>
+    : std::hash <jbcoin::Book>
 {
     explicit hash() = default;
 
-    using Base = std::hash <ripple::Book>;
+    using Base = std::hash <jbcoin::Book>;
     // VFALCO NOTE broken in vs2012
     //using Base::Base; // inherit ctors
 };

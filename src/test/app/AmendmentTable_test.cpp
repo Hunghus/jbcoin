@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,19 +18,19 @@
 //==============================================================================
 
 
-#include <ripple/app/misc/AmendmentTable.h>
-#include <ripple/basics/BasicConfig.h>
-#include <ripple/basics/chrono.h>
-#include <ripple/basics/Log.h>
-#include <ripple/core/ConfigSections.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/PublicKey.h>
-#include <ripple/protocol/SecretKey.h>
-#include <ripple/protocol/digest.h>
-#include <ripple/protocol/TxFlags.h>
-#include <ripple/beast/unit_test.h>
+#include <jbcoin/app/misc/AmendmentTable.h>
+#include <jbcoin/basics/BasicConfig.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/core/ConfigSections.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/PublicKey.h>
+#include <jbcoin/protocol/SecretKey.h>
+#include <jbcoin/protocol/digest.h>
+#include <jbcoin/protocol/TxFlags.h>
+#include <jbcoin/beast/unit_test.h>
 
-namespace ripple
+namespace jbcoin
 {
 
 class AmendmentTable_test final : public beast::unit_test::suite
@@ -773,6 +773,6 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE (AmendmentTable, app, ripple);
+BEAST_DEFINE_TESTSUITE (AmendmentTable, app, jbcoin);
 
-}  // ripple
+}  // jbcoin

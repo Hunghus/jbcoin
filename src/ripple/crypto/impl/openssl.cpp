@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#include <ripple/basics/contract.h>
-#include <ripple/crypto/impl/openssl.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/crypto/impl/openssl.h>
 #include <openssl/hmac.h>
 
-namespace ripple  {
+namespace jbcoin  {
 namespace openssl {
 
 bignum::bignum()
@@ -124,7 +124,7 @@ void serialize_ec_point (ec_point const& point, std::uint8_t* ptr)
 }
 
 } // openssl
-} // ripple
+} // jbcoin
 
 #include <stdio.h>
 #ifdef _MSC_VER

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,26 +17,26 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/Credit.h>
-#include <ripple/app/paths/impl/AmountSpec.h>
-#include <ripple/app/paths/impl/Steps.h>
-#include <ripple/app/paths/impl/StepChecks.h>
-#include <ripple/basics/Log.h>
-#include <ripple/ledger/PaymentSandbox.h>
-#include <ripple/protocol/IOUAmount.h>
-#include <ripple/protocol/Quality.h>
-#include <ripple/protocol/XRPAmount.h>
+#include <jbcoin/app/paths/Credit.h>
+#include <jbcoin/app/paths/impl/AmountSpec.h>
+#include <jbcoin/app/paths/impl/Steps.h>
+#include <jbcoin/app/paths/impl/StepChecks.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/ledger/PaymentSandbox.h>
+#include <jbcoin/protocol/IOUAmount.h>
+#include <jbcoin/protocol/Quality.h>
+#include <jbcoin/protocol/JBCAmount.h>
 
 #include <boost/container/flat_set.hpp>
 
 #include <numeric>
 #include <sstream>
 
-namespace ripple {
+namespace jbcoin {
 
 template <class TDerived>
-class XRPEndpointStep : public StepImp<
-    XRPAmount, XRPAmount, XRPEndpointStep<TDerived>>
+class JBCEndpointStep : public StepImp<
+    JBCAmount, JBCAmount, JBCEndpointStep<TDerived>>
 {
 private:
     AccountID acc_;
@@ -46,7 +46,7 @@ private:
     // Since this step will always be an endpoint in a strand
     // (either the first or last step) the same cache is used
     // for cachedIn and cachedOut and only one will ever be used
-    boost::optional<XRPAmount> cache_;
+    boost::optional<JBCAmount> cache_;
 
     boost::optional<EitherAmount>
     cached () const
@@ -57,7 +57,7 @@ private:
     }
 
 public:
-    XRPEndpointStep (
+    JBCEndpointStep (
         StrandContext const& ctx,
         AccountID const& acc)
             : acc_(acc)
@@ -73,8 +73,8 @@ public:
     directStepAccts () const override
     {
         if (isLast_)
-            return std::make_pair(xrpAccount(), acc_);
-        return std::make_pair(acc_, xrpAccount());
+            return std::make_pair(jbcAccount(), acc_);
+        return std::make_pair(acc_, jbcAccount());
     }
 
     boost::optional<EitherAmount>
@@ -92,19 +92,19 @@ public:
     boost::optional<Quality>
     qualityUpperBound(ReadView const& v, bool& redeems) const override;
 
-    std::pair<XRPAmount, XRPAmount>
+    std::pair<JBCAmount, JBCAmount>
     revImp (
         PaymentSandbox& sb,
         ApplyView& afView,
         boost::container::flat_set<uint256>& ofrsToRm,
-        XRPAmount const& out);
+        JBCAmount const& out);
 
-    std::pair<XRPAmount, XRPAmount>
+    std::pair<JBCAmount, JBCAmount>
     fwdImp (
         PaymentSandbox& sb,
         ApplyView& afView,
         boost::container::flat_set<uint256>& ofrsToRm,
-        XRPAmount const& in);
+        JBCAmount const& in);
 
     std::pair<bool, EitherAmount>
     validFwd (
@@ -116,10 +116,10 @@ public:
     TER check (StrandContext const& ctx) const;
 
 protected:
-    XRPAmount
-    xrpLiquidImpl (ReadView& sb, std::int32_t reserveReduction) const
+    JBCAmount
+    jbcLiquidImpl (ReadView& sb, std::int32_t reserveReduction) const
     {
-        return ripple::xrpLiquid (sb, acc_, reserveReduction, j_);
+        return jbcoin::jbcLiquid (sb, acc_, reserveReduction, j_);
     }
 
     std::string logStringImpl (char const* name) const
@@ -134,19 +134,19 @@ protected:
 private:
     template <class P>
     friend bool operator==(
-        XRPEndpointStep<P> const& lhs,
-        XRPEndpointStep<P> const& rhs);
+        JBCEndpointStep<P> const& lhs,
+        JBCEndpointStep<P> const& rhs);
 
     friend bool operator!=(
-        XRPEndpointStep const& lhs,
-        XRPEndpointStep const& rhs)
+        JBCEndpointStep const& lhs,
+        JBCEndpointStep const& rhs)
     {
         return ! (lhs == rhs);
     }
 
     bool equal (Step const& rhs) const override
     {
-        if (auto ds = dynamic_cast<XRPEndpointStep const*> (&rhs))
+        if (auto ds = dynamic_cast<JBCEndpointStep const*> (&rhs))
         {
             return *this == *ds;
         }
@@ -162,35 +162,35 @@ private:
 // The rules for handling funds in these two cases are almost, but not
 // quite, the same.
 
-// Payment XRPEndpointStep class (not offer crossing).
-class XRPEndpointPaymentStep : public XRPEndpointStep<XRPEndpointPaymentStep>
+// Payment JBCEndpointStep class (not offer crossing).
+class JBCEndpointPaymentStep : public JBCEndpointStep<JBCEndpointPaymentStep>
 {
 public:
-    explicit XRPEndpointPaymentStep() = default;
+    explicit JBCEndpointPaymentStep() = default;
 
-    using XRPEndpointStep<XRPEndpointPaymentStep>::XRPEndpointStep;
+    using JBCEndpointStep<JBCEndpointPaymentStep>::JBCEndpointStep;
 
-    XRPAmount
-    xrpLiquid (ReadView& sb) const
+    JBCAmount
+    jbcLiquid (ReadView& sb) const
     {
-        return xrpLiquidImpl (sb, 0);;
+        return jbcLiquidImpl (sb, 0);;
     }
 
     std::string logString () const override
     {
-        return logStringImpl ("XRPEndpointPaymentStep");
+        return logStringImpl ("JBCEndpointPaymentStep");
     }
 };
 
-// Offer crossing XRPEndpointStep class (not a payment).
-class XRPEndpointOfferCrossingStep :
-    public XRPEndpointStep<XRPEndpointOfferCrossingStep>
+// Offer crossing JBCEndpointStep class (not a payment).
+class JBCEndpointOfferCrossingStep :
+    public JBCEndpointStep<JBCEndpointOfferCrossingStep>
 {
 private:
 
     // For historical reasons, offer crossing is allowed to dig further
-    // into the XRP reserve than an ordinary payment.  (I believe it's
-    // because the trust line was created after the XRP was removed.)
+    // into the JBC reserve than an ordinary payment.  (I believe it's
+    // because the trust line was created after the JBC was removed.)
     // Return how much the reserve should be reduced.
     //
     // Note that reduced reserve only happens if the trust line does not
@@ -205,22 +205,22 @@ private:
     }
 
 public:
-    XRPEndpointOfferCrossingStep (
+    JBCEndpointOfferCrossingStep (
         StrandContext const& ctx, AccountID const& acc)
-    : XRPEndpointStep<XRPEndpointOfferCrossingStep> (ctx, acc)
+    : JBCEndpointStep<JBCEndpointOfferCrossingStep> (ctx, acc)
     , reserveReduction_ (computeReserveReduction (ctx, acc))
     {
     }
 
-    XRPAmount
-    xrpLiquid (ReadView& sb) const
+    JBCAmount
+    jbcLiquid (ReadView& sb) const
     {
-        return xrpLiquidImpl (sb, reserveReduction_);
+        return jbcLiquidImpl (sb, reserveReduction_);
     }
 
     std::string logString () const override
     {
-        return logStringImpl ("XRPEndpointOfferCrossingStep");
+        return logStringImpl ("JBCEndpointOfferCrossingStep");
     }
 
 private:
@@ -230,15 +230,15 @@ private:
 //------------------------------------------------------------------------------
 
 template <class TDerived>
-inline bool operator==(XRPEndpointStep<TDerived> const& lhs,
-    XRPEndpointStep<TDerived> const& rhs)
+inline bool operator==(JBCEndpointStep<TDerived> const& lhs,
+    JBCEndpointStep<TDerived> const& rhs)
 {
     return lhs.acc_ == rhs.acc_ && lhs.isLast_ == rhs.isLast_;
 }
 
 template <class TDerived>
 boost::optional<Quality>
-XRPEndpointStep<TDerived>::qualityUpperBound(
+JBCEndpointStep<TDerived>::qualityUpperBound(
     ReadView const& v, bool& redeems) const
 {
     redeems = this->redeems(v, true);
@@ -247,45 +247,45 @@ XRPEndpointStep<TDerived>::qualityUpperBound(
 
 
 template <class TDerived>
-std::pair<XRPAmount, XRPAmount>
-XRPEndpointStep<TDerived>::revImp (
+std::pair<JBCAmount, JBCAmount>
+JBCEndpointStep<TDerived>::revImp (
     PaymentSandbox& sb,
     ApplyView& afView,
     boost::container::flat_set<uint256>& ofrsToRm,
-    XRPAmount const& out)
+    JBCAmount const& out)
 {
-    auto const balance = static_cast<TDerived const*>(this)->xrpLiquid (sb);
+    auto const balance = static_cast<TDerived const*>(this)->jbcLiquid (sb);
 
     auto const result = isLast_ ? out : std::min (balance, out);
 
-    auto& sender = isLast_ ? xrpAccount() : acc_;
-    auto& receiver = isLast_ ? acc_ : xrpAccount();
+    auto& sender = isLast_ ? jbcAccount() : acc_;
+    auto& receiver = isLast_ ? acc_ : jbcAccount();
     auto ter   = accountSend (sb, sender, receiver, toSTAmount (result), j_);
     if (ter != tesSUCCESS)
-        return {XRPAmount{beast::zero}, XRPAmount{beast::zero}};
+        return {JBCAmount{beast::zero}, JBCAmount{beast::zero}};
 
     cache_.emplace (result);
     return {result, result};
 }
 
 template <class TDerived>
-std::pair<XRPAmount, XRPAmount>
-XRPEndpointStep<TDerived>::fwdImp (
+std::pair<JBCAmount, JBCAmount>
+JBCEndpointStep<TDerived>::fwdImp (
     PaymentSandbox& sb,
     ApplyView& afView,
     boost::container::flat_set<uint256>& ofrsToRm,
-    XRPAmount const& in)
+    JBCAmount const& in)
 {
     assert (cache_);
-    auto const balance = static_cast<TDerived const*>(this)->xrpLiquid (sb);
+    auto const balance = static_cast<TDerived const*>(this)->jbcLiquid (sb);
 
     auto const result = isLast_ ? in : std::min (balance, in);
 
-    auto& sender = isLast_ ? xrpAccount() : acc_;
-    auto& receiver = isLast_ ? acc_ : xrpAccount();
+    auto& sender = isLast_ ? jbcAccount() : acc_;
+    auto& receiver = isLast_ ? acc_ : jbcAccount();
     auto ter   = accountSend (sb, sender, receiver, toSTAmount (result), j_);
     if (ter != tesSUCCESS)
-        return {XRPAmount{beast::zero}, XRPAmount{beast::zero}};
+        return {JBCAmount{beast::zero}, JBCAmount{beast::zero}};
 
     cache_.emplace (result);
     return {result, result};
@@ -293,7 +293,7 @@ XRPEndpointStep<TDerived>::fwdImp (
 
 template <class TDerived>
 std::pair<bool, EitherAmount>
-XRPEndpointStep<TDerived>::validFwd (
+JBCEndpointStep<TDerived>::validFwd (
     PaymentSandbox& sb,
     ApplyView& afView,
     EitherAmount const& in)
@@ -301,45 +301,45 @@ XRPEndpointStep<TDerived>::validFwd (
     if (!cache_)
     {
         JLOG (j_.error()) << "Expected valid cache in validFwd";
-        return {false, EitherAmount (XRPAmount (beast::zero))};
+        return {false, EitherAmount (JBCAmount (beast::zero))};
     }
 
     assert (in.native);
 
-    auto const& xrpIn = in.xrp;
-    auto const balance = static_cast<TDerived const*>(this)->xrpLiquid (sb);
+    auto const& jbcIn = in.jbc;
+    auto const balance = static_cast<TDerived const*>(this)->jbcLiquid (sb);
 
-    if (!isLast_ && balance < xrpIn)
+    if (!isLast_ && balance < jbcIn)
     {
-        JLOG (j_.error()) << "XRPEndpointStep: Strand re-execute check failed."
+        JLOG (j_.error()) << "JBCEndpointStep: Strand re-execute check failed."
             << " Insufficient balance: " << to_string (balance)
-            << " Requested: " << to_string (xrpIn);
+            << " Requested: " << to_string (jbcIn);
         return {false, EitherAmount (balance)};
     }
 
-    if (xrpIn != *cache_)
+    if (jbcIn != *cache_)
     {
-        JLOG (j_.error()) << "XRPEndpointStep: Strand re-execute check failed."
+        JLOG (j_.error()) << "JBCEndpointStep: Strand re-execute check failed."
             << " ExpectedIn: " << to_string (*cache_)
-            << " CachedIn: " << to_string (xrpIn);
+            << " CachedIn: " << to_string (jbcIn);
     }
     return {true, in};
 }
 
 template <class TDerived>
 TER
-XRPEndpointStep<TDerived>::check (StrandContext const& ctx) const
+JBCEndpointStep<TDerived>::check (StrandContext const& ctx) const
 {
     if (!acc_)
     {
-        JLOG (j_.debug()) << "XRPEndpointStep: specified bad account.";
+        JLOG (j_.debug()) << "JBCEndpointStep: specified bad account.";
         return temBAD_PATH;
     }
 
     auto sleAcc = ctx.view.read (keylet::account (acc_));
     if (!sleAcc)
     {
-        JLOG (j_.warn()) << "XRPEndpointStep: can't send or receive XRP from "
+        JLOG (j_.warn()) << "JBCEndpointStep: can't send or receive JBC from "
                              "non-existent account: "
                           << acc_;
         return terNO_ACCOUNT;
@@ -350,9 +350,9 @@ XRPEndpointStep<TDerived>::check (StrandContext const& ctx) const
         return temBAD_PATH;
     }
 
-    auto& src = isLast_ ? xrpAccount () : acc_;
-    auto& dst = isLast_ ? acc_ : xrpAccount();
-    auto ter = checkFreeze (ctx.view, src, dst, xrpCurrency ());
+    auto& src = isLast_ ? jbcAccount () : acc_;
+    auto& dst = isLast_ ? acc_ : jbcAccount();
+    auto ter = checkFreeze (ctx.view, src, dst, jbcCurrency ());
     if (ter != tesSUCCESS)
         return ter;
 
@@ -364,10 +364,10 @@ XRPEndpointStep<TDerived>::check (StrandContext const& ctx) const
 namespace test
 {
 // Needed for testing
-bool xrpEndpointStepEqual (Step const& step, AccountID const& acc)
+bool jbcEndpointStepEqual (Step const& step, AccountID const& acc)
 {
     if (auto xs =
-        dynamic_cast<XRPEndpointStep<XRPEndpointPaymentStep> const*> (&step))
+        dynamic_cast<JBCEndpointStep<JBCEndpointPaymentStep> const*> (&step))
     {
         return xs->acc () == acc;
     }
@@ -378,7 +378,7 @@ bool xrpEndpointStepEqual (Step const& step, AccountID const& acc)
 //------------------------------------------------------------------------------
 
 std::pair<TER, std::unique_ptr<Step>>
-make_XRPEndpointStep (
+make_JBCEndpointStep (
     StrandContext const& ctx,
     AccountID const& acc)
 {
@@ -387,14 +387,14 @@ make_XRPEndpointStep (
     if (ctx.offerCrossing)
     {
         auto offerCrossingStep =
-            std::make_unique<XRPEndpointOfferCrossingStep> (ctx, acc);
+            std::make_unique<JBCEndpointOfferCrossingStep> (ctx, acc);
         ter = offerCrossingStep->check (ctx);
         r = std::move (offerCrossingStep);
     }
     else // payment
     {
         auto paymentStep =
-            std::make_unique<XRPEndpointPaymentStep> (ctx, acc);
+            std::make_unique<JBCEndpointPaymentStep> (ctx, acc);
         ter = paymentStep->check (ctx);
         r = std::move (paymentStep);
     }
@@ -404,4 +404,4 @@ make_XRPEndpointStep (
     return {tesSUCCESS, std::move (r)};
 }
 
-} // ripple
+} // jbcoin

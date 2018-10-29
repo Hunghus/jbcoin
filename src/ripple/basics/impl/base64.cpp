@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2018 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2018 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -54,12 +54,12 @@
 
 */
 
-#include <ripple/basics/base64.h>
+#include <jbcoin/basics/base64.h>
 
 #include <cctype>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 namespace base64 {
 
@@ -244,4 +244,4 @@ base64_decode(std::string const& data)
     return dest;
 }
 
-} // ripple
+} // jbcoin

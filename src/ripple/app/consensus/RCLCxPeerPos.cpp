@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#include <ripple/app/consensus/RCLCxPeerPos.h>
-#include <ripple/core/Config.h>
-#include <ripple/protocol/HashPrefix.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/Serializer.h>
-#include <ripple/protocol/digest.h>
+#include <jbcoin/app/consensus/RCLCxPeerPos.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/protocol/HashPrefix.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/Serializer.h>
+#include <jbcoin/protocol/digest.h>
 
-namespace ripple {
+namespace jbcoin {
 
 // Used to construct received proposals
 RCLCxPeerPos::RCLCxPeerPos(
@@ -102,4 +102,4 @@ RCLCxPeerPos::Data::Data(
 {
 }
 
-}  // ripple
+}  // jbcoin

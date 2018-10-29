@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#include <ripple/shamap/SHAMapMissingNode.h>
-#include <ripple/beast/utility/Zero.h>
+#include <jbcoin/shamap/SHAMapMissingNode.h>
+#include <jbcoin/beast/utility/Zero.h>
 #include <ostream>
 
-namespace ripple {
+namespace jbcoin {
 
 std::ostream&
 operator<< (std::ostream& out, const SHAMapMissingNode& mn)
@@ -50,4 +50,4 @@ operator<< (std::ostream& out, const SHAMapMissingNode& mn)
     return out;
 }
 
-} // ripple
+} // jbcoin

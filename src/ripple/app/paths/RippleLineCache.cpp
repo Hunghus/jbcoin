@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/RippleLineCache.h>
-#include <ripple/ledger/OpenView.h>
+#include <jbcoin/app/paths/JBCoinLineCache.h>
+#include <jbcoin/ledger/OpenView.h>
 
-namespace ripple {
+namespace jbcoin {
 
-RippleLineCache::RippleLineCache(
+JBCoinLineCache::JBCoinLineCache(
     std::shared_ptr <ReadView const> const& ledger)
 {
     // We want the caching that OpenView provides
@@ -31,21 +31,21 @@ RippleLineCache::RippleLineCache(
     mLedger = std::make_shared<OpenView>(&*ledger, ledger);
 }
 
-std::vector<RippleState::pointer> const&
-RippleLineCache::getRippleLines (AccountID const& accountID)
+std::vector<JBCoinState::pointer> const&
+JBCoinLineCache::getJBCoinLines (AccountID const& accountID)
 {
     AccountKey key (accountID, hasher_ (accountID));
 
     std::lock_guard <std::mutex> sl (mLock);
 
     auto it = lines_.emplace (key,
-        std::vector<RippleState::pointer>());
+        std::vector<JBCoinState::pointer>());
 
     if (it.second)
-        it.first->second = getRippleStateItems (
+        it.first->second = getJBCoinStateItems (
             accountID, *mLedger);
 
     return it.first->second;
 }
 
-} // ripple
+} // jbcoin

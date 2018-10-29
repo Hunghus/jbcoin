@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,17 +17,17 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/impl/TransactionAcquire.h>
-#include <ripple/app/ledger/ConsensusTransSetSF.h>
-#include <ripple/app/ledger/InboundLedgers.h>
-#include <ripple/app/ledger/InboundTransactions.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/overlay/Overlay.h>
-#include <ripple/basics/make_lock.h>
+#include <jbcoin/app/ledger/impl/TransactionAcquire.h>
+#include <jbcoin/app/ledger/ConsensusTransSetSF.h>
+#include <jbcoin/app/ledger/InboundLedgers.h>
+#include <jbcoin/app/ledger/InboundTransactions.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/overlay/Overlay.h>
+#include <jbcoin/basics/make_lock.h>
 #include <memory>
 
-namespace ripple {
+namespace jbcoin {
 
 using namespace std::chrono_literals;
 
@@ -265,4 +265,4 @@ void TransactionAcquire::stillNeed ()
         mTimeouts = NORM_TIMEOUTS;
 }
 
-} // ripple
+} // jbcoin

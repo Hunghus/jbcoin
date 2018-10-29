@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,27 +18,27 @@
 //==============================================================================
 
 
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/digest.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/main/DBInit.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/basics/Sustain.h>
-#include <ripple/core/Config.h>
-#include <ripple/core/ConfigSections.h>
-#include <ripple/core/DatabaseCon.h>
-#include <ripple/core/TerminateHandler.h>
-#include <ripple/core/TimeKeeper.h>
-#include <ripple/crypto/csprng.h>
-#include <ripple/json/to_string.h>
-#include <ripple/net/RPCCall.h>
-#include <ripple/resource/Fees.h>
-#include <ripple/rpc/RPCHandler.h>
-#include <ripple/protocol/BuildInfo.h>
-#include <ripple/beast/clock/basic_seconds_clock.h>
-#include <ripple/beast/core/CurrentThreadName.h>
-#include <ripple/beast/utility/Debug.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/digest.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/main/DBInit.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/basics/Sustain.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/core/ConfigSections.h>
+#include <jbcoin/core/DatabaseCon.h>
+#include <jbcoin/core/TerminateHandler.h>
+#include <jbcoin/core/TimeKeeper.h>
+#include <jbcoin/crypto/csprng.h>
+#include <jbcoin/json/to_string.h>
+#include <jbcoin/net/RPCCall.h>
+#include <jbcoin/resource/Fees.h>
+#include <jbcoin/rpc/RPCHandler.h>
+#include <jbcoin/protocol/BuildInfo.h>
+#include <jbcoin/beast/clock/basic_seconds_clock.h>
+#include <jbcoin/beast/core/CurrentThreadName.h>
+#include <jbcoin/beast/utility/Debug.h>
 
 #include <beast/unit_test/dstream.hpp>
 #include <beast/unit_test/global_suites.hpp>
@@ -66,7 +66,7 @@
 
 namespace po = boost::program_options;
 
-namespace ripple {
+namespace jbcoin {
 
 boost::filesystem::path
 getEntropyFile(Config const& config)
@@ -161,8 +161,8 @@ void printHelp (const po::options_description& desc)
            "     peers\n"
            "     ping\n"
            "     random\n"
-           "     ripple ...\n"
-           "     ripple_path_find <json> [<ledger>]\n"
+           "     jbcoin ...\n"
+           "     jbcoin_path_find <json> [<ledger>]\n"
            "     version\n"
            "     server_info [counters]\n"
            "     server_state [counters]\n"
@@ -227,9 +227,9 @@ static int runUnitTests(
     char** argv)
 {
     using namespace beast::unit_test;
-    using namespace ripple::test;
+    using namespace jbcoin::test;
 
-    ripple::test::envUseIPv4 = (! ipv6);
+    jbcoin::test::envUseIPv4 = (! ipv6);
 
     if (!child && num_jobs == 1)
     {
@@ -300,7 +300,7 @@ int run (int argc, char** argv)
 {
     using namespace std;
 
-    beast::setCurrentThreadName ("rippled: main");
+    beast::setCurrentThreadName ("jbcoind: main");
 
     po::variables_map vm;
 
@@ -425,7 +425,7 @@ int run (int argc, char** argv)
     }
     catch (std::exception const&)
     {
-        std::cerr << "rippled: Incorrect command line syntax." << std::endl;
+        std::cerr << "jbcoind: Incorrect command line syntax." << std::endl;
         std::cerr << "Use '--help' for a list of options." << std::endl;
         return 1;
     }
@@ -438,7 +438,7 @@ int run (int argc, char** argv)
 
     if (vm.count ("version"))
     {
-        std::cout << "rippled version " <<
+        std::cout << "jbcoind version " <<
             BuildInfo::getVersionString () << std::endl;
         return 0;
     }
@@ -474,7 +474,7 @@ int run (int argc, char** argv)
         if (vm.count("unittest-jobs"))
         {
             // unittest jobs only makes sense with `unittest`
-            std::cerr << "rippled: '--unittest-jobs' specified without '--unittest'.\n";
+            std::cerr << "jbcoind: '--unittest-jobs' specified without '--unittest'.\n";
             std::cerr << "To run the unit tests the '--unittest' option must be present.\n";
             return 1;
         }
@@ -747,14 +747,14 @@ int run (int argc, char** argv)
     }
 
     // We have an RPC command to process:
-    beast::setCurrentThreadName ("rippled: rpc");
+    beast::setCurrentThreadName ("jbcoind: rpc");
     return RPCCall::fromCommandLine (
         *config,
         vm["parameters"].as<std::vector<std::string>>(),
         *logs);
 }
 
-} // ripple
+} // jbcoin
 
 // Must be outside the namespace for obvious reasons
 //
@@ -776,7 +776,7 @@ int main (int argc, char** argv)
             _ftime (&t);
     #endif
     }
-    ripple::sha512_deprecatedMSVCWorkaround();
+    jbcoin::sha512_deprecatedMSVCWorkaround();
 #endif
 
 #if defined(__GNUC__) && !defined(__clang__)
@@ -785,7 +785,7 @@ int main (int argc, char** argv)
                             __GNUC_PATCHLEVEL__;
 
     static_assert (gccver >= 50100,
-        "GCC version 5.1.0 or later is required to compile rippled.");
+        "GCC version 5.1.0 or later is required to compile jbcoind.");
 #endif
 
     //
@@ -802,7 +802,7 @@ int main (int argc, char** argv)
 
     // At exit, reports all memory blocks which have not been freed.
     //
-#if RIPPLE_DUMP_LEAKS_ON_EXIT
+#if JBCOIN_DUMP_LEAKS_ON_EXIT
     beast::Debug::setHeapReportLeaks (true);
 #else
     beast::Debug::setHeapReportLeaks (false);
@@ -810,9 +810,9 @@ int main (int argc, char** argv)
 
     atexit(&google::protobuf::ShutdownProtobufLibrary);
 
-    std::set_terminate(ripple::terminateHandler);
+    std::set_terminate(jbcoin::terminateHandler);
 
-    auto const result (ripple::run (argc, argv));
+    auto const result (jbcoin::run (argc, argv));
 
     beast::basic_seconds_clock_main_hook();
 

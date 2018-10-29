@@ -17,7 +17,7 @@
 */
 //==============================================================================
 
-#include <ripple/beast/net/IPAddressConversion.h>
+#include <jbcoin/beast/net/IPAddressConversion.h>
 
 namespace beast {
 namespace IP {

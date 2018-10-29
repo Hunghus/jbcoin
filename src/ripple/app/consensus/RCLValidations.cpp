@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,25 +17,25 @@
 */
 //==============================================================================
 
-#include <ripple/app/consensus/RCLValidations.h>
-#include <ripple/app/ledger/InboundLedger.h>
-#include <ripple/app/ledger/InboundLedgers.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/app/misc/ValidatorList.h>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/basics/chrono.h>
-#include <ripple/consensus/LedgerTiming.h>
-#include <ripple/core/DatabaseCon.h>
-#include <ripple/core/JobQueue.h>
-#include <ripple/core/TimeKeeper.h>
+#include <jbcoin/app/consensus/RCLValidations.h>
+#include <jbcoin/app/ledger/InboundLedger.h>
+#include <jbcoin/app/ledger/InboundLedgers.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/app/misc/ValidatorList.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/consensus/LedgerTiming.h>
+#include <jbcoin/core/DatabaseCon.h>
+#include <jbcoin/core/JobQueue.h>
+#include <jbcoin/core/TimeKeeper.h>
 #include <memory>
 #include <mutex>
 #include <thread>
 
-namespace ripple {
+namespace jbcoin {
 
 RCLValidatedLedger::RCLValidatedLedger(MakeGenesis)
     : ledgerID_{0}, ledgerSeq_{0}
@@ -353,4 +353,4 @@ handleNewValidation(Application& app,
 }
 
 
-}  // namespace ripple
+}  // namespace jbcoin

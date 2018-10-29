@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,10 +17,10 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_FEATURE_H_INCLUDED
-#define RIPPLE_PROTOCOL_FEATURE_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_FEATURE_H_INCLUDED
+#define JBCOIN_PROTOCOL_FEATURE_H_INCLUDED
 
-#include <ripple/basics/base_uint.h>
+#include <jbcoin/basics/base_uint.h>
 #include <boost/container/flat_map.hpp>
 #include <boost/optional.hpp>
 #include <array>
@@ -42,7 +42,7 @@
  *
  */
 
-namespace ripple {
+namespace jbcoin {
 
 namespace detail {
 
@@ -368,6 +368,6 @@ extern uint256 const fix1623;
 extern uint256 const featureDepositPreauth;
 extern uint256 const fix1515;
 
-} // ripple
+} // jbcoin
 
 #endif

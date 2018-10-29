@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#include <ripple/shamap/SHAMapNodeID.h>
-#include <ripple/crypto/csprng.h>
-#include <ripple/basics/Log.h>
-#include <ripple/beast/core/LexicalCast.h>
+#include <jbcoin/shamap/SHAMapNodeID.h>
+#include <jbcoin/crypto/csprng.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/beast/core/LexicalCast.h>
 #include <boost/format.hpp>
 #include <cassert>
 #include <cstring>
 
-namespace ripple {
+namespace jbcoin {
 
 uint256 const&
 SHAMapNodeID::Masks (int depth)
@@ -112,7 +112,7 @@ SHAMapNodeID SHAMapNodeID::getChildNodeID (int m) const
 // Which branch would contain the specified hash
 int SHAMapNodeID::selectBranch (uint256 const& hash) const
 {
-#if RIPPLE_VERIFY_NODEOBJECT_KEYS
+#if JBCOIN_VERIFY_NODEOBJECT_KEYS
 
     if (mDepth >= 64)
     {
@@ -167,4 +167,4 @@ void SHAMapNodeID::dump (beast::Journal journal) const
         getString ();
 }
 
-} // ripple
+} // jbcoin

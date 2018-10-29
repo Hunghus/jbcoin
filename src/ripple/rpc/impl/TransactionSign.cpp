@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,32 +17,32 @@
 */
 //==============================================================================
 
-#include <ripple/rpc/impl/TransactionSign.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/ledger/OpenLedger.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/app/misc/Transaction.h>
-#include <ripple/app/misc/TxQ.h>
-#include <ripple/app/paths/Pathfinder.h>
-#include <ripple/app/tx/apply.h>              // Validity::Valid
-#include <ripple/basics/Log.h>
-#include <ripple/basics/mulDiv.h>
-#include <ripple/json/json_writer.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/protocol/Sign.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/STAccount.h>
-#include <ripple/protocol/STParsedJSON.h>
-#include <ripple/protocol/TxFlags.h>
-#include <ripple/rpc/impl/LegacyPathFind.h>
-#include <ripple/rpc/impl/RPCHelpers.h>
-#include <ripple/rpc/impl/Tuning.h>
+#include <jbcoin/rpc/impl/TransactionSign.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/ledger/OpenLedger.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/app/misc/Transaction.h>
+#include <jbcoin/app/misc/TxQ.h>
+#include <jbcoin/app/paths/Pathfinder.h>
+#include <jbcoin/app/tx/apply.h>              // Validity::Valid
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/mulDiv.h>
+#include <jbcoin/json/json_writer.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/protocol/Sign.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/STAccount.h>
+#include <jbcoin/protocol/STParsedJSON.h>
+#include <jbcoin/protocol/TxFlags.h>
+#include <jbcoin/rpc/impl/LegacyPathFind.h>
+#include <jbcoin/rpc/impl/RPCHelpers.h>
+#include <jbcoin/rpc/impl/Tuning.h>
 #include <algorithm>
 #include <iterator>
 
-namespace ripple {
+namespace jbcoin {
 namespace RPC {
 namespace detail {
 
@@ -195,7 +195,7 @@ static Json::Value checkPayment(
 
         if (sendMax.native () && amount.native ())
             return RPC::make_error (rpcINVALID_PARAMS,
-                "Cannot build XRP to XRP paths.");
+                "Cannot build JBC to JBC paths.");
 
         {
             LegacyPathFind lpf (isUnlimited (role), app);
@@ -205,7 +205,7 @@ static Json::Value checkPayment(
             STPathSet result;
             if (ledger)
             {
-                Pathfinder pf(std::make_shared<RippleLineCache>(ledger),
+                Pathfinder pf(std::make_shared<JBCoinLineCache>(ledger),
                     srcAddressID, *dstAccountID, sendMax.issue().currency,
                         sendMax.issue().account, amount, boost::none, app);
                 if (pf.findPaths(app.config().PATH_SEARCH_OLD))
@@ -513,7 +513,7 @@ transactionPreProcessImpl (
         Serializer s = buildMultiSigningData (*stpTrans,
             signingArgs.getSigner ());
 
-        auto multisig = ripple::sign (
+        auto multisig = jbcoin::sign (
             keypair.first,
             keypair.second,
             s.slice());
@@ -1137,14 +1137,14 @@ Json::Value transactionSubmitMultiSigned (
             return RPC::make_error (rpcINVALID_PARAMS, err.str ());
         }
 
-        // The Fee field must be in XRP and greater than zero.
+        // The Fee field must be in JBC and greater than zero.
         auto const fee = stpTrans->getFieldAmount (sfFee);
 
         if (!isLegalNet (fee))
         {
             std::ostringstream err;
             err << "Invalid " << sfFee.fieldName
-                << " field.  Fees must be specified in XRP.";
+                << " field.  Fees must be specified in JBC.";
             return RPC::make_error (rpcINVALID_PARAMS, err.str ());
         }
         if (fee <= 0)
@@ -1211,4 +1211,4 @@ Json::Value transactionSubmitMultiSigned (
 }
 
 } // RPC
-} // ripple
+} // jbcoin

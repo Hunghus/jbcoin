@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,29 +17,29 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_PATHS_PATHFINDER_H_INCLUDED
-#define RIPPLE_APP_PATHS_PATHFINDER_H_INCLUDED
+#ifndef JBCOIN_APP_PATHS_PATHFINDER_H_INCLUDED
+#define JBCOIN_APP_PATHS_PATHFINDER_H_INCLUDED
 
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/app/paths/RippleLineCache.h>
-#include <ripple/core/LoadEvent.h>
-#include <ripple/protocol/STAmount.h>
-#include <ripple/protocol/STPathSet.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/app/paths/JBCoinLineCache.h>
+#include <jbcoin/core/LoadEvent.h>
+#include <jbcoin/protocol/STAmount.h>
+#include <jbcoin/protocol/STPathSet.h>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Calculates payment paths.
 
-    The @ref RippleCalc determines the quality of the found paths.
+    The @ref JBCoinCalc determines the quality of the found paths.
 
-    @see RippleCalc
+    @see JBCoinCalc
 */
 class Pathfinder
 {
 public:
     /** Construct a pathfinder without an issuer.*/
     Pathfinder (
-        std::shared_ptr<RippleLineCache> const& cache,
+        std::shared_ptr<JBCoinLineCache> const& cache,
         AccountID const& srcAccount,
         AccountID const& dstAccount,
         Currency const& uSrcCurrency,
@@ -75,7 +75,7 @@ public:
         nt_SOURCE,     // The source account: with an issuer account, if needed.
         nt_ACCOUNTS,   // Accounts that connect from this source/currency.
         nt_BOOKS,      // Order books that connect to this currency.
-        nt_XRP_BOOK,   // The order book from this currency to XRP.
+        nt_JBC_BOOK,   // The order book from this currency to JBC.
         nt_DEST_BOOK,  // The order book to the destination currency/issuer.
         nt_DESTINATION // The destination account only.
     };
@@ -87,11 +87,11 @@ public:
     // in a path request.
     enum PaymentType
     {
-        pt_XRP_to_XRP,
-        pt_XRP_to_nonXRP,
-        pt_nonXRP_to_XRP,
-        pt_nonXRP_to_same,   // Destination currency is the same as source.
-        pt_nonXRP_to_nonXRP  // Destination currency is NOT the same as source.
+        pt_JBC_to_JBC,
+        pt_JBC_to_nonJBC,
+        pt_nonJBC_to_JBC,
+        pt_nonJBC_to_same,   // Destination currency is the same as source.
+        pt_nonJBC_to_nonJBC  // Destination currency is NOT the same as source.
     };
 
     struct PathRank
@@ -112,13 +112,13 @@ private:
                   addLink:
                       getPathsOut
                       issueMatchesOrigin
-                      isNoRippleOut:
-                          isNoRipple
+                      isNoJBCoinOut:
+                          isNoJBCoin
 
       computePathRanks:
-          rippleCalculate
+          jbcoinCalculate
           getPathLiquidity:
-              rippleCalculate
+              jbcoinCalculate
 
       getBestPaths
      */
@@ -156,11 +156,11 @@ private:
         uint64_t& qualityOut) const;   // OUT: The returned initial quality
 
     // Does this path end on an account-to-account link whose last account has
-    // set the "no ripple" flag on the link?
-    bool isNoRippleOut (STPath const& currentPath);
+    // set the "no jbcoin" flag on the link?
+    bool isNoJBCoinOut (STPath const& currentPath);
 
-    // Is the "no ripple" flag set from one account to another?
-    bool isNoRipple (
+    // Is the "no jbcoin" flag set from one account to another?
+    bool isNoJBCoin (
         AccountID const& fromAccount,
         AccountID const& toAccount,
         Currency const& currency);
@@ -184,7 +184,7 @@ private:
 
     std::shared_ptr <ReadView const> mLedger;
     std::unique_ptr<LoadEvent> m_loadEvent;
-    std::shared_ptr<RippleLineCache> mRLCache;
+    std::shared_ptr<JBCoinLineCache> mRLCache;
 
     STPathElement mSource;
     STPathSet mCompletePaths;
@@ -196,14 +196,14 @@ private:
     Application& app_;
     beast::Journal j_;
 
-    // Add ripple paths
+    // Add jbcoin paths
     static std::uint32_t const afADD_ACCOUNTS = 0x001;
 
     // Add order books
     static std::uint32_t const afADD_BOOKS = 0x002;
 
-    // Add order book to XRP only
-    static std::uint32_t const afOB_XRP = 0x010;
+    // Add order book to JBC only
+    static std::uint32_t const afOB_JBC = 0x010;
 
     // Must link to destination currency
     static std::uint32_t const afOB_LAST = 0x040;
@@ -212,6 +212,6 @@ private:
     static std::uint32_t const afAC_LAST = 0x080;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

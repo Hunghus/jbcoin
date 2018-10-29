@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2017 Ripple Labs Inc
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2017 JBCoin Labs Inc
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -16,21 +16,21 @@
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 //==============================================================================
-#ifndef RIPPLE_TEST_CSF_LEDGERS_H_INCLUDED
-#define RIPPLE_TEST_CSF_LEDGERS_H_INCLUDED
+#ifndef JBCOIN_TEST_CSF_LEDGERS_H_INCLUDED
+#define JBCOIN_TEST_CSF_LEDGERS_H_INCLUDED
 
-#include <ripple/basics/UnorderedContainers.h>
-#include <ripple/basics/chrono.h>
-#include <ripple/consensus/LedgerTiming.h>
-#include <ripple/basics/tagged_integer.h>
-#include <ripple/consensus/LedgerTiming.h>
-#include <ripple/json/json_value.h>
+#include <jbcoin/basics/UnorderedContainers.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/consensus/LedgerTiming.h>
+#include <jbcoin/basics/tagged_integer.h>
+#include <jbcoin/consensus/LedgerTiming.h>
+#include <jbcoin/json/json_value.h>
 #include <test/csf/Tx.h>
 #include <boost/bimap/bimap.hpp>
 #include <boost/optional.hpp>
 #include <set>
 
-namespace ripple {
+namespace jbcoin {
 namespace test {
 namespace csf {
 
@@ -343,6 +343,6 @@ struct LedgerHistoryHelper
 
 }  // csf
 }  // test
-}  // ripple
+}  // jbcoin
 
 #endif

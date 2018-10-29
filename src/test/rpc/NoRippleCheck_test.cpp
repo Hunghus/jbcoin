@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,36 +17,36 @@
 */
 //==============================================================================
 
-#include <ripple/app/misc/TxQ.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/JsonFields.h>
+#include <jbcoin/app/misc/TxQ.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/JsonFields.h>
 #include <test/jtx.h>
 #include <test/jtx/envconfig.h>
 #include <boost/algorithm/string/predicate.hpp>
-#include <ripple/beast/utility/temp_dir.h>
-#include <ripple/resource/ResourceManager.h>
-#include <ripple/resource/impl/Entry.h>
-#include <ripple/resource/impl/Tuning.h>
-#include <ripple/rpc/impl/Tuning.h>
+#include <jbcoin/beast/utility/temp_dir.h>
+#include <jbcoin/resource/ResourceManager.h>
+#include <jbcoin/resource/impl/Entry.h>
+#include <jbcoin/resource/impl/Tuning.h>
+#include <jbcoin/rpc/impl/Tuning.h>
 
-namespace ripple {
+namespace jbcoin {
 
-class NoRippleCheck_test : public beast::unit_test::suite
+class NoJBCoinCheck_test : public beast::unit_test::suite
 {
     void
     testBadInput ()
     {
-        testcase ("Bad input to noripple_check");
+        testcase ("Bad input to nojbcoin_check");
 
         using namespace test::jtx;
         Env env {*this};
 
         auto const alice = Account {"alice"};
-        env.fund (XRP(10000), alice);
+        env.fund (JBC(10000), alice);
         env.close ();
 
         { // missing account field
-            auto const result = env.rpc ("json", "noripple_check", "{}")
+            auto const result = env.rpc ("json", "nojbcoin_check", "{}")
                 [jss::result];
             BEAST_EXPECT (result[jss::error] == "invalidParams");
             BEAST_EXPECT (result[jss::error_message] ==
@@ -56,7 +56,7 @@ class NoRippleCheck_test : public beast::unit_test::suite
         { // missing role field
             Json::Value params;
             params[jss::account] = alice.human();
-            auto const result = env.rpc ("json", "noripple_check",
+            auto const result = env.rpc ("json", "nojbcoin_check",
                 boost::lexical_cast<std::string>(params)) [jss::result];
             BEAST_EXPECT (result[jss::error] == "invalidParams");
             BEAST_EXPECT (result[jss::error_message] ==
@@ -67,7 +67,7 @@ class NoRippleCheck_test : public beast::unit_test::suite
             Json::Value params;
             params[jss::account] = alice.human();
             params[jss::role] = "not_a_role";
-            auto const result = env.rpc ("json", "noripple_check",
+            auto const result = env.rpc ("json", "nojbcoin_check",
                 boost::lexical_cast<std::string>(params)) [jss::result];
             BEAST_EXPECT (result[jss::error] == "invalidParams");
             BEAST_EXPECT (result[jss::error_message] ==
@@ -79,7 +79,7 @@ class NoRippleCheck_test : public beast::unit_test::suite
             params[jss::account] = alice.human();
             params[jss::role] = "user";
             params[jss::limit] = -1;
-            auto const result = env.rpc ("json", "noripple_check",
+            auto const result = env.rpc ("json", "nojbcoin_check",
                 boost::lexical_cast<std::string>(params)) [jss::result];
             BEAST_EXPECT (result[jss::error] == "invalidParams");
             BEAST_EXPECT (result[jss::error_message] ==
@@ -91,7 +91,7 @@ class NoRippleCheck_test : public beast::unit_test::suite
             params[jss::account] = alice.human();
             params[jss::role] = "user";
             params[jss::ledger_hash] = 1;
-            auto const result = env.rpc ("json", "noripple_check",
+            auto const result = env.rpc ("json", "nojbcoin_check",
                 boost::lexical_cast<std::string>(params)) [jss::result];
             BEAST_EXPECT (result[jss::error] == "invalidParams");
             BEAST_EXPECT (result[jss::error_message] ==
@@ -103,7 +103,7 @@ class NoRippleCheck_test : public beast::unit_test::suite
             params[jss::account] = Account{"nobody"}.human();
             params[jss::role] = "user";
             params[jss::ledger] = "current";
-            auto const result = env.rpc ("json", "noripple_check",
+            auto const result = env.rpc ("json", "nojbcoin_check",
                 boost::lexical_cast<std::string>(params)) [jss::result];
             BEAST_EXPECT (result[jss::error] == "actNotFound");
             BEAST_EXPECT (result[jss::error_message] ==
@@ -117,7 +117,7 @@ class NoRippleCheck_test : public beast::unit_test::suite
                 toBase58 (TokenType::NodePrivate, alice.sk());
             params[jss::role] = "user";
             params[jss::ledger] = "current";
-            auto const result = env.rpc ("json", "noripple_check",
+            auto const result = env.rpc ("json", "nojbcoin_check",
                 boost::lexical_cast<std::string>(params)) [jss::result];
             BEAST_EXPECT (result[jss::error] == "badSeed");
             BEAST_EXPECT (result[jss::error_message] ==
@@ -128,7 +128,7 @@ class NoRippleCheck_test : public beast::unit_test::suite
     void
     testBasic (bool user, bool problems)
     {
-        testcase << "Request noripple_check for " <<
+        testcase << "Request nojbcoin_check for " <<
             (user ? "user" : "gateway") << " role, expect" <<
             (problems ? "" : " no") << " problems";
 
@@ -138,16 +138,16 @@ class NoRippleCheck_test : public beast::unit_test::suite
         auto const gw = Account {"gw"};
         auto const alice = Account {"alice"};
 
-        env.fund (XRP(10000), gw, alice);
+        env.fund (JBC(10000), gw, alice);
         if ((user && problems) || (!user && !problems))
         {
-            env (fset (alice, asfDefaultRipple));
+            env (fset (alice, asfDefaultJBCoin));
             env (trust (alice, gw["USD"](100)));
         }
         else
         {
-            env (fclear (alice, asfDefaultRipple));
-            env (trust (alice, gw["USD"](100), gw, tfSetNoRipple));
+            env (fclear (alice, asfDefaultJBCoin));
+            env (trust (alice, gw["USD"](100), gw, tfSetNoJBCoin));
         }
         env.close ();
 
@@ -155,7 +155,7 @@ class NoRippleCheck_test : public beast::unit_test::suite
         params[jss::account] = alice.human();
         params[jss::role] = (user ? "user" : "gateway");
         params[jss::ledger] = "current";
-        auto result = env.rpc ("json", "noripple_check",
+        auto result = env.rpc ("json", "nojbcoin_check",
             boost::lexical_cast<std::string>(params)) [jss::result];
 
         auto const pa = result["problems"];
@@ -194,7 +194,7 @@ class NoRippleCheck_test : public beast::unit_test::suite
         // now make a second request asking for the relevant transactions this
         // time.
         params[jss::transactions] = true;
-        result = env.rpc ("json", "noripple_check",
+        result = env.rpc ("json", "nojbcoin_check",
             boost::lexical_cast<std::string>(params)) [jss::result];
         if (! BEAST_EXPECT (result[jss::transactions].isArray ()))
             return;
@@ -237,7 +237,7 @@ public:
     }
 };
 
-class NoRippleCheckLimits_test : public beast::unit_test::suite
+class NoJBCoinCheckLimits_test : public beast::unit_test::suite
 {
     void
     testLimits(bool admin)
@@ -250,8 +250,8 @@ class NoRippleCheckLimits_test : public beast::unit_test::suite
         Env env {*this, admin ? envconfig () : envconfig(no_admin)};
 
         auto const alice = Account {"alice"};
-        env.fund (XRP (100000), alice);
-        env (fset (alice, asfDefaultRipple));
+        env.fund (JBC (100000), alice);
+        env (fset (alice, asfDefaultJBCoin));
         env.close ();
 
         auto checkBalance = [&env]()
@@ -263,7 +263,7 @@ class NoRippleCheckLimits_test : public beast::unit_test::suite
             // be better if we could add this functionality to Env somehow
             // or otherwise disable endpoint charging for certain test
             // cases.
-            using namespace ripple::Resource;
+            using namespace jbcoin::Resource;
             using namespace std::chrono;
             using namespace beast::IP;
             auto c = env.app ().getResourceManager ()
@@ -280,7 +280,7 @@ class NoRippleCheckLimits_test : public beast::unit_test::suite
             }
         };
 
-        for (auto i = 0; i < ripple::RPC::Tuning::noRippleCheck.rmax + 5; ++i)
+        for (auto i = 0; i < jbcoin::RPC::Tuning::noJBCoinCheck.rmax + 5; ++i)
         {
             if (! admin)
                 checkBalance();
@@ -288,11 +288,11 @@ class NoRippleCheckLimits_test : public beast::unit_test::suite
             auto& txq = env.app().getTxQ();
             auto const gw = Account {"gw" + std::to_string(i)};
             env.memoize(gw);
-            env (pay (env.master, gw, XRP(1000)),
+            env (pay (env.master, gw, JBC(1000)),
                 seq (autofill),
                 fee (txq.getMetrics(*env.current())->expFeeLevel + 1),
                 sig (autofill));
-            env (fset (gw, asfDefaultRipple),
+            env (fset (gw, asfDefaultJBCoin),
                 seq (autofill),
                 fee (txq.getMetrics(*env.current())->expFeeLevel + 1),
                 sig (autofill));
@@ -306,32 +306,32 @@ class NoRippleCheckLimits_test : public beast::unit_test::suite
         params[jss::account] = alice.human();
         params[jss::role] = "user";
         params[jss::ledger] = "current";
-        auto result = env.rpc ("json", "noripple_check",
+        auto result = env.rpc ("json", "nojbcoin_check",
             boost::lexical_cast<std::string>(params)) [jss::result];
 
         BEAST_EXPECT (result["problems"].size() == 301);
 
         // one below minimum
         params[jss::limit] = 9;
-        result = env.rpc ("json", "noripple_check",
+        result = env.rpc ("json", "nojbcoin_check",
             boost::lexical_cast<std::string>(params)) [jss::result];
         BEAST_EXPECT (result["problems"].size() == (admin ? 10 : 11));
 
         // at minimum
         params[jss::limit] = 10;
-        result = env.rpc ("json", "noripple_check",
+        result = env.rpc ("json", "nojbcoin_check",
             boost::lexical_cast<std::string>(params)) [jss::result];
         BEAST_EXPECT (result["problems"].size() == 11);
 
         // at max
         params[jss::limit] = 400;
-        result = env.rpc ("json", "noripple_check",
+        result = env.rpc ("json", "nojbcoin_check",
             boost::lexical_cast<std::string>(params)) [jss::result];
         BEAST_EXPECT (result["problems"].size() == 401);
 
         // at max+1
         params[jss::limit] = 401;
-        result = env.rpc ("json", "noripple_check",
+        result = env.rpc ("json", "nojbcoin_check",
             boost::lexical_cast<std::string>(params)) [jss::result];
         BEAST_EXPECT (result["problems"].size() == (admin ? 402 : 401));
     }
@@ -344,13 +344,13 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE(NoRippleCheck, app, ripple);
+BEAST_DEFINE_TESTSUITE(NoJBCoinCheck, app, jbcoin);
 
 // These tests that deal with limit amounts are slow because of the
 // offer/account setup, so making them manual -- the additional coverage provided
 // by them is minimal
 
-BEAST_DEFINE_TESTSUITE_MANUAL_PRIO(NoRippleCheckLimits, app, ripple, 1);
+BEAST_DEFINE_TESTSUITE_MANUAL_PRIO(NoJBCoinCheckLimits, app, jbcoin, 1);
 
-} // ripple
+} // jbcoin
 

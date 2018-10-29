@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/Transaction.h>
-#include <ripple/core/DatabaseCon.h>
-#include <ripple/core/SociDB.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/resource/Fees.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/Role.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/Transaction.h>
+#include <jbcoin/core/DatabaseCon.h>
+#include <jbcoin/core/SociDB.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/resource/Fees.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/Role.h>
 #include <boost/format.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 // {
 //   start: <index>
@@ -90,4 +90,4 @@ Json::Value doTxHistory (RPC::Context& context)
     return obj;
 }
 
-} // ripple
+} // jbcoin

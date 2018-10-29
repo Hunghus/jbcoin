@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/Flow.h>
-#include <ripple/app/paths/RippleCalc.h>
-#include <ripple/app/paths/Tuning.h>
-#include <ripple/app/paths/cursor/PathCursor.h>
-#include <ripple/app/paths/impl/FlowDebugInfo.h>
-#include <ripple/basics/Log.h>
-#include <ripple/ledger/View.h>
-#include <ripple/protocol/Feature.h>
+#include <jbcoin/app/paths/Flow.h>
+#include <jbcoin/app/paths/JBCoinCalc.h>
+#include <jbcoin/app/paths/Tuning.h>
+#include <jbcoin/app/paths/cursor/PathCursor.h>
+#include <jbcoin/app/paths/impl/FlowDebugInfo.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/ledger/View.h>
+#include <jbcoin/protocol/Feature.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace path {
 
 static
@@ -41,21 +41,21 @@ deleteOffers (ApplyView& view,
     return tesSUCCESS;
 }
 
-RippleCalc::Output RippleCalc::rippleCalculate (
+JBCoinCalc::Output JBCoinCalc::jbcoinCalculate (
     PaymentSandbox& view,
 
     // Compute paths using this ledger entry set.  Up to caller to actually
     // apply to ledger.
 
     // Issuer:
-    //      XRP: xrpAccount()
-    //  non-XRP: uSrcAccountID (for any issuer) or another account with
+    //      JBC: jbcAccount()
+    //  non-JBC: uSrcAccountID (for any issuer) or another account with
     //           trust node.
     STAmount const& saMaxAmountReq,             // --> -1 = no limit.
 
     // Issuer:
-    //      XRP: xrpAccount()
-    //  non-XRP: uDstAccountID (for any issuer) or another account with
+    //      JBC: jbcAccount()
+    //  non-JBC: uDstAccountID (for any issuer) or another account with
     //           trust node.
     STAmount const& saDstAmountReq,
 
@@ -86,7 +86,7 @@ RippleCalc::Output RippleCalc::rippleCalculate (
     if (callFlowV1)
     {
         auto const timeIt = flowV1FlowDebugInfo.timeBlock ("main");
-        RippleCalc rc (
+        JBCoinCalc rc (
             flowV1SB,
             saMaxAmountReq,
             saDstAmountReq,
@@ -99,7 +99,7 @@ RippleCalc::Output RippleCalc::rippleCalculate (
             rc.inputFlags = *pInputs;
         }
 
-        auto result = rc.rippleCalculate (compareFlowV1V2 ? &flowV1FlowDebugInfo : nullptr);
+        auto result = rc.jbcoinCalculate (compareFlowV1V2 ? &flowV1FlowDebugInfo : nullptr);
         flowV1Out.setResult (result);
         flowV1Out.actualAmountIn = rc.actualAmountIn_;
         flowV1Out.actualAmountOut = rc.actualAmountOut_;
@@ -150,7 +150,7 @@ RippleCalc::Output RippleCalc::rippleCalculate (
             if (!useFlowV1Output)
             {
                 // return a tec so the tx is stored
-                path::RippleCalc::Output exceptResult;
+                path::JBCoinCalc::Output exceptResult;
                 exceptResult.setResult(tecINTERNAL);
                 return exceptResult;
             }
@@ -166,7 +166,7 @@ RippleCalc::Output RippleCalc::rippleCalculate (
             boost::optional<BalanceDiffs> const& balanceDiffs,
             bool outputPassInfo,
             bool outputBalanceDiffs) {
-                j.debug () << "RippleCalc Result> " <<
+                j.debug () << "JBCoinCalc Result> " <<
                 " actualIn: " << result.actualAmountIn <<
                 ", actualOut: " << result.actualAmountOut <<
                 ", result: " << result.result () <<
@@ -221,7 +221,7 @@ RippleCalc::Output RippleCalc::rippleCalculate (
     return flowV1Out;
 }
 
-bool RippleCalc::addPathState(STPath const& path, TER& resultCode)
+bool JBCoinCalc::addPathState(STPath const& path, TER& resultCode)
 {
     auto pathState = std::make_shared<PathState> (
         view, saDstAmountReq_, saMaxAmountReq_, j_);
@@ -238,7 +238,7 @@ bool RippleCalc::addPathState(STPath const& path, TER& resultCode)
         uSrcAccountID_);
 
     if (pathState->status() == tesSUCCESS)
-        pathState->checkNoRipple (uDstAccountID_, uSrcAccountID_);
+        pathState->checkNoJBCoin (uDstAccountID_, uSrcAccountID_);
 
     if (pathState->status() == tesSUCCESS)
         pathState->checkFreeze ();
@@ -246,7 +246,7 @@ bool RippleCalc::addPathState(STPath const& path, TER& resultCode)
     pathState->setIndex (pathStateList_.size ());
 
     JLOG (j_.debug())
-        << "rippleCalc: Build direct:"
+        << "jbcoinCalc: Build direct:"
         << " status: " << transToken (pathState->status());
 
     // Return if malformed.
@@ -273,10 +273,10 @@ bool RippleCalc::addPathState(STPath const& path, TER& resultCode)
 // liquidity. No need to revisit path in the future if all liquidity is used.
 
 // <-- TER: Only returns tepPATH_PARTIAL if partialPaymentAllowed.
-TER RippleCalc::rippleCalculate (detail::FlowDebugInfo* flowDebugInfo)
+TER JBCoinCalc::jbcoinCalculate (detail::FlowDebugInfo* flowDebugInfo)
 {
     JLOG (j_.trace())
-        << "rippleCalc>"
+        << "jbcoinCalc>"
         << " saMaxAmountReq_:" << saMaxAmountReq_
         << " saDstAmountReq_:" << saDstAmountReq_;
 
@@ -295,18 +295,18 @@ TER RippleCalc::rippleCalculate (detail::FlowDebugInfo* flowDebugInfo)
     else if (spsPaths_.empty ())
     {
         JLOG (j_.debug())
-            << "rippleCalc: Invalid transaction:"
-            << "No paths and direct ripple not allowed.";
+            << "jbcoinCalc: Invalid transaction:"
+            << "No paths and direct jbcoin not allowed.";
 
-        return temRIPPLE_EMPTY;
+        return temJBCOIN_EMPTY;
     }
 
     // Build a default path.  Use saDstAmountReq_ and saMaxAmountReq_ to imply
     // nodes.
-    // XXX Might also make a XRP bridge by default.
+    // XXX Might also make a JBC bridge by default.
 
     JLOG (j_.trace())
-        << "rippleCalc: Paths in set: " << spsPaths_.size ();
+        << "jbcoinCalc: Paths in set: " << spsPaths_.size ();
 
     // Now expand the path state.
     for (auto const& spPath: spsPaths_)
@@ -365,7 +365,7 @@ TER RippleCalc::rippleCalculate (detail::FlowDebugInfo* flowDebugInfo)
 
                 // Compute increment.
                 JLOG (j_.debug())
-                    << "rippleCalc: AFTER:"
+                    << "jbcoinCalc: AFTER:"
                     << " mIndex=" << pathState->index()
                     << " uQuality=" << pathState->quality()
                     << " rate=" << amountFromQuality (pathState->quality());
@@ -387,7 +387,7 @@ TER RippleCalc::rippleCalculate (detail::FlowDebugInfo* flowDebugInfo)
                     // This should never happen. Consider the path dry
 
                     JLOG (j_.warn())
-                        << "rippleCalc: Non-dry path moves no funds";
+                        << "jbcoinCalc: Non-dry path moves no funds";
 
                     assert (false);
 
@@ -399,7 +399,7 @@ TER RippleCalc::rippleCalculate (detail::FlowDebugInfo* flowDebugInfo)
                     if (!pathState->inPass() || !pathState->outPass())
                     {
                         JLOG (j_.debug())
-                            << "rippleCalc: better:"
+                            << "jbcoinCalc: better:"
                             << " uQuality="
                             << amountFromQuality (pathState->quality())
                             << " inPass()=" << pathState->inPass()
@@ -425,7 +425,7 @@ TER RippleCalc::rippleCalculate (detail::FlowDebugInfo* flowDebugInfo)
                         // Current is better than set.
                     {
                         JLOG (j_.debug())
-                            << "rippleCalc: better:"
+                            << "jbcoinCalc: better:"
                             << " mIndex=" << pathState->index()
                             << " uQuality=" << pathState->quality()
                             << " rate="
@@ -444,14 +444,14 @@ TER RippleCalc::rippleCalculate (detail::FlowDebugInfo* flowDebugInfo)
         if (auto stream = j_.debug())
         {
             stream
-                << "rippleCalc: Summary:"
+                << "jbcoinCalc: Summary:"
                 << " Pass: " << iPass
                 << " Dry: " << iDry
                 << " Paths: " << pathStateList_.size ();
             for (auto pathState: pathStateList_)
             {
                 stream
-                    << "rippleCalc: "
+                    << "jbcoinCalc: "
                     << "Summary: " << pathState->index()
                     << " rate: "
                     << amountFromQuality (pathState->quality())
@@ -471,7 +471,7 @@ TER RippleCalc::rippleCalculate (detail::FlowDebugInfo* flowDebugInfo)
                     pathStateList_.size () - iDry);
 
             JLOG (j_.debug ())
-                << "rippleCalc: best:"
+                << "jbcoinCalc: best:"
                 << " uQuality=" << amountFromQuality (pathState->quality ())
                 << " inPass()=" << pathState->inPass ()
                 << " saOutPass=" << pathState->outPass () << " iBest=" << iBest;
@@ -490,7 +490,7 @@ TER RippleCalc::rippleCalculate (detail::FlowDebugInfo* flowDebugInfo)
             actualAmountOut_ += pathState->outPass();
 
             JLOG (j_.trace())
-                    << "rippleCalc: best:"
+                    << "jbcoinCalc: best:"
                     << " uQuality="
                     << amountFromQuality (pathState->quality())
                     << " inPass()=" << pathState->inPass()
@@ -514,7 +514,7 @@ TER RippleCalc::rippleCalculate (detail::FlowDebugInfo* flowDebugInfo)
             else if (actualAmountOut_ > saDstAmountReq_)
             {
                 JLOG (j_.fatal())
-                    << "rippleCalc: TOO MUCH:"
+                    << "jbcoinCalc: TOO MUCH:"
                     << " actualAmountOut_:" << actualAmountOut_
                     << " saDstAmountReq_:" << saDstAmountReq_;
 
@@ -536,7 +536,7 @@ TER RippleCalc::rippleCalculate (detail::FlowDebugInfo* flowDebugInfo)
                     // This payment is taking too many passes
 
                     JLOG (j_.error())
-                       << "rippleCalc: pass limit";
+                       << "jbcoinCalc: pass limit";
 
                     resultCode = telFAILED_PROCESSING;
                 }
@@ -589,4 +589,4 @@ TER RippleCalc::rippleCalculate (detail::FlowDebugInfo* flowDebugInfo)
 }
 
 } // path
-} // ripple
+} // jbcoin

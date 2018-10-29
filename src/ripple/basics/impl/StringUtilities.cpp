@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Slice.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/basics/ToString.h>
-#include <ripple/beast/core/LexicalCast.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Slice.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/basics/ToString.h>
+#include <jbcoin/beast/core/LexicalCast.h>
 #include <boost/algorithm/string.hpp>
-#include <ripple/beast/net/IPEndpoint.h>
+#include <jbcoin/beast/net/IPEndpoint.h>
 #include <boost/regex.hpp>
 #include <algorithm>
 #include <cstdarg>
 
-namespace ripple {
+namespace jbcoin {
 
 std::pair<Blob, bool> strUnHex (std::string const& strSrc)
 {
@@ -145,4 +145,4 @@ to_uint64(std::string const& s)
     return boost::none;
 }
 
-} // ripple
+} // jbcoin

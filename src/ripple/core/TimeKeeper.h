@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_CORE_TIMEKEEPER_H_INCLUDED
-#define RIPPLE_CORE_TIMEKEEPER_H_INCLUDED
+#ifndef JBCOIN_CORE_TIMEKEEPER_H_INCLUDED
+#define JBCOIN_CORE_TIMEKEEPER_H_INCLUDED
 
-#include <ripple/beast/clock/abstract_clock.h>
-#include <ripple/beast/utility/Journal.h>
-#include <ripple/basics/chrono.h>
+#include <jbcoin/beast/clock/abstract_clock.h>
+#include <jbcoin/beast/utility/Journal.h>
+#include <jbcoin/basics/chrono.h>
 #include <string>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Manages various times used by the server. */
 class TimeKeeper
@@ -46,7 +46,7 @@ public:
 
     /** Returns the estimate of wall time, in network time.
 
-        The network time is wall time adjusted for the Ripple
+        The network time is wall time adjusted for the JBCoin
         epoch, the beginning of January 1st, 2000. Each server
         can compute a different value for network time. Other
         servers value for network time is not directly observable,
@@ -97,6 +97,6 @@ extern
 std::unique_ptr<TimeKeeper>
 make_TimeKeeper(beast::Journal j);
 
-} // ripple
+} // jbcoin
 
 #endif

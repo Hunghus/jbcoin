@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_RPC_SHARDARCHIVEHANDLER_H_INCLUDED
-#define RIPPLE_RPC_SHARDARCHIVEHANDLER_H_INCLUDED
+#ifndef JBCOIN_RPC_SHARDARCHIVEHANDLER_H_INCLUDED
+#define JBCOIN_RPC_SHARDARCHIVEHANDLER_H_INCLUDED
 
-#include <ripple/app/main/Application.h>
-#include <ripple/basics/BasicConfig.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/net/SSLHTTPDownloader.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/basics/BasicConfig.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/net/SSLHTTPDownloader.h>
 
 #include <boost/asio/basic_waitable_timer.hpp>
 #include <boost/filesystem.hpp>
 
-namespace ripple {
+namespace jbcoin {
 namespace RPC {
 
 /** Handles the download and import one or more shard archives. */
@@ -92,6 +92,6 @@ private:
 };
 
 } // RPC
-} // ripple
+} // jbcoin
 
 #endif

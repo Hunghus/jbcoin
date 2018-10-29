@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_BASICS_KEYCACHE_H_INCLUDED
-#define RIPPLE_BASICS_KEYCACHE_H_INCLUDED
+#ifndef JBCOIN_BASICS_KEYCACHE_H_INCLUDED
+#define JBCOIN_BASICS_KEYCACHE_H_INCLUDED
 
-#include <ripple/basics/hardened_hash.h>
-#include <ripple/basics/UnorderedContainers.h>
-#include <ripple/beast/clock/abstract_clock.h>
-#include <ripple/beast/insight/Insight.h>
+#include <jbcoin/basics/hardened_hash.h>
+#include <jbcoin/basics/UnorderedContainers.h>
+#include <jbcoin/beast/clock/abstract_clock.h>
+#include <jbcoin/beast/insight/Insight.h>
 #include <mutex>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Maintains a cache of keys with no associated data.
 

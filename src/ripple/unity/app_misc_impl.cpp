@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,12 +18,12 @@
 //==============================================================================
 
 
-#include <ripple/app/misc/impl/AccountTxPaging.cpp>
-#include <ripple/app/misc/impl/AmendmentTable.cpp>
-#include <ripple/app/misc/impl/LoadFeeTrack.cpp>
-#include <ripple/app/misc/impl/Manifest.cpp>
-#include <ripple/app/misc/impl/Transaction.cpp>
-#include <ripple/app/misc/impl/TxQ.cpp>
-#include <ripple/app/misc/impl/ValidatorList.cpp>
-#include <ripple/app/misc/impl/ValidatorSite.cpp>
-#include <ripple/app/misc/impl/ValidatorKeys.cpp>
+#include <jbcoin/app/misc/impl/AccountTxPaging.cpp>
+#include <jbcoin/app/misc/impl/AmendmentTable.cpp>
+#include <jbcoin/app/misc/impl/LoadFeeTrack.cpp>
+#include <jbcoin/app/misc/impl/Manifest.cpp>
+#include <jbcoin/app/misc/impl/Transaction.cpp>
+#include <jbcoin/app/misc/impl/TxQ.cpp>
+#include <jbcoin/app/misc/impl/ValidatorList.cpp>
+#include <jbcoin/app/misc/impl/ValidatorSite.cpp>
+#include <jbcoin/app/misc/impl/ValidatorKeys.cpp>

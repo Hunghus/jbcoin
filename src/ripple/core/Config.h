@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_CORE_CONFIG_H_INCLUDED
-#define RIPPLE_CORE_CONFIG_H_INCLUDED
+#ifndef JBCOIN_CORE_CONFIG_H_INCLUDED
+#define JBCOIN_CORE_CONFIG_H_INCLUDED
 
-#include <ripple/basics/BasicConfig.h>
-#include <ripple/basics/base_uint.h>
-#include <ripple/protocol/SystemParameters.h> // VFALCO Breaks levelization
-#include <ripple/beast/net/IPEndpoint.h>
+#include <jbcoin/basics/BasicConfig.h>
+#include <jbcoin/basics/base_uint.h>
+#include <jbcoin/protocol/SystemParameters.h> // VFALCO Breaks levelization
+#include <jbcoin/beast/net/IPEndpoint.h>
 #include <boost/beast/core/string.hpp>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <boost/filesystem.hpp> // VFALCO FIX: This include should not be here
 #include <boost/lexical_cast.hpp>
 #include <boost/optional.hpp>
@@ -36,7 +36,7 @@
 #include <unordered_set>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 
 class Rules;
 
@@ -121,9 +121,9 @@ public:
     bool validateShards = false;
     bool ELB_SUPPORT = false;
 
-    std::vector<std::string>    IPS;                    // Peer IPs from rippled.cfg.
-    std::vector<std::string>    IPS_FIXED;              // Fixed Peer IPs from rippled.cfg.
-    std::vector<std::string>    SNTP_SERVERS;           // SNTP servers from rippled.cfg.
+    std::vector<std::string>    IPS;                    // Peer IPs from jbcoind.cfg.
+    std::vector<std::string>    IPS_FIXED;              // Fixed Peer IPs from jbcoind.cfg.
+    std::vector<std::string>    SNTP_SERVERS;           // SNTP servers from jbcoind.cfg.
 
     enum StartUpType
     {
@@ -208,6 +208,6 @@ public:
     bool canSign() const { return signingEnabled_; }
 };
 
-} // ripple
+} // jbcoin
 
 #endif

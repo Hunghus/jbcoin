@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/basics/Log.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/core/Config.h>
-#include <ripple/core/TimeKeeper.h>
-#include <ripple/overlay/Cluster.h>
-#include <ripple/overlay/ClusterNode.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/protocol/tokens.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/core/TimeKeeper.h>
+#include <jbcoin/overlay/Cluster.h>
+#include <jbcoin/overlay/ClusterNode.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/protocol/tokens.h>
 #include <boost/regex.hpp>
 #include <memory.h>
 
-namespace ripple {
+namespace jbcoin {
 
 Cluster::Cluster (beast::Journal j)
     : j_ (j)
@@ -142,4 +142,4 @@ Cluster::load (Section const& nodes)
     return true;
 }
 
-} // ripple
+} // jbcoin

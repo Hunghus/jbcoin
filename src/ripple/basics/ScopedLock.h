@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Portions of this file are from JUCE.
     Copyright (c) 2013 - Raw Material Software Ltd.
@@ -21,10 +21,10 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_BASICS_SCOPEDLOCK_H_INCLUDED
-#define RIPPLE_BASICS_SCOPEDLOCK_H_INCLUDED
+#ifndef JBCOIN_BASICS_SCOPEDLOCK_H_INCLUDED
+#define JBCOIN_BASICS_SCOPEDLOCK_H_INCLUDED
 
-namespace ripple
+namespace jbcoin
 {
 
 //==============================================================================
@@ -100,6 +100,6 @@ public:
     }
 };
 
-} // ripple
+} // jbcoin
 #endif
 

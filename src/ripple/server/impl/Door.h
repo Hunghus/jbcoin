@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_SERVER_DOOR_H_INCLUDED
-#define RIPPLE_SERVER_DOOR_H_INCLUDED
+#ifndef JBCOIN_SERVER_DOOR_H_INCLUDED
+#define JBCOIN_SERVER_DOOR_H_INCLUDED
 
-#include <ripple/server/impl/io_list.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/server/impl/PlainHTTPPeer.h>
-#include <ripple/server/impl/SSLHTTPPeer.h>
-#include <ripple/beast/asio/ssl_bundle.h>
+#include <jbcoin/server/impl/io_list.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/server/impl/PlainHTTPPeer.h>
+#include <jbcoin/server/impl/SSLHTTPPeer.h>
+#include <jbcoin/beast/asio/ssl_bundle.h>
 #include <boost/beast/core/multi_buffer.hpp>
 #include <boost/asio/basic_waitable_timer.hpp>
 #include <boost/asio/buffer.hpp>
@@ -39,7 +39,7 @@
 #include <memory>
 #include <mutex>
 
-namespace ripple {
+namespace jbcoin {
 
 /** A listening socket. */
 template<class Handler>
@@ -400,6 +400,6 @@ do_accept(boost::asio::yield_context do_yield)
     }
 }
 
-} // ripple
+} // jbcoin
 
 #endif

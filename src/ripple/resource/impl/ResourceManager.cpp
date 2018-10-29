@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,16 +17,16 @@
 */
 //==============================================================================
 
-#include <ripple/resource/ResourceManager.h>
-#include <ripple/resource/impl/Logic.h>
-#include <ripple/basics/chrono.h>
-#include <ripple/basics/Log.h>
-#include <ripple/beast/core/CurrentThreadName.h>
+#include <jbcoin/resource/ResourceManager.h>
+#include <jbcoin/resource/impl/Logic.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/beast/core/CurrentThreadName.h>
 #include <condition_variable>
 #include <memory>
 #include <mutex>
 
-namespace ripple {
+namespace jbcoin {
 namespace Resource {
 
 class ManagerImp : public Manager

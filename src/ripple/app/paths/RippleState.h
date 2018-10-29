@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,17 +17,17 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_PATHS_RIPPLESTATE_H_INCLUDED
-#define RIPPLE_APP_PATHS_RIPPLESTATE_H_INCLUDED
+#ifndef JBCOIN_APP_PATHS_JBCOINSTATE_H_INCLUDED
+#define JBCOIN_APP_PATHS_JBCOINSTATE_H_INCLUDED
 
-#include <ripple/ledger/View.h>
-#include <ripple/protocol/Rate.h>
-#include <ripple/protocol/STAmount.h>
-#include <ripple/protocol/STLedgerEntry.h>
+#include <jbcoin/ledger/View.h>
+#include <jbcoin/protocol/Rate.h>
+#include <jbcoin/protocol/STAmount.h>
+#include <jbcoin/protocol/STLedgerEntry.h>
 #include <cstdint>
 #include <memory> // <memory>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Wraps a trust line SLE for convenience.
     The complication of trust lines is that there is a
@@ -36,23 +36,23 @@ namespace ripple {
     a chosen account on the line.
 */
 // VFALCO TODO Rename to TrustLine
-class RippleState
+class JBCoinState
 {
 public:
     // VFALCO Why is this shared_ptr?
-    using pointer = std::shared_ptr <RippleState>;
+    using pointer = std::shared_ptr <JBCoinState>;
 
 public:
-    RippleState () = delete;
+    JBCoinState () = delete;
 
-    virtual ~RippleState() = default;
+    virtual ~JBCoinState() = default;
 
-    static RippleState::pointer makeItem(
+    static JBCoinState::pointer makeItem(
         AccountID const& accountID,
         std::shared_ptr<SLE const> sle);
 
     // Must be public, for make_shared
-    RippleState (std::shared_ptr<SLE const>&& sle,
+    JBCoinState (std::shared_ptr<SLE const>&& sle,
         AccountID const& viewAccount);
 
     /** Returns the state map key for the ledger entry. */
@@ -85,14 +85,14 @@ public:
         return mFlags & (!mViewLowest ? lsfLowAuth : lsfHighAuth);
     }
 
-    bool getNoRipple () const
+    bool getNoJBCoin () const
     {
-        return mFlags & (mViewLowest ? lsfLowNoRipple : lsfHighNoRipple);
+        return mFlags & (mViewLowest ? lsfLowNoJBCoin : lsfHighNoJBCoin);
     }
 
-    bool getNoRipplePeer () const
+    bool getNoJBCoinPeer () const
     {
-        return mFlags & (!mViewLowest ? lsfLowNoRipple : lsfHighNoRipple);
+        return mFlags & (!mViewLowest ? lsfLowNoJBCoin : lsfHighNoJBCoin);
     }
 
     /** Have we set the freeze flag on our peer */
@@ -157,10 +157,10 @@ private:
     STAmount                        mBalance;
 };
 
-std::vector <RippleState::pointer>
-getRippleStateItems (AccountID const& accountID,
+std::vector <JBCoinState::pointer>
+getJBCoinStateItems (AccountID const& accountID,
     ReadView const& view);
 
-} // ripple
+} // jbcoin
 
 #endif

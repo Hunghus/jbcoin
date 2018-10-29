@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,25 +17,25 @@
 */
 //==============================================================================
 
-#include <ripple/overlay/impl/PeerImp.h>
-#include <ripple/overlay/impl/Tuning.h>
-#include <ripple/app/consensus/RCLValidations.h>
-#include <ripple/app/ledger/InboundLedgers.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/ledger/InboundTransactions.h>
-#include <ripple/app/misc/HashRouter.h>
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/app/misc/Transaction.h>
-#include <ripple/app/misc/ValidatorList.h>
-#include <ripple/app/tx/apply.h>
-#include <ripple/basics/random.h>
-#include <ripple/basics/UptimeClock.h>
-#include <ripple/beast/core/LexicalCast.h>
-#include <ripple/beast/core/SemanticVersion.h>
-#include <ripple/nodestore/DatabaseShard.h>
-#include <ripple/overlay/Cluster.h>
-#include <ripple/protocol/digest.h>
+#include <jbcoin/overlay/impl/PeerImp.h>
+#include <jbcoin/overlay/impl/Tuning.h>
+#include <jbcoin/app/consensus/RCLValidations.h>
+#include <jbcoin/app/ledger/InboundLedgers.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/ledger/InboundTransactions.h>
+#include <jbcoin/app/misc/HashRouter.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/app/misc/Transaction.h>
+#include <jbcoin/app/misc/ValidatorList.h>
+#include <jbcoin/app/tx/apply.h>
+#include <jbcoin/basics/random.h>
+#include <jbcoin/basics/UptimeClock.h>
+#include <jbcoin/beast/core/LexicalCast.h>
+#include <jbcoin/beast/core/SemanticVersion.h>
+#include <jbcoin/nodestore/DatabaseShard.h>
+#include <jbcoin/overlay/Cluster.h>
+#include <jbcoin/protocol/digest.h>
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/algorithm/string.hpp>
@@ -45,7 +45,7 @@
 
 using namespace std::chrono_literals;
 
-namespace ripple {
+namespace jbcoin {
 
 PeerImp::PeerImp (Application& app, id_t id, endpoint_type remote_endpoint,
     PeerFinder::Slot::ptr const& slot, http_request_type&& request,
@@ -103,7 +103,7 @@ PeerImp::run()
             &PeerImp::run, shared_from_this()));
     {
         auto s = getVersion();
-        if (boost::starts_with(s, "rippled-"))
+        if (boost::starts_with(s, "jbcoind-"))
         {
             s.erase(s.begin(), s.begin() + 8);
             beast::SemanticVersion v;
@@ -2497,4 +2497,4 @@ PeerImp::isHighLatency() const
     return latency_.count() >= Tuning::peerHighLatency;
 }
 
-} // ripple
+} // jbcoin

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,21 +17,21 @@
 */
 //==============================================================================
 
-#include <ripple/app/tx/impl/Escrow.h>
+#include <jbcoin/app/tx/impl/Escrow.h>
 
-#include <ripple/app/misc/HashRouter.h>
-#include <ripple/basics/chrono.h>
-#include <ripple/basics/Log.h>
-#include <ripple/conditions/Condition.h>
-#include <ripple/conditions/Fulfillment.h>
-#include <ripple/ledger/ApplyView.h>
-#include <ripple/ledger/View.h>
-#include <ripple/protocol/digest.h>
-#include <ripple/protocol/st.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/TxFlags.h>
-#include <ripple/protocol/XRPAmount.h>
+#include <jbcoin/app/misc/HashRouter.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/conditions/Condition.h>
+#include <jbcoin/conditions/Fulfillment.h>
+#include <jbcoin/ledger/ApplyView.h>
+#include <jbcoin/ledger/View.h>
+#include <jbcoin/protocol/digest.h>
+#include <jbcoin/protocol/st.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/TxFlags.h>
+#include <jbcoin/protocol/JBCAmount.h>
 
 // During an EscrowFinish, the transaction must specify both
 // a condition and a fulfillment. We track whether that
@@ -39,40 +39,40 @@
 #define SF_CF_INVALID  SF_PRIVATE5
 #define SF_CF_VALID    SF_PRIVATE6
 
-namespace ripple {
+namespace jbcoin {
 
 /*
     Escrow
     ======
 
-    Escrow is a feature of the XRP Ledger that allows you to send conditional
-    XRP payments. These conditional payments, called escrows, set aside XRP and
+    Escrow is a feature of the JBC Ledger that allows you to send conditional
+    JBC payments. These conditional payments, called escrows, set aside JBC and
     deliver it later when certain conditions are met. Conditions to successfully
     finish an escrow include time-based unlocks and crypto-conditions. Escrows
     can also be set to expire if not finished in time.
 
-    The XRP set aside in an escrow is locked up. No one can use or destroy the
-    XRP until the escrow has been successfully finished or canceled. Before the
-    expiration time, only the intended receiver can get the XRP. After the
-    expiration time, the XRP can only be returned to the sender.
+    The JBC set aside in an escrow is locked up. No one can use or destroy the
+    JBC until the escrow has been successfully finished or canceled. Before the
+    expiration time, only the intended receiver can get the JBC. After the
+    expiration time, the JBC can only be returned to the sender.
 
     For more details on escrow, including examples, diagrams and more please
-    visit https://ripple.com/build/escrow/#escrow
+    visit https://jbcoin.com/build/escrow/#escrow
 
     For details on specific transactions, including fields and validation rules
     please see:
 
     `EscrowCreate`
     --------------
-        See: https://ripple.com/build/transactions/#escrowcreate
+        See: https://jbcoin.com/build/transactions/#escrowcreate
 
     `EscrowFinish`
     --------------
-        See: https://ripple.com/build/transactions/#escrowfinish
+        See: https://jbcoin.com/build/transactions/#escrowfinish
 
     `EscrowCancel`
     --------------
-        See: https://ripple.com/build/transactions/#escrowcancel
+        See: https://jbcoin.com/build/transactions/#escrowcancel
 */
 
 //------------------------------------------------------------------------------
@@ -88,10 +88,10 @@ static inline bool after (NetClock::time_point now, std::uint32_t mark)
     return now.time_since_epoch().count() > mark;
 }
 
-XRPAmount
+JBCAmount
 EscrowCreate::calculateMaxSpend(STTx const& tx)
 {
-    return tx[sfAmount].xrp();
+    return tx[sfAmount].jbc();
 }
 
 NotTEC
@@ -107,7 +107,7 @@ EscrowCreate::preflight (PreflightContext const& ctx)
     if (!isTesSuccess (ret))
         return ret;
 
-    if (! isXRP(ctx.tx[sfAmount]))
+    if (! isJBC(ctx.tx[sfAmount]))
         return temBAD_AMOUNT;
 
     if (ctx.tx[sfAmount] <= beast::zero)
@@ -135,7 +135,7 @@ EscrowCreate::preflight (PreflightContext const& ctx)
 
     if (auto const cb = ctx.tx[~sfCondition])
     {
-        using namespace ripple::cryptoconditions;
+        using namespace jbcoin::cryptoconditions;
 
         std::error_code ec;
 
@@ -200,14 +200,14 @@ EscrowCreate::doApply()
 
     // Check reserve and funds availability
     {
-        auto const balance = STAmount((*sle)[sfBalance]).xrp();
+        auto const balance = STAmount((*sle)[sfBalance]).jbc();
         auto const reserve = ctx_.view().fees().accountReserve(
             (*sle)[sfOwnerCount] + 1);
 
         if (balance < reserve)
             return tecINSUFFICIENT_RESERVE;
 
-        if (balance < reserve + STAmount(ctx_.tx[sfAmount]).xrp())
+        if (balance < reserve + STAmount(ctx_.tx[sfAmount]).jbc())
             return tecUNFUNDED;
     }
 
@@ -221,10 +221,10 @@ EscrowCreate::doApply()
                 ! ctx_.tx[~sfDestinationTag])
             return tecDST_TAG_NEEDED;
 
-        // Obeying the lsfDissalowXRP flag was a bug.  Piggyback on
+        // Obeying the lsfDissalowJBC flag was a bug.  Piggyback on
         // featureDepositAuth to remove the bug.
         if (! ctx_.view().rules().enabled(featureDepositAuth) &&
-                ((*sled)[sfFlags] & lsfDisallowXRP))
+                ((*sled)[sfFlags] & lsfDisallowJBC))
             return tecNO_TARGET;
     }
 
@@ -280,7 +280,7 @@ static
 bool
 checkCondition (Slice f, Slice c)
 {
-    using namespace ripple::cryptoconditions;
+    using namespace jbcoin::cryptoconditions;
 
     std::error_code ec;
 
@@ -594,5 +594,5 @@ EscrowCancel::doApply()
     return tesSUCCESS;
 }
 
-} // ripple
+} // jbcoin
 

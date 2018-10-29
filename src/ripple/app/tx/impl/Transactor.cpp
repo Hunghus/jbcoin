@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,22 +17,22 @@
 */
 //==============================================================================
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/misc/LoadFeeTrack.h>
-#include <ripple/app/tx/apply.h>
-#include <ripple/app/tx/impl/Transactor.h>
-#include <ripple/app/tx/impl/SignerEntries.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/Log.h>
-#include <ripple/core/Config.h>
-#include <ripple/json/to_string.h>
-#include <ripple/ledger/View.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/UintTypes.h>
-#include <ripple/protocol/Protocol.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/misc/LoadFeeTrack.h>
+#include <jbcoin/app/tx/apply.h>
+#include <jbcoin/app/tx/impl/Transactor.h>
+#include <jbcoin/app/tx/impl/SignerEntries.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/json/to_string.h>
+#include <jbcoin/ledger/View.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/UintTypes.h>
+#include <jbcoin/protocol/Protocol.h>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Performs early sanity checks on the txid */
 NotTEC
@@ -67,7 +67,7 @@ preflight1 (PreflightContext const& ctx)
 
     // No point in going any further if the transaction fee is malformed.
     auto const fee = ctx.tx.getFieldAmount (sfFee);
-    if (!fee.native () || fee.negative () || !isLegalAmount (fee.xrp ()))
+    if (!fee.native () || fee.negative () || !isLegalAmount (fee.jbc ()))
     {
         JLOG(ctx.j.debug()) << "preflight1: invalid fee";
         return temBAD_FEE;
@@ -141,13 +141,13 @@ std::uint64_t Transactor::calculateBaseFee (
     return baseFee + (signerCount * baseFee);
 }
 
-XRPAmount
+JBCAmount
 Transactor::calculateFeePaid(STTx const& tx)
 {
-    return tx[sfFee].xrp();
+    return tx[sfFee].jbc();
 }
 
-XRPAmount
+JBCAmount
 Transactor::minimumFee (Application& app, std::uint64_t baseFee,
     Fees const& fees, ApplyFlags flags)
 {
@@ -155,7 +155,7 @@ Transactor::minimumFee (Application& app, std::uint64_t baseFee,
         fees, flags & tapUNLIMITED);
 }
 
-XRPAmount
+JBCAmount
 Transactor::calculateMaxSpend(STTx const& tx)
 {
     return beast::zero;
@@ -186,7 +186,7 @@ Transactor::checkFee (PreclaimContext const& ctx,
     auto const id = ctx.tx.getAccountID(sfAccount);
     auto const sle = ctx.view.read(
         keylet::account(id));
-    auto const balance = (*sle)[sfBalance].xrp();
+    auto const balance = (*sle)[sfBalance].jbc();
 
     if (balance < feePaid)
     {
@@ -219,7 +219,7 @@ TER Transactor::payFee ()
     mSourceBalance -= feePaid;
     sle->setFieldAmount (sfBalance, mSourceBalance);
 
-    // VFALCO Should we call view().rawDestroyXRP() here as well?
+    // VFALCO Should we call view().rawDestroyJBC() here as well?
 
     return tesSUCCESS;
 }
@@ -307,7 +307,7 @@ TER Transactor::apply ()
 
     if (sle)
     {
-        mPriorBalance   = STAmount ((*sle)[sfBalance]).xrp ();
+        mPriorBalance   = STAmount ((*sle)[sfBalance]).jbc ();
         mSourceBalance  = mPriorBalance;
 
         setSeq();
@@ -565,15 +565,15 @@ void removeUnfundedOffers (ApplyView& view, std::vector<uint256> const& offers, 
 }
 
 /** Reset the context, discarding any changes made and adjust the fee */
-XRPAmount
-Transactor::reset(XRPAmount fee)
+JBCAmount
+Transactor::reset(JBCAmount fee)
 {
     ctx_.discard();
 
     auto const txnAcct = view().peek(
         keylet::account(ctx_.tx.getAccountID(sfAccount)));
 
-    auto const balance = txnAcct->getFieldAmount (sfBalance).xrp ();
+    auto const balance = txnAcct->getFieldAmount (sfBalance).jbc ();
 
     // balance should have already been checked in checkFee / preFlight.
     assert(balance != beast::zero && (!view().open() || balance >= fee));
@@ -629,7 +629,7 @@ Transactor::operator()()
         stream << "preclaim result: " << transToken(result);
 
     bool applied = isTesSuccess (result);
-    auto fee = ctx_.tx.getFieldAmount(sfFee).xrp ();
+    auto fee = ctx_.tx.getFieldAmount(sfFee).jbc ();
 
     if (ctx_.size() > oversizeMetaDataCap)
         result = tecOVERSIZE;
@@ -713,7 +713,7 @@ Transactor::operator()()
         // transaction. We just need to account for it in the ledger
         // header.
         if (!view().open() && fee != beast::zero)
-            ctx_.destroyXRP (fee);
+            ctx_.destroyJBC (fee);
 
         // Once we call apply, we will no longer be able to look at view()
         ctx_.apply(result);

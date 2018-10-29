@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -24,13 +24,13 @@
 #include <sstream>
 #include <string>
 
-#include <ripple/json/impl/json_reader.cpp>
-#include <ripple/json/impl/json_value.cpp>
-#include <ripple/json/impl/json_valueiterator.cpp>
-#include <ripple/json/impl/json_writer.cpp>
-#include <ripple/json/impl/to_string.cpp>
+#include <jbcoin/json/impl/json_reader.cpp>
+#include <jbcoin/json/impl/json_value.cpp>
+#include <jbcoin/json/impl/json_valueiterator.cpp>
+#include <jbcoin/json/impl/json_writer.cpp>
+#include <jbcoin/json/impl/to_string.cpp>
 
-#include <ripple/json/impl/JsonPropertyStream.cpp>
-#include <ripple/json/impl/Writer.cpp>
-#include <ripple/json/impl/Object.cpp>
-#include <ripple/json/impl/Output.cpp>
+#include <jbcoin/json/impl/JsonPropertyStream.cpp>
+#include <jbcoin/json/impl/Writer.cpp>
+#include <jbcoin/json/impl/Object.cpp>
+#include <jbcoin/json/impl/Output.cpp>

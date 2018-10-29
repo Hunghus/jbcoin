@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,11 +17,11 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_BASICS_RANDOM_H_INCLUDED
-#define RIPPLE_BASICS_RANDOM_H_INCLUDED
+#ifndef JBCOIN_BASICS_RANDOM_H_INCLUDED
+#define JBCOIN_BASICS_RANDOM_H_INCLUDED
 
-#include <ripple/basics/win32_workaround.h>
-#include <ripple/beast/xor_shift_engine.h>
+#include <jbcoin/basics/win32_workaround.h>
+#include <jbcoin/beast/xor_shift_engine.h>
 #include <boost/beast/core/detail/type_traits.hpp>
 #include <boost/thread/tss.hpp>
 #include <cassert>
@@ -32,18 +32,18 @@
 #include <limits>
 #include <type_traits>
 
-namespace ripple {
+namespace jbcoin {
 
 #ifndef __INTELLISENSE__
 static_assert (
     std::is_integral <beast::xor_shift_engine::result_type>::value &&
     std::is_unsigned <beast::xor_shift_engine::result_type>::value,
-        "The Ripple default PRNG engine must return an unsigned integral type.");
+        "The JBCoin default PRNG engine must return an unsigned integral type.");
 
 static_assert (
     std::numeric_limits<beast::xor_shift_engine::result_type>::max() >=
     std::numeric_limits<std::uint64_t>::max(),
-        "The Ripple default PRNG engine return must be at least 64 bits wide.");
+        "The JBCoin default PRNG engine return must be at least 64 bits wide.");
 #endif
 
 namespace detail {
@@ -199,6 +199,6 @@ rand_bool ()
 }
 /** @} */
 
-} // ripple
+} // jbcoin
 
-#endif // RIPPLE_BASICS_RANDOM_H_INCLUDED
+#endif // JBCOIN_BASICS_RANDOM_H_INCLUDED

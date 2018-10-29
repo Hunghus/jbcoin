@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
     Copyright 2014, Nikolaos D. Bougalis <nikb@bougalis.net>
 
     Permission to use, copy, modify, and/or distribute this software for any
@@ -20,14 +20,14 @@
 #ifndef BEAST_UTILITY_TAGGED_INTEGER_H_INCLUDED
 #define BEAST_UTILITY_TAGGED_INTEGER_H_INCLUDED
 
-#include <ripple/beast/hash/hash_append.h>
+#include <jbcoin/beast/hash/hash_append.h>
 #include <boost/operators.hpp>
 #include <functional>
 #include <iostream>
 #include <type_traits>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 /** A type-safe wrap around standard integral types
 
@@ -221,11 +221,11 @@ public:
     }
 };
 
-} // ripple
+} // jbcoin
 
 namespace beast {
 template <class Int, class Tag, class HashAlgorithm>
-struct is_contiguously_hashable<ripple::tagged_integer<Int, Tag>, HashAlgorithm>
+struct is_contiguously_hashable<jbcoin::tagged_integer<Int, Tag>, HashAlgorithm>
     : public is_contiguously_hashable<Int, HashAlgorithm>
 {
     explicit is_contiguously_hashable() = default;

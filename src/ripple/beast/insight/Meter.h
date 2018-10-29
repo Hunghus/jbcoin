@@ -22,8 +22,8 @@
 
 #include <memory>
 
-#include <ripple/beast/insight/Base.h>
-#include <ripple/beast/insight/MeterImpl.h>
+#include <jbcoin/beast/insight/Base.h>
+#include <jbcoin/beast/insight/MeterImpl.h>
 
 namespace beast {
 namespace insight {

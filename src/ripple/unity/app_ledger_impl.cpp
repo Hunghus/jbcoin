@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -18,15 +18,15 @@
 //==============================================================================
 
 
-#include <ripple/app/ledger/impl/BuildLedger.cpp>
-#include <ripple/app/ledger/impl/InboundLedger.cpp>
-#include <ripple/app/ledger/impl/InboundLedgers.cpp>
-#include <ripple/app/ledger/impl/InboundTransactions.cpp>
-#include <ripple/app/ledger/impl/LedgerCleaner.cpp>
-#include <ripple/app/ledger/impl/LedgerMaster.cpp>
-#include <ripple/app/ledger/impl/LedgerReplay.cpp>
-#include <ripple/app/ledger/impl/LocalTxs.cpp>
-#include <ripple/app/ledger/impl/OpenLedger.cpp>
-#include <ripple/app/ledger/impl/LedgerToJson.cpp>
-#include <ripple/app/ledger/impl/TransactionAcquire.cpp>
-#include <ripple/app/ledger/impl/TransactionMaster.cpp>
+#include <jbcoin/app/ledger/impl/BuildLedger.cpp>
+#include <jbcoin/app/ledger/impl/InboundLedger.cpp>
+#include <jbcoin/app/ledger/impl/InboundLedgers.cpp>
+#include <jbcoin/app/ledger/impl/InboundTransactions.cpp>
+#include <jbcoin/app/ledger/impl/LedgerCleaner.cpp>
+#include <jbcoin/app/ledger/impl/LedgerMaster.cpp>
+#include <jbcoin/app/ledger/impl/LedgerReplay.cpp>
+#include <jbcoin/app/ledger/impl/LocalTxs.cpp>
+#include <jbcoin/app/ledger/impl/OpenLedger.cpp>
+#include <jbcoin/app/ledger/impl/LedgerToJson.cpp>
+#include <jbcoin/app/ledger/impl/TransactionAcquire.cpp>
+#include <jbcoin/app/ledger/impl/TransactionMaster.cpp>

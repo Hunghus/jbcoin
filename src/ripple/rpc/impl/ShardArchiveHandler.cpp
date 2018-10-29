@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2014 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2014 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#include <ripple/app/misc/NetworkOPs.h>
-#include <ripple/basics/Archive.h>
-#include <ripple/core/ConfigSections.h>
-#include <ripple/nodestore/DatabaseShard.h>
-#include <ripple/rpc/ShardArchiveHandler.h>
+#include <jbcoin/app/misc/NetworkOPs.h>
+#include <jbcoin/basics/Archive.h>
+#include <jbcoin/core/ConfigSections.h>
+#include <jbcoin/nodestore/DatabaseShard.h>
+#include <jbcoin/rpc/ShardArchiveHandler.h>
 
 #include <memory>
 
-namespace ripple {
+namespace jbcoin {
 namespace RPC {
 
 using namespace boost::filesystem;
@@ -262,4 +262,4 @@ ShardArchiveHandler::remove(std::uint32_t shardIndex)
 }
 
 } // RPC
-} // ripple
+} // jbcoin

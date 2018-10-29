@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,25 +17,25 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_PATHS_RIPPLELINECACHE_H_INCLUDED
-#define RIPPLE_APP_PATHS_RIPPLELINECACHE_H_INCLUDED
+#ifndef JBCOIN_APP_PATHS_JBCOINLINECACHE_H_INCLUDED
+#define JBCOIN_APP_PATHS_JBCOINLINECACHE_H_INCLUDED
 
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/app/paths/RippleState.h>
-#include <ripple/basics/hardened_hash.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/app/paths/JBCoinState.h>
+#include <jbcoin/basics/hardened_hash.h>
 #include <cstddef>
 #include <memory>
 #include <mutex>
 #include <vector>
 
-namespace ripple {
+namespace jbcoin {
 
 // Used by Pathfinder
-class RippleLineCache
+class JBCoinLineCache
 {
 public:
     explicit
-    RippleLineCache (
+    JBCoinLineCache (
         std::shared_ptr <ReadView const> const& l);
 
     std::shared_ptr <ReadView const> const&
@@ -44,13 +44,13 @@ public:
         return mLedger;
     }
 
-    std::vector<RippleState::pointer> const&
-    getRippleLines (AccountID const& accountID);
+    std::vector<JBCoinState::pointer> const&
+    getJBCoinLines (AccountID const& accountID);
 
 private:
     std::mutex mLock;
 
-    ripple::hardened_hash<> hasher_;
+    jbcoin::hardened_hash<> hasher_;
     std::shared_ptr <ReadView const> mLedger;
 
     struct AccountKey
@@ -93,10 +93,10 @@ private:
 
     hash_map <
         AccountKey,
-        std::vector <RippleState::pointer>,
+        std::vector <JBCoinState::pointer>,
         AccountKey::Hash> lines_;
 };
 
-} // ripple
+} // jbcoin
 
 #endif

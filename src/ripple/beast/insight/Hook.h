@@ -20,8 +20,8 @@
 #ifndef BEAST_INSIGHT_HOOK_H_INCLUDED
 #define BEAST_INSIGHT_HOOK_H_INCLUDED
 
-#include <ripple/beast/insight/Base.h>
-#include <ripple/beast/insight/HookImpl.h>
+#include <jbcoin/beast/insight/Base.h>
+#include <jbcoin/beast/insight/HookImpl.h>
 
 #include <memory>
 

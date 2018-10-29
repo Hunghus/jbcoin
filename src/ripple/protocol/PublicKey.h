@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_PUBLICKEY_H_INCLUDED
-#define RIPPLE_PROTOCOL_PUBLICKEY_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_PUBLICKEY_H_INCLUDED
+#define JBCOIN_PROTOCOL_PUBLICKEY_H_INCLUDED
 
-#include <ripple/basics/Slice.h>
-#include <ripple/crypto/KeyType.h> // move to protocol/
-#include <ripple/protocol/STExchange.h>
-#include <ripple/protocol/tokens.h>
-#include <ripple/protocol/UintTypes.h>
+#include <jbcoin/basics/Slice.h>
+#include <jbcoin/crypto/KeyType.h> // move to protocol/
+#include <jbcoin/protocol/STExchange.h>
+#include <jbcoin/protocol/tokens.h>
+#include <jbcoin/protocol/UintTypes.h>
 #include <boost/optional.hpp>
 #include <algorithm>
 #include <cstdint>
@@ -32,14 +32,14 @@
 #include <ostream>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 /** A public key.
 
     Public keys are used in the public-key cryptography
     system used to verify signatures attached to messages.
 
-    The format of the public key is Ripple specific,
+    The format of the public key is JBCoin specific,
     information needed to determine the cryptosystem
     parameters used is stored inside the key.
 
@@ -253,6 +253,6 @@ calcNodeID (PublicKey const&);
 AccountID
 calcAccountID (PublicKey const& pk);
 
-} // ripple
+} // jbcoin
 
 #endif

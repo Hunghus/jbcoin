@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-  This file is part of rippled: https://github.com/ripple/rippled
-  Copyright (c) 2012-2016 Ripple Labs Inc.
+  This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+  Copyright (c) 2012-2016 JBCoin Labs Inc.
 
   Permission to use, copy, modify, and/or distribute this software for any
   purpose  with  or without fee is hereby granted, provided that the above
@@ -17,10 +17,10 @@
 */
 //==============================================================================
 
-#include <ripple/app/tx/impl/InvariantCheck.h>
-#include <ripple/basics/Log.h>
+#include <jbcoin/app/tx/impl/InvariantCheck.h>
+#include <jbcoin/basics/Log.h>
 
-namespace ripple {
+namespace jbcoin {
 
 void
 TransactionFeeCheck::visitEntry(
@@ -36,7 +36,7 @@ bool
 TransactionFeeCheck::finalize(
     STTx const& tx,
     TER const result,
-    XRPAmount const fee,
+    JBCAmount const fee,
     beast::Journal const& j)
 {
     // We should never charge a negative fee
@@ -47,7 +47,7 @@ TransactionFeeCheck::finalize(
     }
 
     // We should never charge a fee that's greater than or equal to the
-    // entire XRP supply.
+    // entire JBC supply.
     if (fee.drops() >= SYSTEM_CURRENCY_START)
     {
         JLOG(j.fatal()) << "Invariant failed: fee paid exceeds system limit: " << fee.drops();
@@ -56,7 +56,7 @@ TransactionFeeCheck::finalize(
 
     // We should never charge more for a transaction than the transaction
     // authorizes. It's possible to charge less in some circumstances.
-    if (fee > tx.getFieldAmount(sfFee).xrp())
+    if (fee > tx.getFieldAmount(sfFee).jbc())
     {
         JLOG(j.fatal()) << "Invariant failed: fee paid is " << fee.drops() <<
             " exceeds fee specified in transaction.";
@@ -69,7 +69,7 @@ TransactionFeeCheck::finalize(
 //------------------------------------------------------------------------------
 
 void
-XRPNotCreated::visitEntry(
+JBCNotCreated::visitEntry(
     uint256 const&,
     bool isDelete,
     std::shared_ptr <SLE const> const& before,
@@ -77,7 +77,7 @@ XRPNotCreated::visitEntry(
 {
     /* We go through all modified ledger entries, looking only at account roots,
      * escrow payments, and payment channels. We remove from the total any
-     * previous XRP values and add to the total any new XRP values. The net
+     * previous JBC values and add to the total any new JBC values. The net
      * balance of a payment channel is computed from two fields (amount and
      * balance) and deletions are ignored for paychan and escrow because the
      * amount fields have not been adjusted for those in the case of deletion.
@@ -87,13 +87,13 @@ XRPNotCreated::visitEntry(
         switch (before->getType())
         {
         case ltACCOUNT_ROOT:
-            drops_ -= (*before)[sfBalance].xrp().drops();
+            drops_ -= (*before)[sfBalance].jbc().drops();
             break;
         case ltPAYCHAN:
-            drops_ -= ((*before)[sfAmount] - (*before)[sfBalance]).xrp().drops();
+            drops_ -= ((*before)[sfAmount] - (*before)[sfBalance]).jbc().drops();
             break;
         case ltESCROW:
-            drops_ -= (*before)[sfAmount].xrp().drops();
+            drops_ -= (*before)[sfAmount].jbc().drops();
             break;
         default:
             break;
@@ -105,15 +105,15 @@ XRPNotCreated::visitEntry(
         switch (after->getType())
         {
         case ltACCOUNT_ROOT:
-            drops_ += (*after)[sfBalance].xrp().drops();
+            drops_ += (*after)[sfBalance].jbc().drops();
             break;
         case ltPAYCHAN:
             if (! isDelete)
-                drops_ += ((*after)[sfAmount] - (*after)[sfBalance]).xrp().drops();
+                drops_ += ((*after)[sfAmount] - (*after)[sfBalance]).jbc().drops();
             break;
         case ltESCROW:
             if (! isDelete)
-                drops_ += (*after)[sfAmount].xrp().drops();
+                drops_ += (*after)[sfAmount].jbc().drops();
             break;
         default:
             break;
@@ -122,18 +122,18 @@ XRPNotCreated::visitEntry(
 }
 
 bool
-XRPNotCreated::finalize(
+JBCNotCreated::finalize(
     STTx const& tx,
     TER const,
-    XRPAmount const fee,
+    JBCAmount const fee,
     beast::Journal const& j)
 {
     // The net change should never be positive, as this would mean that the
-    // transaction created XRP out of thin air. That's not possible.
+    // transaction created JBC out of thin air. That's not possible.
     if (drops_ > 0)
     {
         JLOG(j.fatal()) <<
-            "Invariant failed: XRP net change was positive: " << drops_;
+            "Invariant failed: JBC net change was positive: " << drops_;
         return false;
     }
 
@@ -141,7 +141,7 @@ XRPNotCreated::finalize(
     if (-drops_ != fee.drops())
     {
         JLOG(j.fatal()) <<
-            "Invariant failed: XRP net change of " << drops_ <<
+            "Invariant failed: JBC net change of " << drops_ <<
             " doesn't match fee " << fee.drops();
         return false;
     }
@@ -152,7 +152,7 @@ XRPNotCreated::finalize(
 //------------------------------------------------------------------------------
 
 void
-XRPBalanceChecks::visitEntry(
+JBCBalanceChecks::visitEntry(
     uint256 const&,
     bool,
     std::shared_ptr <SLE const> const& before,
@@ -163,7 +163,7 @@ XRPBalanceChecks::visitEntry(
         if (!balance.native())
             return true;
 
-        auto const drops = balance.xrp().drops();
+        auto const drops = balance.jbc().drops();
 
         // Can't have more than the number of drops instantiated
         // in the genesis ledger.
@@ -185,11 +185,11 @@ XRPBalanceChecks::visitEntry(
 }
 
 bool
-XRPBalanceChecks::finalize(STTx const&, TER const, XRPAmount const, beast::Journal const& j)
+JBCBalanceChecks::finalize(STTx const&, TER const, JBCAmount const, beast::Journal const& j)
 {
     if (bad_)
     {
-        JLOG(j.fatal()) << "Invariant failed: incorrect account XRP balance";
+        JLOG(j.fatal()) << "Invariant failed: incorrect account JBC balance";
         return false;
     }
 
@@ -214,7 +214,7 @@ NoBadOffers::visitEntry(
         if (gets < beast::zero)
             return true;
 
-        // Can't have an XRP to XRP offer:
+        // Can't have an JBC to JBC offer:
         return pays.native() && gets.native();
     };
 
@@ -226,7 +226,7 @@ NoBadOffers::visitEntry(
 }
 
 bool
-NoBadOffers::finalize(STTx const& tx, TER const, XRPAmount const, beast::Journal const& j)
+NoBadOffers::finalize(STTx const& tx, TER const, JBCAmount const, beast::Journal const& j)
 {
     if (bad_)
     {
@@ -251,10 +251,10 @@ NoZeroEscrow::visitEntry(
         if (!amount.native())
             return true;
 
-        if (amount.xrp().drops() <= 0)
+        if (amount.jbc().drops() <= 0)
             return true;
 
-        if (amount.xrp().drops() >= SYSTEM_CURRENCY_START)
+        if (amount.jbc().drops() >= SYSTEM_CURRENCY_START)
             return true;
 
         return false;
@@ -268,7 +268,7 @@ NoZeroEscrow::visitEntry(
 }
 
 bool
-NoZeroEscrow::finalize(STTx const& tx, TER const, XRPAmount const, beast::Journal const& j)
+NoZeroEscrow::finalize(STTx const& tx, TER const, JBCAmount const, beast::Journal const& j)
 {
     if (bad_)
     {
@@ -293,7 +293,7 @@ AccountRootsNotDeleted::visitEntry(
 }
 
 bool
-AccountRootsNotDeleted::finalize(STTx const&, TER const, XRPAmount const, beast::Journal const& j)
+AccountRootsNotDeleted::finalize(STTx const&, TER const, JBCAmount const, beast::Journal const& j)
 {
     if (! accountDeleted_)
         return true;
@@ -320,7 +320,7 @@ LedgerEntryTypesMatch::visitEntry(
         {
         case ltACCOUNT_ROOT:
         case ltDIR_NODE:
-        case ltRIPPLE_STATE:
+        case ltJBCOIN_STATE:
         case ltTICKET:
         case ltSIGNER_LIST:
         case ltOFFER:
@@ -340,7 +340,7 @@ LedgerEntryTypesMatch::visitEntry(
 }
 
 bool
-LedgerEntryTypesMatch::finalize(STTx const&, TER const, XRPAmount const, beast::Journal const& j)
+LedgerEntryTypesMatch::finalize(STTx const&, TER const, JBCAmount const, beast::Journal const& j)
 {
     if ((! typeMismatch_) && (! invalidTypeAdded_))
         return true;
@@ -361,32 +361,32 @@ LedgerEntryTypesMatch::finalize(STTx const&, TER const, XRPAmount const, beast::
 //------------------------------------------------------------------------------
 
 void
-NoXRPTrustLines::visitEntry(
+NoJBCTrustLines::visitEntry(
     uint256 const&,
     bool,
     std::shared_ptr <SLE const> const&,
     std::shared_ptr <SLE const> const& after)
 {
-    if (after && after->getType() == ltRIPPLE_STATE)
+    if (after && after->getType() == ltJBCOIN_STATE)
     {
         // checking the issue directly here instead of
         // relying on .native() just in case native somehow
         // were systematically incorrect
-        xrpTrustLine_ =
-            after->getFieldAmount (sfLowLimit).issue() == xrpIssue() ||
-            after->getFieldAmount (sfHighLimit).issue() == xrpIssue();
+        jbcTrustLine_ =
+            after->getFieldAmount (sfLowLimit).issue() == jbcIssue() ||
+            after->getFieldAmount (sfHighLimit).issue() == jbcIssue();
     }
 }
 
 bool
-NoXRPTrustLines::finalize(STTx const&, TER const, XRPAmount const, beast::Journal const& j)
+NoJBCTrustLines::finalize(STTx const&, TER const, JBCAmount const, beast::Journal const& j)
 {
-    if (! xrpTrustLine_)
+    if (! jbcTrustLine_)
         return true;
 
-    JLOG(j.fatal()) << "Invariant failed: an XRP trust line was created";
+    JLOG(j.fatal()) << "Invariant failed: an JBC trust line was created";
     return false;
 }
 
-}  // ripple
+}  // jbcoin
 

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,18 +17,18 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_TX_APPLY_H_INCLUDED
-#define RIPPLE_TX_APPLY_H_INCLUDED
+#ifndef JBCOIN_TX_APPLY_H_INCLUDED
+#define JBCOIN_TX_APPLY_H_INCLUDED
 
-#include <ripple/core/Config.h>
-#include <ripple/ledger/View.h>
-#include <ripple/protocol/STTx.h>
-#include <ripple/protocol/TER.h>
-#include <ripple/beast/utility/Journal.h>
+#include <jbcoin/core/Config.h>
+#include <jbcoin/ledger/View.h>
+#include <jbcoin/protocol/STTx.h>
+#include <jbcoin/protocol/TER.h>
+#include <jbcoin/beast/utility/Journal.h>
 #include <memory>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 class Application;
 class HashRouter;
@@ -152,6 +152,6 @@ applyTransaction(Application& app, OpenView& view,
     STTx const& tx, bool retryAssured, ApplyFlags flags,
     beast::Journal journal);
 
-} // ripple
+} // jbcoin
 
 #endif

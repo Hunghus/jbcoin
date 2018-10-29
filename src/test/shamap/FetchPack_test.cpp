@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,19 +17,19 @@
 */
 //==============================================================================
 
-#include <ripple/shamap/SHAMap.h>
+#include <jbcoin/shamap/SHAMap.h>
 #include <test/shamap/common.h>
-#include <ripple/protocol/digest.h>
-#include <ripple/basics/contract.h>
-#include <ripple/basics/random.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/basics/UnorderedContainers.h>
-#include <ripple/beast/xor_shift_engine.h>
-#include <ripple/beast/unit_test.h>
+#include <jbcoin/protocol/digest.h>
+#include <jbcoin/basics/contract.h>
+#include <jbcoin/basics/random.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/basics/UnorderedContainers.h>
+#include <jbcoin/beast/xor_shift_engine.h>
+#include <jbcoin/beast/unit_test.h>
 #include <functional>
 #include <stdexcept>
 
-namespace ripple {
+namespace jbcoin {
 namespace tests {
 
 class FetchPack_test : public beast::unit_test::suite
@@ -87,7 +87,7 @@ public:
     {
         Serializer s;
         for (int d = 0; d < 3; ++d)
-            s.add32 (ripple::rand_int<std::uint32_t>(r));
+            s.add32 (jbcoin::rand_int<std::uint32_t>(r));
         return std::make_shared <Item> (
             s.getSHA512Half(), s.peekData ());
     }
@@ -162,8 +162,8 @@ public:
     }
 };
 
-BEAST_DEFINE_TESTSUITE(FetchPack,shamap,ripple);
+BEAST_DEFINE_TESTSUITE(FetchPack,shamap,jbcoin);
 
 } // tests
-} // ripple
+} // jbcoin
 

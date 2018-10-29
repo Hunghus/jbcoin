@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,33 +17,33 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_LEDGER_LEDGERMASTER_H_INCLUDED
-#define RIPPLE_APP_LEDGER_LEDGERMASTER_H_INCLUDED
+#ifndef JBCOIN_APP_LEDGER_LEDGERMASTER_H_INCLUDED
+#define JBCOIN_APP_LEDGER_LEDGERMASTER_H_INCLUDED
 
-#include <ripple/app/main/Application.h>
-#include <ripple/app/ledger/AbstractFetchPackContainer.h>
-#include <ripple/app/ledger/InboundLedgers.h>
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/app/ledger/LedgerCleaner.h>
-#include <ripple/app/ledger/LedgerHistory.h>
-#include <ripple/app/ledger/LedgerHolder.h>
-#include <ripple/app/ledger/LedgerReplay.h>
-#include <ripple/app/misc/CanonicalTXSet.h>
-#include <ripple/basics/chrono.h>
-#include <ripple/basics/RangeSet.h>
-#include <ripple/basics/ScopedLock.h>
-#include <ripple/basics/StringUtilities.h>
-#include <ripple/protocol/RippleLedgerHash.h>
-#include <ripple/protocol/STValidation.h>
-#include <ripple/beast/insight/Collector.h>
-#include <ripple/core/Stoppable.h>
-#include <ripple/protocol/Protocol.h>
-#include <ripple/beast/utility/PropertyStream.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/app/ledger/AbstractFetchPackContainer.h>
+#include <jbcoin/app/ledger/InboundLedgers.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/app/ledger/LedgerCleaner.h>
+#include <jbcoin/app/ledger/LedgerHistory.h>
+#include <jbcoin/app/ledger/LedgerHolder.h>
+#include <jbcoin/app/ledger/LedgerReplay.h>
+#include <jbcoin/app/misc/CanonicalTXSet.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/basics/RangeSet.h>
+#include <jbcoin/basics/ScopedLock.h>
+#include <jbcoin/basics/StringUtilities.h>
+#include <jbcoin/protocol/JBCoinLedgerHash.h>
+#include <jbcoin/protocol/STValidation.h>
+#include <jbcoin/beast/insight/Collector.h>
+#include <jbcoin/core/Stoppable.h>
+#include <jbcoin/protocol/Protocol.h>
+#include <jbcoin/beast/utility/PropertyStream.h>
 #include <mutex>
 
-#include <ripple/protocol/messages.h>
+#include <jbcoin/protocol/messages.h>
 
-namespace ripple {
+namespace jbcoin {
 
 class Peer;
 class Transaction;
@@ -364,6 +364,6 @@ private:
 
 };
 
-} // ripple
+} // jbcoin
 
 #endif

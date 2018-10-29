@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_NET_HTTPCLIENT_H_INCLUDED
-#define RIPPLE_NET_HTTPCLIENT_H_INCLUDED
+#ifndef JBCOIN_NET_HTTPCLIENT_H_INCLUDED
+#define JBCOIN_NET_HTTPCLIENT_H_INCLUDED
 
-#include <ripple/core/Config.h>
+#include <jbcoin/core/Config.h>
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/streambuf.hpp>
 #include <chrono>
 
-namespace ripple {
+namespace jbcoin {
 
 /** Provides an asynchronous HTTP client implementation with optional SSL.
 */
@@ -75,6 +75,6 @@ public:
         beast::Journal& j);
 };
 
-} // ripple
+} // jbcoin
 
 #endif

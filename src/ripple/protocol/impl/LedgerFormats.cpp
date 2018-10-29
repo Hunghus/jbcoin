@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#include <ripple/protocol/LedgerFormats.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
+#include <jbcoin/protocol/LedgerFormats.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
 #include <algorithm>
 #include <array>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 LedgerFormats::LedgerFormats ()
 {
@@ -72,7 +72,7 @@ LedgerFormats::LedgerFormats ()
             << SOElement (sfExpiration,          SOE_OPTIONAL)
             ;
 
-    add ("RippleState", ltRIPPLE_STATE)
+    add ("JBCoinState", ltJBCOIN_STATE)
             << SOElement (sfBalance,             SOE_REQUIRED)
             << SOElement (sfLowLimit,            SOE_REQUIRED)
             << SOElement (sfHighLimit,           SOE_REQUIRED)
@@ -194,4 +194,4 @@ LedgerFormats::getInstance ()
     return instance;
 }
 
-} // ripple
+} // jbcoin

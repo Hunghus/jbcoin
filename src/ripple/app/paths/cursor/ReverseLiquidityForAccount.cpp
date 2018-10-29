@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,12 +17,12 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/Credit.h>
-#include <ripple/app/paths/cursor/RippleLiquidity.h>
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/Quality.h>
+#include <jbcoin/app/paths/Credit.h>
+#include <jbcoin/app/paths/cursor/JBCoinLiquidity.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/Quality.h>
 
-namespace ripple {
+namespace jbcoin {
 namespace path {
 
 // Calculate saPrvRedeemReq, saPrvIssueReq, saPrvDeliver from saCur, based on
@@ -33,7 +33,7 @@ namespace path {
 // Reedems are limited based on IOUs previous has on hand.
 // Issues are limited based on credit limits and amount owed.
 //
-// Currency cannot be XRP because we are rippling.
+// Currency cannot be JBC because we are rippling.
 //
 // No permanent account balance adjustments as we don't know how much is going
 // to actually be pushed through yet - changes are only in the scratch pad
@@ -174,7 +174,7 @@ TER PathCursor::reverseLiquidityForAccount () const
     }
 
     // The next four cases correspond to the table at the bottom of this Wiki
-    // page section: https://ripple.com/wiki/Transit_Fees#Implementation
+    // page section: https://jbcoin.com/wiki/Transit_Fees#Implementation
     else if (previousNodeIsAccount && nextNodeIsAccount)
     {
         if (isFinalNode)
@@ -224,8 +224,8 @@ TER PathCursor::reverseLiquidityForAccount () const
 
                 // If we previously redeemed and this has a poorer rate, this
                 // won't be included the current increment.
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     qualityIn,
                     parityRate,
                     saPrvIssueReq,
@@ -263,8 +263,8 @@ TER PathCursor::reverseLiquidityForAccount () const
                 // TODO(tom): add English.
                 // Rate : 1.0 : quality out - we must accept our own IOUs
                 // as 1:1.
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     parityRate,
                     qualityOut,
                     saPrvRedeemReq,
@@ -287,8 +287,8 @@ TER PathCursor::reverseLiquidityForAccount () const
                 // The previous node has no IOUs to redeem remaining, so issues.
             {
                 // Rate: quality in : quality out
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     qualityIn,
                     qualityOut,
                     saPrvIssueReq,
@@ -313,8 +313,8 @@ TER PathCursor::reverseLiquidityForAccount () const
                 // Did not complete redeeming previous IOUs.
             {
                 // Rate : 1.0 : transfer_rate
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     parityRate,
                     transferRate (view(), node().account_),
                     saPrvRedeemReq,
@@ -341,8 +341,8 @@ TER PathCursor::reverseLiquidityForAccount () const
                 // Previous can issue.
             {
                 // Rate: quality in : 1.0
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     qualityIn,
                     parityRate,
                     saPrvIssueReq,
@@ -399,8 +399,8 @@ TER PathCursor::reverseLiquidityForAccount () const
             && node().saRevDeliver)                 // Need some issued.
         {
             // Rate : 1.0 : transfer_rate
-            rippleLiquidity (
-                rippleCalc_,
+            jbcoinLiquidity (
+                jbcoinCalc_,
                 parityRate,
                 transferRate (view(), node().account_),
                 saPrvRedeemReq,
@@ -416,8 +416,8 @@ TER PathCursor::reverseLiquidityForAccount () const
             && node().saRevDeliver != saCurDeliverAct)  // Still need some issued.
         {
             // Rate: quality in : 1.0
-            rippleLiquidity (
-                rippleCalc_,
+            jbcoinLiquidity (
+                jbcoinCalc_,
                 qualityIn,
                 parityRate,
                 saPrvIssueReq,
@@ -480,8 +480,8 @@ TER PathCursor::reverseLiquidityForAccount () const
             // to a document.
 
             // Rate: quality in : 1.0
-            rippleLiquidity (
-                rippleCalc_,
+            jbcoinLiquidity (
+                jbcoinCalc_,
                 qualityIn,
                 parityRate,
                 saPrvDeliverReq,
@@ -514,7 +514,7 @@ TER PathCursor::reverseLiquidityForAccount () const
                 << " node.saRevIssue:" << node().saRevIssue;
 
             // deliver -> redeem
-            // TODO(tom): now we have more checking in nodeRipple, these checks
+            // TODO(tom): now we have more checking in nodeJBCoin, these checks
             // might be redundant.
             if (node().saRevRedeem)  // Next wants us to redeem.
             {
@@ -524,8 +524,8 @@ TER PathCursor::reverseLiquidityForAccount () const
                 // out.
                 //
                 // Rate : 1.0 : quality out
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     parityRate,
                     qualityOut,
                     saPrvDeliverReq,
@@ -542,8 +542,8 @@ TER PathCursor::reverseLiquidityForAccount () const
                 // Need some issued.
             {
                 // Rate : 1.0 : transfer_rate
-                rippleLiquidity (
-                    rippleCalc_,
+                jbcoinLiquidity (
+                    jbcoinCalc_,
                     parityRate,
                     transferRate (view(), node().account_),
                     saPrvDeliverReq,
@@ -575,8 +575,8 @@ TER PathCursor::reverseLiquidityForAccount () const
             << "reverseLiquidityForAccount: offer --> ACCOUNT --> offer";
 
         // Rate : 1.0 : transfer_rate
-        rippleLiquidity (
-            rippleCalc_,
+        jbcoinLiquidity (
+            jbcoinCalc_,
             parityRate,
             transferRate (view(), node().account_),
             saPrvDeliverReq,
@@ -596,4 +596,4 @@ TER PathCursor::reverseLiquidityForAccount () const
 }
 
 } // path
-} // ripple
+} // jbcoin

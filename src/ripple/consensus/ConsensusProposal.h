@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2017 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2017 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -16,15 +16,15 @@
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 //==============================================================================
-#ifndef RIPPLE_CONSENSUS_ConsensusProposal_H_INCLUDED
-#define RIPPLE_CONSENSUS_ConsensusProposal_H_INCLUDED
+#ifndef JBCOIN_CONSENSUS_ConsensusProposal_H_INCLUDED
+#define JBCOIN_CONSENSUS_ConsensusProposal_H_INCLUDED
 
-#include <ripple/basics/chrono.h>
-#include <ripple/json/json_value.h>
-#include <ripple/protocol/JsonFields.h>
+#include <jbcoin/basics/chrono.h>
+#include <jbcoin/json/json_value.h>
+#include <jbcoin/protocol/JsonFields.h>
 #include <cstdint>
 
-namespace ripple {
+namespace jbcoin {
 /** Represents a proposed position taken during a round of consensus.
 
     During consensus, peers seek agreement on a set of transactions to

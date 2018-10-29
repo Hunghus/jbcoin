@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_PROTOCOL_SFIELD_H_INCLUDED
-#define RIPPLE_PROTOCOL_SFIELD_H_INCLUDED
+#ifndef JBCOIN_PROTOCOL_SFIELD_H_INCLUDED
+#define JBCOIN_PROTOCOL_SFIELD_H_INCLUDED
 
-#include <ripple/json/json_value.h>
+#include <jbcoin/json/json_value.h>
 #include <cstdint>
 #include <utility>
 
-namespace ripple {
+namespace jbcoin {
 
 /*
 
@@ -436,7 +436,7 @@ extern SF_Amount const sfDeliverMin;
 
 // currency amount (uncommon)
 extern SF_Amount const sfMinimumOffer;
-extern SF_Amount const sfRippleEscrow;
+extern SF_Amount const sfJBCoinEscrow;
 extern SF_Amount const sfDeliveredAmount;
 
 // variable length (common)
@@ -506,6 +506,6 @@ extern SField const sfMajorities;
 
 //------------------------------------------------------------------------------
 
-} // ripple
+} // jbcoin
 
 #endif

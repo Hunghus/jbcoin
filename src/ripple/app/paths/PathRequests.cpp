@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,23 +17,23 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/PathRequests.h>
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/app/main/Application.h>
-#include <ripple/basics/Log.h>
-#include <ripple/core/JobQueue.h>
-#include <ripple/net/RPCErr.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/JsonFields.h>
-#include <ripple/resource/Fees.h>
+#include <jbcoin/app/paths/PathRequests.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/app/main/Application.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/core/JobQueue.h>
+#include <jbcoin/net/RPCErr.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/JsonFields.h>
+#include <jbcoin/resource/Fees.h>
 #include <algorithm>
 
-namespace ripple {
+namespace jbcoin {
 
-/** Get the current RippleLineCache, updating it if necessary.
+/** Get the current JBCoinLineCache, updating it if necessary.
     Get the correct ledger to use.
 */
-std::shared_ptr<RippleLineCache>
+std::shared_ptr<JBCoinLineCache>
 PathRequests::getLineCache (
     std::shared_ptr <ReadView const> const& ledger,
     bool authoritative)
@@ -48,7 +48,7 @@ PathRequests::getLineCache (
          (authoritative && ((lgrSeq + 8)  < lineSeq)) ||   // we jumped way back for some reason
          (lgrSeq > (lineSeq + 8)))                         // we jumped way forward for some reason
     {
-        mLineCache = std::make_shared<RippleLineCache> (ledger);
+        mLineCache = std::make_shared<JBCoinLineCache> (ledger);
     }
     return mLineCache;
 }
@@ -61,7 +61,7 @@ void PathRequests::updateAll (std::shared_ptr <ReadView const> const& inLedger,
             jtPATH_FIND, "PathRequest::updateAll");
 
     std::vector<PathRequest::wptr> requests;
-    std::shared_ptr<RippleLineCache> cache;
+    std::shared_ptr<JBCoinLineCache> cache;
 
     // Get the ledger and cache we should be using
     {
@@ -222,7 +222,7 @@ PathRequests::makePathRequest(
     return std::move (result.second);
 }
 
-// Make an old-style ripple_path_find request
+// Make an old-style jbcoin_path_find request
 Json::Value
 PathRequests::makeLegacyPathRequest(
     PathRequest::pointer& req,
@@ -264,7 +264,7 @@ PathRequests::doLegacyPathRequest (
         std::shared_ptr<ReadView const> const& inLedger,
         Json::Value const& request)
 {
-    auto cache = std::make_shared<RippleLineCache> (inLedger);
+    auto cache = std::make_shared<JBCoinLineCache> (inLedger);
 
     auto req = std::make_shared<PathRequest> (app_, []{},
         consumer, ++mLastIdentifier, *this, mJournal);
@@ -275,4 +275,4 @@ PathRequests::doLegacyPathRequest (
     return std::move (result.second);
 }
 
-} // ripple
+} // jbcoin

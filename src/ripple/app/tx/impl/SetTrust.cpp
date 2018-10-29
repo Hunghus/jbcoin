@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#include <ripple/app/tx/impl/SetTrust.h>
-#include <ripple/basics/Log.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/Quality.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/st.h>
-#include <ripple/ledger/View.h>
+#include <jbcoin/app/tx/impl/SetTrust.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/Quality.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/st.h>
+#include <jbcoin/ledger/View.h>
 
-namespace ripple {
+namespace jbcoin {
 
 NotTEC
 SetTrust::preflight (PreflightContext const& ctx)
@@ -62,7 +62,7 @@ SetTrust::preflight (PreflightContext const& ctx)
     if (badCurrency() == saLimitAmount.getCurrency ())
     {
         JLOG(j.trace()) <<
-            "Malformed transaction: specifies XRP as IOU";
+            "Malformed transaction: specifies JBC as IOU";
         return temBAD_CURRENCY;
     }
 
@@ -156,19 +156,19 @@ SetTrust::doApply ()
     // items.
     //
     // We do this because being able to exchange currencies,
-    // which needs trust lines, is a powerful Ripple feature.
+    // which needs trust lines, is a powerful JBCoin feature.
     // So we want to make it easy for a gateway to fund the
     // accounts of its users without fear of being tricked.
     //
     // Without this logic, a gateway that wanted to have a
     // new user use its services, would have to give that
-    // user enough XRP to cover not only the account reserve
+    // user enough JBC to cover not only the account reserve
     // but the incremental reserve for the trust line as
     // well. A person with no intention of using the gateway
-    // could use the extra XRP for their own purposes.
+    // could use the extra JBC for their own purposes.
 
-    XRPAmount const reserveCreate ((uOwnerCount < 2)
-        ? XRPAmount (beast::zero)
+    JBCAmount const reserveCreate ((uOwnerCount < 2)
+        ? JBCAmount (beast::zero)
         : view().fees().accountReserve(uOwnerCount + 1));
 
     std::uint32_t uQualityIn (bQualityIn ? ctx_.tx.getFieldU32 (sfQualityIn) : 0);
@@ -180,8 +180,8 @@ SetTrust::doApply ()
     std::uint32_t const uTxFlags = ctx_.tx.getFlags ();
 
     bool const bSetAuth = (uTxFlags & tfSetfAuth);
-    bool const bSetNoRipple = (uTxFlags & tfSetNoRipple);
-    bool const bClearNoRipple  = (uTxFlags & tfClearNoRipple);
+    bool const bSetNoJBCoin = (uTxFlags & tfSetNoJBCoin);
+    bool const bClearNoJBCoin  = (uTxFlags & tfClearNoJBCoin);
     bool const bSetFreeze = (uTxFlags & tfSetFreeze);
     bool const bClearFreeze = (uTxFlags & tfClearFreeze);
 
@@ -216,10 +216,10 @@ SetTrust::doApply ()
     STAmount saLimitAllow = saLimitAmount;
     saLimitAllow.setIssuer (account_);
 
-    SLE::pointer sleRippleState = view().peek (
+    SLE::pointer sleJBCoinState = view().peek (
         keylet::line(account_, uDstAccountID, currency));
 
-    if (sleRippleState)
+    if (sleJBCoinState)
     {
         STAmount        saLowBalance;
         STAmount        saLowLimit;
@@ -238,17 +238,17 @@ SetTrust::doApply ()
         // Balances
         //
 
-        saLowBalance    = sleRippleState->getFieldAmount (sfBalance);
+        saLowBalance    = sleJBCoinState->getFieldAmount (sfBalance);
         saHighBalance   = -saLowBalance;
 
         //
         // Limits
         //
 
-        sleRippleState->setFieldAmount (!bHigh ? sfLowLimit : sfHighLimit, saLimitAllow);
+        sleJBCoinState->setFieldAmount (!bHigh ? sfLowLimit : sfHighLimit, saLimitAllow);
 
-        saLowLimit  = !bHigh ? saLimitAllow : sleRippleState->getFieldAmount (sfLowLimit);
-        saHighLimit =  bHigh ? saLimitAllow : sleRippleState->getFieldAmount (sfHighLimit);
+        saLowLimit  = !bHigh ? saLimitAllow : sleJBCoinState->getFieldAmount (sfLowLimit);
+        saHighLimit =  bHigh ? saLimitAllow : sleJBCoinState->getFieldAmount (sfHighLimit);
 
         //
         // Quality in
@@ -258,26 +258,26 @@ SetTrust::doApply ()
         {
             // Not setting. Just get it.
 
-            uLowQualityIn   = sleRippleState->getFieldU32 (sfLowQualityIn);
-            uHighQualityIn  = sleRippleState->getFieldU32 (sfHighQualityIn);
+            uLowQualityIn   = sleJBCoinState->getFieldU32 (sfLowQualityIn);
+            uHighQualityIn  = sleJBCoinState->getFieldU32 (sfHighQualityIn);
         }
         else if (uQualityIn)
         {
             // Setting.
 
-            sleRippleState->setFieldU32 (!bHigh ? sfLowQualityIn : sfHighQualityIn, uQualityIn);
+            sleJBCoinState->setFieldU32 (!bHigh ? sfLowQualityIn : sfHighQualityIn, uQualityIn);
 
-            uLowQualityIn   = !bHigh ? uQualityIn : sleRippleState->getFieldU32 (sfLowQualityIn);
-            uHighQualityIn  =  bHigh ? uQualityIn : sleRippleState->getFieldU32 (sfHighQualityIn);
+            uLowQualityIn   = !bHigh ? uQualityIn : sleJBCoinState->getFieldU32 (sfLowQualityIn);
+            uHighQualityIn  =  bHigh ? uQualityIn : sleJBCoinState->getFieldU32 (sfHighQualityIn);
         }
         else
         {
             // Clearing.
 
-            sleRippleState->makeFieldAbsent (!bHigh ? sfLowQualityIn : sfHighQualityIn);
+            sleJBCoinState->makeFieldAbsent (!bHigh ? sfLowQualityIn : sfHighQualityIn);
 
-            uLowQualityIn   = !bHigh ? 0 : sleRippleState->getFieldU32 (sfLowQualityIn);
-            uHighQualityIn  =  bHigh ? 0 : sleRippleState->getFieldU32 (sfHighQualityIn);
+            uLowQualityIn   = !bHigh ? 0 : sleJBCoinState->getFieldU32 (sfLowQualityIn);
+            uHighQualityIn  =  bHigh ? 0 : sleJBCoinState->getFieldU32 (sfHighQualityIn);
         }
 
         if (QUALITY_ONE == uLowQualityIn)   uLowQualityIn   = 0;
@@ -292,38 +292,38 @@ SetTrust::doApply ()
         {
             // Not setting. Just get it.
 
-            uLowQualityOut  = sleRippleState->getFieldU32 (sfLowQualityOut);
-            uHighQualityOut = sleRippleState->getFieldU32 (sfHighQualityOut);
+            uLowQualityOut  = sleJBCoinState->getFieldU32 (sfLowQualityOut);
+            uHighQualityOut = sleJBCoinState->getFieldU32 (sfHighQualityOut);
         }
         else if (uQualityOut)
         {
             // Setting.
 
-            sleRippleState->setFieldU32 (!bHigh ? sfLowQualityOut : sfHighQualityOut, uQualityOut);
+            sleJBCoinState->setFieldU32 (!bHigh ? sfLowQualityOut : sfHighQualityOut, uQualityOut);
 
-            uLowQualityOut  = !bHigh ? uQualityOut : sleRippleState->getFieldU32 (sfLowQualityOut);
-            uHighQualityOut =  bHigh ? uQualityOut : sleRippleState->getFieldU32 (sfHighQualityOut);
+            uLowQualityOut  = !bHigh ? uQualityOut : sleJBCoinState->getFieldU32 (sfLowQualityOut);
+            uHighQualityOut =  bHigh ? uQualityOut : sleJBCoinState->getFieldU32 (sfHighQualityOut);
         }
         else
         {
             // Clearing.
 
-            sleRippleState->makeFieldAbsent (!bHigh ? sfLowQualityOut : sfHighQualityOut);
+            sleJBCoinState->makeFieldAbsent (!bHigh ? sfLowQualityOut : sfHighQualityOut);
 
-            uLowQualityOut  = !bHigh ? 0 : sleRippleState->getFieldU32 (sfLowQualityOut);
-            uHighQualityOut =  bHigh ? 0 : sleRippleState->getFieldU32 (sfHighQualityOut);
+            uLowQualityOut  = !bHigh ? 0 : sleJBCoinState->getFieldU32 (sfLowQualityOut);
+            uHighQualityOut =  bHigh ? 0 : sleJBCoinState->getFieldU32 (sfHighQualityOut);
         }
 
-        std::uint32_t const uFlagsIn (sleRippleState->getFieldU32 (sfFlags));
+        std::uint32_t const uFlagsIn (sleJBCoinState->getFieldU32 (sfFlags));
         std::uint32_t uFlagsOut (uFlagsIn);
 
-        if (bSetNoRipple && !bClearNoRipple && (bHigh ? saHighBalance : saLowBalance) >= beast::zero)
+        if (bSetNoJBCoin && !bClearNoJBCoin && (bHigh ? saHighBalance : saLowBalance) >= beast::zero)
         {
-            uFlagsOut |= (bHigh ? lsfHighNoRipple : lsfLowNoRipple);
+            uFlagsOut |= (bHigh ? lsfHighNoJBCoin : lsfLowNoJBCoin);
         }
-        else if (bClearNoRipple && !bSetNoRipple)
+        else if (bClearNoJBCoin && !bSetNoJBCoin)
         {
-            uFlagsOut &= ~(bHigh ? lsfHighNoRipple : lsfLowNoRipple);
+            uFlagsOut &= ~(bHigh ? lsfHighNoJBCoin : lsfLowNoJBCoin);
         }
 
         if (bSetFreeze && !bClearFreeze && !sle->isFlag  (lsfNoFreeze))
@@ -339,17 +339,17 @@ SetTrust::doApply ()
 
         if (QUALITY_ONE == uHighQualityOut) uHighQualityOut = 0;
 
-        bool const bLowDefRipple        = sleLowAccount->getFlags() & lsfDefaultRipple;
-        bool const bHighDefRipple       = sleHighAccount->getFlags() & lsfDefaultRipple;
+        bool const bLowDefJBCoin        = sleLowAccount->getFlags() & lsfDefaultJBCoin;
+        bool const bHighDefJBCoin       = sleHighAccount->getFlags() & lsfDefaultJBCoin;
 
         bool const  bLowReserveSet      = uLowQualityIn || uLowQualityOut ||
-                                            ((uFlagsOut & lsfLowNoRipple) == 0) != bLowDefRipple ||
+                                            ((uFlagsOut & lsfLowNoJBCoin) == 0) != bLowDefJBCoin ||
                                             (uFlagsOut & lsfLowFreeze) ||
                                             saLowLimit || saLowBalance > beast::zero;
         bool const  bLowReserveClear    = !bLowReserveSet;
 
         bool const  bHighReserveSet     = uHighQualityIn || uHighQualityOut ||
-                                            ((uFlagsOut & lsfHighNoRipple) == 0) != bHighDefRipple ||
+                                            ((uFlagsOut & lsfHighNoJBCoin) == 0) != bHighDefJBCoin ||
                                             (uFlagsOut & lsfHighFreeze) ||
                                             saHighLimit || saHighBalance > beast::zero;
         bool const  bHighReserveClear   = !bHighReserveSet;
@@ -405,14 +405,14 @@ SetTrust::doApply ()
         }
 
         if (uFlagsIn != uFlagsOut)
-            sleRippleState->setFieldU32 (sfFlags, uFlagsOut);
+            sleJBCoinState->setFieldU32 (sfFlags, uFlagsOut);
 
         if (bDefault || badCurrency() == currency)
         {
             // Delete.
 
             terResult = trustDelete (view(),
-                sleRippleState, uLowAccountID, uHighAccountID, viewJ);
+                sleJBCoinState, uLowAccountID, uHighAccountID, viewJ);
         }
         // Reserve is not scaled by load.
         else if (bReserveIncrease && mPriorBalance < reserveCreate)
@@ -420,15 +420,15 @@ SetTrust::doApply ()
             JLOG(j_.trace()) <<
                 "Delay transaction: Insufficent reserve to add trust line.";
 
-            // Another transaction could provide XRP to the account and then
+            // Another transaction could provide JBC to the account and then
             // this transaction would succeed.
             terResult = tecINSUF_RESERVE_LINE;
         }
         else
         {
-            view().update (sleRippleState);
+            view().update (sleJBCoinState);
 
-            JLOG(j_.trace()) << "Modify ripple line";
+            JLOG(j_.trace()) << "Modify jbcoin line";
         }
     }
     // Line does not exist.
@@ -438,7 +438,7 @@ SetTrust::doApply ()
         (! (view().rules().enabled(featureTrustSetAuth)) || ! bSetAuth))
     {
         JLOG(j_.trace()) <<
-            "Redundant: Setting non-existent ripple line to defaults.";
+            "Redundant: Setting non-existent jbcoin line to defaults.";
         return tecNO_LINE_REDUNDANT;
     }
     else if (mPriorBalance < reserveCreate) // Reserve is not scaled by load.
@@ -454,14 +454,14 @@ SetTrust::doApply ()
         // Zero balance in currency.
         STAmount saBalance ({currency, noAccount()});
 
-        uint256 index (getRippleStateIndex (
+        uint256 index (getJBCoinStateIndex (
             account_, uDstAccountID, currency));
 
         JLOG(j_.trace()) <<
-            "doTrustSet: Creating ripple line: " <<
+            "doTrustSet: Creating jbcoin line: " <<
             to_string (index);
 
-        // Create a new ripple line.
+        // Create a new jbcoin line.
         terResult = trustCreate (view(),
             bHigh,
             account_,
@@ -469,7 +469,7 @@ SetTrust::doApply ()
             index,
             sle,
             bSetAuth,
-            bSetNoRipple && !bClearNoRipple,
+            bSetNoJBCoin && !bClearNoJBCoin,
             bSetFreeze && !bClearFreeze,
             saBalance,
             saLimitAllow,       // Limit for who is being charged.

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012-2015 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012-2015 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,14 +17,14 @@
 */
 //==============================================================================
 
-#include <ripple/app/ledger/LedgerMaster.h>
-#include <ripple/protocol/ErrorCodes.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/resource/Fees.h>
-#include <ripple/rpc/Context.h>
-#include <ripple/rpc/impl/TransactionSign.h>
+#include <jbcoin/app/ledger/LedgerMaster.h>
+#include <jbcoin/protocol/ErrorCodes.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/resource/Fees.h>
+#include <jbcoin/rpc/Context.h>
+#include <jbcoin/rpc/impl/TransactionSign.h>
 
-namespace ripple {
+namespace jbcoin {
 
 // {
 //   SigningAccounts <array>,
@@ -52,4 +52,4 @@ Json::Value doSubmitMultiSigned (RPC::Context& context)
         RPC::getProcessTxnFn (context.netOps));
 }
 
-} // ripple
+} // jbcoin

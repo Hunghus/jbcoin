@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,17 +17,17 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/impl/AmountSpec.h>
-#include <ripple/ledger/PaymentSandbox.h>
-#include <ripple/ledger/View.h>
-#include <ripple/protocol/Feature.h>
-#include <ripple/protocol/SField.h>
-#include <ripple/protocol/STAccount.h>
+#include <jbcoin/app/paths/impl/AmountSpec.h>
+#include <jbcoin/ledger/PaymentSandbox.h>
+#include <jbcoin/ledger/View.h>
+#include <jbcoin/protocol/Feature.h>
+#include <jbcoin/protocol/SField.h>
+#include <jbcoin/protocol/STAccount.h>
 #include <boost/optional.hpp>
 
 #include <cassert>
 
-namespace ripple {
+namespace jbcoin {
 
 namespace detail {
 
@@ -220,9 +220,9 @@ PaymentSandbox::balanceHook (AccountID const& account,
         }
     }
 
-    if (isXRP(issuer) && adjustedAmt < beast::zero)
-        // A calculated negative XRP balance is not an error case. Consider a
-        // payment snippet that credits a large XRP amount and then debits the
+    if (isJBC(issuer) && adjustedAmt < beast::zero)
+        // A calculated negative JBC balance is not an error case. Consider a
+        // payment snippet that credits a large JBC amount and then debits the
         // same amount. The credit can't be used but we subtract the debit and
         // calculate a negative value. It's not an error case.
         adjustedAmt.clear();
@@ -281,7 +281,7 @@ PaymentSandbox::balanceChanges (ReadView const& view) const
     using key = std::tuple<AccountID, AccountID, Currency>;
     // Map of delta trust lines. As a special case, when both ends of the trust
     // line are the same currency, then it's delta currency for that issuer. To
-    // get the change in XRP balance, Account == root, issuer == root, currency == XRP
+    // get the change in JBC balance, Account == root, issuer == root, currency == JBC
     std::map<key, STAmount> result;
 
     // populate a dictionary with low/high/currency/delta. This can be
@@ -305,12 +305,12 @@ PaymentSandbox::balanceChanges (ReadView const& view) const
             switch(bt)
             {
                 case ltACCOUNT_ROOT:
-                    lowID = xrpAccount();
+                    lowID = jbcAccount();
                     highID = (*before)[sfAccount];
                     oldBalance = (*before)[sfBalance];
                     newBalance = oldBalance.zeroed();
                     break;
-                case ltRIPPLE_STATE:
+                case ltJBCOIN_STATE:
                     lowID = (*before)[sfLowLimit].getIssuer();
                     highID = (*before)[sfHighLimit].getIssuer();
                     oldBalance = (*before)[sfBalance];
@@ -330,12 +330,12 @@ PaymentSandbox::balanceChanges (ReadView const& view) const
             switch(at)
             {
                 case ltACCOUNT_ROOT:
-                    lowID = xrpAccount();
+                    lowID = jbcAccount();
                     highID = (*after)[sfAccount];
                     newBalance = (*after)[sfBalance];
                     oldBalance = newBalance.zeroed();
                     break;
-                case ltRIPPLE_STATE:
+                case ltJBCOIN_STATE:
                     lowID = (*after)[sfLowLimit].getIssuer();
                     highID = (*after)[sfHighLimit].getIssuer();
                     newBalance = (*after)[sfBalance];
@@ -356,12 +356,12 @@ PaymentSandbox::balanceChanges (ReadView const& view) const
             switch(at)
             {
                 case ltACCOUNT_ROOT:
-                    lowID = xrpAccount();
+                    lowID = jbcAccount();
                     highID = (*after)[sfAccount];
                     oldBalance = (*before)[sfBalance];
                     newBalance = (*after)[sfBalance];
                     break;
-                case ltRIPPLE_STATE:
+                case ltJBCOIN_STATE:
                     lowID = (*after)[sfLowLimit].getIssuer();
                     highID = (*after)[sfHighLimit].getIssuer();
                     oldBalance = (*before)[sfBalance];
@@ -395,9 +395,9 @@ PaymentSandbox::balanceChanges (ReadView const& view) const
     return result;
 }
 
-XRPAmount PaymentSandbox::xrpDestroyed () const
+JBCAmount PaymentSandbox::jbcDestroyed () const
 {
     return items_.dropsDestroyed ();
 }
 
-}  // ripple
+}  // jbcoin

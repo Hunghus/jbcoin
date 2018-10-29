@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#include <ripple/json/json_value.h>
-#include <ripple/json/json_reader.h>
-#include <ripple/json/json_writer.h>
-#include <ripple/beast/unit_test.h>
-#include <ripple/beast/type_name.h>
+#include <jbcoin/json/json_value.h>
+#include <jbcoin/json/json_reader.h>
+#include <jbcoin/json/json_writer.h>
+#include <jbcoin/beast/unit_test.h>
+#include <jbcoin/beast/type_name.h>
 
 #include <algorithm>
 
-namespace ripple {
+namespace jbcoin {
 
 struct json_value_test : beast::unit_test::suite
 {
@@ -309,6 +309,6 @@ struct json_value_test : beast::unit_test::suite
     }
 };
 
-BEAST_DEFINE_TESTSUITE(json_value, json, ripple);
+BEAST_DEFINE_TESTSUITE(json_value, json, jbcoin);
 
-} // ripple
+} // jbcoin

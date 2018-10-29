@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,21 +17,21 @@
 */
 //==============================================================================
 
-#include <ripple/app/paths/Credit.h>
-#include <ripple/app/paths/PathState.h>
-#include <ripple/basics/Log.h>
-#include <ripple/json/to_string.h>
-#include <ripple/protocol/Indexes.h>
-#include <ripple/protocol/JsonFields.h>
+#include <jbcoin/app/paths/Credit.h>
+#include <jbcoin/app/paths/PathState.h>
+#include <jbcoin/basics/Log.h>
+#include <jbcoin/json/to_string.h>
+#include <jbcoin/protocol/Indexes.h>
+#include <jbcoin/protocol/JsonFields.h>
 #include <boost/lexical_cast.hpp>
 
-namespace ripple {
+namespace jbcoin {
 
 // OPTIMIZE: When calculating path increment, note if increment consumes all
 // liquidity. No need to revisit path in the future if all liquidity is used.
 //
 
-class RippleCalc; // for logging
+class JBCoinCalc; // for logging
 
 void PathState::clear()
 {
@@ -55,7 +55,7 @@ void PathState::reset(STAmount const& in, STAmount const& out)
     if (inReq() > beast::zero && inAct() >= inReq())
     {
         JLOG (j_.warn())
-            <<  "rippleCalc: DONE:"
+            <<  "jbcoinCalc: DONE:"
             << " inAct()=" << inAct()
             << " inReq()=" << inReq();
     }
@@ -66,7 +66,7 @@ void PathState::reset(STAmount const& in, STAmount const& out)
     if (outAct() >= outReq())
     {
         JLOG (j_.warn())
-            << "rippleCalc: ALREADY DONE:"
+            << "jbcoinCalc: ALREADY DONE:"
             << " saOutAct=" << outAct()
             << " saOutReq=" << outReq();
     }
@@ -100,11 +100,11 @@ bool PathState::lessPriority (PathState const& lhs, PathState const& rhs)
 // - Currencies must be converted via an offer.
 // - A node names its output.
 
-// - A ripple nodes output issuer must be the node's account or the next node's
+// - A jbcoin nodes output issuer must be the node's account or the next node's
 //   account.
 // - Offers can only go directly to another offer if the currency and issuer are
 //   an exact match.
-// - Real issuers must be specified for non-XRP.
+// - Real issuers must be specified for non-JBC.
 TER PathState::pushImpliedNodes (
     AccountID const& account,    // --> Delivering to this account.
     Currency const& currency,  // --> Delivering this currency.
@@ -120,31 +120,31 @@ TER PathState::pushImpliedNodes (
     if (nodes_.back ().issue_.currency != currency)
     {
         // Currency is different, need to convert via an offer from an order
-        // book.  xrpAccount() does double duty as signaling "this is an order
+        // book.  jbcAccount() does double duty as signaling "this is an order
         // book".
 
         // Corresponds to "Implies an offer directory" in the diagram, currently
         // at http://goo.gl/Uj3HAB.
 
-        auto type = isXRP(currency) ? STPathElement::typeCurrency
+        auto type = isJBC(currency) ? STPathElement::typeCurrency
             : STPathElement::typeCurrency | STPathElement::typeIssuer;
 
         // The offer's output is what is now wanted.
-        // xrpAccount() is a placeholder for offers.
-        resultCode = pushNode (type, xrpAccount(), currency, issuer);
+        // jbcAccount() is a placeholder for offers.
+        resultCode = pushNode (type, jbcAccount(), currency, issuer);
     }
 
 
-    // For ripple, non-XRP, ensure the issuer is on at least one side of the
+    // For jbcoin, non-JBC, ensure the issuer is on at least one side of the
     // transaction.
     if (resultCode == tesSUCCESS
-        && !isXRP(currency)
+        && !isJBC(currency)
         && nodes_.back ().account_ != issuer
         // Previous is not issuing own IOUs.
         && account != issuer)
         // Current is not receiving own IOUs.
     {
-        // Need to ripple through issuer's account.
+        // Need to jbcoin through issuer's account.
         // Case "Implies an another node: (pushImpliedNodes)" in the document.
         // Intermediate account is the needed issuer.
         resultCode = pushNode (
@@ -178,7 +178,7 @@ TER PathState::pushNode (
 
     auto const& backNode = pathIsEmpty ? path::Node () : nodes_.back ();
 
-    // true, iff node is a ripple account. false, iff node is an offer node.
+    // true, iff node is a jbcoin account. false, iff node is an offer node.
     const bool hasAccount = (iType & STPathElement::typeAccount);
 
     // Is currency specified for the output of the current node?
@@ -208,9 +208,9 @@ TER PathState::pushNode (
         JLOG (j_.debug()) << "pushNode: bad bits.";
         resultCode = temBAD_PATH;
     }
-    else if (hasIssuer && isXRP (node.issue_))
+    else if (hasIssuer && isJBC (node.issue_))
     {
-        JLOG (j_.debug()) << "pushNode: issuer specified for XRP.";
+        JLOG (j_.debug()) << "pushNode: issuer specified for JBC.";
 
         resultCode = temBAD_PATH;
     }
@@ -233,7 +233,7 @@ TER PathState::pushNode (
         // Account link
         node.account_ = account;
         node.issue_.account = hasIssuer ? issuer :
-                (isXRP (node.issue_) ? xrpAccount() : account);
+                (isJBC (node.issue_) ? jbcAccount() : account);
         // Zero value - for accounts.
         node.saRevRedeem = STAmount ({node.issue_.currency, account});
         node.saRevIssue = node.saRevRedeem;
@@ -261,7 +261,7 @@ TER PathState::pushNode (
             resultCode = pushImpliedNodes (
                 node.account_,
                 node.issue_.currency,
-                isXRP(node.issue_.currency) ? xrpAccount() : account);
+                isJBC(node.issue_.currency) ? jbcAccount() : account);
 
             // Note: backNode may no longer be the immediately previous node.
         }
@@ -271,12 +271,12 @@ TER PathState::pushNode (
             auto const& backNode = nodes_.back ();
             if (backNode.isAccount())
             {
-                auto sleRippleState = view().peek(
+                auto sleJBCoinState = view().peek(
                     keylet::line(backNode.account_, node.account_, backNode.issue_.currency));
 
-                // A "RippleState" means a balance betweeen two accounts for a
+                // A "JBCoinState" means a balance betweeen two accounts for a
                 // specific currency.
-                if (!sleRippleState)
+                if (!sleJBCoinState)
                 {
                     JLOG (j_.trace())
                             << "pushNode: No credit line between "
@@ -308,9 +308,9 @@ TER PathState::pushNode (
                         resultCode   = terNO_ACCOUNT;
                     }
                     else if ((sleBck->getFieldU32 (sfFlags) & lsfRequireAuth) &&
-                             !(sleRippleState->getFieldU32 (sfFlags) &
+                             !(sleJBCoinState->getFieldU32 (sfFlags) &
                                   (bHigh ? lsfHighAuth : lsfLowAuth)) &&
-                             sleRippleState->getFieldAmount(sfBalance) == beast::zero)
+                             sleJBCoinState->getFieldAmount(sfBalance) == beast::zero)
                     {
                         JLOG (j_.warn())
                                 << "pushNode: delay: can't receive IOUs from "
@@ -358,9 +358,9 @@ TER PathState::pushNode (
         // issuer.
         if (hasIssuer)
             node.issue_.account = issuer;
-        else if (isXRP (node.issue_.currency))
-            node.issue_.account = xrpAccount();
-        else if (isXRP (backNode.issue_.account))
+        else if (isJBC (node.issue_.currency))
+            node.issue_.account = jbcAccount();
+        else if (isJBC (backNode.issue_.account))
             node.issue_.account = backNode.account_;
         else
             node.issue_.account = backNode.issue_.account;
@@ -386,7 +386,7 @@ TER PathState::pushNode (
 
             // Insert intermediary issuer account if needed.
             resultCode   = pushImpliedNodes (
-                xrpAccount(), // Rippling, but offers don't have an account.
+                jbcAccount(), // Rippling, but offers don't have an account.
                 backNode.issue_.currency,
                 backNode.issue_.account);
         }
@@ -428,31 +428,31 @@ TER PathState::expandPath (
     Currency const& currencyOutID = saOutReq.getCurrency ();
     AccountID const& issuerOutID = saOutReq.getIssuer ();
     AccountID const& uSenderIssuerID
-        = isXRP(uMaxCurrencyID) ? xrpAccount() : uSenderID;
-    // Sender is always issuer for non-XRP.
+        = isJBC(uMaxCurrencyID) ? jbcAccount() : uSenderID;
+    // Sender is always issuer for non-JBC.
 
     JLOG (j_.trace())
         << "expandPath> " << spSourcePath.getJson (0);
 
     terStatus = tesSUCCESS;
 
-    // XRP with issuer is malformed.
-    if ((isXRP (uMaxCurrencyID) && !isXRP (uMaxIssuerID))
-        || (isXRP (currencyOutID) && !isXRP (issuerOutID)))
+    // JBC with issuer is malformed.
+    if ((isJBC (uMaxCurrencyID) && !isJBC (uMaxIssuerID))
+        || (isJBC (currencyOutID) && !isJBC (issuerOutID)))
     {
         JLOG (j_.debug())
-            << "expandPath> issuer with XRP";
+            << "expandPath> issuer with JBC";
         terStatus   = temBAD_PATH;
     }
 
     // Push sending node.
-    // For non-XRP, issuer is always sending account.
+    // For non-JBC, issuer is always sending account.
     // - Trying to expand, not-compact.
     // - Every issuer will be traversed through.
     if (terStatus == tesSUCCESS)
     {
         terStatus   = pushNode (
-            !isXRP(uMaxCurrencyID)
+            !isJBC(uMaxCurrencyID)
             ? STPathElement::typeAccount | STPathElement::typeCurrency |
               STPathElement::typeIssuer
             : STPathElement::typeAccount | STPathElement::typeCurrency,
@@ -471,7 +471,7 @@ TER PathState::expandPath (
     if (tesSUCCESS == terStatus && uMaxIssuerID != uSenderIssuerID)
     {
         // May have an implied account node.
-        // - If it was XRP, then issuers would have matched.
+        // - If it was JBC, then issuers would have matched.
 
         // Figure out next node properties for implied node.
         const auto uNxtCurrencyID  = spSourcePath.size ()
@@ -484,11 +484,11 @@ TER PathState::expandPath (
         // understands it.
         const auto nextAccountID   = spSourcePath.size ()
                 ? AccountID(spSourcePath. front ().getAccountID ())
-                : !isXRP(currencyOutID)
+                : !isJBC(currencyOutID)
                 ? (issuerOutID == uReceiverID)
                 ? AccountID(uReceiverID)
                 : AccountID(issuerOutID)                      // Use implied node.
-                : xrpAccount();
+                : jbcAccount();
 
         JLOG (j_.debug())
             << "expandPath: implied check:"
@@ -500,7 +500,7 @@ TER PathState::expandPath (
         // Can't just use push implied, because it can't compensate for next
         // account.
         if (!uNxtCurrencyID
-            // Next is XRP, offer next. Must go through issuer.
+            // Next is JBC, offer next. Must go through issuer.
             || uMaxCurrencyID != uNxtCurrencyID
             // Next is different currency, offer next...
             || uMaxIssuerID != nextAccountID)
@@ -514,7 +514,7 @@ TER PathState::expandPath (
 
             // Add account implied by SendMax.
             terStatus = pushNode (
-                !isXRP(uMaxCurrencyID)
+                !isJBC(uMaxCurrencyID)
                     ? STPathElement::typeAccount | STPathElement::typeCurrency |
                       STPathElement::typeIssuer
                     : STPathElement::typeAccount | STPathElement::typeCurrency,
@@ -536,7 +536,7 @@ TER PathState::expandPath (
     }
 
     if (terStatus == tesSUCCESS
-        && !isXRP(currencyOutID)               // Next is not XRP
+        && !isJBC(currencyOutID)               // Next is not JBC
         && issuerOutID != uReceiverID)         // Out issuer is not receiver
     {
         assert (!nodes_.empty ());
@@ -554,7 +554,7 @@ TER PathState::expandPath (
                 << " issuer=" << issuerOutID;
 
             terStatus   = pushNode (
-                !isXRP(currencyOutID)
+                !isJBC(currencyOutID)
                     ? STPathElement::typeAccount | STPathElement::typeCurrency |
                       STPathElement::typeIssuer
                     : STPathElement::typeAccount | STPathElement::typeCurrency,
@@ -570,7 +570,7 @@ TER PathState::expandPath (
         // Last node is always an account.
 
         terStatus   = pushNode (
-            !isXRP(currencyOutID)
+            !isJBC(currencyOutID)
                 ? STPathElement::typeAccount | STPathElement::typeCurrency |
                    STPathElement::typeIssuer
                : STPathElement::typeAccount | STPathElement::typeCurrency,
@@ -667,19 +667,19 @@ void PathState::checkFreeze()
     }
 }
 
-/** Check if a sequence of three accounts violates the no ripple constrains
+/** Check if a sequence of three accounts violates the no jbcoin constrains
     [first] -> [second] -> [third]
-    Disallowed if 'second' set no ripple on [first]->[second] and
+    Disallowed if 'second' set no jbcoin on [first]->[second] and
     [second]->[third]
 */
-TER PathState::checkNoRipple (
+TER PathState::checkNoJBCoin (
     AccountID const& firstAccount,
     AccountID const& secondAccount,
     // This is the account whose constraints we are checking
     AccountID const& thirdAccount,
     Currency const& currency)
 {
-    // fetch the ripple lines into and out of this node
+    // fetch the jbcoin lines into and out of this node
     SLE::pointer sleIn = view().peek (
         keylet::line(firstAccount, secondAccount, currency));
     SLE::pointer sleOut = view().peek (
@@ -691,28 +691,28 @@ TER PathState::checkNoRipple (
     }
     else if (
         sleIn->getFieldU32 (sfFlags) &
-            ((secondAccount > firstAccount) ? lsfHighNoRipple : lsfLowNoRipple) &&
+            ((secondAccount > firstAccount) ? lsfHighNoJBCoin : lsfLowNoJBCoin) &&
         sleOut->getFieldU32 (sfFlags) &
-            ((secondAccount > thirdAccount) ? lsfHighNoRipple : lsfLowNoRipple))
+            ((secondAccount > thirdAccount) ? lsfHighNoJBCoin : lsfLowNoJBCoin))
     {
         JLOG (j_.info())
-            << "Path violates noRipple constraint between "
+            << "Path violates noJBCoin constraint between "
             << firstAccount << ", "
             << secondAccount << " and "
             << thirdAccount;
 
-        terStatus = terNO_RIPPLE;
+        terStatus = terNO_JBCOIN;
     }
     return terStatus;
 }
 
-// Check a fully-expanded path to make sure it doesn't violate no-Ripple
+// Check a fully-expanded path to make sure it doesn't violate no-JBCoin
 // settings.
-TER PathState::checkNoRipple (
+TER PathState::checkNoJBCoin (
     AccountID const& uDstAccountID,
     AccountID const& uSrcAccountID)
 {
-    // There must be at least one node for there to be two consecutive ripple
+    // There must be at least one node for there to be two consecutive jbcoin
     // lines.
     if (nodes_.size() == 0)
        return terStatus;
@@ -731,7 +731,7 @@ TER PathState::checkNoRipple (
             }
             else
             {
-                terStatus = checkNoRipple (
+                terStatus = checkNoJBCoin (
                     uSrcAccountID, nodes_[0].account_, uDstAccountID,
                     nodes_[0].issue_.currency);
             }
@@ -751,7 +751,7 @@ TER PathState::checkNoRipple (
         }
         else
         {
-            terStatus = checkNoRipple (
+            terStatus = checkNoJBCoin (
                 uSrcAccountID, nodes_[0].account_, nodes_[1].account_,
                 nodes_[0].issue_.currency);
             if (terStatus != tesSUCCESS)
@@ -772,7 +772,7 @@ TER PathState::checkNoRipple (
         }
         else
         {
-            terStatus = checkNoRipple (
+            terStatus = checkNoJBCoin (
                 nodes_[s].account_, nodes_[s+1].account_,
                 uDstAccountID, nodes_[s].issue_.currency);
             if (tesSUCCESS != terStatus)
@@ -781,7 +781,7 @@ TER PathState::checkNoRipple (
     }
 
     // Loop through all nodes that have a prior node and successor nodes
-    // These are the nodes whose no ripple constraints could be violated
+    // These are the nodes whose no jbcoin constraints could be violated
     for (int i = 1; i < nodes_.size() - 1; ++i)
     {
         if (nodes_[i - 1].isAccount() &&
@@ -796,7 +796,7 @@ TER PathState::checkNoRipple (
                 terStatus = temBAD_PATH;
                 return terStatus;
             }
-            terStatus = checkNoRipple (
+            terStatus = checkNoJBCoin (
                 nodes_[i-1].account_, nodes_[i].account_, nodes_[i+1].account_,
                 currencyID);
             if (terStatus != tesSUCCESS)
@@ -809,7 +809,7 @@ TER PathState::checkNoRipple (
             nodes_[i -1].issue_.account != nodes_[i].account_)
         { // offer -> account -> account
             auto const& currencyID = nodes_[i].issue_.currency;
-            terStatus = checkNoRipple (
+            terStatus = checkNoJBCoin (
                 nodes_[i-1].issue_.account, nodes_[i].account_, nodes_[i+1].account_,
                 currencyID);
             if (terStatus != tesSUCCESS)
@@ -858,4 +858,4 @@ Json::Value PathState::getJson () const
     return jvPathState;
 }
 
-} // ripple
+} // jbcoin

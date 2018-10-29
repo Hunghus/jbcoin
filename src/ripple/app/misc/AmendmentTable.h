@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 /*
-    This file is part of rippled: https://github.com/ripple/rippled
-    Copyright (c) 2012, 2013 Ripple Labs Inc.
+    This file is part of jbcoind: https://github.com/jbcoin/jbcoind
+    Copyright (c) 2012, 2013 JBCoin Labs Inc.
 
     Permission to use, copy, modify, and/or distribute this software for any
     purpose  with  or without fee is hereby granted, provided that the above
@@ -17,15 +17,15 @@
 */
 //==============================================================================
 
-#ifndef RIPPLE_APP_MISC_AMENDMENTTABLE_H_INCLUDED
-#define RIPPLE_APP_MISC_AMENDMENTTABLE_H_INCLUDED
+#ifndef JBCOIN_APP_MISC_AMENDMENTTABLE_H_INCLUDED
+#define JBCOIN_APP_MISC_AMENDMENTTABLE_H_INCLUDED
 
-#include <ripple/app/ledger/Ledger.h>
-#include <ripple/protocol/STValidation.h>
-#include <ripple/core/ConfigSections.h>
-#include <ripple/protocol/Protocol.h>
+#include <jbcoin/app/ledger/Ledger.h>
+#include <jbcoin/protocol/STValidation.h>
+#include <jbcoin/core/ConfigSections.h>
+#include <jbcoin/protocol/Protocol.h>
 
-namespace ripple {
+namespace jbcoin {
 
 /** The amendment table stores the list of enabled and potential amendments.
     Individuals amendments are voted on by validators during the consensus
@@ -155,6 +155,6 @@ std::unique_ptr<AmendmentTable> make_AmendmentTable (
     Section const& vetoed,
     beast::Journal journal);
 
-}  // ripple
+}  // jbcoin
 
 #endif
